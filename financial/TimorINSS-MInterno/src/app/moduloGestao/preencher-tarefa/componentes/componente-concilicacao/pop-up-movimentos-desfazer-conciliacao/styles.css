@@ -1,0 +1,159 @@
+
+.desfazer-conciliacao table {
+  width: 100%;
+}
+
+.titulo {
+  height: 13%;
+  text-align: center;
+  color: #2A81CC;
+
+  font-weight: bold;
+}
+
+.pdfIconTable{
+  cursor: pointer;
+  color: red;
+  font-size: 18px;
+  margin-left: 10%;
+}
+
+.popUpIcon {
+  top: 5px;
+  position: relative;
+  font-size: 1.3em;
+}
+
+.dialogPositionFix {
+  position: relative;
+  height: 100%;
+}
+
+.bodyDialog {
+  height: 100%;
+  margin: 0;
+}
+
+.buttons-wrapper {
+  margin: 0 27px 25px;
+}
+
+.buttons-wrapper button {
+  margin-left: 15px;
+  background-color: black;
+  color: #fff;
+  font-size: 13px;
+  width: 250px;
+}
+
+.buttons-wrapper button.active {
+  background-color: #2A81CC;
+}
+
+.buttons-wrapper button:first-child {
+  margin-left: 0;
+}
+
+.from-table-2 div:nth-child(1) {
+  order: 2;
+}
+.from-table-2 div:nth-child(2) {
+  order: 1;
+}
+
+.DadosContainer {
+  margin-left: calc(5% - 50px);
+  margin-right: 5%;
+  padding-bottom: 5px;
+}
+
+.secondLineContainers {
+  display: inline-flex;
+  position: relative;
+  margin-left: 50px;
+}
+
+.buttons {
+  position: absolute;
+  bottom: 0;
+  height: 12%;
+  width: 100%;
+}
+
+.gravarButton {
+  background: rgba(52, 176, 43, 100);
+  color:white;
+
+  font-size: 10px;
+}
+
+.buttonCancelar {
+  background:darkred;
+  color:white;
+
+  font-size: 10px;
+}
+.icon {
+  padding-right: 5px;
+}
+
+.error {
+  font-size: 10px;
+  color: red;
+}
+
+.formSize {
+  height: 80%;
+}
+
+.buttonfilter {
+  background-color: black;
+  color: white;
+  vertical-align: super;
+  margin: 10px;
+}
+
+.SearchButton {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  margin-left: 20px;
+  margin-top: 5px;
+  top: 10px;
+  background-color:green;
+  color: white;
+}
+
+.SearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.pesquisar, .date{
+  height: 25px;
+  margin-left: 10px;
+  max-width: 150px;
+  font-size: 14px;
+}
+
+.date {
+  margin-left: 20px;
+  max-width: 150px;
+}
+
+.clearFilterIcon{
+  padding-right: 5px;
+}
+
+.clearFilterButton{
+  background: green;
+  color: white;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  vertical-align: -webkit-baseline-middle;
+}
+
+.filters-wrapper {
+  margin: 10px 0;
+}

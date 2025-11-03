@@ -1,0 +1,35 @@
+<div class="dialogPositionFix">
+    <h1 class="titulo" mat-dialog-title>
+      <mat-icon class="personRemoveIcon">notification_important</mat-icon>
+      {{'responsavel_legal.facultQuestion' | translate}}
+    </h1>
+    <div class="bodyDialog" mat-dialog-content>
+            <div class="secondLineContainers">
+                <div class="RadioInput" >
+                    <mat-radio-group [(ngModel)]="IndFacultivaSS" aria-label="Select an option" [value]="IndFacultivaSS">
+                        <mat-radio-button color="primary" [value]="true">{{'general.sim' | translate}}</mat-radio-button>
+                        <mat-radio-button class="righ-radio" color="primary" (click)="resetNiss()" [value]="false">{{'general.nao' | translate}}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div class="secondLineContainers">
+                <mat-form-field *ngIf="IndFacultivaSS" class="NissInput" appearance="outline">
+                    <mat-label>{{ 'general.niss' | translate }}</mat-label>
+                    <input matInput type="number" [(ngModel)]="request.niss"
+                    [errorStateMatcher]="matcher" [required]="submittedFormError"/>
+                    <fa-icon class="clear-icon" *ngIf="request.niss" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="resetNiss()"></fa-icon>
+                    <mat-error>{{'general.required' | translate}}</mat-error>
+                  </mat-form-field>
+            </div>
+    </div>
+    <div class="buttons">
+            <button class="buttonOk" mat-button (click)="onProceed()">
+                <mat-icon class="adicionarIcon">check</mat-icon>
+                <mat-label>{{'general.proceed' | translate}}</mat-label>
+            </button>
+            <button class="buttonCancelar" mat-button (click)="cancel()">
+                <mat-icon class="adicionarIcon">close</mat-icon>
+                <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+            </button>
+    </div>
+  </div>

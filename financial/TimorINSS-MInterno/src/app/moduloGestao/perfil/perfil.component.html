@@ -1,0 +1,64 @@
+<div class="gestaoPerfis">
+
+  <div class="subHeader">
+    <div class="searchContainer">
+      <button class="perfilSearchButton" mat-fab color="green" aria-label="Search" (click)="pesquisarPerfil()">
+        <mat-icon class="perfilSearchIcon">search</mat-icon>
+      </button>
+      <mat-form-field class="pesquisar" appearance="outline">
+        <mat-label>{{'general.pesquisar' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="filterBy" name="stringFilterInput" (keydown.enter)="pesquisarPerfil()"/>
+        <fa-icon *ngIf="filterBy" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearPesquisarPerfil()">
+        </fa-icon>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div>
+    <div class="adicionarPerfil">
+      <button class="adicionarPerfilButton" mat-raised-button (click)="adicionarPerfil()" [disabled]="!create">
+        <mat-icon>person</mat-icon>
+        <mat-label>{{'perfil.addPerfil' | translate}}</mat-label>
+      </button>
+    </div>
+
+    <div class="painelListagemPerfis">
+
+      <div class="tabelaPerfisTitulo">
+        <mat-icon class="tableTitleIcon">people</mat-icon>
+        {{'perfil.title' | translate}}
+      </div>
+
+      <table mat-table [dataSource]="dataSourcePerfis" class="mat-elevation-z8 tabelaPerfis">
+        <ng-container matColumnDef="dataCriacao">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.data' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{formatDatePT(element.dataCriacao)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.nome' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+        </ng-container>
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.acao' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon class="editIconTable" *ngIf="element.indActivo && update" (click)="editPerfil(element.id, element.descricao)"
+              matTooltip="{{'perfil.editarPerfil' | translate}}">edit</mat-icon>
+            <mat-icon *ngIf="element.indActivo && update" class="swithActive" (click)="updatePerfil(element)"
+              matTooltip="{{'perfil.inativarPerfil' | translate}}">toggle_on
+            </mat-icon>
+            <mat-icon *ngIf="!element.indActivo && update" class="swithInactive" (click)="updatePerfil(element)"
+              matTooltip="{{'perfil.ativarPerfil' | translate}}">toggle_off
+            </mat-icon>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsPerfis"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsPerfis;"></tr>
+      </table>
+      <mat-paginator class="paginator" [length]="this.totalRowsPerfisTable" [pageSize]="this.pageSizePerfisTable"
+        (page)="updatePerfisTable($event)" [pageIndex]="pageIndexPerfisTable"
+        [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons>
+      </mat-paginator>
+
+    </div>
+  </div>
+</div>

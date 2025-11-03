@@ -1,0 +1,17 @@
+.errorIcon {
+  color: red;
+}
+
+.mat-dialog-title {
+  text-align: center;
+}
+
+.mat-dialog-actions{
+  position: absolute;
+  bottom: 0;
+}
+
+.dialogPositionFix {
+  position: relative;
+  height: 100%;
+}

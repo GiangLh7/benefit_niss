@@ -1,0 +1,162 @@
+.gestaoUtilizadores{
+    position:relative;
+    min-height: 85%;
+}
+
+.mat-form-field {
+    font-size: 12px;
+    width: 100%;
+}
+
+.subHeader {
+    min-height: 50px;
+    background: rgba(207, 207, 207, 0.966);
+    width: 90%;
+    padding-left: 10%;
+}
+
+.mat-table {
+    width: 100%;
+}
+
+.searchContainer {
+    width: 50%;
+    min-width: 192px;
+    display: inline-flex;
+    position: relative;
+}
+
+.SearchButton {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    margin-top: 5px;
+    top: 10px;
+    background-color:#2A81CC;
+    color: white;
+}
+
+.SearchIcon {
+    position: relative;
+    bottom: 13px;
+    left: 1px;
+}
+
+.pesquisar{
+    height: 50px;
+    margin-top: 10px;
+}
+
+
+.configurar{
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-top: 50px;
+}
+
+.configurarButton {
+    background: rgba(52, 176, 43, 100);
+    color: white;
+    top: -3px;
+}
+
+.painelListagem {
+    width: 80%;
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-top: 2%;
+    text-align: center;
+}
+
+.tabelaTitulo {
+width: 100%;
+padding-bottom: 1%;
+font-size: 1.1em;
+font-weight: bold;
+color: #2A81CC;
+display: flex;
+padding-top: 20px;
+}
+
+.tableTitleIcon {
+font-size: 1.7em;
+padding-right: 10px;
+top: -5px;
+position: relative;
+}
+
+.tabela {
+width:100%;
+text-align: left;
+background-color: white;
+}
+  
+.editIconTable {
+    color: #2A81CC;
+    cursor: pointer;
+    margin-left: 35%;
+  }
+
+.tabletitleText {
+    padding-top: 10px;
+}
+
+table th {
+    background-color: rgb(211, 211, 211);
+}
+
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+.mat-form-field {
+  font-size: 11px;
+  min-width: 150px;
+  width: calc(100% - 32px);
+}
+
+table th {
+  font-weight: bold;
+}
+
+table td,
+table th {
+  width: 16%;
+  text-align: center;
+}
+
+.swithActive {
+    padding-right: 47%;
+    float: right;
+    color: green;
+    cursor: pointer;
+  }
+  
+  .swithInactive {
+    padding-right: 47%;
+    float: right;
+    color: darkred;
+    cursor: pointer;
+  }
+  
+  .thirdLineContainers {
+    margin-left: 20px;
+    width: 60%;
+    margin-top: 10px;
+  }
+
+  .clearFilterButton{
+    background: #2A81CC;
+    color: white;
+    margin-left: 10px;
+    margin-top: 3px;
+  }
+
+  .checkIconTable {
+    color: green;
+  }
+
+  .crossIconTable {
+    color: red;
+  }

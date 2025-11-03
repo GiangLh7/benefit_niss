@@ -1,0 +1,163 @@
+<div class="dialogPositionFix">
+
+  <h1 class="titulo" mat-dialog-title *ngIf="data.adicionar">
+    <mat-icon class="popUpIcon">home</mat-icon>
+    {{'morada.titleAdicionarMorada' | translate}}
+  </h1>
+  <h1 class="titulo" mat-dialog-title *ngIf="data.editar">
+    <mat-icon class="popUpIcon">home</mat-icon>
+    {{'morada.titleEditarMorada' | translate}}
+  </h1>
+
+  <form (ngSubmit)="gravar($event,data)" class="formSize" #moradaForm="ngForm">
+    <div class="bodyDialog" mat-dialog-content>
+      <div class="DadosContainer">
+        <div class="secondLineContainers">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'morada.rua' | translate}}</mat-label>
+            <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry" maxLength="100"
+              [(ngModel)]="data.rua" type="text" name="rua" matInput>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="secondLineContainers">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'morada.numPorta' | translate}}</mat-label>
+            <input #name="ngModel" [errorStateMatcher]="matcher"[(ngModel)]="data.numPorta"
+              type="text" maxLength="20" name="numPorta" matInput>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="secondLineContainers">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'morada.municipio' | translate}}</mat-label>
+            <mat-select [(ngModel)]="data.idMunicipio" [errorStateMatcher]="matcherPais" [(value)]="data.idMunicipio"
+              name="municipio" (selectionChange)="changePosto(data.idMunicipio,data)" [required]="submittedTry">
+              <!-- select with groups -->
+              <ng-container *ngIf="data.listaMunicipio.length > 1">
+                <mat-optgroup *ngFor="let group of data.listaMunicipio" [label]="group.name | translate" [disabled]="group.disabled">
+                  <mat-option *ngFor="let municipio of group.array" [value]="municipio.id">{{municipio.nome}}</mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <!-- select without groups -->
+              <ng-container *ngIf="data.listaMunicipio.length == 1">
+                <mat-option *ngFor="let municipio of data.listaMunicipio[0]?.array" [disabled]="data.listaMunicipio[0]?.disabled" [value]="municipio.id">{{municipio.nome}}</mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+      </div>
+      <div class="DadosContainer">
+        <div class="secondLineContainers">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'morada.postoAdministrativo' | translate}}</mat-label>
+            <mat-select [(ngModel)]="data.idPostoAdministrativo" [errorStateMatcher]="matcherPais"
+              [(value)]="data.idPostoAdministrativo" name="postoAdministrativo"
+              (selectionChange)="changeSuco(data.idPostoAdministrativo,data)" [required]="submittedTry">
+              <!-- select with groups -->
+              <ng-container *ngIf="data.listaPostoFilter.length > 1">
+                <mat-optgroup *ngFor="let group of data.listaPostoFilter" [label]="group.name | translate" [disabled]="group.disabled">
+                  <mat-option *ngFor="let posto of group.array" [value]="posto.id">{{posto.nome}}</mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <!-- select without groups -->
+              <ng-container *ngIf="data.listaPostoFilter.length == 1">
+                <mat-option *ngFor="let posto of data.listaPostoFilter[0]?.array" [disabled]="data.listaPostoFilter[0]?.disabled" [value]="posto.id">{{posto.nome}}</mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="secondLineContainers">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'morada.suco' | translate}}</mat-label>
+            <mat-select [(ngModel)]="data.idSuco" [errorStateMatcher]="matcherPais" [(value)]="data.idSuco" name="suco"
+              (selectionChange)="changeAldeia(data.idSuco,data)" [required]="submittedTry">
+              <!-- select with groups -->
+              <ng-container *ngIf="data.listaSucoFilter.length > 1">
+                <mat-optgroup *ngFor="let group of data.listaSucoFilter" [label]="group.name | translate" [disabled]="group.disabled">
+                  <mat-option *ngFor="let suco of group.array" [value]="suco.id">{{suco.nome}}</mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <!-- select without groups -->
+              <ng-container *ngIf="data.listaSucoFilter.length == 1">
+                <mat-option *ngFor="let suco of data.listaSucoFilter[0]?.array" [disabled]="data.listaSucoFilter[0]?.disabled" [value]="suco.id">{{suco.nome}}</mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="secondLineContainers">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'morada.aldeia' | translate}}</mat-label>
+            <mat-select [(ngModel)]="data.idAldeia" [errorStateMatcher]="matcherPais" [(value)]="data.idAldeia"
+              name="aldeia" [required]="submittedTry">
+              <!-- select with groups -->
+              <ng-container *ngIf="data.listaAldeiaFilter.length > 1">
+                <mat-optgroup *ngFor="let group of data.listaAldeiaFilter" [label]="group.name | translate" [disabled]="group.disabled">
+                  <mat-option *ngFor="let aldeia of group.array" [value]="aldeia.id">{{aldeia.nome}}</mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <!-- select without groups -->
+              <ng-container *ngIf="data.listaAldeiaFilter.length == 1">
+                <mat-option *ngFor="let aldeia of data.listaAldeiaFilter[0]?.array" [disabled]="data.listaAldeiaFilter[0]?.disabled" [value]="aldeia.id">{{aldeia.nome}}</mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="DadosContainer">
+        <div class="secondLineContainers">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'morada.pais' | translate}}</mat-label>
+            <mat-select [(ngModel)]="data.idPais" [errorStateMatcher]="matcher" [(value)]="data.idPais" name="pais"
+              [required]="submittedTry" (selectionChange)="updateDependentErroState(data)">
+              <!-- select with groups -->
+              <ng-container *ngIf="data.listaPais.length > 1">
+                <mat-optgroup *ngFor="let group of data.listaPais" [label]="group.name | translate" [disabled]="group.disabled">
+                  <mat-option *ngFor="let pais of group.array" [value]="pais.id">{{pais.nome}}</mat-option>
+                </mat-optgroup>
+              </ng-container>
+              <!-- select without groups -->
+              <ng-container *ngIf="data.listaPais.length == 1">
+                <mat-option *ngFor="let pais of data.listaPais[0]?.array" [disabled]="data.listaPais[0]?.disabled" [value]="pais.id">{{pais.nome}}</mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="secondLineContainers">
+          <mat-radio-group aria-label="Select an option" [(ngModel)]="data.moradaPrincipal"
+            [value]="data.moradaPrincipal" name="moradaPrincipal" [required]="submittedTry">
+            <label>{{'morada.moradaPrincipal' | translate}}: </label>
+            <mat-radio-button color="primary" [value]="true"> {{ 'balanco.sim' | translate }} </mat-radio-button>
+            <mat-radio-button color="primary" style="margin-left: 10px;" [value]="false"> {{ 'balanco.nao' | translate }} </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </div>
+    <div class="buttons">
+      <div class="secondLineContainers">
+        <button class="gravarButton" mat-raised-button type="submit" (click)="submitMorada()" [disabled]="!moradaForm.valid" >
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="secondLineContainers">
+        <button class="buttonCancelar" type="button" mat-raised-button (click)="closePopUp()">
+          <mat-icon class="icon">close</mat-icon>
+          <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+        </button>
+      </div>
+    </div>
+    </form>
+</div>

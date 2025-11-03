@@ -1,0 +1,35 @@
+.searchDateFormField{
+  width: 130px;
+}
+
+.datePickerIcon{
+  color: #2A81CC;
+  position: relative;
+}
+
+.mat-form-field {
+  font-size: 10px;
+  top: 2px;
+  font: "Montserrat-regular", "Helvetica Neue", sans-serif;
+  font-weight: 400;
+}
+
+.icons {
+  display: flex;
+  position: relative;
+  width: 30px;
+  height: 0px;
+}
+
+.iconsBottom {
+  bottom: 4px;
+}
+
+.fa-icon {
+  position: relative;
+  top: 7px;
+}
+
+.searchDateFormField .mat-form-field-wrapper{
+  padding-bottom: 0;
+}

@@ -1,0 +1,13 @@
+<div class="dialogPositionFix">
+  <h1 mat-dialog-title>{{errorTitle}}
+    <mat-icon class="errorIcon">error</mat-icon>
+  </h1>
+  <div mat-dialog-content>
+    <li *ngFor="let error of data.errors">
+      <span class="error">{{error}}</span>
+    </li>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="">Ok</button>
+  </div>
+</div>

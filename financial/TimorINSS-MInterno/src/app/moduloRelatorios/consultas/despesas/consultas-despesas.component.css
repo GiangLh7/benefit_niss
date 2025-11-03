@@ -1,0 +1,233 @@
+.situacoes {
+  position: relative;
+  min-height: 85%;
+}
+
+.mat-form-field {
+  font-size: 12px;
+  width: 100%;
+}
+
+.subHeader {
+  /* min-height: 50px; */
+  background: rgba(207, 207, 207, 0.966);
+  width: 90%;
+  padding-left: 10%;
+  height: 71px;
+}
+
+.no-results {
+  font-size: 18px;
+  margin: 50px 0 0;
+  font-size: 600;
+}
+
+.perfil-cell {
+  padding: 7px 0;
+}
+
+.perfil {
+  background-color: #f9ac05;
+  padding: 2px 10px;
+  color: #fff;
+  margin: 3px;
+  display: inline-block;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: 500;
+  border-radius: 50px;
+}
+
+.searchContainer {
+  width: 20%;
+  height: 100%;
+  min-width: 192px;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  column-gap: 14px;
+}
+
+.situacoesSearchButton {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  background-color: #2A81CC;
+  color: white;
+}
+
+.situacoesSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.input {
+  height: 44px;
+}
+
+.clearFilterButton{
+  background: green;
+  min-width: unset;
+  color: white;
+  height: 40px;
+  font-size: 14px;
+}
+
+.clearFilterIcon {
+  font-size: 21px;
+  padding-right: 5px;
+  width: 19px;
+  height: 19px;
+}
+
+.visibilityIcon {
+  font-size: 1.5em;
+}
+
+.visibilityButton {
+  color: #2fcc2a;
+  position: relative;
+  margin-right: 5%;
+}
+
+.painelListagemSituacoes {
+  width: 80%;
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 2%;
+  text-align: center;
+}
+
+.tabelaSituacoesTitulo {
+  width: 100%;
+  padding-bottom: 1%;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 20px;
+}
+
+.buttons{
+  padding-bottom: 10px;
+  height: 12%;
+  margin-top: 50px;
+  text-align: left;
+}
+
+.firstButton {
+  background: #2A81CC;
+  color:white;
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.tableTitleIcon {
+  font-size: 1.7em;
+  padding-right: 10px;
+  top: -5px;
+  position: relative;
+}
+
+.tabelaSituacoes {
+  width: 100%;
+  text-align: left;
+  background-color: white;
+}
+
+.visualizar {
+  color: green;
+  cursor: pointer;
+}
+
+.editIconTable {
+  color: #2A81CC;
+  cursor: pointer;
+}
+
+.tabletitleText {
+  padding-top: 10px;
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+
+table tr:nth-child(even) {
+  background-color: rgb(231, 231, 231);
+}
+
+.mat-form-field {
+  font-size: 11px;
+  min-width: 150px;
+  width: calc(100% - 32px);
+}
+
+table th {
+  font-weight: bold;
+}
+
+table td,
+table th {
+  width: 16%;
+  text-align: center;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+  background-color: #2A81CC;
+}
+
+tr.mat-footer-row .mat-footer-cell {
+  color: #fff;
+}
+
+.mat-expansion-panel-header:hover {
+  background: #1f64a1 !important;
+}
+
+.mat-expansion-panel-header {
+  position: relative;
+  background: #2A81CC !important;
+  height: 50px;
+  font-weight: bold;
+  color: white;
+  padding-left: 5%;
+  display: flex;
+  font-size: 15px;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.txt-box-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px 10% 0;
+  justify-content: center;
+}
+
+.txt-box{
+  margin: 10px 15px;
+  color:  #2A81CC;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.txt{
+  color:  black;
+  display: inline-flex;
+  font-weight: normal;
+  margin-left: 5px;
+}
+
+table th {
+  font-weight: bold;
+}
+
+table td,
+table th {
+  /* width: 13%; */
+  padding: 0 6px;
+  text-align: center;
+}

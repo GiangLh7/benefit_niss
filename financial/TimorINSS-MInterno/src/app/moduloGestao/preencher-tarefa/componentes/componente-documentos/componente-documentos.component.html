@@ -1,0 +1,39 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteDocumentos (afterExpand)="scroll(componenteDocumentos)">
+    <mat-expansion-panel-header>
+        {{'tarefa.adicionarNovoDocumento' | translate}}
+    </mat-expansion-panel-header>
+    <div class="containerBody">
+      <div class="secondLineContainers inputContainerSmall">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'general.docType' | translate}}</mat-label>
+          <mat-select #name="ngModel" [(ngModel)]="documento.tpDocIdentificacao" name="tpDocIdentificacao"
+          (selectionChange)="changedDocType()">
+            <mat-optgroup *ngFor="let group of documentosList.groups" [label]="'general.'+group.name | translate">
+              <mat-option *ngFor="let documentType of group.values" [value]="documentType.id">
+                {{documentType.descricao}}</mat-option>
+            </mat-optgroup>
+          </mat-select>
+          <fa-icon *ngIf="documento.documento" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+            (click)="clearDocumento()"></fa-icon>
+          <mat-error>{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+      </div>
+        <div class="secondLineContainers" *ngIf='documento.tpDocIdentificacao'>
+            <mat-form-field appearance="outline">
+              <mat-label>{{'general.document' | translate}}</mat-label>
+              <ngx-mat-file-input [errorStateMatcher]="matcher" [required]="wrongFormat"
+                [formControl]="fileControlDocumento"
+                [accept]="accept" name="Documento">
+                <mat-icon ngxMatFileInputIcon>upload</mat-icon>
+              </ngx-mat-file-input>
+              <mat-error>{{'general.documentLimitSize' | translate}} {{accept}}</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="secondLineContainers" style="vertical-align: super;" *ngIf="documento.documento" >
+          <button class="gravarButton" mat-raised-button type="submit" (click)="SaveDocument()">
+            <mat-icon class="icon">check</mat-icon>
+            <mat-label>{{'general.inputFile' | translate}}</mat-label>
+          </button>
+        </div>
+    </div>
+</mat-expansion-panel>

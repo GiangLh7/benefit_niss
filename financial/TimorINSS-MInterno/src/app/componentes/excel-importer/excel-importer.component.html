@@ -1,0 +1,9 @@
+<div class="excel-importer">
+  <input #fileUploader accept=".csv" type="file" class="file-uploader" (change)="fileChange($event)" />
+  <button type="button" mat-raised-button class="left-button" (click)="upload()">
+    <ng-content></ng-content>
+  </button>
+  <button type="button" matTooltip="{{ 'excelImports.downloadExcel' | translate }}" mat-raised-button class="right-button" (click)="downloadExcel()">
+    <mat-icon>insert_drive_file</mat-icon>
+  </button>
+</div>

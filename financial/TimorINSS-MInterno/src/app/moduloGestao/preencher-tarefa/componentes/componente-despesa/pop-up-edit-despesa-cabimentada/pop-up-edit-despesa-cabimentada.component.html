@@ -1,0 +1,43 @@
+<h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">payments</mat-icon>
+    {{'componenteDespesa.despesaCabimentada' | translate}}
+  </h1>
+  
+  <form (ngSubmit)="editarDespesaCabimentada()" #executarClassificacaoForm="ngForm">    
+    <div class="panel">
+      <div class="dados">
+        <div class="containerLine" style="margin-bottom: 30px;">
+
+            <mat-form-field class="despesaAExecutar" appearance="outline">
+                <mat-label>{{'componenteDespesa.descricaoDespesaRegistada' | translate}}</mat-label>
+                <input matInput maxlength="100" type="text" [(ngModel)]="data.despesaCabimentada.descricaoDespesa" name="nomeDespesa"
+                  [errorStateMatcher]="matcher" [required]="submittedTry" [disabled]="true" />
+              </mat-form-field>
+
+              <mat-form-field class="despesaAExecutar" appearance="outline">
+                <mat-label>{{'componenteDespesa.codigoOSS' | translate}}</mat-label>
+                <input matInput maxlength="100" type="text" [(ngModel)]="data.despesaCabimentada.codigoOrcamento" name="nomeDestinatario"
+                  [errorStateMatcher]="matcher" [required]="submittedTry" [disabled]="true" />
+              </mat-form-field>
+
+            <mat-form-field class="despesaAExecutar" appearance="outline">
+                <mat-label>{{'gerirCampos.Valor' | translate}}</mat-label>
+                <input autocomplete="off" matInput #name="ngModel" currencyMask [options]="currencyOptions" name="valor"
+                    [(ngModel)]="data.despesaCabimentada.valorRegistado" [errorStateMatcher]="matcher" [required]="submittedTry">
+            </mat-form-field>
+        </div>
+        <div class="rightButton">
+        </div>
+      </div>  
+    </div>    
+  </form>
+  <div class="containerLine">
+    <button class="terminarButton" type="submit" (click)="editarDespesaCabimentada()" style="margin-right: 5px;" mat-raised-button>
+      <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+    </button>
+
+    <button class="closeButton" (click)="closePopUp()" mat-raised-button>
+      <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+    </button>
+  </div>
+    

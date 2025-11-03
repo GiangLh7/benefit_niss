@@ -1,0 +1,23 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteCabecalhoProcesso (afterExpand)="scroll(componenteCabecalhoProcesso)">
+    <mat-expansion-panel-header>
+        {{'tarefa.componenteCabecalhoProcesso' | translate}}
+    </mat-expansion-panel-header>
+    <div class="containerBody">
+        <div class="txt-box">
+            {{'processo.numero' | translate}}
+            <a class="txt">{{numProcesso}}</a>
+        </div>
+        <div class="txt-box">
+            {{'processo.nome' | translate}}
+            <a class="txt">{{nomeProcesso}}</a>
+        </div>
+        <div class="txt-box">
+            {{'tarefa.nome' | translate}}
+            <a class="txt">{{nomeTarefa}}</a>
+        </div>
+        <div class="txt-box">
+            {{'general.user' | translate}}:
+            <a class="txt">{{username}}</a>
+        </div>
+    </div>
+</mat-expansion-panel>

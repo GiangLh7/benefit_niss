@@ -1,0 +1,40 @@
+  .titulo {
+    height: 13%;
+    margin-left: 450px;
+    color: #2A81CC;
+    font-weight: bold;
+  }
+
+  .popUpIcon {
+    top: 5px;
+    position: relative;
+    font-size: 1.3em;
+  }
+
+  .pdfIconTable{
+    cursor: pointer;
+    color: red;
+    font-size: 18px;
+    margin-left: 10%;
+  }
+  
+  .tabelaDespesa {
+    margin-left: 100px;
+    margin-top: 5px;
+    width:80%;
+    text-align: left;
+    background-color: white;
+  }
+
+  table td,
+  table th {
+  width: 20%;
+  text-align: center;
+  }
+
+  table th {
+  font-weight: bold;
+  }
+  table th {
+  background-color: rgb(211, 211, 211);
+  }

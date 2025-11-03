@@ -1,0 +1,43 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteListDocumentoTarefa (afterExpand)="scroll(componenteListDocumentoTarefa)">
+    <mat-expansion-panel-header>
+        {{'tarefa.documentos' | translate}}
+    </mat-expansion-panel-header>
+    <div class="containerBody">
+        <table mat-table [dataSource]="documentos" matSort class="mat-elevation-z8 tabelaListagem">
+            <ng-container matColumnDef="tipo">
+              <th mat-header-cell *matHeaderCellDef> {{'general.document' | translate}} </th>
+              <td mat-cell *matCellDef="let element"> {{element.tpDocIdentificacao}} {{element.numero}} </td>
+            </ng-container>
+            <ng-container matColumnDef="dataInsert">
+              <th mat-header-cell *matHeaderCellDef> {{'general.dataInsert' | translate}} </th>
+              <td mat-cell *matCellDef="let element"> {{formatDate(element.dataCriacao)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="tarefa">
+              <th mat-header-cell *matHeaderCellDef> {{'tarefa.nome' | translate}} </th>
+              <td mat-cell *matCellDef="let element"> {{element.tarefa}} </td>
+            </ng-container>
+            <ng-container matColumnDef="user">
+              <th mat-header-cell *matHeaderCellDef> {{'general.user' | translate}} </th>
+              <td mat-cell *matCellDef="let element"> {{element.utilizador}} </td>
+            </ng-container>
+            <ng-container *ngIf="!readOnly" matColumnDef="verEditar">
+              <th mat-header-cell *matHeaderCellDef> {{'responsavelLegalListagem.editarEliminar' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <mat-icon class="deleteIconTable" (click)="deleteDocumento(element)">clear</mat-icon>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="pdf">
+              <th mat-header-cell *matHeaderCellDef> {{'preencherTarefa.pdf' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <fa-icon class="pdfIconTable" (click)="openPdf(element)" [icon]="faFilePdf"></fa-icon>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsDocumento"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsDocumento;"></tr>
+          </table>
+          <mat-paginator class="paginator" [length]="totalRowsDocumentosTable" [pageIndex]="pageIndexDocumentosTable"
+            [pageSize]="pageSizeDocumentosTable" (page)="updateDocumentosTable($event)"
+            [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> 
+          </mat-paginator>
+    </div>
+</mat-expansion-panel>

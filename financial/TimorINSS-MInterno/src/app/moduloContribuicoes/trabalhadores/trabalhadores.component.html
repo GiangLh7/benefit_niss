@@ -1,0 +1,93 @@
+<div class="paginaListagemTrabalhadores">
+  <div class="subHeader">
+    <div class="secondLineContainers datePicker">
+      <button class="returnButton" mat-fab color="green" aria-label="Search" (click)="return()">
+        <mat-icon matTooltip="Retornar" class="utilizadorSearchIcon">keyboard_return</mat-icon>
+      </button>
+      <app-date-picker [(date)]="date" (dateSetEvent)="dateUpdated()"></app-date-picker>
+    </div>
+    <div class="sorter">
+      <mat-form-field appearance="outline" class="input inputs-grid__cell">
+        <mat-label>{{'entidadeEmpregadora.ordenarNomePorDirecao' | translate}}</mat-label>
+        <mat-select [(ngModel)]="orderDirection" name="Order" (selectionChange)="orderChange($event)">
+          <mat-option *ngFor="let option of orderDirectionOptions" [value]="option.id">{{ option.descricao | translate
+            }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="searchContainer">
+      <button class="personSearchButton" mat-fab color="green" aria-label="Search" (click)="pesquisarPessoa()">
+        <mat-icon class="personSearchIcon">person_search</mat-icon>
+      </button>
+      <mat-form-field class="pesquisar" appearance="outline">
+        <mat-label>{{'trabalhadores.searchTrab' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="filterBy" name="stringFilterInput"
+          (keydown.enter)="pesquisarPessoa()" />
+        <fa-icon *ngIf="filterBy" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearPesquisarPessoa()">
+        </fa-icon>
+      </mat-form-field>
+    </div>
+    <div class="adicionarTrabalhador">
+      <a [routerLink]="'/vincularTrabalhador'" [skipLocationChange]="true" class="adicionarTrabalhadorButton"
+        mat-raised-button>
+        <mat-icon class="adicionarTrabalhadorIcon">person_add</mat-icon>
+        <mat-label>{{'general.adicionarTrabalhador' | translate}}</mat-label>
+      </a>
+      <button (click)="adicionarSuspensao()" class="registarSuspensaoButton" mat-raised-button>
+        <mat-icon class="registarSuspensaoIcon">add_circle_outline</mat-icon>
+        <mat-label>{{'entidadeEmpregadora.registarSuspensao' | translate}}</mat-label>
+      </button>
+    </div>
+  </div>
+  <div>
+    <div class="painelListagemTrabalhadores">
+      <div class="tabelaTrabalhadoresTitulo">
+        <mat-icon class="tableTitleIcon">people</mat-icon>
+        {{'trabalhadores.tableTitle' | translate}}
+      </div>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabelaTrabalhadores">
+        <ng-container matColumnDef="nome">
+          <th class="align-left" mat-header-cell *matHeaderCellDef> {{'general.nome' | translate}} </th>
+          <td class="align-left" mat-cell *matCellDef="let element"> {{element.nome}} </td>
+        </ng-container>
+        <ng-container matColumnDef="regime">
+          <th mat-header-cell *matHeaderCellDef> {{'general.regime' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.regime}} </td>
+        </ng-container>
+        <ng-container matColumnDef="incricaoINSS">
+          <th mat-header-cell *matHeaderCellDef> {{'suspensao.inscricaoINSS' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.incricaoINSS}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dtInicioDeVinculo">
+          <th mat-header-cell *matHeaderCellDef> {{'vinculo.dataInicVinc' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{formatDate(element.dtInicioDeVinculo)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="dtFimDeVinculo">
+          <th mat-header-cell *matHeaderCellDef> {{'vinculo.dataFimVinc' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{formatDate(element.dtFimDeVinculo)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="verEditar">
+          <th mat-header-cell *matHeaderCellDef> {{'trabalhadores.detalhesEditar' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="divButtonList">
+              <a [routerLink]="['../novoTrabalhador', element.idRel]" [skipLocationChange]="true"
+                class="trabalhadorVisibilityButton" mat-icon-button>
+                <mat-icon class="trabalhadorVisibilityIcon">visibility</mat-icon>
+              </a>
+              <button *ngIf="!element.dtFimDeVinculo" (click)="desvincularTrabalhador(element.idRel)"
+                class="trabalhadorRemoveButton" mat-icon-button>
+                <mat-icon class="trabalhadorRemoveIcon">person_remove</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator class="paginadorTrabalhadores" [length]="this.totalRows" [pageSize]="this.pageSize"
+        (page)="updateTable($event)" [pageIndex]="this.pageIndex" [pageSizeOptions]="[5,10,25,50,100,500,1000]"
+        showFirstLastButtons> </mat-paginator>
+    </div>
+  </div>
+</div>

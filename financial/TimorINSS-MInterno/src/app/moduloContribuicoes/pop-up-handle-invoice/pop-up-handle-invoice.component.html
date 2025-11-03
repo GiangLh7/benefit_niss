@@ -1,0 +1,137 @@
+<div class="dialogPositionFix">
+  <div class="formSize" *ngIf="!data.avaliableCredit">
+    <h1 class="titulo" mat-dialog-title *ngIf="data.adicionar">
+      <mat-icon class="popUpIcon">home</mat-icon>
+      Payment receipt validation
+    </h1>
+
+    <form (ngSubmit)="saveComprovativo()" class="formSize" #documentoForm="ngForm">
+      <div class="bodyDialog" mat-dialog-content>
+        <div class="DadosContainer">
+          <div class="DadosContainer-expansion">
+            <div class="secondLineContainers inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'comprovativoPagamento.value' | translate}}</mat-label>
+                <input [disabled]="data.view" [errorStateMatcher]="matcher" [required]="submittedTry"
+                       (click)="focusCurrency($event)" matInput currencyMask [options]="currencyOptions"
+                       [(ngModel)]="approvePaymentRequest.valorComprovativoPag" name="comprovativo value"
+                       matTooltip="{{'comprovativoPagamento.value' | translate}}"/>
+                <fa-icon *ngIf="data.data.valor && data.adicionar" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                         (click)="clearValor()"></fa-icon>
+                <mat-error *ngIf="!data.data.valor">{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'comprovativoPagamento.date' | translate}}</mat-label>
+                <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry"
+                       [(ngModel)]="approvePaymentRequest.dataComprovativoPag" name="DataComprovativo" matInput
+                       [matDatepicker]="pickerDocument" [disabled]="data.view" [max]="now"
+                       matTooltip="{{'comprovativoPagamento.date' | translate}}">
+                <mat-datepicker-toggle matSuffix [for]="pickerDocument"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDocument></mat-datepicker>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'comprovativoPagamento.file' | translate}}</mat-label>
+                <ngx-mat-file-input [placeholder]="documentPlaceholder | translate" [errorStateMatcher]="matcher"
+                                    [required]="submittedTry || wrongFormat" [formControl]="fileControl"
+                                    [accept]="accept"
+                                    name="ComprovativoPagamento"
+                                    matTooltip="{{'comprovativoPagamento.file' | translate}}">
+                  <mat-icon ngxMatFileInputIcon>upload</mat-icon>
+                </ngx-mat-file-input>
+                <mat-error>{{'general.requiredAndWrongFormat' | translate}} {{accept}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>Invoice</mat-label>
+                <input [disabled]="data.view" [errorStateMatcher]="matcher" [required]="submittedTry" matInput
+                       [value]="guiaDetail?.paymentRef" readonly/>
+
+                <mat-error *ngIf="!data.data.valor">{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline" class="comboBox">
+                <mat-label>{{ 'guiaPagamentoListagem.chooseReason' | translate }}</mat-label>
+                <mat-select [(ngModel)]="reason">
+                  <mat-option *ngFor="let option of reasonOptions" [value]="option.key">
+                    {{option.label | translate}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+
+          </div>
+        </div>
+        <div *ngIf="pdfSrc" class="PdfContainer">
+          <div class="pdfLineContainers">
+            <pdf-viewer [src]="pdfSrc" [page]="1" [show-all]="false" [render-text]="false" [original-size]="false"
+                        [zoom-scale]="'page-fit'" [zoom]="1" [matTooltip]="fileName"></pdf-viewer>
+          </div>
+        </div>
+        <mat-icon *ngIf="pdfSrc" (click)="downloadDocument()" class="downloadIcon"
+                  matTooltip="{{'general.download' | translate}}">file_download
+        </mat-icon>
+        <div *ngIf="pdfSrc2" class="PdfContainer">
+          <div class="pdfLineContainers">
+            <pdf-viewer [src]="pdfSrc2" [page]="1" [show-all]="false" [render-text]="false" [original-size]="false"
+                        [zoom-scale]="'page-fit'" [zoom]="1" [matTooltip]="fileName"></pdf-viewer>
+          </div>
+        </div>
+        <mat-icon *ngIf="pdfSrc2" (click)="downloadDocument2()" class="downloadIcon"
+                  matTooltip="{{'general.download' | translate}}">file_download
+        </mat-icon>
+      </div>
+
+
+      <div class="buttons">
+        <button class="gravarButton" mat-raised-button [disabled]="!documentoForm.valid"
+                (click)="approve()">
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>Approve</mat-label>
+        </button>
+        <button type="button" class="buttonReject" mat-raised-button [disabled]="!documentoForm.valid"
+                (click)="reject()">
+          <mat-icon class="icon">cancel</mat-icon>
+          <mat-label>Reject</mat-label>
+        </button>
+        <button type="button" class="buttonCancelar" mat-raised-button (click)="closePopUp()">
+          <mat-icon class="icon">close</mat-icon>
+          <mat-label>Cancel</mat-label>
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="formSize" *ngIf="data.avaliableCredit">
+    <h1 class="titulo" mat-dialog-title>
+      <mat-icon class="popUpIcon">warning</mat-icon>
+      {{'comprovativoPagamento.creditTitle' | translate}}
+    </h1>
+
+    <div class="creditBodyDialog" mat-dialog-content>
+      <div class="warningBox">
+        <div class="warningText" mat-dialog-content>
+          {{'comprovativoPagamento.warningMsg1' |
+          translate}}${{data.avaliableCredit}}{{'comprovativoPagamento.warningMsg2' | translate}}
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="button" class="gravarButton" mat-raised-button (click)="useCredit()">
+        <mat-icon class="icon">check</mat-icon>
+        <mat-label>{{'general.sim' | translate}}</mat-label>
+      </button>
+      <button type="button" class="buttonCancelar" mat-raised-button (click)="proceedUpload()">
+        <mat-icon class="icon">close</mat-icon>
+        <mat-label>{{'general.nao' | translate}}</mat-label>
+      </button>
+    </div>
+  </div>
+</div>

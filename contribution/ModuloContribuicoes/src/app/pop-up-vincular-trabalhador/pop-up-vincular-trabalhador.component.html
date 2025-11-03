@@ -1,0 +1,183 @@
+<div class="dialogPositionFix">
+  <h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">assignment_ind</mat-icon>
+    {{'vinculo.novoVinculo' | translate}}
+  </h1>
+  <form (ngSubmit)="onSaveClick()" class="formClass" #vincularForm="ngForm">
+    <div class="bodyDialog" mat-dialog-content>
+      <div class="ContractZone">
+        <div class="zoneTitle">
+          <mat-icon class="zoneIconContract">contact_page</mat-icon>
+          <div class="zoneTextContract">
+            {{'vinculo.contract' | translate}}
+          </div>
+        </div>
+        <div class="DadosContainer">
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.dataInicVinc' | translate}}</mat-label>
+              <input #name="ngModel" name="dtIniVincTrabalhador" [(ngModel)]="rel.dtIniVincTrabalhador" [errorStateMatcher]="matcher" matInput
+                    (dateChange)="updateDataInicioVinculo()" [matDatepicker]="picker" [required]="submittedTry">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.dataFimVinc' | translate}}</mat-label>
+              <input #name="ngModel" name="dtIniFimTrabalhador" [errorStateMatcher]="matcherDataSuperior" [(ngModel)]="rel.dtIniFimTrabalhador" matInput [matDatepicker]="picker2">
+              <div [ngClass]="{'iconsBottom': rel.dtIniFimTrabalhador}" class="icons" matSuffix>
+                <fa-icon class="fa-icon" *ngIf="rel.dtIniFimTrabalhador" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearDtIniFimTrabalhador()"></fa-icon>
+                <mat-datepicker-toggle [for]="picker2"></mat-datepicker-toggle>
+              </div>
+              <mat-datepicker #picker2></mat-datepicker>
+              <mat-error>{{'vinculo.dtIniFimTrabalhadorError' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="DadosContainer">
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.tpContrato' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="tipoContrato" [(ngModel)]="rel.tipoContrato" [errorStateMatcher]="matcher" [required]="submittedTry">
+                <mat-option *ngFor="let tipoContrato of data.tiposContratos" [value]="tipoContrato.id">{{tipoContrato.descricao}}</mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.naturezaContracto' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="naturezaContrato" [(ngModel)]="rel.naturezaContrato" [errorStateMatcher]="matcher" [required]="submittedTry">
+                <mat-option *ngFor="let naturezaContrato of data.naturezaContratos" [value]="naturezaContrato.id">{{naturezaContrato.descricao}}</mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.LeisLabApli' | translate}}</mat-label>
+              <mat-select #name="ngModel" [(ngModel)]="rel.leiLabAplicavel" name="leiLabAplicavel" [errorStateMatcher]="matcher" [required]="submittedTry">
+                <mat-option *ngFor="let leiLabAplicavel of data.leisLabAplicavel" [value]="leiLabAplicavel.id">{{leiLabAplicavel.descricao}}</mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="DadosContainer">
+          <div class="secondLineContainers inputContainer">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.Profissao' | translate}}</mat-label>
+              <mat-select #name="ngModel" [(ngModel)]="rel.profissao" name="profissao" [errorStateMatcher]="matcher" [required]="submittedTry"
+              (selectionChange)="updateIsProfissaoOutro()">
+                <mat-option *ngFor="let profissao of data.profissoes" [value]="profissao.id">{{profissao.descricao}}</mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="secondLineContainers inputContainerSmall">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.HorasSemana' | translate}}</mat-label>
+              <input #name="ngModel" [errorStateMatcher]="notRequiredMatcher" matInput type="text" [pattern]="availableRegex.intPattern" maxLength="3" [(ngModel)]="rel.horasSemana" name="horasSemana"/>
+              <fa-icon *ngIf="rel.horasSemana" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearHorasSemana()"></fa-icon>
+              <mat-error>{{'general.wrongFormat' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="secondLineContainers inputContainerSmall">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.DiasSemana' | translate}}</mat-label>
+              <input #name="ngModel" matInput name="diasSemana" [errorStateMatcher]="notRequiredMatcher" type="text" [pattern]="availableRegex.intPattern" maxLength="1" [(ngModel)]="rel.diasSemana"/>
+              <fa-icon *ngIf="rel.diasSemana" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearDiasSemana()"></fa-icon>
+              <mat-error>{{'general.wrongFormat' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+
+        <div class="DadosContainer" *ngIf="isProfissaoOutro">
+          <div class="secondLineContainers inputContainerSmall">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.ProfissaoOutro' | translate}}</mat-label>
+              <input #name="ngModel" [required]="submittedTry"
+                [errorStateMatcher]="matcher"
+                matInput type="text" maxLength="50" [errorStateMatcher]="matcher"
+                [required]="submittedTry"
+                [(ngModel)]="rel.profissaoOutro" name="profissaoOutro" />
+              <fa-icon *ngIf="rel.profissaoOutro" matSuffix aria-label="Clear"
+                [icon]="faTimesCircle" (click)="clearProfissaoOutro()"></fa-icon>
+              <mat-error *ngIf="!rel.profissaoOutro">{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="DadosContainer">
+          <div class="secondLineContainers radioContainer">
+            <mat-radio-group #name="ngModel" aria-label="Select an option" [(ngModel)]="rel.funcPublico" (change)="updateDependentErroState()" name="VincularFuncionarPublico" [required]="submittedTry">
+              <label>{{'vinculo.funcPublica' | translate}}</label>
+              <mat-radio-button color="primary" [value]="true"> {{'general.sim' | translate}} </mat-radio-button>
+              <mat-radio-button color="primary" [value]="false"> {{'general.nao' | translate}} </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <div class="secondLineContainers inputContainer">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.NmFuncaoPublico' | translate}}</mat-label>
+              <input #name="ngModel" [disabled]="!rel.funcPublico" [pattern]="availableRegex.intPattern" matInput type="text" maxLength="20" [errorStateMatcher]="matcherFuncpublico"  [required]="submittedTry" [(ngModel)]="rel.numFuncPublico" name="stringFilterInput"/>
+              <fa-icon *ngIf="rel.numFuncPublico" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearNumFuncPublico()"></fa-icon>
+              <mat-error *ngIf="!rel.numFuncPublico">{{'general.required' | translate}}</mat-error>
+              <mat-error *ngIf="rel.numFuncPublico">{{'general.wrongFormat' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="RegimeZone">
+        <div class="zoneTitle">
+          <mat-icon class="zoneIconRegime">gavel</mat-icon>
+          <div class="zoneTextRegime">
+            {{'general.regime' | translate}}
+          </div>
+        </div>
+
+        <div class="DadosContainer">
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'general.regime' | translate}}</mat-label>
+              <mat-select (selectionChange)="changeRegime()" #name="ngModel" name="regimeFk" [(ngModel)]="rel.regimeFk" [errorStateMatcher]="matcher" [required]="submittedTry">
+                <mat-option *ngFor="let regime of data.regimes" [value]="regime.id">{{regime.descricao}}</mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'vinculo.escalao' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="escalaoFk" [disabled]="escaloesFiltrados.length <= 0" [(ngModel)]="rel.escalaoFk" [errorStateMatcher]="escalaoMatcher" [required]="submittedTry">
+                <mat-option *ngFor="let escalao of escaloesFiltrados" [value]="escalao.id">{{escalao.nome}}</mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="buttons">
+      <button class="adicionarButton" [disabled]="!vincularForm.valid" mat-button type="submit" (click)="submit()">
+        <mat-icon class="adicionarIcon">check</mat-icon>
+        <mat-label>{{'general.buttonGravar' | translate}}</mat-label></button>
+      <button class="buttonCancelar" type="button" mat-button (click)="onNoClick()">
+        <mat-icon class="adicionarIcon">close</mat-icon>
+        <mat-label>{{'general.buttonCancelar' | translate}}</mat-label></button>
+    </div>
+  </form>
+</div>
+

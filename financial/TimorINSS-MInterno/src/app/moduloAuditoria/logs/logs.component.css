@@ -1,0 +1,57 @@
+
+
+.mat-form-field {
+  font-size: 12px;
+  width: 100%;
+}
+
+.logs-page{
+    position:relative;
+    padding-top: 4%;
+    padding-bottom: 2%;
+}
+
+.button-container{
+    display: flex;
+    position: relative;
+}
+
+.logs-button{
+    margin-top: 3%;
+    margin-left: 5%;
+    border-radius: 2px 2px 2px 2px;
+    width: 200px;
+    height: 40px;
+    display: inline-table;
+    text-align: center;
+    float: left;
+    background-color: rgba(86, 119, 252, 100);
+    box-shadow: 0px 8px 8px 0px rgba(0, 0, 0, 0.24);
+    text-transform: uppercase;
+    font-size: 10px;
+    font-weight: 380;
+    margin-bottom: 4%;
+  }
+
+  .logsHeader {
+    position: relative;
+    background: #2A81CC;
+    height: 50px;
+    color: white;
+    padding-left: 5%;
+    width: 95%;
+    display: flex;
+    font-weight: bold;
+  }
+
+  .logsHeaderIcon {
+    padding-top: 6px;
+    font-size: 2.2em;
+    position: relative;
+    width: 50px;
+  }
+
+  .logsHeaderText {
+    padding-top: 14px;
+    font-size: 1.2em;
+  }

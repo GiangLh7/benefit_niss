@@ -1,0 +1,103 @@
+.dialogPositionFix {
+    position: relative;
+    height: 100%;
+  }
+
+  .mat-dialog-title {
+    text-align: center;
+  }
+
+  .titulo {
+    height: 13%;
+    margin: 0;
+  }
+
+  .bodyDialog {
+    height: 60%;
+    margin-top: 10px;
+    position: relative;
+    margin-bottom: 5px;
+  }
+
+  .buttons {
+    margin-top: 10px;
+    position: absolute;
+    height: 12%;
+    width: 100%;
+  }
+
+  .DadosContainer {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding-bottom: 5px;
+  }
+
+  .datepickerBegin {
+    padding-left: 10%;
+    padding-top: 5%;
+  }
+
+  .buttonOk {
+    background: rgba(52, 176, 43, 100);
+    color:white;
+
+    font-size: 1em;
+    display: inline-flex;
+    position: relative;
+  }
+
+  .buttonCancelar {
+    background:darkred;
+    color:white;
+
+    font-size: 1em;
+    display: inline-flex;
+    position: relative;
+    margin-left: 50px;
+  }
+
+  .error {
+    font-size: 10px;
+    color: red;
+  }
+
+  .personRemoveIcon {
+    top: 5px;
+    position: relative;
+    font-size: 1.3em;
+    padding-right: 2px;
+  }
+
+  .mat-dialog-title {
+    color: rgb(248,177,23);
+  }
+
+  .dinamic-msg{
+
+    font-size: 1em;
+    color: black;
+    padding-top: 5%;
+    position: relative;
+    font-weight: bold;
+    font-family: Montserrat;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .static-msg{
+
+    font-size: 1em;
+    color: black;
+    font-weight: bold;
+    font-family: Montserrat;
+    bottom: 0;
+    position: relative;
+    width: 100%;
+    text-align: center;
+  }
+
+  .center {
+    position: relative;
+    text-align: center;
+  }

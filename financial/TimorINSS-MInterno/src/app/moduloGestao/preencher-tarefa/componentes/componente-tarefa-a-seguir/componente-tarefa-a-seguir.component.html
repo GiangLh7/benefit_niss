@@ -1,0 +1,19 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteAccoesTarefa (afterExpand)="scroll(componenteAccoesTarefa)">
+    <mat-expansion-panel-header>
+        {{'tarefa.componenteAccoesTarefa' | translate}}
+    </mat-expansion-panel-header>
+    <div class="containerBody">
+        <mat-form-field class="subContainer" appearance="outline">
+            <mat-label>{{'tarefa.tarefaASeguir' | translate}}</mat-label>
+            <mat-select #name="ngModel" [(ngModel)]="nextTarefaId" name="tarefaIdClass"
+            (selectionChange)="selectNextTarefa()">
+                <mat-option>
+                  -- {{'tarefa.tarefaASeguir' | translate}} --
+                </mat-option>
+                <mat-option *ngFor="let item of tarefasList" [value]="item.id" title="{{item.nome}}">
+                {{item.nome}}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+</mat-expansion-panel>

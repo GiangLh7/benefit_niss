@@ -1,0 +1,60 @@
+<h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">payments</mat-icon>
+    {{'general.compromisso' | translate}}
+  </h1>
+  
+  <form (ngSubmit)="registarCompromisso()" #executarClassificacaoForm="ngForm">    
+    <div class="panel">
+      <div class="dados">
+        <div class="containerLine" style="margin-bottom: 30px;">
+  
+            <mat-form-field class="despesaAExecutar" appearance="outline">
+                <mat-label>{{'componenteDespesa.despesaCabimentada' | translate}}</mat-label>
+                <mat-select [(ngModel)]="data.compromisso.despesaRegistadaFk"
+                  [(value)]="data.compromisso.despesaRegistadaFk" name="descricaoDespesa" [errorStateMatcher]="matcher"
+                  [required]="submittedTry">
+                  <ng-container>
+                    <mat-option *ngFor="let descricao of data.listaDespesaAExecutar" [value]="descricao.id">
+                      {{descricao.descricaoDespesa}}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+
+            <mat-form-field class="despesaAExecutar" appearance="outline">
+                <mat-label>{{'componenteDespesa.nomeCompromisso' | translate}}</mat-label>
+                <input matInput maxlength="100" type="text" [(ngModel)]="data.compromisso.nomeCompromisso" name="nomeDestinatario"
+                  [errorStateMatcher]="matcher" [required]="submittedTry" />
+              </mat-form-field>
+
+            <mat-form-field class="despesaAExecutar" appearance="outline">
+                <mat-label>{{'gerirCampos.Valor' | translate}}</mat-label>
+                <input autocomplete="off" matInput #name="ngModel" currencyMask [options]="currencyOptions" name="valor"
+                    [(ngModel)]="data.compromisso.valorCompromisso" [errorStateMatcher]="matcher" [required]="submittedTry">
+            </mat-form-field>
+      
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'componenteDespesa.dataCompromisso' | translate}}</mat-label>
+            <input name="dataInicio"
+              [errorStateMatcher]="matcher" [required]="submittedTry"
+              [(ngModel)]="data.compromisso.dataCompromisso" matInput [matDatepicker]="pickerInicio">
+            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>  
+        </div>
+        <div class="rightButton">
+        </div>
+      </div>  
+    </div>    
+  </form>
+  <div class="containerLine">
+    <button class="terminarButton" type="submit" (click)="registarCompromisso()" mat-raised-button>
+      <mat-label>{{'despesas.registarCompromisso' | translate}}</mat-label>
+    </button>
+
+    <button class="closeButton" (click)="closePopUp()" mat-raised-button>
+      <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+    </button>
+  </div>
+    

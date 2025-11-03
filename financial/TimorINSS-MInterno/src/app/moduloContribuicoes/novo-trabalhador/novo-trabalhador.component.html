@@ -1,0 +1,1036 @@
+<div class="novoTrabalhadorPagina">
+  <div *ngIf="!isEdicao" class="novoTrabalhadorHeader">
+    <button class="returnButton" mat-fab color="green" aria-label="Search" (click)="return()">
+      <mat-icon matTooltip="Retornar" class="utilizadorSearchIcon">keyboard_return</mat-icon>
+    </button>
+    <mat-icon class="novoTrabalhadorHeaderIcon">person_add</mat-icon>
+    <div class="novoTrabalhadorHeaderText">
+      {{'novoTrabalhador.titleAdd' | translate}}
+    </div>
+  </div>
+  <div *ngIf="isEdicao" class="novoTrabalhadorHeader">
+    <button class="returnButton" mat-fab color="green" aria-label="Search" (click)="return()">
+      <mat-icon matTooltip="Retornar" class="utilizadorSearchIcon">keyboard_return</mat-icon>
+    </button>
+    <mat-icon class="novoTrabalhadorHeaderIcon">switch_account</mat-icon>
+    <div class="novoTrabalhadorHeaderText">
+      {{'novoTrabalhador.titleEdit' | translate}}
+    </div>
+  </div>
+  <form (ngSubmit)="adicionaTrabalhador()" #trabalhadorForm="ngForm">
+    <div class="DadosPrincipais">
+      <form (ngSubmit)="updateDadosPrincipais()" #dadosContainerForm="ngForm">
+        <div class="DadosContainer">
+          <div class="secondLineContainers inputContainer">
+            <mat-form-field class="mat-form-field" appearance="outline">
+              <mat-label>{{'general.niss' | translate}}</mat-label>
+              <input #name="ngModel" [disabled]="!editDadosPrincipais" matInput type="text" maxLength="20"
+                [(ngModel)]="trabalhador.niss" name="NISSInput" />
+              <fa-icon *ngIf="trabalhador.niss && editDadosPrincipais" matSuffix aria-label="Clear"
+                [icon]="faTimesCircle" (click)="clearNISS()"></fa-icon>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="isEdicao" class="secondLineContainers inputContainer">
+            <mat-form-field class="mat-form-field" appearance="outline">
+              <mat-label>{{'general.numInscricaoProvisorio' | translate}}</mat-label>
+              <input #name="ngModel"  matInput type="text" maxLength="20"
+               disabled [(ngModel)]="trabalhador.numInscProvisoria" name="numInscricaoProvisoria" />
+            </mat-form-field>
+          </div>
+
+          <div class="secondLineContainers inputContainer">
+            <mat-form-field class="mat-form-field" appearance="outline">
+              <mat-label>{{'general.tin' | translate}}</mat-label>
+              <input #name="ngModel" [disabled]="!editDadosPrincipais" [errorStateMatcher]="matcher" maxLength="20"
+                 matInput type="text"
+                [(ngModel)]="trabalhador.tin" name="TINInput" />
+              <fa-icon *ngIf="trabalhador.tin && editDadosPrincipais" matSuffix aria-label="Clear"
+                [icon]="faTimesCircle" (click)="clearTIN()"></fa-icon>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="DadosContainer">
+          <div class="secondLineContainers nomeContainer">
+            <mat-form-field class="mat-form-field" appearance="outline">
+              <mat-label>{{'general.nomeCompleto' | translate}}</mat-label>
+              <input #name="ngModel" [disabled]="!editDadosPrincipais" [errorStateMatcher]="matcher"
+                [required]="submittedTryDadosPrincipais || submittedTry" matInput type="text" maxlength="100"
+                [(ngModel)]="trabalhador.nome" name="NomeCompletoInput" />
+              <fa-icon *ngIf="trabalhador.nome && editDadosPrincipais" matSuffix aria-label="Clear"
+                [icon]="faTimesCircle" (click)="clearNomeCompleto()"></fa-icon>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'general.dataNasc' | translate}}</mat-label>
+              <input #name="ngModel" [disabled]="!editDadosPrincipais" [errorStateMatcher]="matcher"
+                [required]="submittedTryDadosPrincipais || submittedTry" name="dataNasc"
+                [(ngModel)]="trabalhador.dataNasc" matInput [matDatepicker]="pickerNascimento">
+              <mat-datepicker-toggle matSuffix [for]="pickerNascimento"></mat-datepicker-toggle>
+              <mat-datepicker #pickerNascimento></mat-datepicker>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="DadosContainer">
+          <div class="secondLineContainers nomeContainer">
+            <mat-form-field class="mat-form-field" appearance="outline">
+              <mat-label>{{'novoTrabalhador.nomeDaMae' | translate}}</mat-label>
+              <input #name="ngModel" [errorStateMatcher]="matcherMaeDesc" maxlength="100"
+                [required]="(submittedTryDadosPrincipais || submittedTry)"
+                [disabled]="trabalhador.indDescNomeMae || !editDadosPrincipais" matInput type="text"
+                [(ngModel)]="trabalhador.nomeMae" name="NomeDaMaeInput" />
+              <fa-icon *ngIf="trabalhador.nomeMae && editDadosPrincipais" matSuffix aria-label="Clear"
+                [icon]="faTimesCircle" (click)="clearNomeDaMae()"></fa-icon>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="secondLineContainers radioContainer">
+            <mat-radio-group #name="ngModel" [disabled]="!editDadosPrincipais" aria-label="Select an option"
+              [(ngModel)]="trabalhador.indDescNomeMae" (change)="changeMaeDesconhecida()" name="indDescNomeMae"
+              [required]="submittedTry">
+              <mat-label [ngClass]="{'disabledLabel': !editDadosPrincipais}">{{'novoTrabalhador.desconhecido' | translate}}:</mat-label>
+              <mat-radio-button color="primary" [value]="true"> {{'general.sim' | translate}} </mat-radio-button>
+              <mat-radio-button color="primary" [value]="false"> {{'general.nao' | translate}} </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="DadosContainer">
+          <div class="secondLineContainers nomeContainer">
+            <mat-form-field class="mat-form-field" appearance="outline">
+              <mat-label>{{'novoTrabalhador.nomeDoPai' | translate}}</mat-label>
+              <input #name="ngModel" [errorStateMatcher]="matcherPaiDesc" maxlength="100"
+                [required]="(submittedTryDadosPrincipais || submittedTry) && !trabalhador.indDescNomePai"
+                [disabled]="trabalhador.indDescNomePai || !editDadosPrincipais" matInput type="text"
+                [(ngModel)]="trabalhador.nomePai" name="NomeDoPaiInput" />
+              <fa-icon *ngIf="trabalhador.nomePai && editDadosPrincipais" matSuffix aria-label="Clear"
+                [icon]="faTimesCircle" (click)="clearNomeDoPai()"></fa-icon>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="secondLineContainers radioContainer">
+            <mat-radio-group #name="ngModel" [disabled]="!editDadosPrincipais" name="indDescNomePai"
+              aria-labelledby="indDescNomePai" [(ngModel)]="trabalhador.indDescNomePai"
+              (change)="changePaiDesconhecido()" [required]="submittedTry">
+              <mat-label [ngClass]="{'disabledLabel': !editDadosPrincipais}">{{'novoTrabalhador.desconhecido' | translate}}:</mat-label>
+              <mat-radio-button color="primary" [value]="true"> {{'general.sim' | translate}} </mat-radio-button>
+              <mat-radio-button color="primary" [value]="false"> {{'general.nao' | translate}} </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="DadosContainer">
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'novoTrabalhador.estadoCivil' | translate}}</mat-label>
+              <mat-select #name="ngModel" [disabled]="!editDadosPrincipais" name="estadoCivil"
+                [(ngModel)]="trabalhador.estadoCivil">
+                <!-- select with groups -->
+                <ng-container *ngIf="estadosCivis.length > 1">
+                  <mat-optgroup *ngFor="let group of estadosCivis" [label]="group.name | translate"
+                    [disabled]="group.disabled">
+                    <mat-option *ngFor="let estadoCivil of group.array" [value]="estadoCivil.id">
+                      {{estadoCivil.descricao}}</mat-option>
+                  </mat-optgroup>
+                </ng-container>
+                <!-- select without groups -->
+                <ng-container *ngIf="estadosCivis.length == 1">
+                  <mat-option *ngFor="let estadoCivil of estadosCivis[0]?.array" [disabled]="estadosCivis[0].disabled"
+                    [value]="estadoCivil.id">{{estadoCivil.descricao}}</mat-option>
+                </ng-container>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'general.sexo' | translate}}</mat-label>
+              <mat-select #name="ngModel" [errorStateMatcher]="matcher"
+                [required]="submittedTryDadosPrincipais || submittedTry" [disabled]="!editDadosPrincipais" name="sexo"
+                [(ngModel)]="trabalhador.sexo">
+                <!-- select with groups -->
+                <ng-container *ngIf="sexos.length > 1">
+                  <mat-optgroup *ngFor="let group of sexos" [label]="group.name | translate"
+                    [disabled]="group.disabled">
+                    <mat-option *ngFor="let sexo of group.array" [value]="sexo.id">{{sexo.descricao}}</mat-option>
+                  </mat-optgroup>
+                </ng-container>
+                <!-- select without groups -->
+                <ng-container *ngIf="sexos.length == 1">
+                  <mat-option *ngFor="let sexo of sexos[0]?.array" [disabled]="sexos[0].disabled" [value]="sexo.id">
+                    {{sexo.descricao}}</mat-option>
+                </ng-container>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'general.nacionalidade' | translate}}</mat-label>
+              <mat-select #name="ngModel" [errorStateMatcher]="matcher"
+                [required]="submittedTryDadosPrincipais || submittedTry" [disabled]="!editDadosPrincipais"
+                name="nacionalidade" [(ngModel)]="trabalhador.nacionalidade">
+                <!-- select with groups -->
+                <ng-container *ngIf="nacionalidades.length > 1">
+                  <mat-optgroup *ngFor="let group of nacionalidades" [label]="group.name | translate"
+                    [disabled]="group.disabled">
+                    <mat-option *ngFor="let nacionalidade of group.array" [value]="nacionalidade.id">
+                      {{nacionalidade.descricao}}</mat-option>
+                  </mat-optgroup>
+                </ng-container>
+                <!-- select without groups -->
+                <ng-container *ngIf="nacionalidades.length == 1">
+                  <mat-option *ngFor="let nacionalidade of nacionalidades[0]?.array"
+                    [disabled]="nacionalidades[0].disabled" [value]="nacionalidade.id">{{nacionalidade.descricao}}
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="secondLineContainers inputContainer">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'general.naturalidade' | translate}}</mat-label>
+              <input #name="ngModel" [errorStateMatcher]="matcher" maxLength="50"
+                [required]="submittedTryDadosPrincipais || submittedTry" [disabled]="!editDadosPrincipais" matInput
+                type="text" [(ngModel)]="trabalhador.naturalidade" name="NaturalidadeInput" />
+              <fa-icon *ngIf="trabalhador.naturalidade && editDadosPrincipais" matSuffix aria-label="Clear"
+                [icon]="faTimesCircle" (click)="clearNaturalidade()"></fa-icon>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="DadosContainer">
+          <div class="secondLineContainers radioContainer">
+            <mat-radio-group #name="ngModel" [disabled]="!editDadosPrincipais" aria-label="Select an option"
+              [(ngModel)]="esteveInscritoINSSEstrangeiro" name="esteveInscritoINSSEstrangeiro"
+              [required]="submittedTry">
+              <mat-label [ngClass]="{'disabledLabel': !editDadosPrincipais}">{{'novoTrabalhador.esteveinscritoestrangeiro' | translate}}:
+              </mat-label>
+              <mat-radio-button color="primary" [value]="true"> {{'general.sim' | translate}} </mat-radio-button>
+              <mat-radio-button color="primary" [value]="false"> {{'general.nao' | translate}} </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="DadosContainer" *ngIf="isEdicao">
+          <div class="secondLineContainers">
+            <button class="editarButton" type="button" mat-raised-button [disabled]="editDadosPrincipais"
+              (click)="enableEditDadosPrincipais()">
+              <mat-icon class="adicionarIcon">edit</mat-icon>
+              <mat-label>{{'general.buttonEdit' | translate}}</mat-label>
+            </button>
+            <button class="adicionarButton" mat-raised-button
+              [disabled]="!editDadosPrincipais || !dadosContainerForm.valid" type="submit"
+              (click)="submitDadosPrincipais()">
+              <mat-icon class="adicionarIcon">check</mat-icon>
+              <mat-label>{{'general.buttonSubstituirDados' | translate}}</mat-label>
+            </button>
+            <button class="buttonCancelar" type="button" mat-raised-button [disabled]="!editDadosPrincipais"
+              (click)="disableDadosPrincipais()">
+              <mat-icon class="adicionarIcon">close</mat-icon>
+              <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="novoTrabalhadorExpansions">
+      <mat-accordion class="example-headers-align" multi>
+        <mat-expansion-panel #panelDocument (afterExpand)="scroll(panelDocument)" [(expanded)]="expandDocument" *ngIf="!isEdicao">
+          <mat-expansion-panel-header class="headerExpansionPanel">
+            {{'novoTrabalhador.documentCaps' | translate}}
+          </mat-expansion-panel-header>
+          <div class="expandFirstContainer">
+            <div class="secondLineContainers radioContainer">
+              <mat-radio-group aria-label="Select an option" [(ngModel)]="estrangeiro" (change)="changeEstrangeiro()"
+                name="estrangeiro" [required]="submittedTry">
+                <mat-label>{{'general.foreign' | translate}} </mat-label>
+                <mat-radio-button color="primary" [value]="true"> {{'general.sim' | translate}} </mat-radio-button>
+                <mat-radio-button color="primary" [value]="false"> {{'general.nao' | translate}} </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="DadosContainer-expansion">
+            <div class="secondLineContainers inputContainerSmall">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'general.docType' | translate}}</mat-label>
+                <mat-select #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry"
+                  [disabled]="estrangeiro" [(ngModel)]="documento.tpDocIdentificacao" name="tpDocIdentificacao"
+                  (selectionChange)="updateIsPassaporte()">
+                  <mat-option *ngFor="let documentType of tiposDocumentoShow" [value]="documentType.id">
+                    {{documentType.descricao}}</mat-option>
+                </mat-select>
+                <fa-icon *ngIf="documento.documento" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                  (click)="clearDocumento()"></fa-icon>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'general.docNumber' | translate}}</mat-label>
+                <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry" matInput
+                  [pattern]="availableRegex.idNoPattern" type="text" [pattern]="availableRegex.idNoPattern" maxLength="20"
+                  [(ngModel)]="documento.numero" name="documentNumber" />
+                <fa-icon *ngIf="documento.numero" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                  (click)="clearDocumentNumber()"></fa-icon>
+                <mat-error *ngIf="!documento.numero">{{'general.required' | translate}}</mat-error>
+                <mat-error *ngIf="documento.numero">{{'general.wrongFormat' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div *ngIf="isPassaporte" class="secondLineContainers inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'general.emitLocal' | translate}}</mat-label>
+                <input #name="ngModel" [errorStateMatcher]="matcher" maxLength="50" [required]="submittedTry" matInput
+                  type="text" [(ngModel)]="documento.localEmissao" name="LocalEmissaoInput" />
+                <fa-icon *ngIf="documento.localEmissao" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                  (click)="clearLocalEmissao()"></fa-icon>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="DadosContainer-expansion">
+            <div *ngIf="!isCartaoEleitoral" class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'general.dtValidade' | translate}}</mat-label>
+                <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry" name="dataValidade"
+                [disabled]="documento.tpDocIdentificacao == cartaoEleitoral"[(ngModel)]="documento.dataValidade" name="dataValidade" matInput [matDatepicker]="pickerDocument">
+                <mat-datepicker-toggle matSuffix [for]="pickerDocument"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDocument></mat-datepicker>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'general.document' | translate}}</mat-label>
+                <ngx-mat-file-input [errorStateMatcher]="matcher" [required]="submittedTry || wrongFormat"
+                  [formControl]="fileControlDocumento"
+                  [accept]="accept" name="Documento">
+                  <mat-icon ngxMatFileInputIcon>upload</mat-icon>
+                </ngx-mat-file-input>
+                <mat-error>{{'general.documentRequiredLimitSize' | translate}} {{accept}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelDocumentEdit (afterExpand)="scroll(panelDocumentEdit)" *ngIf="isEdicao">
+          <mat-expansion-panel-header class="headerExpansionPanel">
+            {{'novoTrabalhador.documentsCaps' | translate}}
+          </mat-expansion-panel-header>
+          <div class="expandTableContainer">
+            <table mat-table [dataSource]="documentos" matSort class="mat-elevation-z8 tabelaListagem">
+              <ng-container matColumnDef="tipo">
+                <th mat-header-cell *matHeaderCellDef> {{'general.docType' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.tpDocIdentificacao}} </td>
+              </ng-container>
+              <ng-container matColumnDef="numero">
+                <th mat-header-cell *matHeaderCellDef> {{'general.docNumber' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.numero}} </td>
+              </ng-container>
+              <ng-container matColumnDef="dataValidade">
+                <th mat-header-cell *matHeaderCellDef> {{'general.dtValidade' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{formatDate(element.dataValidade)}} </td>
+              </ng-container>
+              <ng-container matColumnDef="verDocumento">
+                <th mat-header-cell *matHeaderCellDef> {{'general.verDocumento' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                    <fa-icon class="pdfIconTable" (click)="openPdf(element)" [icon]="faFilePdf"></fa-icon>
+                </td>
+            </ng-container>
+              <ng-container matColumnDef="verEditar">
+                <th mat-header-cell *matHeaderCellDef> {{'responsavelLegalListagem.editarEliminar' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="editIconTable" (click)="editarDocumento(element)">edit</mat-icon>
+                  <mat-icon class="deleteIconTable" (click)="deleteDocumento(element)">clear</mat-icon>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsDocumento"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsDocumento;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="totalRowsDocumentosTable" [pageIndex]="pageIndexDocumentosTable"
+              [pageSize]="pageSizeDocumentosTable" (page)="updateDocumentosTable($event)"
+              [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> </mat-paginator>
+          </div>
+          <div class="DadosContainer-expansion expansion">
+            <div class="secondLineContainers buttons">
+              <button type="button" class="adicionarButton" mat-raised-button (click)="adicionarDocumento()">
+                <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+                <mat-label>{{'novoTrabalhador.addDocumentCaps' | translate}}</mat-label>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelMorada (afterExpand)="scroll(panelMorada)" [(expanded)]="expandMorada" *ngIf="!isEdicao">
+          <mat-expansion-panel-header class="headerExpansionPanel">
+            {{'morada.subTitle' | translate}}
+          </mat-expansion-panel-header>
+          <div class="expandFirstContainer">
+            <div class="secondLineContainers inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'morada.rua' | translate}}</mat-label>
+                <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry" maxLength="100"
+                  [(ngModel)]="morada.Rua" type="text" name="rua" matInput>
+                <fa-icon *ngIf="morada.Rua" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearRua()">
+                </fa-icon>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'morada.numPorta' | translate}}</mat-label>
+                <input #name="ngModel" [errorStateMatcher]="matcher"
+                  [(ngModel)]="morada.NumPorta" type="text" maxLength="20" name="numPorta" matInput>
+                <fa-icon *ngIf="morada.NumPorta" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                  (click)="clearNumPorta()"></fa-icon>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="DadosContainer-expansion">
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'morada.municipio' | translate}}</mat-label>
+                <mat-select #name="ngModel" [required]="submittedTry" [errorStateMatcher]="matcherPaisTimor"
+                  [(ngModel)]="idMunicipio" (selectionChange)="changePosto()" name="municipio">
+                  <mat-option *ngFor="let municipio of listaMunicipios" [value]="municipio.id">{{municipio.nome}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'morada.postoAdministrativo' | translate}}</mat-label>
+                <mat-select #name="ngModel" [required]="submittedTry" [errorStateMatcher]="matcherPaisTimor"
+                  [(ngModel)]="idPostoAdministrativo" (selectionChange)="changeSuco()" name="postoAdministrativo">
+                  <mat-option *ngFor="let posto of listaPostosAdministrativosFilter" [value]="posto.id">{{posto.nome}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'morada.suco' | translate}}</mat-label>
+                <mat-select #name="ngModel" [required]="submittedTry" [errorStateMatcher]="matcherPaisTimor"
+                  [(ngModel)]="idSuco" (selectionChange)="changeAldeia()" name="suco">
+                  <mat-option *ngFor="let suco of listaSucosFilter" [value]="suco.id">{{suco.nome}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'morada.aldeia' | translate}}</mat-label>
+                <mat-select #name="ngModel" [required]="submittedTry" [errorStateMatcher]="matcherPaisTimor"
+                  [(ngModel)]="morada.MoradaAldeiaFk" name="aldeia">
+                  <mat-option *ngFor="let aldeia of listaAldeiasFilter" [value]="aldeia.id">{{aldeia.nome}}</mat-option>
+                </mat-select>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="DadosContainer-expansion">
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'morada.pais' | translate}}</mat-label>
+                <mat-select #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry"
+                  (selectionChange)="changePais()" [(ngModel)]="morada.MoradaPaisFk" name="pais">
+                  <mat-option *ngFor="let pais of listaPaises[0]?.array" [disabled]="listaPaises[0].disabled"
+                    [value]="pais.id">{{pais.nome}}</mat-option>
+                </mat-select>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelMoradaEdit (afterExpand)="scroll(panelMoradaEdit)" *ngIf="isEdicao">
+          <mat-expansion-panel-header class="headerExpansionPanel">
+            {{'morada.title' | translate}}
+          </mat-expansion-panel-header>
+          <div class="expandTableContainer">
+            <table mat-table [dataSource]="moradas" matSort class="mat-elevation-z8 tabelaListagem">
+              <ng-container matColumnDef="rua">
+                <th mat-header-cell *matHeaderCellDef> {{'morada.rua' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.ruaNumPorta}} </td>
+              </ng-container>
+              <ng-container matColumnDef="municipio">
+                <th mat-header-cell *matHeaderCellDef> {{'morada.municipio' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.municipio}} </td>
+              </ng-container>
+              <ng-container matColumnDef="postoAdministrativo">
+                <th mat-header-cell *matHeaderCellDef> {{'morada.postoAdministrativo' | translate}}</th>
+                <td mat-cell *matCellDef="let element"> {{element.postoAdministrativo}} </td>
+              </ng-container>
+              <ng-container matColumnDef="suco">
+                <th mat-header-cell *matHeaderCellDef>{{'morada.suco' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.suco}} </td>
+              </ng-container>
+              <ng-container matColumnDef="aldeia">
+                <th mat-header-cell *matHeaderCellDef>{{'morada.aldeia' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.aldeia}} </td>
+              </ng-container>
+              <ng-container matColumnDef="pais">
+                <th mat-header-cell *matHeaderCellDef>{{'morada.pais' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.pais}} </td>
+              </ng-container>
+              <ng-container matColumnDef="moradaPrincipal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'morada.moradaPrincipal' | translate}}</th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="moradaCheckIcon" *ngIf="element.moradaPrincipal">check</mat-icon>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="verEditar">
+                <th mat-header-cell *matHeaderCellDef> {{'morada.editarEliminar' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="editIconTable" (click)="editarMorada(element)">edit</mat-icon>
+                  <mat-icon class="deleteIconTable" (click)="deleteMorada(element)">clear</mat-icon>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsMorada"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsMorada;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="totalRowsMoradasTable" [pageSize]="pageSizeMoradasTable"
+              (page)="updateMoradasTable($event)" [pageIndex]="pageIndexMoradasTable"
+              [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> </mat-paginator>
+          </div>
+          <div class="DadosContainer-expansion expansion">
+            <div class="secondLineContainers buttons">
+              <button type="button" class="adicionarButton" mat-raised-button (click)="adicionarMorada()">
+                <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+                <mat-label>{{'morada.buttonAdicionarMorada' | translate}}</mat-label>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelContacto (afterExpand)="scroll(panelContacto)" [(expanded)]="expandContato" *ngIf="!isEdicao">
+          <mat-expansion-panel-header class="headerExpansionPanel">
+            {{'contacto.subTitle' | translate}}
+          </mat-expansion-panel-header>
+          <div class="expandFirstContainer">
+            <div class="secondLineContainers  inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'contacto.email' | translate}}</mat-label>
+                <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry"
+                  [(ngModel)]="contacto.email" [pattern]="availableRegex.emailPattern" type="text" name="Email"
+                  maxlength="50" matInput>
+                <fa-icon *ngIf="contacto.email" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                  (click)="clearEmail()"></fa-icon>
+                <mat-error *ngIf="!contacto.email">{{'general.required' | translate}}</mat-error>
+                <mat-error *ngIf="contacto.email">{{'general.wrongFormat' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers  inputContainer">
+              <mat-form-field appearance="outline">
+                <mat-label>{{'contacto.telemovel' | translate}}</mat-label>
+                <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry"
+                  [(ngModel)]="contacto.telemovel" type="number" [pattern]="availableRegex.phonelPattern" maxlength="20"
+                  name="Telemovel" matInput>
+                <fa-icon *ngIf="contacto.telemovel" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                  (click)="clearTelemovel()"></fa-icon>
+                <mat-error *ngIf="!contacto.telemovel">{{'general.required' | translate}}</mat-error>
+                <mat-error *ngIf="contacto.telemovel">{{'general.wrongFormat' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelContactoEdit (afterExpand)="scroll(panelContactoEdit)" *ngIf="isEdicao">
+          <mat-expansion-panel-header class="headerExpansionPanel">
+            {{'contacto.title' | translate}}
+          </mat-expansion-panel-header>
+          <div class="expandTableContainer">
+            <table mat-table [dataSource]="contactos" matSort class="mat-elevation-z8 tabelaListagem">
+              <ng-container matColumnDef="telemovel">
+                <th mat-header-cell *matHeaderCellDef> {{'contacto.telemovel' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.telemovel}} </td>
+              </ng-container>
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef> {{'contacto.email' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+              <ng-container matColumnDef="verEditar">
+                <th mat-header-cell *matHeaderCellDef> {{'contacto.editarEliminar' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="editIconTable" (click)="editarContacto(element)">edit</mat-icon>
+                  <mat-icon class="deleteIconTable" (click)="deleteContacto(element)">clear</mat-icon>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsContacto"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsContacto;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="totalRowsContactosTable" [pageSize]="pageSizeContactosTable"
+              (page)="updateContactosTable($event)" [pageIndex]="pageIndexContactosTable"
+              [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+          <div class="DadosContainer-expansion expansion">
+            <div class="secondLineContainers buttons">
+              <button type="button" class="adicionarButton" mat-raised-button (click)="adicionarContacto()">
+                <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+                <mat-label>{{'contacto.buttonAdicionarContato' | translate}}</mat-label>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelSuspensoes (afterExpand)="scroll(panelSuspensoes)" class="mat-expansion" *ngIf="isEdicao" [(expanded)]="suspensaoOpenState"
+          (opened)="suspensaoOpenState = true" (closed)="suspensaoOpenState = false">
+          <mat-expansion-panel-header class="headerExpansionPanel">
+            {{'suspensao.title' | translate}}
+          </mat-expansion-panel-header>
+          <div id="suspensaoGrid" class="expandTableContainer">
+            <table mat-table [dataSource]="suspensoes" matSort class="mat-elevation-z8 tabelaListagem">
+              <ng-container matColumnDef="dataInicioSuspensao">
+                <th mat-header-cell *matHeaderCellDef> {{'suspensao.dataInicioSuspensao' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{formatDate(element.dataInicioSuspensao)}} </td>
+              </ng-container>
+              <ng-container matColumnDef="dataFimSuspensao">
+                <th mat-header-cell *matHeaderCellDef> {{'suspensao.dataFimSuspensao' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{formatDate(element.dataFimSuspensao)}} </td>
+              </ng-container>
+              <ng-container matColumnDef="verEditar">
+                <th mat-header-cell *matHeaderCellDef> {{'suspensao.editarEliminar' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="deleteIconTable" (click)="deleteSuspensao(element)">clear</mat-icon>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsSuspensao"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsSuspensao;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="totalRowsSuspensoesTable" [pageSize]="pageSizeSuspensoesTable"
+              (page)="updateSuspensoesTable($event)" [pageIndex]="pageIndexSuspensoesTable"
+              [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons>
+            </mat-paginator>
+          </div>
+          <div class="DadosContainer-expansion expansion">
+            <div class="secondLineContainers buttons">
+              <button type="button" class="adicionarButton" mat-raised-button (click)="adicionarSuspensao()">
+                <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+                <mat-label>{{'suspensao.adiconarSuspensao' | translate}}</mat-label>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelContrato (afterExpand)="scroll(panelContrato)" [(expanded)]="expandContratoTrab">
+          <mat-expansion-panel-header>
+            {{'novoTrabalhador.contractoTrabalho' | translate}}
+          </mat-expansion-panel-header>
+          <form (ngSubmit)="updateContrato()" #contractoForm="ngForm">
+            <div class="expandFirstContainer">
+              <div class="secondLineContainers dataContainer">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.dataInicVinc' | translate}}</mat-label>
+                  <input #name="ngModel" [errorStateMatcher]="matcher" [required]="submittedTry || submittedTryContrato"
+                    [disabled]="!editContrato" name="dtIniVincTrabalhador" (dateChange)="updateDataInicioVinculo()"
+                    [(ngModel)]="contrato.dtIniVincTrabalhador" matInput [matDatepicker]="pickerInicioVindulo">
+                  <mat-datepicker-toggle matSuffix [for]="pickerInicioVindulo"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerInicioVindulo></mat-datepicker>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="secondLineContainers dataContainer">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.dataFimVinc' | translate}}</mat-label>
+                  <input #name="ngModel" [errorStateMatcher]="matcherDataSuperior" [disabled]="!editContrato"
+                    [(ngModel)]="contrato.dtIniFimTrabalhador" name="dtIniFimTrabalhador" matInput
+                    [matDatepicker]="pickerFimVindulo">
+                  <div [ngClass]="{'iconsBottom': contrato.dtIniFimTrabalhador}" class="icons" matSuffix>
+                    <fa-icon class="fa-icon" *ngIf="contrato.dtIniFimTrabalhador && editContrato" matSuffix
+                      aria-label="Clear" [icon]="faTimesCircle" (click)="clearDtIniFimTrabalhador()"></fa-icon>
+                    <mat-datepicker-toggle [for]="pickerFimVindulo"></mat-datepicker-toggle>
+                  </div>
+                  <mat-datepicker #pickerFimVindulo></mat-datepicker>
+                  <mat-error>{{'vinculo.dtIniFimTrabalhadorError' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="DadosContainer-expansion">
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.tpContrato' | translate}}</mat-label>
+                  <mat-select #name="ngModel" [errorStateMatcher]="matcher"
+                    [required]="submittedTry || submittedTryContrato" [disabled]="!editContrato" name="tipoContrato"
+                    [(ngModel)]="contrato.tipoContrato">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="tiposContratos.length > 1">
+                      <mat-optgroup *ngFor="let group of tiposContratos" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let tipoContr of group.array" [value]="tipoContr.id">{{tipoContr.descricao}}
+                        </mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="tiposContratos.length == 1">
+                      <mat-option *ngFor="let tipoContr of tiposContratos[0]?.array"
+                        [disabled]="tiposContratos[0]?.disabled" [value]="tipoContr.id">{{tipoContr.descricao}}
+                      </mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.naturezaContracto' | translate}}</mat-label>
+                  <mat-select #name="ngModel" [errorStateMatcher]="matcher"
+                    [required]="submittedTry || submittedTryContrato" [disabled]="!editContrato" name="naturezaContrato"
+                    [(ngModel)]="contrato.naturezaContrato">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="naturezasContrato.length > 1">
+                      <mat-optgroup *ngFor="let group of naturezasContrato" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let naturezaContrato of group.array" [value]="naturezaContrato.id">
+                          {{naturezaContrato.descricao}}</mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="naturezasContrato.length == 1">
+                      <mat-option *ngFor="let naturezaContrato of naturezasContrato[0]?.array"
+                        [disabled]="naturezasContrato[0]?.disabled" [value]="naturezaContrato.id">
+                        {{naturezaContrato.descricao}}</mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.LeisLabApli' | translate}}</mat-label>
+                  <mat-select #name="ngModel" [errorStateMatcher]="matcher"
+                    [required]="submittedTry || submittedTryContrato" [disabled]="!editContrato" name="leiLabAplicavel"
+                    [(ngModel)]="contrato.leiLabAplicavel">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="leisLabAplicaveis.length > 1">
+                      <mat-optgroup *ngFor="let group of leisLabAplicaveis" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let lei of group.array" [value]="lei.id">{{lei.descricao}}</mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="leisLabAplicaveis.length == 1">
+                      <mat-option *ngFor="let lei of leisLabAplicaveis[0]?.array"
+                        [disabled]="leisLabAplicaveis[0]?.disabled" [value]="lei.id">{{lei.descricao}}</mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="DadosContainer-expansion">
+              <div class="secondLineContainers inputContainer">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.Profissao' | translate}}</mat-label>
+                  <mat-select #name="ngModel" [errorStateMatcher]="matcher"
+                    [required]="submittedTry || submittedTryContrato" [disabled]="!editContrato" name="profissao"
+                    [(ngModel)]="contrato.profissao" (selectionChange)="updateIsProfissaoOutro()">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="profissoes.length > 1">
+                      <mat-optgroup *ngFor="let group of profissoes" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let profissao of group.array" [value]="profissao.id">{{profissao.descricao}}</mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="profissoes.length == 1">
+                      <mat-option *ngFor="let profissao of profissoes[0]?.array"
+                        [disabled]="profissoes[0]?.disabled" [value]="profissao.id">{{profissao.descricao}}</mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="secondLineContainers inputContainerSmall">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.HorasSemana' | translate}}</mat-label>
+                  <input #name="ngModel" [disabled]="!editContrato" [errorStateMatcher]="notRequiredMatcher" matInput
+                    type="text" [pattern]="availableRegex.intPattern" maxLength="3" [(ngModel)]="contrato.horasSemana"
+                    name="horasSemana" />
+                  <fa-icon *ngIf="contrato.horasSemana && editContrato" matSuffix aria-label="Clear"
+                    [icon]="faTimesCircle" (click)="clearHorasSemana()"></fa-icon>
+                  <mat-error>{{'general.wrongFormat' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="secondLineContainers inputContainerSmall">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.DiasSemana' | translate}}</mat-label>
+                  <input #name="ngModel" [disabled]="!editContrato" matInput [errorStateMatcher]="notRequiredMatcher"
+                    type="text" [pattern]="availableRegex.intPattern" maxLength="1" [(ngModel)]="contrato.diasSemana"
+                    name="diasSemana" />
+                  <fa-icon *ngIf="contrato.diasSemana && editContrato" matSuffix aria-label="Clear"
+                    [icon]="faTimesCircle" (click)="clearDiasSemana()"></fa-icon>
+                  <mat-error>{{'general.wrongFormat' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="DadosContainer-expansion" *ngIf="isProfissaoOutro">
+              <div class="secondLineContainers inputContainerSmall">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.ProfissaoOutro' | translate}}</mat-label>
+                  <input #name="ngModel" [disabled]="!editContrato" [required]="submittedTry || submittedTryContrato"
+                    [errorStateMatcher]="matcher"
+                    matInput type="text" maxLength="50" [errorStateMatcher]="matcher"
+                    [required]="submittedTry"
+                    [(ngModel)]="contrato.profissaoOutro" name="profissaoOutro" />
+                  <fa-icon *ngIf="contrato.profissaoOutro && editContrato" matSuffix aria-label="Clear"
+                    [icon]="faTimesCircle" (click)="clearProfissaoOutro()"></fa-icon>
+                  <mat-error *ngIf="!contrato.profissaoOutro">{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="DadosContainer-expansion">
+              <div class="secondLineContainers radioContainer">
+                <mat-radio-group #name="ngModel" [disabled]="!editContrato" aria-label="Select an option"
+                  [(ngModel)]="contrato.funcPublico" (change)="changeFuncPublico()" name="VincularFuncionarPublico"
+                  [required]="submittedTry">
+                  <mat-label [ngClass]="{'disabledLabel': !editContrato}">{{'vinculo.funcPublica' | translate}}</mat-label>
+                  <mat-radio-button color="primary" [value]="true"> {{'general.sim' | translate}} </mat-radio-button>
+                  <mat-radio-button color="primary" [value]="false"> {{'general.nao' | translate}} </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div class="secondLineContainers inputContainer">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.NmFuncaoPublico' | translate}}</mat-label>
+                  <input #name="ngModel" [required]="submittedTry || submittedTryContrato"
+                    [errorStateMatcher]="matcherFuncpublico" [disabled]="!contrato.funcPublico || !editContrato"
+                    matInput type="text" maxLength="20" [errorStateMatcher]="matcherFuncpublico"
+                    [pattern]="availableRegex.intTextPattern" [required]="submittedTry"
+                    [(ngModel)]="contrato.numFuncPublico" name="numFuncPublico" />
+                  <fa-icon *ngIf="contrato.numFuncPublico && editContrato" matSuffix aria-label="Clear"
+                    [icon]="faTimesCircle" (click)="clearNumFuncPublico()"></fa-icon>
+                  <mat-error *ngIf="!contrato.numFuncPublico">{{'general.required' | translate}}</mat-error>
+                  <mat-error *ngIf="contrato.numFuncPublico">{{'general.wrongFormat' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="DadosContainer-expansion" *ngIf="isEdicao">
+              <div class="secondLineContainers">
+                <button class="editarButton" type="button" mat-raised-button [disabled]="editContrato"
+                  (click)="enableEditContrato()">
+                  <mat-icon class="adicionarIcon">edit</mat-icon>
+                  <mat-label>{{'general.buttonEdit' | translate}}</mat-label>
+                </button>
+                <button class="adicionarButton" mat-raised-button [disabled]="!editContrato || !contractoForm.valid"
+                  type="submit" (click)="submitContracto()">
+                  <mat-icon class="adicionarIcon">check</mat-icon>
+                  <mat-label>{{'general.buttonSubstituirDados' | translate}}</mat-label>
+                </button>
+                <button class="buttonCancelar" type="button" mat-raised-button [disabled]="!editContrato"
+                  (click)="disableContrato()">
+                  <mat-icon class="adicionarIcon">close</mat-icon>
+                  <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelRegime (afterExpand)="scroll(panelRegime)" [(expanded)]="expandRegime">
+          <mat-expansion-panel-header>
+            {{'general.regimeCaps' | translate}}
+          </mat-expansion-panel-header>
+          <form (ngSubmit)="updateContratoRegime()" #contractoRegimeForm="ngForm">
+            <div class="expandFirstContainer">
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'general.regime' | translate}}</mat-label>
+                  <mat-select  (selectionChange)="changeRegime()" #name="ngModel" [errorStateMatcher]="matcher"
+                    [required]="submittedTry || submittedTryContratoRegime" [disabled]="!editContratoRegime" name="regimeFk"
+                    [(ngModel)]="contratoRegime.regimeFk">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="regimes.length > 1">
+                      <mat-optgroup *ngFor="let group of regimes" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let regime of group.array" [value]="regime.id">{{regime.descricao}}
+                        </mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="regimes.length == 1">
+                      <mat-option *ngFor="let regime of regimes[0]?.array" [disabled]="regimes[0].disabled"
+                        [value]="regime.id">{{regime.descricao}}</mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.escalao' | translate}}</mat-label>
+                  <mat-select #name="ngModel" [errorStateMatcher]="escalaoMatcher"
+                    [required]="submittedTry || submittedTryContratoRegime" [disabled]="!editContratoRegime || escaloesFilter.length <= 0" name="escalaoFk"
+                    [(ngModel)]="contratoRegime.escalaoFk">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="escaloesFilter.length > 1">
+                      <mat-optgroup *ngFor="let group of escaloesFilter" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let escalao of group.array" [value]="escalao.id">{{escalao.nome}}
+                        </mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="escaloesFilter.length == 1">
+                      <mat-option *ngFor="let escalao of escaloesFilter[0]?.array" [disabled]="escaloesFilter[0].disabled"
+                        [value]="escalao.id">{{escalao.nome}}</mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="DadosContainer-expansion" *ngIf="isEdicao">
+              <div class="secondLineContainers">
+                <button class="editarButton" type="button" mat-raised-button [disabled]="editContratoRegime"
+                  (click)="enableEditContratoRegime()">
+                  <mat-icon class="adicionarIcon">edit</mat-icon>
+                  <mat-label>{{'general.buttonEdit' | translate}}</mat-label>
+                </button>
+                <button class="adicionarButton" mat-raised-button [disabled]="!editContratoRegime || !contractoRegimeForm.valid"
+                  type="submit" (click)="submitContractoRegime()">
+                  <mat-icon class="adicionarIcon">check</mat-icon>
+                  <mat-label>{{'general.buttonSubstituirDados' | translate}}</mat-label>
+                </button>
+                <button class="buttonCancelar" type="button" mat-raised-button [disabled]="!editContratoRegime"
+                  (click)="disableContratoRegime()">
+                  <mat-icon class="adicionarIcon">close</mat-icon>
+                  <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+        <mat-expansion-panel #panelEstrangeiro (afterExpand)="scroll(panelEstrangeiro)" [expanded]="expandSocialEstrang" *ngIf="esteveInscritoINSSEstrangeiro">
+          <mat-expansion-panel-header>
+            {{'novoTrabalhador.inssEstrangeiroTitle' | translate}}
+          </mat-expansion-panel-header>
+          <form (ngSubmit)="updateINSSEstrangeiro()" #iNSSEstranheiroForm="ngForm">
+            <div class="expandFirstContainer">
+              <div class="secondLineContainers inputContainer">
+                <mat-form-field class="mat-form-field-nomes" appearance="outline">
+                  <mat-label>{{'novoTrabalhador.nomeINSSEstrangeiro' | translate}}</mat-label>
+                  <input #name="ngModel" [errorStateMatcher]="matcher"
+                    [required]="submittedTry || submittedTryINSSEstrangeiro" [disabled]="!editINSSEstrangeiro" matInput
+                    type="text" [(ngModel)]="inssEstrangeiro.nomeSSEstrangeiro" name="nomeSSEstrangeiro" />
+                  <fa-icon *ngIf="inssEstrangeiro.nomeSSEstrangeiro && editINSSEstrangeiro" matSuffix aria-label="Clear"
+                    [icon]="faTimesCircle" (click)="clearNomeEstrangeiro()"></fa-icon>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'morada.pais' | translate}}</mat-label>
+                  <mat-select #name="ngModel" [errorStateMatcher]="matcher"
+                    [required]="submittedTry || submittedTryINSSEstrangeiro" [disabled]="!editINSSEstrangeiro"
+                    [(ngModel)]="inssEstrangeiro.estrangeiroPaisFk" name="estrangeiroPaisFk">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="listaPaises.length > 1">
+                      <mat-optgroup *ngFor="let group of listaPaises" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let pais of group.array" [value]="pais.id">{{pais.descricao}}</mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="listaPaises.length == 1">
+                      <mat-option *ngFor="let pais of listaPaises[0]?.array" [disabled]="listaPaises[0]?.disabled"
+                        [value]="pais.id">{{pais.nome}}</mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="secondLineContainers inputContainerSmall">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'vinculo.nissEstrangeiro' | translate}}</mat-label>
+                  <input #name="ngModel" [errorStateMatcher]="matcher"
+                    [required]="submittedTry || submittedTryINSSEstrangeiro" [disabled]="!editINSSEstrangeiro"
+                    [(ngModel)]="inssEstrangeiro.nissestrangeiro" type="text" maxLength="20" name="idINSSEstrangeiro"
+                    matInput>
+                  <fa-icon *ngIf="inssEstrangeiro.idInssestrang && editINSSEstrangeiro" matSuffix aria-label="Clear"
+                    [icon]="faTimesCircle" (click)="clearNISSEstrangeiro()"></fa-icon>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="DadosContainer-expansion">
+              <div class="secondLineContainers radioContainer">
+                <mat-radio-group #name="ngModel" [disabled]="!editINSSEstrangeiro" aria-label="Select an option"
+                  [(ngModel)]="inssEstrangeiro.indBenfAtualmente" name="indBenfAtualmente" [required]="submittedTry">
+                  <mat-label [ngClass]="{'disabledLabel': !editINSSEstrangeiro}">{{'vinculo.benefActualmente' | translate}}</mat-label>
+                  <mat-radio-button color="primary" [value]="true"> {{'general.sim' | translate}} </mat-radio-button>
+                  <mat-radio-button color="primary" [value]="false"> {{'general.nao' | translate}} </mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div class="secondLineContainers radioContainer">
+                <mat-radio-group #name="ngModel" [disabled]="!editINSSEstrangeiro" aria-label="Select an option"
+                  [(ngModel)]="inssEstrangeiro.indDecontAtualmente" name="indDecontAtualmente"
+                  [required]="submittedTry">
+                  <mat-label [ngClass]="{'disabledLabel': !editINSSEstrangeiro}">{{'vinculo.descActualmente' | translate}}</mat-label>
+                  <mat-radio-button color="primary" [value]="true"> {{'general.sim' | translate}} </mat-radio-button>
+                  <mat-radio-button color="primary" [value]="false"> {{'general.nao' | translate}} </mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div *ngIf="editINSSEstrangeiro" class="secondLineContainers inputContainerSmall">
+                <mat-form-field appearance="outline">
+                  <mat-label *ngIf="inssEstrangeiro.nomeDocumento && !fileControlDocumentoINSSEstrangeiro.pristine">
+                    {{'general.document' | translate}}
+                  </mat-label>
+                  <ngx-mat-file-input [errorStateMatcher]="notRequiredMatcher"
+                    [formControl]="fileControlDocumentoINSSEstrangeiro"
+                    [required]= "wrongFormat"
+                    [placeholder]="documentINESSPlaceholder | translate" [accept]="accept" name="documentInput">
+                    <mat-icon ngxMatFileInputIcon>upload</mat-icon>
+                  </ngx-mat-file-input>
+                  <fa-icon *ngIf="inssEstrangeiro.documento" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                    (click)="clearInssEstrangeiroDocumento()"></fa-icon>
+                  <mat-error>{{'general.documentLimitSize' | translate}} {{accept}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="DadosContainer-expansion" *ngIf="isEdicao">
+              <div class="secondLineContainers">
+                <button class="editarButton" type="button" mat-raised-button [disabled]="editINSSEstrangeiro"
+                  (click)="enableEditINSSEstrangeiro()">
+                  <mat-icon class="adicionarIcon">edit</mat-icon>
+                  <mat-label>{{'general.buttonEdit' | translate}}</mat-label>
+                </button>
+                <button class="adicionarButton" mat-raised-button
+                  [disabled]="!editINSSEstrangeiro || !iNSSEstranheiroForm.valid" type="submit"
+                  (click)="submitINSSEstrangeiro()">
+                  <mat-icon class="adicionarIcon">check</mat-icon>
+                  <mat-label>{{'general.buttonSubstituirDados' | translate}}</mat-label>
+                </button>
+                <button class="buttonCancelar" type="button" mat-raised-button [disabled]="!editINSSEstrangeiro"
+                  (click)="disableINSSEstrangeiro()">
+                  <mat-icon class="adicionarIcon">close</mat-icon>
+                  <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+                </button>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div *ngIf="!isEdicao" class="AdicionarTrabalhadorActionDiv">
+      <div class="secondLineContainers">
+        <button class="AdicionarTrabalhadorButton" type="submit" (click)="submitTrabalhador()"
+          [disabled]="!trabalhadorForm.valid" mat-raised-button>
+          <mat-icon class="AdicionarTrabalhadorIcon">perm_contact_calendar</mat-icon>
+          <mat-label>{{'vinculo.inscreverTrabalhador' | translate}}</mat-label>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

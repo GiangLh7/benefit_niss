@@ -1,0 +1,274 @@
+  .dadosEntidadeEmpregadoraHeader {
+    position: relative;
+    background: #2A81CC;
+    height: 50px;
+    font-weight: bold;
+    font-weight: 400;
+    color: white;
+    padding-left: 3%;
+    display: flex;
+
+  }
+
+  .dadosEntidadeEmpregadoraIcon {
+    padding-top: 6px;
+    font-size: 2.2em;
+    position: relative;
+    width: 50px;
+  }
+
+  .dadosEntidadeEmpregadoraText {
+    padding-left: 2%;
+    padding-top: 14px;
+    font-size: 1.2em;
+  }
+
+  .mat-expansion-panel-header {
+
+    font-size: 15px;
+    font-weight: bold;
+    background: rgba(42, 129, 204, 100);
+    height: 50px;
+    padding-left: 70px;
+
+  }
+
+  .mat-expansion-panel {
+    background-color: #ffffff73;
+  }
+
+  .disable_ripple{
+    background: rgba(42, 129, 204, 100) !important;
+  }
+
+  .mat-expansion-panel-header-title {
+    color: white
+}
+
+
+  .font {
+    color: black;
+    margin-left: 5px;
+  }
+
+  .mat-icon {
+    background: transparent;
+    color:white;
+  }
+
+  .header{
+
+    font-size: 16px;
+    color: rgba(42, 129, 204, 100);
+  }
+
+/* container */
+.container {
+  border-radius: 5px;
+  padding: 50px;
+  padding-left: 70px;
+}
+
+.consultaEntidadeEmpregadora{
+  position:relative;
+  min-height: 85%;
+}
+
+
+.DadosContainer {
+  margin-right: 5%;
+  padding-bottom: 10px;
+}
+
+.secondLineContainers {
+  display: inline-flex;
+  position: relative;
+  margin-left: 50px;
+}
+.registarSuspensaoButton {
+  background: #2A81CC;
+  color: white;
+  top: -3px;
+}
+
+.registarSuspensaoIcon {
+  padding-right: 5px;
+}
+
+.registarSuspensao {
+  display: inline-flex;
+  position: relative;
+  margin-left: 50px;
+  margin-top: 30px;
+}
+.buttons {
+  bottom: 0;
+  position: absolute;
+  height: 12%;
+  margin-left: 50px;
+}
+
+.mat-form-field {
+  height: 10%;
+  font-size: 12px;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: white;
+}
+
+.painelListagem {
+  width: 80%;
+}
+
+.tabelaTitulo {
+  width: 100%;
+  padding-left: 10%;
+  padding-bottom: 1%;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 20px;
+}
+
+.tabelaTituloText {
+  padding-top: 10px;
+}
+
+.tableTitleIcon {
+  font-size: 1.7em;
+  padding-top: 4px;
+  padding-left: 10px;
+}
+
+.tabelaListagem {
+  width:100%;
+  margin-left: 10%;
+
+}
+
+.deleteIconTable {
+  padding-right: 15%;
+  float: right;
+  color: darkred;
+  cursor: pointer;
+}
+
+.editIconTable {
+  color: #2A81CC;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.paginator{
+  width:100%;
+  margin-left: 10%;
+}
+
+table td,
+table th {
+  text-align: center;
+}
+
+table th {
+  font-weight: bold;
+}
+
+.mat-row:nth-child(even){
+  background-color: rgba(199, 199, 199, 0.78);
+}
+
+.mat-row:nth-child(odd){
+  background-color: rgb(255, 255, 255, 0.78);
+}
+
+.moradas{
+  margin-top: 50px;
+}
+
+.moradaCheckIcon {
+  color: rgba(52, 176, 43, 100);
+  font-size: 20px;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-size: 10px;
+}
+
+
+.adicionarDiv {
+  position: relative;
+  top: 20px;
+  margin-left: 10%;
+}
+
+.adicionarButton {
+  background: rgba(52, 176, 43, 100);
+  color:white;
+
+  font-size: 10px;
+}
+
+.editarButton {
+  background: rgba(42, 129, 204, 100);
+  color:white;
+
+  font-size: 10px;
+  margin-right: 10px;
+}
+
+.buttonCancelar {
+  background:darkred;
+  color:white;
+
+  font-size: 10px;
+  margin-left: 10px;
+}
+.adicionarIcon {
+  padding-right: 5px;
+}
+
+.substiturDadosDiv {
+  position: relative;
+  top: 30px;
+  float: left;
+  width: 15%;
+}
+
+.editarElementos{
+  margin-left: 1100px;
+  font-size: 16px;
+}
+
+.mat-expansion{
+  background-color: rgba(255, 255, 255, 0.63);
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.63);
+}
+
+.mat-column-verEditar{
+   width: 50px;
+}
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+.returnButton{
+  width: 30px;
+  height: 30px;
+  background-color: #2A81CC;
+  color: white;
+  margin-right: 3%;
+  margin-top: 6px;
+  display: block;
+}
+
+.utilizadorSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}

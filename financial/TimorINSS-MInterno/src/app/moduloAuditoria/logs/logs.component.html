@@ -1,0 +1,12 @@
+
+<div *ngIf="isLoggedIn">
+    <div class="logsHeader">
+        <mat-icon class="logsHeaderIcon">visibility</mat-icon>
+        <div class="logsHeaderText">
+            {{'general.auditoria' | translate}}
+        </div>
+        </div>
+    <div class="button-container">
+        <button mat-raised-button class="logs-button" color="primary" (click)="logDownload()">{{'general.downloadLogs' | translate}}</button>
+        </div>
+</div>

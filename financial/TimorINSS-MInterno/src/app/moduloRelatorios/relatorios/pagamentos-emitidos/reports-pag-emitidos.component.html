@@ -1,0 +1,113 @@
+<div class="ordens">
+
+    <div class="subHeader">
+        <div class="searchContainer inputs-grid inputs-grid--6">
+            <button class="ordensSearchButton inputs-grid__cell" mat-fab color="green" aria-label="Search"
+                (click)="getOrdensPagamentoTable()">
+                <mat-icon class="ordensSearchIcon">search</mat-icon>
+            </button>
+
+
+            <mat-form-field class="input inputs-grid__cell" appearance="outline">
+                <mat-label>{{'perfil.data' | translate}}</mat-label>
+                <input [(ngModel)]="beginDate" matInput readonly="true" [errorStateMatcher]="matcher" [required]="submittedTry">
+                <input matInput hidden [matDatepicker]="beginDatePicker" [(ngModel)]="beginDate" name="BeginDate"/>
+                <mat-datepicker-toggle matSuffix [for]="beginDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #beginDatePicker (monthSelected)="chosenMonthHandler($event, beginDatePicker)" startView="year"></mat-datepicker>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="input inputs-grid__cell">
+                <mat-label>{{'pagamentosExecutados.centroCusto' | translate}}</mat-label>
+                <mat-select [(ngModel)]="centroCusto" name="centroCusto" [errorStateMatcher]="matcher" [required]="submittedTry" [disabled]="!beginDate" (selectionChange)="centroCustoChange()">
+                    <mat-option *ngFor="let option of centroCustoOptions" [value]="option.id">{{ option.nome }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <mat-form-field class="input inputs-grid__cell" appearance="outline">
+                <mat-label>{{'pagamentosExecutados.contaOGE' | translate}}</mat-label>
+                <mat-select
+                    #name="ngModel" name="selectConta" [(ngModel)]="contaOGE"
+                    [errorStateMatcher]="matcher" [required]="submittedTry" [disabled]="!centroCusto">
+                    <mat-option>
+                        <ngx-mat-select-search #name="ngModel"
+                            noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                            placeholderLabel="" ngModel
+                            (ngModelChange)="onTipoContaSearch($event)"
+                            name="contaSearch">
+                        </ngx-mat-select-search>
+                    </mat-option>
+                    <mat-option *ngFor="let option of contaOptionsFiltered" [value]="option.id">
+                        {{option.nome}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <a (click)="clearFilter()" class="clearFilterButton input inputs-grid__cell" type="button" mat-raised-button>
+                <mat-icon class="clearFilterIcon">clear</mat-icon>
+                <mat-label>{{'general.clearFilter' | translate}}</mat-label>
+            </a>
+        </div>
+    </div>
+
+    <div>
+        <div class="painelListagemOrdens">
+
+            <div class="tabelaOrdensTitulo">
+                <mat-icon class="tableTitleIcon">toc</mat-icon>
+                {{'pagamentosExecutados.relatoriosPagamentosEmitidos' | translate}}
+            </div>
+
+            <div class="no-results" *ngIf="!resultsShown">
+                {{ 'general.filtroNecessarioParaListagem' | translate }}
+            </div>
+
+            <table mat-table [dataSource]="pagamentosList" class="mat-elevation-z8 tabelaOrdens" *ngIf="resultsShown">
+                <ng-container matColumnDef="numeroPagamento">
+                    <th mat-header-cell *matHeaderCellDef> {{'pagamentosExecutados.numeroOrdemPagamento' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.numeroPagamento }} </td>
+                    <td mat-footer-cell *matFooterCellDef>{{ 'general.total' | translate }}</td>
+                </ng-container>
+                <ng-container matColumnDef="conta">
+                    <th mat-header-cell *matHeaderCellDef> {{'pagamentosExecutados.contaOGE' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.conta }}</td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+                <ng-container matColumnDef="destinatario">
+                    <th mat-header-cell *matHeaderCellDef> {{'pagamentosExecutados.destinatario' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.destinatario }}</td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+                <ng-container matColumnDef="iban">
+                    <th mat-header-cell *matHeaderCellDef> {{'pagamentosExecutados.iban' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.iban }}</td>
+                    <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+                <ng-container matColumnDef="valor">
+                    <th mat-header-cell *matHeaderCellDef> {{'pagamentosExecutados.valor' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{ formataCurrency(element.valor) }}</td>
+                    <td mat-footer-cell *matFooterCellDef>{{ formataCurrency(totais.valor) }}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr mat-footer-row *matFooterRowDef="displayedColumns; sticky: true"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsTable"
+                [pageSize]="this.pageSizeTable" (page)="updateOrdensTable($event)"
+                [pageIndex]="pageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons *ngIf="resultsShown">
+            </mat-paginator>
+            
+
+            <div class="buttons" *ngIf="resultsShown">
+                <button class="firstButton" mat-raised-button (click)="gerarPDF()" [disabled]="!beginDate || !centroCusto || !contaOGE">
+                  <mat-label>{{'general.gerarPDF' | translate}}</mat-label>
+                </button>
+            </div>
+            
+
+        </div>
+    </div>
+</div>

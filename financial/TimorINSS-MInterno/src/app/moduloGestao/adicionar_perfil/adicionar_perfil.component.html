@@ -1,0 +1,131 @@
+<div class="pageAddPerfil">
+
+  <div class="addPerfilHeader">
+    <mat-icon class="addPerfilIcon">border_color</mat-icon>
+    <div class="addPerfilText">
+      {{'perfil.addPerfil' | translate}} </div>
+  </div>
+
+  <form (ngSubmit)="adicionarEditarPerfil()" #perfilForm="ngForm">
+    <div>
+      <mat-form-field class="nomePerfil" appearance="outline">
+        <mat-label>{{'perfil.nome' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="nomePerfil" name="nomePerfil"
+          [errorStateMatcher]="matcher" [required]="submittedTry" />
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="example-container">
+      <h2 class="title">{{'perfil.funcionalidadesAtributo' | translate}}</h2>
+
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabelaFuncionalidades" cdkDropList #table1
+        #list1="cdkDropList" [cdkDropListData]="dataSource.data" [cdkDropListConnectedTo]="[list2]"
+        (cdkDropListDropped)="drop($event)" id="table1">
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.nomeFuncionalidade' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+        </ng-container>
+        <ng-container matColumnDef="create">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.create' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" disabled>
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="read">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.read' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" disabled>
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="update">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.update' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" disabled>
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.delete' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" disabled>
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsFuncionalidades"></tr>
+        <tr mat-row style="cursor: all-scroll;" *matRowDef="let row; columns: displayedColumnsFuncionalidades;" cdkDrag
+          [cdkDragData]="row"></tr>
+      </table>
+    </div>
+
+
+    <div class="arrow">
+      <mat-icon class="arrowIcon" matTooltip="{{'perfil.arrowInfo' | translate}}">sync_alt</mat-icon>
+    </div>
+
+
+    <div class="example-container">
+      <h2 class="title">{{'perfil.funcionalidadesPerfil' | translate}}</h2>
+      <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8 tabelaFuncionalidades" cdkDropList #table2
+        #list2="cdkDropList" [cdkDropListData]="dataSource2.data" [cdkDropListConnectedTo]="[list1]"
+        (cdkDropListDropped)="drop($event)" id="table2">
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.nomeFuncionalidade' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+        </ng-container>
+        <ng-container matColumnDef="create">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.create' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" (change)="updateCreate($event,element)" [checked]="element.create">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="read">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.read' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" (change)="updateRead($event,element)" [checked]="element.read">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="update">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.update' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" (change)="updateUpdate($event,element)" [checked]="element.update">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef> {{'perfil.delete' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox color="primary" (change)="updateDelete($event,element)" [checked]="element.delete">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsFuncionalidades"></tr>
+        <tr mat-row style="cursor: all-scroll;" *matRowDef="let row; columns: displayedColumnsFuncionalidades;" cdkDrag
+          [cdkDragData]="row"></tr>
+      </table>
+
+      <div class="emptyTable" *ngIf="dataSource2.length === 0"> {{'perfil.emptyTable' | translate}} </div>
+
+    </div>
+
+    <div class="buttons">
+      <button class="adicionarEditarPerfilButton" *ngIf="addPerfil" type="submit" (click)="submitPerfil()"
+        [disabled]="!perfilForm.valid || dataSource2.length === 0" mat-raised-button>
+        <mat-icon>check</mat-icon>
+        <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+      </button>
+      <button class="adicionarEditarPerfilButton" type="submit" (click)="submitPerfil()" *ngIf="editPerfil"
+        [disabled]="!perfilForm.valid || dataSource2.length === 0" mat-raised-button>
+        <mat-icon>check</mat-icon>
+        <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+      </button>
+      <button class="cancelarButton" type="submit" (click)="cancelar()" mat-raised-button>
+        <mat-icon>close</mat-icon>
+        <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+      </button>
+    </div>
+  </form>
+</div>

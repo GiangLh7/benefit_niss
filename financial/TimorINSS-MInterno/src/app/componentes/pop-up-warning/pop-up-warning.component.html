@@ -1,0 +1,25 @@
+<div class="dialogPositionFix">
+    <h1 class="titulo" mat-dialog-title>
+      <mat-icon class="personRemoveIcon">warning</mat-icon>
+      {{'general.warning' | translate}}
+    </h1>
+    <div class="bodyDialog" mat-dialog-content>
+      <div class="dinamic-msg">{{data.msg | translate}}</div>
+      <div *ngIf="!data.noConfirmation && !data.hideQuestion" class="static-msg">{{'general.proceder' | translate}}</div>
+    </div>
+    <div *ngIf="!data.noConfirmation" class="buttons">
+      <div class="center">
+        <button class="buttonOk" mat-button (click)="onSaveClick()">
+          <mat-icon class="adicionarIcon">check</mat-icon>
+          <mat-label>{{'general.sim' | translate}}</mat-label></button>
+        <button class="buttonCancelar" mat-button (click)="onNoClick()">
+          <mat-icon class="adicionarIcon">close</mat-icon>
+          <mat-label>{{'general.nao' | translate}}</mat-label></button>
+      </div>
+    </div>
+    <div *ngIf="data.noConfirmation" class="buttons">
+      <button class="buttonOk" mat-button (click)="onNoClick()">
+        <mat-icon class="adicionarIcon">check</mat-icon>
+        <mat-label>Ok</mat-label></button>
+    </div>
+  </div>

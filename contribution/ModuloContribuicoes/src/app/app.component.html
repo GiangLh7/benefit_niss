@@ -1,0 +1,74 @@
+<div class="app mat-typography">
+  <div class="navbar">
+    <div class="firstLineHeader">
+      <div class="headerEsquerda" routerLinkActive="active">
+        <a href="" routerLink="" (click)="this.isLoginRoute = false" [skipLocationChange]="true">
+          <img class="img-Icon" src="{{ssIcon}}">
+        </a>
+
+        <a href="" class="app-title" (click)="this.isLoginRoute = false" routerLink="" [skipLocationChange]="true">{{ 'general.inssPortal' | translate }}</a>
+      </div>
+      <div class="right-header">
+
+        <div  class="user-nav" *ngIf="isLoggedIn">
+          <mat-icon class="profile-icon_2">account_circle</mat-icon>
+          <div class="user-txt-box">
+            {{'general.user' | translate}}:
+            <a class="user-txt">{{username}}</a>
+          </div>
+          <div class="niss-txt-box">
+            {{ 'general.niss' | translate }}:
+            <a class="user-txt">{{niss}}</a>
+          </div>
+        </div>
+
+        <div  href="/login" class="login-nav" *ngIf="!isLoggedIn && !isLoginRoute" routerLink="login" (click)="this.isLoginRoute = true" [skipLocationChange]="true">
+          <mat-icon class="profile-icon">account_circle</mat-icon>
+          <a class="login-txt">{{'general.reservedArea' | translate}}</a>
+          <a class="login-txt_2">{{'general.login' | translate}}</a>
+        </div>
+
+        <div class="logged-container">
+          <div class="nav-link" *ngIf="isLoggedIn">
+            <mat-icon (click)="logout()" class="logout-icon" matTooltip="{{'general.logout' | translate}}">power_settings_new</mat-icon>
+          </div>
+
+          <select class="language-form" [(ngModel)]="selectLang" name="selectLang" (change)="setTransLanguage()">
+            <option *ngFor="let lang of TransLang" value="{{lang}}">{{ lang }}</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="navigation-header" *ngIf="isLoggedIn">
+      <a class="routetitle" routerLink="/declaracaoRemuneracao" [routerLinkActive]="['active']" [skipLocationChange]="true">
+        <span>{{'general.declaracaoRemuneracao' | translate}}</span>
+      </a>
+      <a class="routetitle" routerLink="/contaCorrente" [routerLinkActive]="['active']" [skipLocationChange]="true">
+        <span>{{'general.contaCorrente' | translate}}</span>
+      </a>
+      <a class="routetitle" routerLink="/guiaPagamento" [routerLinkActive]="['active']" [skipLocationChange]="true">
+        <span>{{'general.guiasDePagamento' | translate}}</span>
+      </a>
+      <a class="routetitle" routerLink="/entidadeEmpregadora" [routerLinkActive]="['active']" [skipLocationChange]="true">
+        <span>{{'general.entidadeEmpregadora' | translate}}</span>
+      </a>
+      <a class="routetitle" routerLink="/trabalhadores" [routerLinkActive]="['active']" [skipLocationChange]="true">
+        <span>{{'general.trabalhadores' | translate}}</span>
+      </a>
+    </div>
+
+  </div>
+  <div class="scrollContainer">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+    <footer>
+      <div class="disclaimer">© 2020 {{ 'general.disclaimer' | translate }}</div>
+    </footer>
+  </div>
+  <ngx-spinner class="spinner" [fullScreen]="true" [color]="'#2A81CC'" [type]="'ball-climbing-dot'">
+    {{'general.pleaseWait' | translate}}
+  </ngx-spinner>
+</div>

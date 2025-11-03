@@ -1,0 +1,126 @@
+<div class="dialogPositionFix">
+  <div class="titulo" mat-dialog-title>
+    <mat-icon class="titleIconFix">poll</mat-icon>
+    <mat-label class="resumoDeclaracaoTitle">{{'resumoDeclaracao.titulo' | translate}}</mat-label>
+  </div>
+  <div *ngIf="response" class="bodyDialog" mat-dialog-content>
+    <div class="ResumoGroup">
+      <div class="tableTitle">
+        <mat-icon>public</mat-icon>
+        <mat-label class="resumoDeclaracaoSegmentoTitle">{{'resumoDeclaracao.nacionalidade' | translate}}</mat-label>
+      </div>
+      <div class="nacionalidadesBody">
+        <div *ngIf="resumo.totalNacionalidades.trabalhadores > 0" class="chartAndRadio">
+          <div class="chart">
+            <canvas baseChart
+              [data]="pieChartNacionalidadeData"
+              [labels]="pieChartNacionalidadeLabels"
+              [chartType]="pieChartType"
+              [options]="pieChartNacionalidadeOptions"
+              [colors]="pieChartColors"
+              [legend]="false">
+            </canvas>
+          </div>
+          <div class="chartRadio">
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="nacionalidadeCurrency" (change)="ChangeNacionalidadeChart()" name="nacionalidadeCurrency">
+              <mat-radio-button *ngIf="resumo.totalNacionalidades.total > 0" color="primary" [value]="true"> {{'resumoDeclaracao.remuneracoes' | translate}} </mat-radio-button>
+              <mat-radio-button color="primary" [value]="false"> {{'resumoDeclaracao.trabalhadores' | translate}} </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <table mat-table [dataSource]="displayNacionalidades" matSort class="mat-elevation-z8 tabelaListagem">
+          <ng-container matColumnDef="cor">
+            <th class="nacionalidade-cor" mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.cor' | translate}} </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <div *ngIf="numberNacionalidade > i">
+                <mat-icon [ngStyle]="{color: pieChartColors[0]?.backgroundColor[i]}">stop</mat-icon>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="nacionalidade">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.nacionalidade' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.nacionalidade}} </td>
+          </ng-container>
+          <ng-container matColumnDef="renumeracoes">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.remuneracao' | translate}} </th>
+            <td mat-cell *matCellDef="let element">{{element.total | currency: 'USD':'symbol-narrow':'.2-2':'pt-BR'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="trabalhadores">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.trabalhadores' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.trabalhadores}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsNacionalidade"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsNacionalidade;"></tr>
+        </table>
+      </div>
+    </div>
+    <div class="ResumoGroup secondGroup">
+      <div class="tableTitle">
+        <mat-icon>assignment_ind</mat-icon>
+        <mat-label class="resumoDeclaracaoSegmentoTitle">{{'resumoDeclaracao.regime' | translate}}</mat-label>
+      </div>
+      <div class="regimesBody">
+        <div *ngIf="resumo.total.total > 0" class="chartAndRadio">
+          <div class="chart">
+            <canvas baseChart
+              [data]="pieChartRegimeData"
+              [labels]="pieChartRegimeLabels"
+              [chartType]="pieChartType"
+              [options]="pieChartRegimeOptions"
+              [colors]="pieChartColors"
+              [legend]="false">
+            </canvas>
+          </div>
+          <div class="chartRadio">
+            <mat-radio-group aria-label="Select an option" [(ngModel)]="regimeChartType" (change)="ChangeRegimeChart()" name="regimeCurrency">
+              <mat-radio-button color="primary" [value]="1"> {{'resumoDeclaracao.remuneracoes' | translate}} </mat-radio-button>
+              <mat-radio-button color="primary" [value]="2"> {{'resumoDeclaracao.quotizacoes' | translate}} </mat-radio-button>
+              <mat-radio-button color="primary" [value]="3"> {{'resumoDeclaracao.contribuicoes' | translate}} </mat-radio-button>
+              <mat-radio-button color="primary" [value]="4"> {{'resumoDeclaracao.total' | translate}} </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <table mat-table [dataSource]="displayRegimes" matSort class="mat-elevation-z8 tabelaListagem">
+          <ng-container matColumnDef="cor">
+            <th class="regime-cor" mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.cor' | translate}} </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              <div *ngIf="numberRegime > i">
+                <mat-icon [ngStyle]="{color: pieChartColors[0]?.backgroundColor[i]}">stop</mat-icon>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="regime">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.regime' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.regime}} </td>
+          </ng-container>
+          <ng-container matColumnDef="renumeracoes">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.remuneracao' | translate}} </th>
+            <td mat-cell *matCellDef="let element">{{element.remuneracoes | currency: 'USD':'symbol-narrow':'.2-2':'pt-BR'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="taxaTrabalhador">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.taxaTrabalhador' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.taxaTrabalhador}}<label *ngIf="element.taxaTrabalhador">%</label></td>
+          </ng-container>
+          <ng-container matColumnDef="taxaEntidade">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.taxaEntidade' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.taxaEntidade}}<label *ngIf="element.taxaEntidade">%</label></td>
+          </ng-container>
+          <ng-container matColumnDef="quotizacoes">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.contribuicoes' | translate}} </th>
+            <td mat-cell *matCellDef="let element">{{element.quotizacoes | currency: 'USD':'symbol-narrow':'.2-2':'pt-BR'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="contribuicoes">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.quotizacoes' | translate}} </th>
+            <td mat-cell *matCellDef="let element">{{element.contribuicoes | currency: 'USD':'symbol-narrow':'.2-2':'pt-BR'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef> {{'resumoDeclaracao.total' | translate}} </th>
+            <td mat-cell *matCellDef="let element">{{element.total | currency: 'USD':'symbol-narrow':'.2-2':'pt-BR'}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsRegime"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsRegime;"></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

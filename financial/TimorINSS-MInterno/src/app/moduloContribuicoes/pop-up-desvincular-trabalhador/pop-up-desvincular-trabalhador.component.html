@@ -1,0 +1,27 @@
+<div class="dialogPositionFix">
+  <h1 class="titulo" mat-dialog-title>
+    <mat-icon class="personRemoveIcon">person_remove</mat-icon>
+    {{'vinculo.desvincularTrab' | translate}}
+  </h1>
+  <form (ngSubmit)="onSaveClick()" class="formSize" #desvincularForm="ngForm">
+    <div class="bodyDialog" mat-dialog-content>
+      <div class="datepickerBegin">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'vinculo.dataFimVinc' | translate}}</mat-label>
+          <input #name="ngModel" [errorStateMatcher]="matcher" [(ngModel)]="dtIniFimTrabalhador" name="dtIniFimTrabalhador" matInput [matDatepicker]="picker" [required]="submittedTry">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+          <mat-error>{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="buttons">
+      <button class="adicionarButton" [disabled]="!desvincularForm.valid" type="submit" mat-button (click)="submit()">
+        <mat-icon class="adicionarIcon">check</mat-icon>
+        <mat-label>{{'general.buttonGravar' | translate}}</mat-label></button>
+      <button type="button" class="buttonCancelar" mat-button (click)="onNoClick()">
+        <mat-icon class="adicionarIcon">close</mat-icon>
+        <mat-label>{{'general.buttonCancelar' | translate}}</mat-label></button>
+    </div>
+  </form>
+</div>

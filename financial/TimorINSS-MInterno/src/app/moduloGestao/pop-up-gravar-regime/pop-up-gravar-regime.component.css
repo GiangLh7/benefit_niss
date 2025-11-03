@@ -1,0 +1,78 @@
+.dialogPositionFix {
+  position: relative;
+  height: 100%;
+}
+
+.titulo {
+  display: flex;
+  height: 13%;
+  margin: 0;
+  color: #2A81CC;
+  font-weight: bold;
+}
+
+.popUpIcon {
+  top: 5px;
+  position: relative;
+  font-size: 1.3em;
+  margin-right: 10px;
+}
+
+.formSize {
+  height: 85%;
+}
+
+.bodyDialog {
+  height: 80%;
+  margin: 0;
+}
+
+.DadosContainer {
+  margin-left: calc(5% - 50px);
+  margin-right: 5%;
+  padding-bottom: 5px;
+}
+
+.InnerDadosContainers {
+  display: inline-flex;
+  position: relative;
+  margin-left: 50px;
+}
+
+.buttons {
+  margin-top: 5px;
+  position: absolute;
+  height: 12%;
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 12px;
+  width: 100%;
+}
+
+.gravarButton {
+  background: rgba(52, 176, 43, 100);
+  color:white;
+  font-size: 10px;
+  margin-left: 5%;
+  margin-top: 5px;
+}
+
+.icon {
+  padding-right: 5px;
+}
+
+.buttonCancelar {
+  background:darkred;
+  color:white;
+  font-size: 10px;
+  margin-left: 5%;
+  margin-top: 5px;
+}
+
+.inputContainer
+{
+  width: 30%;
+  min-width: 175px;
+}

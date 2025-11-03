@@ -1,0 +1,36 @@
+<div class="home-page">
+    <iframe *ngIf="!isLoggedIn && iframeUrl" class="iframe-class" [src]="iframeUrl" frameborder="0"></iframe>
+    <img *ngIf="!isLoggedIn && !iframeUrl" class="img-Icon" src="{{ssIcon}}">
+    <div class="logged-home" *ngIf="isLoggedIn">
+        <div class="container">
+            <mat-icon class="profile-icon">account_circle</mat-icon>
+            <div class="title-txt">{{'home.declaracaoTitle' | translate}}</div>
+            <div class="description-txt">{{'home.declaracaoResume' | translate}}</div>
+            <button mat-raised-button class="button" color="primary" [routerLink]="'/declaracaoRemuneracao'" [skipLocationChange]="true">{{'home.declaracaoButtonText' | translate}}</button>
+        </div>
+        <div class="container">
+            <mat-icon class="profile-icon">donut_small</mat-icon>
+            <div class="title-txt">{{'home.contaCorrenteTitle' | translate}}</div>
+            <div class="description-txt">{{'home.contaCorrenteResume' | translate}}</div>
+            <button mat-raised-button class="button" color="primary" [routerLink]="'/contaCorrente'" [skipLocationChange]="true">{{'home.contaCorrenteButtonText' | translate}}</button>
+        </div>
+        <div class="container">
+            <mat-icon class="profile-icon">assignment</mat-icon>
+            <div class="title-txt">{{'home.guiasTitle' | translate}}</div>
+            <div class="description-txt">{{'home.guiasResume' | translate}}</div>
+            <button mat-raised-button class="button" color="primary" [routerLink]="'/guiaPagamento'" [skipLocationChange]="true">{{'home.guiasButtonText' | translate}}</button>
+        </div>
+        <div class="container">
+            <mat-icon class="profile-icon">account_balance</mat-icon>
+            <div class="title-txt">{{'home.entidadeTitle' | translate}}</div>
+            <div class="description-txt">{{'home.entidadeResume' | translate}}</div>
+            <button mat-raised-button class="button" color="primary" [routerLink]="'/entidadeEmpregadora'" [skipLocationChange]="true">{{'home.moreInfo' | translate}}</button>
+        </div>
+        <div class="container">
+            <mat-icon class="profile-icon">people</mat-icon>
+            <div class="title-txt">{{'home.trabalhadoresTitle' | translate}}</div>
+            <div class="description-txt">{{'home.trabalhadoresResume' | translate}}</div>
+            <button mat-raised-button class="button" color="primary" [routerLink]="'/trabalhadores'" [skipLocationChange]="true">{{'home.moreInfo' | translate}}</button>
+        </div>
+    </div>
+</div>

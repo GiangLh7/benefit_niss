@@ -1,0 +1,41 @@
+.buttons{
+  padding-bottom: 10px;
+  height: 12%;
+  margin-top: 15px;
+}
+
+.voltarButton {
+  background: #2A81CC;
+  color:white;
+  font-size: 14px;
+  margin-left: 4%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.arrowIcon{
+  margin-right: 5px;
+}
+
+.processoDetalheHeader {
+  position: relative;
+  background: #2A81CC;
+  height: 50px;
+  color: white;
+  padding-left: 5%;
+  width: 95%;
+  display: flex;
+  font-weight: bold;
+}
+
+.processoDetalheHeaderIcon {
+  padding-top: 9px;
+  font-size: 2.2em;
+  position: relative;
+  width: 50px;
+}
+
+.processoDetalheHeaderText {
+  padding-top: 14px;
+  font-size: 1.2em;
+}

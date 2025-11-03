@@ -1,0 +1,85 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+$custom-typography: mat-typography-config(
+  $font-family: 'Montserrat'
+);
+@include mat-core($custom-typography);
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ModuloContribuicoes-primary: mat-palette($mat-indigo);
+$ModuloContribuicoes-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ModuloContribuicoes-warn: mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$ModuloContribuicoes-theme: mat-light-theme((
+  color: (
+    primary: $ModuloContribuicoes-primary,
+    accent: $ModuloContribuicoes-accent,
+    warn: $ModuloContribuicoes-warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ModuloContribuicoes-theme);
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+mat-paginator {
+  box-shadow:
+    0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 0px rgba(0, 0, 0, 0.14),
+    0px 3px 14px 0px rgba(0, 0, 0, 0.12);
+}
+
+$disabled-color: rgb(115, 115, 115);
+
+.mat-form-field-disabled .mat-form-field-flex .mat-form-field-outline,
+.mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after,
+.mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after,
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-label,
+.mat-select-disabled .mat-select-value,
+.mat-radio-button.mat-radio-disabled .mat-radio-label-content
+{
+  color:$disabled-color;
+}
+
+
+.mat-radio-button.mat-radio-disabled.mat-radio-checked .mat-radio-outer-circle, .mat-radio-button.mat-radio-disabled .mat-radio-outer-circle
+{
+  border-color:$disabled-color;
+}
+
+.disabledLabel
+ {
+  color:$disabled-color !important;
+}
+
+.mat-list-item {
+  height: 39px !important;
+}

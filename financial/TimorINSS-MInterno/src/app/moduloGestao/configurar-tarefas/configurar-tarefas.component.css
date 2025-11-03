@@ -1,0 +1,297 @@
+  .mat-form-field {
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .configurarTarefas {
+    position: relative;
+    background: #2A81CC;
+    height: 50px;
+    color: white;
+    padding-left: 5%;
+    width: 95%;
+    display: flex;
+    font-weight: bold;
+  }
+
+  .configurarTarefasIcon {
+    padding-top: 6px;
+    font-size: 2.2em;
+    position: relative;
+    width: 50px;
+  }
+
+  .configurarTarefasText {
+    padding-top: 14px;
+    font-size: 1.2em;
+  }
+
+
+  .nomeTarefa{
+    width: 50%;
+    margin-top: 20px;
+    margin-left: 50px;
+  }
+
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+  }
+
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .container {
+    width: 35%;
+    margin: 0 25px 25px 50px;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .tabelaComponentes {
+    width:100%;
+    text-align: left;
+    background-color: white;
+  }
+
+  table th {
+    background-color: rgb(211, 211, 211);
+  }
+
+
+ table tr:nth-child(even)  {
+    background-color: rgb(231, 231, 231);
+ }
+
+ .title{
+     color: #2A81CC;
+ }
+
+ .mat-expansion{
+  background-color: rgba(255, 255, 255, 0.63);
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.63);
+}
+
+.mat-expansion-panel-header {
+
+  font-size: 15px;
+  font-weight: bold;
+  background: rgba(42, 129, 204, 100);
+  height: 50px;
+  padding-left: 70px;
+
+}
+
+.mat-expansion-panel {
+  background-color: #ffffff73;
+}
+
+.mat-expansion-panel-header-title {
+  color: white
+}
+
+.disable_ripple{
+  background: rgba(42, 129, 204, 100) !important;
+}
+
+.titulo{
+  width: 30%;
+  margin-top: 20px;
+  margin-left: 50px;
+}
+
+.checkbox{
+  margin-left: 50px;
+}
+
+.numCaracteres{
+  margin-left: 10px;
+  width: 4.5%;
+}
+
+.span{
+  margin-left: 30px;
+}
+
+.buttons{
+  padding-bottom: 10px;
+  height: 12%;
+  margin-top: 15px;
+}
+
+.gravarButtton {
+  margin-left: 50px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  top: -3px;
+}
+
+.componenteTexto{
+  margin-left: 50px;
+}
+
+.prazoTarefa{
+  width: 10%;
+  margin-top: 30px;
+  margin-left: 50px;
+}
+
+.accoesTarefa{
+  width: 40%;
+  margin-top: 30px;
+  margin-left: 50px;
+}
+
+.adicionar{
+  margin-left: 50px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  top: -3px;
+}
+
+.tables {
+  width: 40%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.tabelasTarefa {
+  margin-left: 50px;
+  width:100%;
+  text-align: left;
+  background-color: white;
+}
+
+.tabelaControloAcesso{
+  width: 42%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.tabelaPerfil {
+  margin-left: 50px;
+  width:83%;
+  text-align: left;
+  background-color: white;
+}
+
+.tabelaUtilizador {
+  width:83%;
+  text-align: left;
+  background-color: white;
+}
+
+.deleteIconTable {
+  color: darkred;
+  cursor: pointer;
+}
+
+.documentosTarefa{
+  width: 40%;
+  margin-top: 30px;
+  margin-left: 50px;
+}
+
+.link{
+  width: 100%;
+  margin-top: 10px;
+  color: #2A81CC;
+}
+
+.classificacaoTarefa{
+  width: 30%;
+  margin-top: 30px;
+  margin-left: 50px;
+}
+
+.searchResultsNotFound {
+  color: red;
+  margin-left: 50px;
+}
+
+.perfilUtilizadorTarefa{
+  width: 30%;
+  margin-top: 30px;
+  margin-left: 50px;
+}
+
+.arrowIcon {
+  color:#2A81CC;
+  font-size: 2.2em;
+  cursor: pointer;
+  margin-left: 50px;
+  top: -3px;
+}
+
+.cancelarButton {
+  margin-left: 50px;
+  background: darkred;
+  color: white;
+  top: -3px;
+}
+
+.editarButton{
+  margin-left: 50px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 30px;
+}
+
+.orcamentoRadioGroup {
+  display: block;
+  padding-top: 20px;
+}
+
+.orcamentoRadioGroupLabel {
+  width: 200px;
+  display:inline-block
+}
+
+.orcamentoRadioButton {
+  padding-left: 10px;
+  width: 190px;
+}
+
+.bodyComponenteOrcamento {
+  padding-left: 50px;
+}
+
+.bodyComponenteDespesa {
+  padding-left: 50px;
+  margin-top: 20px;
+}
+
+.editarButtonComponente{
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 30px;
+}
+
+
+.despesaRadioGroup {
+  display: block;
+  padding-top: 20px;
+}
+
+.despesaRadioGroupLabel {
+  width: 200px;
+  display:inline-block
+}
+
+.despesaRadioButton {
+  padding-left: 10px;
+  width: 190px;
+}
+
+.checkIcon{
+  color: green;
+}

@@ -1,0 +1,186 @@
+.VincularTrabalhadorTitulo,
+.VincularTrabalhadorSearchDropDowns  {
+  position: relative;
+  display: flex;
+}
+
+.VincularTrabalhadorCorpo {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 2%;
+  position: relative;
+}
+
+.VincularTrabalhadorSearch {
+  position: relative;
+}
+
+.VincularTrabalhadorTitulo {
+  position: relative;
+  background: #2A81CC;
+  height: 50px;
+  color: white;
+  padding-left: 5%;
+  width: 95%;
+  display: flex;
+
+  font-weight: bold;
+}
+
+.VincularTrabalhadorTituloIcon {
+  padding-top: 9px;
+  font-size: 2.2em;
+  position: relative;
+  width: 50px;
+}
+
+.VincularTrabalhadorTituloText {
+  padding-top: 14px;
+  font-size: 1.2em;
+}
+
+table td,
+table th {
+  text-align: center;
+}
+
+table th {
+  font-weight: bold;
+}
+
+.mat-column-nome,
+.mat-column-niss,
+.mat-column-nissProvisorio  {
+  width: 30%;
+}
+
+.mat-column-select  {
+  width: 10%;
+}
+
+.tabelaVincularTrabalhadores {
+  width: 100%;
+}
+
+.VincularTrabalhadorSearchDiv {
+  min-height: 81px;
+  display: flex;
+  position: relative;
+}
+
+.VincularTrabalhadorSearchDivButton {
+  width: 34px;
+  height: 34px;
+  margin-left: 15px;
+  top: 10px;
+  background-color:#2A81CC;
+  color: white;
+  position: relative;
+}
+
+.VincularTrabalhadorSearchDivIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.VincularTrabalhadorSearchDivButtonDiv {
+  display: flex;
+  position: relative;
+  width:70px;
+}
+
+.DocumentSelect {
+  padding-left: 15px;
+}
+
+.VincularTrabalhadorActionsSearchResultsNotFonud {
+  color: red;
+  font-weight: bold;
+}
+
+.AdicionarTrabalhadorActionDiv {
+  display: inline-flex;
+  position: relative;
+  padding-left: 25px;
+}
+
+.vincularTrabalhadorButton {
+  background-color: #2A81CC;
+  color: white;
+}
+
+.AdicionarTrabalhadorButton {
+  background-color: green;
+  color: white;
+}
+
+.mat-form-field {
+  width:100%;
+  font-size: 12px;
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+
+table tr[isChecked='true']{
+  background-color: #2A81CC;
+}
+
+table td[isChecked='true']{
+  color: white;
+}
+
+.VincularTrabalhadorActionsSearchResultsTitulo {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  padding-bottom: 5px;
+}
+
+
+.inputContainer
+{
+  width: 40%;
+  min-width: 175px;
+}
+
+.inputContainerSmall
+{
+  width: 20%;
+  min-width: 150px;
+}
+
+.secondLineContainers {
+  display: inline-flex;
+  position: relative;
+  margin-right: 2%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.VincularTrabalhadorActions {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.returnButton {
+  width: 30px;
+  height: 30px;
+  background-color: #2A81CC;
+  color: white;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+
+.utilizadorSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}

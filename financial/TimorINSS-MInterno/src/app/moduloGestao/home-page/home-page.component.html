@@ -1,0 +1,116 @@
+<div class="gestaoTarefas">
+
+    <div class="subHeader">
+        <div class="searchContainer">
+            <button class="tarefaSearchButton" mat-fab color="green" aria-label="Search"
+                (click)="pesquisarTarefa()">
+                <mat-icon class="tarefaSearchIcon">search</mat-icon>
+            </button>
+            <mat-form-field class="pesquisar" appearance="outline">
+                <mat-label>{{'general.pesquisar' | translate}}</mat-label>
+                <input matInput maxlength="100" type="text" [(ngModel)]="filterBy" (keydown.enter)="pesquisarTarefa()" name="stringFilterInput" />
+                <fa-icon *ngIf="filterBy" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                    (click)="clearPesquisarTarefa()">
+                </fa-icon>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="input inputs-grid__cell">
+              <mat-label>{{'gestaoTarefas.ordenarPor' | translate}}</mat-label>
+              <mat-select [(ngModel)]="orderBy" name="Order">
+                  <mat-option *ngFor="let option of orderByOptions" [value]="option.id">{{ option.descricao | translate }}
+                  </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="input inputs-grid__cell">
+              <mat-label>{{'gestaoTarefas.ordenarPorDirecao' | translate}}</mat-label>
+              <mat-select [(ngModel)]="orderDirection" name="Order">
+                  <mat-option *ngFor="let option of orderDirectionOptions" [value]="option.id">{{ option.descricao | translate }}
+                  </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div>
+        <div class="painelListagemTarefas">
+
+            <div class="tabelaTarefaTitulo">
+                <mat-icon class="tableTitleIcon">toc</mat-icon>
+                {{'gestaoTarefas.title' | translate}}
+            </div>
+
+            <table mat-table [dataSource]="tarefasList" class="mat-elevation-z8 tabelaTarefa">
+                <ng-container matColumnDef="numeroProcesso">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.numero' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.numeroProcesso}} </td>
+                </ng-container>
+                <ng-container matColumnDef="processo">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.nome' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nomeProcesso}} </td>
+                </ng-container>
+                <ng-container matColumnDef="tarefas">
+                    <th mat-header-cell *matHeaderCellDef> {{'tarefa.nome' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef> {{'guiaPagamentoListagem.estadoPagamento' | translate}} </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div>
+                            <mat-icon class="estadoEmPrazo" *ngIf="element.estado == 1 || element.estado == 0"
+                                matTooltip="{{'tarefa.estadoEmPrazo' | translate}}">
+                                fiber_manual_record
+                            </mat-icon>
+                            <mat-icon class="estadoPendente" *ngIf="element.estado == 2"
+                                matTooltip="{{'tarefa.estadoPendente' | translate}}">
+                                fiber_manual_record
+                            </mat-icon>
+                            <mat-icon class="estadoEmAtraso" *ngIf="element.estado == 3"
+                                matTooltip="{{'tarefa.estadoEmAtraso' | translate}}">
+                                fiber_manual_record
+                            </mat-icon>
+                        <div class="lined_text" *ngIf="element.estado != 0">{{element.estadoDays}} {{'general.days' | translate}}</div>
+                        <div class="lined_text" *ngIf="element.estado == 0">{{'tarefa.estadoSemPrazo' | translate}}</div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="lastUpdate">
+                    <th mat-header-cell *matHeaderCellDef> {{'tarefa.lastUpdate' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{formatDatePT(element.ultimaAtualizacao)}} </td>
+                </ng-container>
+                <ng-container matColumnDef="acoes">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.actions' | translate}} </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-icon (click)="updateTarefa(element.id)" *ngIf="update" class="editIconTable">
+                          edit
+                        </mat-icon>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsTable"
+                [pageSize]="this.pageSizeTable" (page)="updateTarefaTable($event)"
+                [pageIndex]="pageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons>
+            </mat-paginator>
+
+            <div>
+                <div class="descriptionBanner">
+                    <mat-icon class="estadoEmPrazo">fiber_manual_record</mat-icon>
+                    {{'tarefa.estadoEmPrazo' | translate}}
+                    <mat-icon class="estadoPendente">fiber_manual_record</mat-icon>
+                    {{'tarefa.estadoPendente' | translate}}
+                    <mat-icon class="estadoEmAtraso">fiber_manual_record</mat-icon>
+                    {{'tarefa.estadoEmAtraso' | translate}}
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="firstButton" mat-raised-button (click)="iniciarProcesso()" [disabled]="cannotStartProcess">
+                  <mat-label>{{'processo.inciarProcesso' | translate}}</mat-label>
+                </button>
+                <button class="secondButton" (click)="consultarProcessosArquivados()" mat-raised-button>
+                  <mat-label>{{'processo.consultarProcessosArquivados' | translate}}</mat-label>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

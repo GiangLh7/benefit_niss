@@ -1,0 +1,34 @@
+<mat-expansion-panel *ngIf='request.textTitle' class="mat-expansion" [expanded]="request.isExpanded" (opened)="request.isExpanded = true"
+    (closed)="request.isExpanded = false" #componenteTexto1 (afterExpand)="scroll(componenteTexto1)">
+    <mat-expansion-panel-header>
+        {{request.textTitle}}
+    </mat-expansion-panel-header>
+    <div class="txtBody">
+        <div class="charClass">
+            Quantidade de caracteres: {{request.charLimit}}
+        </div>
+        <mat-form-field class="full-width" appearance="fill">
+            <textarea [(ngModel)]="request.text" matInput maxlength="{{request.charLimit}}"
+            [errorStateMatcher]="matcher" [required]="request.obrigatorio"></textarea>
+            <mat-hint align="end">{{request.text.length}} / {{request.charLimit}}</mat-hint>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+    </div>
+</mat-expansion-panel>
+<mat-expansion-panel *ngIf='request.textTitle2' class="mat-expansion" [expanded]="request.isExpanded2" (opened)="request.isExpanded2 = true"
+    (closed)="request.isExpanded2 = false" #componenteTexto2 (afterExpand)="scroll(componenteTexto2)">
+    <mat-expansion-panel-header>
+        {{request.textTitle2}}
+    </mat-expansion-panel-header>
+    <div class="txtBody">
+        <div class="charClass">
+            Quantidade de caracteres: {{request.charLimit2}}
+        </div>
+        <mat-form-field class="full-width" appearance="fill">
+            <textarea [(ngModel)]="request.text2" matInput maxlength="{{request.charLimit2}}"
+            [errorStateMatcher]="matcher" [required]="request.obrigatorio2"></textarea>
+            <mat-hint align="end">{{request.text2.length}} / {{request.charLimit2}}</mat-hint>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+    </div>
+</mat-expansion-panel>

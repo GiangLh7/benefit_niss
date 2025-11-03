@@ -1,0 +1,75 @@
+<div class="dialogPositionFix">
+
+  <h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">contact_page</mat-icon>
+    <span *ngIf="!data.id">{{'tarefa.adicionarMovimento' | translate}}</span>
+    <span *ngIf="data.id">{{'tarefa.editarMovimento' | translate}}</span>
+  </h1>
+  <form (ngSubmit)="saveMovimento()" class="formSize" #movimentoForm="ngForm">
+
+    <div class="bodyDialog" mat-dialog-content>
+      <div class="inputs-grid inputs-grid--3">
+
+        <app-excel-importer *ngIf="!data.id" type="1" text="{{'conciliacaoComponent.addMovimentosBancarios' | translate}}" [columns]="['Description', 'Amount', 'Date (dd/mm/yyyy)']" url="/movimentosBancarios/ImportMovimentos?tarefaAtivoId={{ data.tarefaAtivoId }}&{{ data.caixaId ? 'caixaId=' + data.caixaId : 'bancoId=' + data.bancoId }}" (onComplete)="onImporterComplete($event)">{{ 'excelImports.importMovimentosBancarios' | translate }}</app-excel-importer>
+
+        <mat-form-field appearance="outline" class="inputs-grid__cell--full-width">
+          <mat-label>{{'tarefa.movimentoDescricao' | translate}}</mat-label>
+          <textarea [(ngModel)]="data.descricao" name="DataComprovativo" matInput [required]="submittedTry"></textarea>
+          <mat-error *ngIf="!data.descricao">{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-radio-group appearance="outline" class="radioContainer" name="CreditDebit" [(ngModel)]="isDebit">
+          <mat-radio-button class="firstRadio" [value]=false color="primary" (click)="changeMask(false)">{{'tarefa.credito' | translate}}</mat-radio-button>
+          <mat-radio-button class="secondRadio" [value]=true color="primary" (click)="changeMask(true)">{{'tarefa.debito' | translate}}</mat-radio-button>
+       </mat-radio-group>
+
+        <mat-form-field appearance="outline" class="inputs-grid__cell">
+          <mat-label>{{'tarefa.movimentoValor' | translate}}</mat-label>
+            <input
+              [errorStateMatcher]="diffNumberMatcher"
+              [required]="submittedTry"
+              (click)="focusCurrency($event)"
+              matInput
+              currencyMask
+              [options]="currencyOptions"
+              [(ngModel)]="data.valor"
+              name="Valor"
+            />
+          <mat-error *ngIf="data.valor == 0">{{'error.valueNotZero' | translate}}</mat-error>
+          <mat-error *ngIf="!data.valor && data.valor != 0">{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="inputs-grid__cell">
+          <mat-label>{{'tarefa.movimentoDataValor' | translate}}</mat-label>
+          <input [(ngModel)]="data.data" [max]="now" matInput name="Data" [errorStateMatcher]="matcher" [matDatepicker]="datePicker" [required]="submittedTry" />
+          <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+          <mat-datepicker #datePicker></mat-datepicker>
+          <mat-error>{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+    <div class="buttons">
+      <div class="secondLineContainers">
+        <button class="gravarButton" mat-raised-button type="submit" [disabled]="!movimentoForm.valid" (click)="submitMovimento(!data.id)" >
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="secondLineContainers" *ngIf="!data.id">
+        <button class="gravarButton" mat-raised-button type="submit" [disabled]="!movimentoForm.valid" (click)="submitMovimento(false)" >
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>{{'general.buttonGravarEFechar' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="secondLineContainers">
+        <button class="buttonCancelar" type="button" mat-raised-button (click)="closePopUp()">
+          <mat-icon class="icon">close</mat-icon>
+          <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,149 @@
+.cabecalho{
+
+    font-size: 12px;
+    color: rgba(42, 129, 204, 100);
+  }
+
+  /* container */
+  .container {
+  background-color: #ffffff73;
+  padding: 30px;
+  }
+
+  .divClass {
+    float: left;
+    width: 30%;
+    margin-top: 6px;
+    color:black;
+  }
+
+
+  .row:after {
+  content: "";
+  display: table;
+  clear: both;
+  }
+
+  @media screen and (max-width: 600px) {
+  .divClass, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+  }
+
+  .mat-form-field {
+  height: 10%;
+  font-size: 12px;
+  }
+
+  .editarMorada {
+
+    font-size: 18px;
+    font-weight: bold;
+    color: rgba(42, 129, 204, 100);
+  }
+
+  .buttonGravar{
+    background-color: green;
+  }
+
+  .bodyDialog {
+    height: 60%;
+    margin-top: 10px;
+    position: relative;
+    margin-bottom: 5px;
+  }
+
+  .adicionarDiv {
+    position: relative;
+    top: 20px;
+    left: 115px;
+  }
+
+  .buttonOk {
+    background: rgba(52, 176, 43, 100);
+    color:white;
+
+    font-size: 10px;
+    display: inline-flex;
+    position: relative;
+    margin-left: 50px;
+  }
+
+  .buttonCancelar {
+    background:darkred;
+    color:white;
+
+    font-size: 10px;
+    display: inline-flex;
+    position: relative;
+    margin-left: 50px;
+  }
+
+  .icon{
+      color: #2A81CC;
+  }
+
+  .radioButton{
+    color: black;
+    margin-top: 10px;
+  }
+
+
+  .error {
+    font-size: 10px;
+    color: red;
+  }
+
+  .righ-radio{
+    margin-left: 10px;
+  }
+
+  .RadioInput{
+    font-size: 14px;
+    display: inline-flex;
+    position: relative;
+    margin-top: 50px;
+}
+
+.NissInput{
+    font-size: 14px;
+    display: inline-flex;
+    position: relative;
+    margin-top: 10px;
+}
+
+.dialogPositionFix {
+  position: relative;
+  height: 100%;
+}
+
+.titulo {
+    height: 13%;
+    margin: 0;
+  }
+
+  .personRemoveIcon {
+    top: 5px;
+    position: relative;
+    font-size: 1.3em;
+    padding-right: 2px;
+  }
+
+  .mat-dialog-title {
+    color: #2A81CC;
+    text-align: -webkit-center;
+  }
+
+  .buttons {
+    margin-top: 5px;
+    position: absolute;
+    height: 12%;
+    width: 100%;
+  }
+
+  .secondLineContainers {
+    display: inline-flex;
+    position: relative;
+    margin-left: 50px;
+  }

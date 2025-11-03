@@ -1,0 +1,20 @@
+<div class="importer-toast-content">
+  <div class="importer-toast-status" [ngClass]="{'importer-toast-status-success': isFinished && data.Fail == 0, 'importer-toast-status-partial': isFinished && data.Fail > 0}"></div>
+  <mat-icon *ngIf="!isFinished" class="importer-toast-upload-icon">cloud_upload</mat-icon>
+  <mat-icon *ngIf="isFinished" [ngClass]="{'importer-toast-check-icon--partial': data.Fail > 0}" class="importer-toast-check-icon">check</mat-icon>
+  <div>
+    <div class="importer-toast-title">
+      {{ title | translate }}
+    </div>
+    <div class="importer-toast-progress">
+      <div #fill class="importer-toast-progress-fill"></div>
+    </div>
+    <div class="importer-toast-counts">
+      {{ 'excelImports.imported' | translate }}: <div class="importer-toast-count importer-toast-count--margin">{{ data.Success || 0 }}</div>
+      {{ 'excelImports.failed' | translate }}: <div class="importer-toast-count importer-toast-count--margin">{{ data.Fail || 0 }}</div>
+      <span *ngIf="data.Existing">{{ 'excelImports.existing' | translate }}: <div class="importer-toast-count">{{ data.Existing }}</div></span>
+    </div>
+    <div *ngIf="isFinished && data.Fail > 0" (click)="viewDetails()" class="view-details">{{ 'excelImports.viewDetails' | translate }}</div>
+  </div>
+  <mat-icon *ngIf="isFinished" class="importer-toast-close" (click)="close()">close</mat-icon>
+</div>

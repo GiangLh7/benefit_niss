@@ -1,0 +1,78 @@
+<div class="login-page">
+  <div *ngIf="!isLoggedIn">
+    <div class="login-box" *ngIf="!secondForm">
+
+      <div class="title">{{'login_form.title' | translate}}</div>
+
+      <div class="text-container">
+        <mat-icon class="icon">perm_identity</mat-icon>
+        <mat-form-field class="text" appearance="outline">
+          <mat-label>{{'login_form.username' | translate}}</mat-label>
+          <input [errorStateMatcher]="matcher" [disabled]="disabledButton" matInput [(ngModel)]="request.Username" [required]="submittedFormError">
+          <mat-error *ngIf="request.Username.length == 0">{{'login_form.usernameRequired' | translate}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="text-container extra">
+        <mat-icon class="icon">lock</mat-icon>
+        <mat-form-field class="text" appearance="outline">
+          <mat-label>{{'login_form.password' | translate}}</mat-label>
+          <input [errorStateMatcher]="matcher" [disabled]="disabledButton" matInput [(ngModel)]="request.Password" (keydown.enter)="onSubmit()" [type]="hide ? 'password' : 'text'" [required]="submittedFormError">
+          <mat-error *ngIf="request.Password.length == 0">{{'login_form.passwordRequired' | translate}}</mat-error>
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="button-container">
+        <button mat-raised-button class="login-button" color="primary"  [disabled]="disabledButton" (click)="onSubmit()">{{'login_form.login' | translate}}</button>
+        <div class="login-error" *ngIf="loginFailed">{{ errorMessage }}</div>
+      </div>
+
+      <div class="recover" (click)="recoverPassword()">{{'login_form.recoverPassword' | translate}}</div>
+      <div class="first-access" (click)="firstAccess()" matTooltip="{{'login_form.firstAccessTooltip' | translate}}">
+        {{'login_form.firstAccess' | translate}}
+      </div>
+
+    </div>
+    <div class="login-box" *ngIf="secondForm">
+
+      <div *ngIf="isRecoverPassword" class="title">{{'login_form.recoverPassword' | translate}}</div>
+      <div *ngIf="isFirstAccess" class="title">{{ 'login_form.firstAccess' | translate }}</div>
+
+      <div class="text-container">
+        <mat-icon class="icon">assignment_ind</mat-icon>
+        <mat-form-field class="text" appearance="outline">
+          <mat-label>{{ 'general.niss' | translate }}</mat-label>
+          <input *ngIf="!isFirstAccess" type="number" [errorStateMatcher]="recoverMatcher" [disabled]="disabledButton" matInput [(ngModel)]="recoverRequest.Niss" [required]="submittedFormError" (keypress)="keyPressNumbers($event)" (keydown.arrowup)="false" (keydown.arrowdown)="false">
+          <input *ngIf="isFirstAccess" type="number" [errorStateMatcher]="FirstAcessMatcher" [disabled]="disabledButton" matInput [(ngModel)]="recoverRequest.Niss" [required]="submittedFormError" (keypress)="keyPressNumbers($event)" (keydown.arrowup)="false" (keydown.arrowdown)="false">
+          <mat-error *ngIf="!recoverRequest.Niss || recoverRequest.Niss.length == 0">{{'login_form.nissRequired' | translate}}</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="text-container extra">
+        <mat-icon class="icon">email</mat-icon>
+        <mat-form-field class="text" appearance="outline">
+          <mat-label>{{ 'utilizador.email' | translate }}</mat-label>
+          <input *ngIf="!isFirstAccess" [errorStateMatcher]="recoverMatcher" [disabled]="disabledButton" matInput [(ngModel)]="recoverRequest.Email" [pattern]="availableRegex.emailPattern" (keydown.enter)="recoverSubmit()" [required]="submittedFormError">
+          <input *ngIf="isFirstAccess" [errorStateMatcher]="FirstAcessMatcher" [disabled]="disabledButton" matInput [(ngModel)]="recoverRequest.Email" [pattern]="availableRegex.emailPattern" (keydown.enter)="recoverSubmit()" [required]="submittedFormError">
+          <mat-error *ngIf="recoverRequest.Email.length == 0">{{'login_form.emailRequired' | translate}}</mat-error>
+          <mat-error *ngIf="recoverRequest.Email">{{'general.wrongFormat' | translate}}</mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <div class="button-container">
+        <button mat-raised-button class="login-button" color="primary"  [disabled]="disabledButton" (click)="recoverSubmit()">{{'login_form.submit' | translate}}</button>
+        <div class="login-error" *ngIf="counter >= 3">{{'error.contact' | translate}}</div>
+      </div>
+
+      <div class="recover" (click)="back()">{{'login_form.title' | translate}}</div>
+
+    </div>
+  </div>
+  <div *ngIf="isLoggedIn">
+
+  </div>
+</div>

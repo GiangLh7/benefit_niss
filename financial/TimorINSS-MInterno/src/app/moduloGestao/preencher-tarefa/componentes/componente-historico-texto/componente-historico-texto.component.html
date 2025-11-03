@@ -1,0 +1,43 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteHistoricoTexto (afterExpand)="scroll(componenteHistoricoTexto)">
+    <mat-expansion-panel-header>
+        {{'tarefa.historicoTexto' | translate}}
+    </mat-expansion-panel-header>
+    <div class="containerBody">
+        <div *ngIf="noRecords">
+            <div class="titleClass">
+                <div class="title">
+                    {{'suspensao.semResultados' | translate}} 
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!noRecords">
+            <div class="textContainer" *ngFor="let text of textos">
+                <div class="firstDiv">
+                    <div class="titleClass">
+                        <div class="title">
+                            {{'tarefa.textTitle' | translate}}: 
+                        </div> {{text.titulo}}
+                    </div>
+                    <div class="tarefaClass">
+                        <div class="title">
+                            {{'tarefa.nome' | translate}}: 
+                        </div> {{text.tarefa}}
+                    </div>
+                </div>
+                <div class="usernameClass">
+                    <div class="title">
+                        {{'general.user' | translate}}: 
+                    </div> {{text.user}}
+                </div>
+                <div class="tarefaClass">
+                    <div class="title">
+                        {{'perfil.data' | translate}}:
+                    </div> {{formatDate(text.data)}}
+                </div>
+                <mat-form-field class="full-width" appearance="fill">
+                    <textarea [ngModel]="text.texto" matInput disabled="true"></textarea>
+                </mat-form-field>
+            </div>
+        </div>        
+    </div>
+</mat-expansion-panel>

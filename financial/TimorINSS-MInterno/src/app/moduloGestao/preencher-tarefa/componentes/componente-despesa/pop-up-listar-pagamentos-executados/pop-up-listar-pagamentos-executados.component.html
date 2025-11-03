@@ -1,0 +1,28 @@
+<h1 class="titulo" mat-dialog-title>
+  <mat-icon class="popUpIcon">payments</mat-icon>
+  {{'componenteDespesa.listaPagamentosPDF' | translate}}
+</h1>
+
+<div>
+  <table mat-table [dataSource]="listaPagamentos" class="mat-elevation-z8 tabelaDespesa">
+    <ng-container matColumnDef="numPagamento">
+      <th mat-header-cell *matHeaderCellDef>{{'pagamentosExecutados.numeroOrdemPagamento' | translate}} </th>
+      <td mat-cell *matCellDef="let element"> {{element.numeroPagamento}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="valor">
+      <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valor' | translate}} </th>
+      <td mat-cell *matCellDef="let element">$ {{element.valor}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="pdf">
+      <th mat-header-cell *matHeaderCellDef> {{'preencherTarefa.pdf' | translate}} </th>
+      <td mat-cell *matCellDef="let element"> 
+        <fa-icon  class="pdfIconTable" (click)="getPagamentoDetails(element.numeroPagamento)" [icon]="faFilePdf"></fa-icon>    
+    </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsPagamentosExecutados"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsPagamentosExecutados;"></tr>
+  </table>
+</div>

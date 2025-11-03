@@ -1,0 +1,79 @@
+<h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">payments</mat-icon>
+    {{'general.classificacaoContabilistica' | translate}}
+  </h1>
+  
+  <form (ngSubmit)="associarDespesa()" #executarClassificacaoForm="ngForm">    
+    <div class="panel">
+      <div class="dados">
+        <div class="containerLine" style="margin-bottom: 30px;">
+  
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'componenteDespesa.contabilidade' | translate}} {{'tarefa.credito' | translate}}</mat-label>
+            <mat-select
+                (selectionChange)="updateContabilidadeDebito(contabilidade.id)"
+                #name="ngModel" name="selectComponenteContabilidade" [(ngModel)]="contabilidade.id"
+                [errorStateMatcher]="matcher" [required]="submittedTry">
+                <mat-option>
+                    <ngx-mat-select-search #name="ngModel"
+                        noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                        placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
+                        (ngModelChange)="filterCustomOptionsContabilidadeCredito($event)"
+                        name="ContabilidadeFilterSearch">
+                    </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let value of filtersContabilidadeFilteredCredito" [value]="value.id"
+                matTooltip="{{value.designacao}}">
+                    {{value.designacao}}
+                </mat-option>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+  
+        <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'componenteDespesa.contabilidade' | translate}} {{'tarefa.debito' | translate}}</mat-label>
+            <mat-select
+                (selectionChange)="updateContabilidadeCredito(contabilidadeDebito.id)"
+                #name="ngModel" name="selectComponenteContabilidadeDebito" [(ngModel)]="contabilidadeDebito.id"
+                [errorStateMatcher]="matcher" [required]="submittedTry">
+                <mat-option>
+                    <ngx-mat-select-search #name="ngModel"
+                        noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                        placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
+                        (ngModelChange)="filterCustomOptionsContabilidadeDebito($event)"
+                        name="ContabilidadeFilterSearch">
+                    </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let value of filtersContabilidadeFilteredDebito" [value]="value.id"
+                matTooltip="{{value.designacao}}">
+                    {{value.designacao}}
+                </mat-option>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+      
+          <mat-form-field class="despesaAExecutar" appearance="outline">
+            <mat-label>{{'componenteDespesa.dataExecucao' | translate}}</mat-label>
+            <input name="dataInicio"
+              [errorStateMatcher]="matcher" [required]="submittedTry"
+              [(ngModel)]="dataregisto" matInput [matDatepicker]="pickerInicio">
+            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>  
+        </div>
+        <div class="rightButton">
+        </div>
+      </div>  
+    </div>    
+  </form>
+  <div class="containerLine">
+    <button class="terminarButton" type="submit" (click)="associarDespesa()" mat-raised-button>
+      <mat-label>{{'classificacaoContabilistica.submit' | translate}}</mat-label>
+    </button>
+
+    <button class="closeButton" (click)="closePopUp()" mat-raised-button>
+      <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+    </button>
+  </div>
+    

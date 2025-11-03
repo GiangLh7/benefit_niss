@@ -1,0 +1,267 @@
+.app{
+    width: 100%;
+    height: 100%;
+}
+
+.navbar{
+  top: 0;
+  z-index: 700;
+  background: #2A81CC;
+  height: 130px;
+  position: sticky;
+}
+
+.img-Icon{
+  width: 77px;
+  padding-top: 9px;
+  padding-left: 15px;
+}
+
+.app-title{
+    width: 325px;
+    color: rgb(248,177,23);
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 100%;
+    text-align: -webkit-center;
+    text-decoration: none;
+    padding-top: 20px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+.right-header{
+    margin-top: 15px;
+    position: relative;
+    width: 45%;
+    padding-right: 10px;
+ }
+
+.headerEsquerda {
+  width: 55%;
+  display: inline-flex;
+}
+
+.language-form{
+    margin-right: 35px;
+    cursor: pointer;
+    border: none;
+    background: rgb(243 239 239 / 0%);
+    outline: none;
+    color: rgb(248,177,23);
+    margin-top: 15%;
+    width: 56px;
+    font-size: 17px;
+    position: relative;
+    display: inline-flex;
+}
+
+.nav-link{
+    display: inline-flex;
+    margin-right: 25px;
+    margin-top: 10%;
+    cursor: pointer;
+}
+
+.login-nav{
+    background-color: #2A81CC;
+    width: 230px;
+    height: 70px;
+    float: right;
+    cursor: pointer;
+    text-decoration-line: initial;
+    border-radius: 35px 0px 0px 35px;
+    position: relative;
+    display: flex;
+    margin-left: -25px;
+}
+
+.user-nav{
+    width: 270px;
+    float: right;
+    position: relative;
+    display: flex;
+    margin-left: -45px;
+}
+
+.profile-icon{
+    margin-top: 2%;
+    margin-left: 6%;
+    font-size: 60px;
+    color: white;
+}
+
+.profile-icon_2{
+    margin-top: 2%;
+    margin-left: 6%;
+    font-size: 60px;
+    color: rgb(248,177,23);
+}
+
+.logout-icon{
+    margin-top: 2%;
+    margin-left: 7%;
+    font-size: 30px;
+    color: #2A81CC;
+}
+
+.logged-container{
+    position: relative;
+    display: inline-flex;
+    margin-top: 10px;
+    float: right;
+}
+
+.login-txt{
+    position: absolute;
+    display: flex;
+    margin-top: 20px;
+    margin-left: 40%;
+    color: white;
+    font-size: 14px;
+
+    font-weight: bold;
+}
+.login-txt_2{
+    position: absolute;
+    display: flex;
+    margin-top: 40px;
+    margin-left: 40%;
+    color: white;
+    font-size: 14px;
+
+}
+
+.user-txt-box{
+    position: absolute;
+    display: flex;
+    margin-top: 20px;
+    margin-left: 30%;
+    color:  rgb(248,177,23);
+    font-weight: bold;
+    font-size: 14px;
+
+}
+
+.niss-txt-box{
+    position: absolute;
+    display: flex;
+    margin-top: 40px;
+    margin-left: 30%;
+    color:  rgb(248,177,23);
+    font-weight: bold;
+    font-size: 14px;
+
+}
+
+.user-txt{
+    color:  black;
+    font-weight: normal;
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+.container{
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 95%;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+
+.scrollContainer{
+  min-height: calc(100% - 130px);
+  height: calc(100% - 130px);
+  width:100%;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+  .navigation-header{
+    background: rgb(243 239 239 / 0%);
+    width: 100%;
+    position: relative;
+    display: inline-flex;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    height: 40px;
+    text-align: center;
+    background-color: #1a6aaf;
+  }
+
+ .routetitle {
+  width: 20%;
+  text-decoration: none;
+  color: white;
+ }
+
+ .routetitle:hover {
+  background: #145792;
+ }
+
+ .routetitle:active {
+   color: rgb(248,177,23);
+ }
+
+.routetitle span {
+  padding-top: 8px;
+  display: block;
+  font-size: 1vw;
+}
+
+  .routetitle.active {
+    background-color: #1f90f1;
+    color: rgb(248,177,23);
+   }
+
+footer {
+  height: 5%;
+  background-color: #2A81CC;
+}
+
+.disclaimer {
+  background-color: #2A81CC;
+  padding-top: 6px;
+  margin-left: 35px;
+  color: white;
+}
+
+.firstLineHeader {
+  height: 70%;
+  display: inline-flex;
+  width: 100%;
+  background: white;
+}
+
+@media screen and (max-width: 865px) {
+  .user-nav { display: none; }
+}
+
+@media screen and (max-width: 800px) {
+  .routetitle span {
+    font-size: 10px;
+    line-height: 12px;
+   }
+   .app-title {
+     font-size: 22px;
+     padding-top: 18px;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+  .app-title { font-size: 25px;  }
+  .routetitle span { font-size: 20px; }
+}
+
+.menuIcon{
+  color: white; margin-left: 10px;
+}

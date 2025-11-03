@@ -1,0 +1,14 @@
+importer-toasts {
+  position: fixed;
+  width: 470px;
+  height: 100%;
+  bottom: 0;
+  right: 0;
+  pointer-events: none;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  z-index: 99999;
+}

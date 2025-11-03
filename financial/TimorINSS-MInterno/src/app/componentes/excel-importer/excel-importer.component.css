@@ -1,0 +1,41 @@
+.excel-importer {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%);
+  transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1),box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.excel-importer:active {
+  box-shadow: 0px 5px 5px -3px rgb(0 0 0 / 20%), 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%);
+}
+
+.left-button, .right-button {
+  height: 100%;
+  border: 0;
+  color: #fff;
+  box-shadow: unset !important;
+}
+
+.left-button {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  background-color: #5677fc;
+  font-size: 15px;
+}
+
+.right-button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  background-color: #4460cf;
+}
+
+.right-button .mat-icon {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.file-uploader {
+  display: none;
+}

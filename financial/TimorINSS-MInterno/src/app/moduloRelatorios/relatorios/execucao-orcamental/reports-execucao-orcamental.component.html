@@ -1,0 +1,218 @@
+<div class="ordens">
+
+    <div class="subHeader">
+        <div class="searchContainer inputs-grid inputs-grid--6">
+            <button class="ordensSearchButton inputs-grid__cell" mat-fab color="green" aria-label="Search"
+                (click)="getExecucaoOrcamentalTable()">
+                <mat-icon class="ordensSearchIcon">search</mat-icon>
+            </button>
+
+            <mat-form-field class="input inputs-grid__cell" appearance="outline">
+                <mat-label>{{'perfil.data' | translate}}</mat-label>
+                <input [(ngModel)]="year" matInput readonly="true" [errorStateMatcher]="matcher" [required]="submittedTry">
+                <input matInput hidden [matDatepicker]="beginDatePicker" [(ngModel)]="beginDate" name="BeginDate"/>
+                <mat-datepicker-toggle matSuffix [for]="beginDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #beginDatePicker (yearSelected)="chosenYearHandler($event, beginDatePicker)" startView="multi-year"></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="input inputs-grid__cell">
+                <mat-label>{{'execucaoOrcamental.tipoConta' | translate}}</mat-label>
+                <mat-select [(ngModel)]="tipoConta" name="tipoConta" [errorStateMatcher]="matcher" [required]="submittedTry">
+                    <mat-option *ngFor="let option of tipoContaOptions" [value]="option.id">{{ option.descricao }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <a (click)="clearFilter()" class="clearFilterButton input inputs-grid__cell" type="button" mat-raised-button>
+                <mat-icon class="clearFilterIcon">clear</mat-icon>
+                <mat-label>{{'general.clearFilter' | translate}}</mat-label>
+            </a>
+        </div>
+    </div>
+
+    <div>
+        <div class="painelListagemOrdens">
+
+            <div class="tabelaOrdensTitulo">
+                <mat-icon class="tableTitleIcon">toc</mat-icon>
+                {{'execucaoOrcamental.relatoriosExecucaoOrcamental' | translate}}
+            </div>
+
+            <div class="no-results" *ngIf="!resultsShown">
+                {{ 'general.filtroNecessarioParaListagem' | translate }}
+            </div>
+
+            <table mat-table [dataSource]="contasList" class="mat-elevation-z8 tabelaOrdens" *ngIf="resultsShown">
+                <ng-container matColumnDef="conta">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="3">{{ 'execucaoOrcamental.contaOGE' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.contaOGE }}</td>
+                </ng-container>
+                <ng-container matColumnDef="centroCusto">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="3">{{ 'execucaoOrcamental.centroCusto' | translate }}</th>
+                    <td mat-cell *matCellDef="let element" class="badge-cell">
+                        <div class="badge" *ngFor="let centro of element.centrosCusto">
+                            {{ centro }}
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="rubrica">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="3">{{ 'execucaoOrcamental.rubricaClassificacao' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="badge" *ngFor="let rubrica of element.rubricas">
+                            {{ rubrica }}
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="valorOrcamentoInicial">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="3">{{ 'execucaoOrcamental.valorOrcamentoInicial' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorOrcamentoInicial) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="valorOrcamentado">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.valorOrcamentado' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorOrcamentado) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="valorAnoAnterior">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.anoAnterior' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.valorAnoAnterior) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="janeiro">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right rowspan-column-left" [attr.rowspan]="2">{{ 'execucaoOrcamental.janeiro' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.janeiro) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="fevereiro">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.fevereiro' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.fevereiro) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="marco">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.marco' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.marco) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="abril">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.abril' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.abril) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="maio">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.maio' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.maio) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="junho">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.junho' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.junho) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="julho">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.julho' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.julho) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="agosto">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.agosto' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.agosto) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="setembro">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.setembro' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.setembro) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="outubro">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.outubro' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.outubro) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="novembro">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.novembro' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.novembro) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="dezembro">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.dezembro' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.dezembro) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="totalExecucao">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" [attr.rowspan]="2">{{ 'execucaoOrcamental.totalExecucao' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ formataCurrency(element.totalExecucao) }}</td>
+                </ng-container>
+                <ng-container matColumnDef="taxaExecucao">
+                    <th mat-header-cell *matHeaderCellDef>{{ 'execucaoOrcamental.taxaEcecucao' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.taxaExecucao.toFixed(2) }}%</td>
+                </ng-container>
+                <ng-container matColumnDef="variacaoExecucao">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-left" [attr.rowspan]="2">{{ 'execucaoOrcamental.variacaoExecucao' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.variacaoExecucao.toFixed(2) }}%</td>
+                </ng-container>
+
+                <ng-container matColumnDef="ghost-column">
+                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"></th>
+                </ng-container>
+
+                <ng-container matColumnDef="anoAnteriorColumn">
+                    <th mat-header-cell *matHeaderCellDef> 
+                        {{ 'execucaoOrcamental.janeiroADezembro' | translate }}
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="janeiroAJaneiro">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{ 'execucaoOrcamental.janeiroAJaneiro' | translate }}
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="tipoConta">
+                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="21">
+                        {{ tipoContaText }}
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="label-1">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right">
+                        (1)
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="label-2">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right">
+                        (2)
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="label-3">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right">
+                        (3)
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="label-4">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right">
+                        (4) = ∑(3)
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="label-5">
+                    <th mat-header-cell *matHeaderCellDef class="rowspan-column-right" style="min-width: 80px;">
+                        (5) = (4)/(1)
+                    </th>
+                </ng-container>
+
+                <ng-container matColumnDef="label-6">
+                    <th mat-header-cell *matHeaderCellDef style="min-width: 100px;">
+                        (6) = (4-2)/(2)
+                    </th>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="['ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'anoAnteriorColumn', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'janeiroAJaneiro', 'ghost-column']"></tr>
+                <tr mat-header-row *matHeaderRowDef="['ghost-column', 'ghost-column', 'ghost-column', 'ghost-column', 'label-1', 'label-2', 'label-3', 'label-3', 'label-3', 'label-3', 'label-3', 'label-3', 'label-3', 'label-3', 'label-3', 'label-3', 'label-3', 'label-3', 'label-4', 'label-5', 'label-6']"></tr>
+                <tr mat-header-row *matHeaderRowDef="['tipoConta']"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsTable"
+                [pageSize]="this.pageSizeTable" (page)="updateOrdensTable($event)"
+                [pageIndex]="pageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons *ngIf="resultsShown">
+            </mat-paginator>
+            
+
+            <div class="buttons" *ngIf="resultsShown">
+                <button class="firstButton" mat-raised-button (click)="exportExcelRelatorio()" [disabled]="!tipoConta || !year">
+                  <mat-label>{{'general.gerarExcel' | translate}}</mat-label>
+                </button>
+            </div>
+            
+
+        </div>
+    </div>
+</div>

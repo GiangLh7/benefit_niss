@@ -1,0 +1,53 @@
+.mat-expansion-panel-header:hover {
+    background: #1f64a1 !important;
+  }
+  
+  .mat-expansion-panel-header {
+    position: relative;
+    background: #2A81CC !important;
+    height: 50px;
+    font-weight: bold;
+    color: white;
+    padding-left: 5%;
+    display: flex;
+    font-size: 15px;
+    border: 1px solid rgb(255, 255, 255);
+  }
+  
+  .mat-expansion-panel {
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+  }
+
+  .tabelaListagem {
+    width: 100%;
+  }
+
+  table th {
+    background-color: rgb(211, 211, 211);
+  }
+  
+  table tr:nth-child(even)  {
+    background-color: rgb(231, 231, 231);
+  }
+
+.containerBody{
+    padding-left: calc(10% - 24px);
+    padding-right: calc(10% - 24px);
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .deleteIconTable {
+    color: darkred;
+    cursor: pointer;
+    margin-left: 4%;
+  }
+
+  .pdfIconTable{
+    cursor: pointer;
+    color: red;
+    font-size: 25px;
+    margin-left: 10%;
+  }
+

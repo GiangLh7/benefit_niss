@@ -1,0 +1,336 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteConciliacaoMovimentos (afterExpand)="scroll(componenteConciliacaoMovimentos)">
+    <mat-expansion-panel-header>
+        {{'tarefa.componenteConciliacaoMovimentos' | translate}}
+    </mat-expansion-panel-header>
+    <div class="containerBody">
+        <div class="inputs-grid inputs-grid--2 column_gap">
+            <div class="inputs-grid__cell containerLiner">
+                <mat-form-field class="select_box" appearance="outline">
+                    <mat-label>{{'conciliacaoComponent.conta' | translate}}</mat-label>
+                    <mat-select #name="ngModel" [(ngModel)]="contaSelectedId" name="contaClass"
+                    (selectionChange)="resetCaixa()">
+                        <mat-option *ngFor="let item of contasList" [value]="item.id">
+                        {{item.descricao}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="select_box" appearance="outline">
+                    <mat-label>{{'conciliacaoComponent.caixa' | translate}}</mat-label>
+                    <mat-select #name="ngModel" [(ngModel)]="caixaSelectedId" name="contaClass"
+                    (selectionChange)="resetConta()">
+                        <mat-option *ngFor="let item of caixasList" [value]="item.id">
+                        {{item.descricao}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button class="button" [disabled]="disabledSearchBank" (click)="searchMovimentosBancarios(true)" mat-raised-button>
+                    <mat-icon class="buttonIcon">filter_alt</mat-icon>
+                    <mat-label class="buttonLabel">{{'tarefa.selecionar' | translate}}</mat-label>
+                </button>
+            </div>
+            <div class="inputs-grid__cell containerLiner">
+                <mat-form-field class="select_box" appearance="outline" *ngIf="selectMovimentosTypePermission">
+                    <mat-label>{{'conciliacaoComponent.movimentoAConciliar' | translate}}</mat-label>
+                    <mat-select #name="ngModel" [(ngModel)]="movimentosTypeSelected" name="movimentosDropDownClass"
+                    (selectionChange)="selectMovimentoType()">
+                        <mat-option *ngFor="let item of movimentosTypeList" [value]="item.id">
+                        {{item.descricao}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-checkbox class="checkbox-process-transactions-only" [(ngModel)]="apenasMovimentosProcesso" [color]="'primary'" [labelPosition]="'after'">
+                    {{'tarefa.apenasMovimentosProcesso' | translate}}
+                </mat-checkbox>
+                <button class="button" *ngIf="selectMovimentosTypePermission" [disabled]="disabledSearchMov" (click)="searchMovimentosAConciliar(true)" mat-raised-button>
+                    <mat-icon class="buttonIcon">filter_alt</mat-icon>
+                    <mat-label class="buttonLabel">{{'tarefa.selecionar' | translate}}</mat-label>
+                </button>
+            </div>
+            <div class="inputs-grid__cell containerLiner">
+                <div *ngIf="contaSelectedId">
+                    <mat-form-field class="select_box" appearance="outline">
+                        <mat-label>{{'gerirCampos.SWIFT' | translate}}</mat-label>
+                        <input #name="ngModel" matInput type="text" disabled="true" [(ngModel)]="selectedConta.swift" name="swift"/>
+                    </mat-form-field>
+                    <mat-form-field class="select_box" appearance="outline">
+                        <mat-label>{{'gerirCampos.EntidadeBancaria' | translate}}</mat-label>
+                        <input #name="ngModel" matInput type="text" disabled="true" [(ngModel)]="selectedConta.entidadeBancaria" name="entidadeBancaria"/>
+                    </mat-form-field>
+                    <mat-form-field class="select_box" appearance="outline">
+                        <mat-label>{{'gerirCampos.Descricao' | translate}}</mat-label>
+                        <input #name="ngModel" matInput type="text" disabled="true" [(ngModel)]="selectedConta.descricao" name="descricao"/>
+                    </mat-form-field>
+                    <mat-form-field class="select_box" appearance="outline">
+                        <mat-label>{{'gerirCampos.IBAN' | translate}}</mat-label>
+                        <input #name="ngModel" matInput type="text" disabled="true" [(ngModel)]="selectedConta.iban" name="iban"/>
+                    </mat-form-field>
+                    <mat-form-field class="select_box" appearance="outline">
+                        <mat-label>{{'gerirCampos.NConta' | translate}}</mat-label>
+                        <input #name="ngModel" matInput type="text" disabled="true" [(ngModel)]="selectedConta.numero" name="numeroConta"/>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="caixaSelectedId">
+                    <mat-form-field class="select_box" appearance="outline">
+                        <mat-label>{{'gerirCampos.Descricao' | translate}}</mat-label>
+                        <input #name="ngModel" matInput type="text" disabled="true" [(ngModel)]="selectedCaixa.descricao" name="caixadescricao"/>
+                    </mat-form-field>
+                </div>
+                <div  class="title">
+                    <!-- <div *ngIf="noResultsMovimentosBancarios">{{'suspensao.semResultados' | translate}} </div> -->
+                </div>
+
+                <div class="inputs-grid__cell--full-width" *ngIf="resultsMovimentosBancarios">
+                    <button matTooltip="{{'general.pesquisar' | translate}}" class="SearchButton" mat-fab color="green" aria-label="Search"
+                        (click)="searchMovimentosBancarios()">
+                        <mat-icon class="SearchIcon">search</mat-icon>
+                    </button>
+                    <mat-form-field class="pesquisar" appearance="outline">
+                        <mat-label>{{'gerirCampos.Descricao' | translate}}</mat-label>
+                        <input matInput maxlength="100" type="text" [(ngModel)]="movimentosBancariosfilterBy" (keydown.enter)="searchMovimentosBancarios()" name="stringFilterInput" />
+                    </mat-form-field>
+                    <mat-form-field class="date" appearance="outline">
+                        <mat-label>{{'perfil.data' | translate}}</mat-label>
+                        <input [(ngModel)]="movimentosBancariosFilter.dateFilterBegin" matInput [matDatepicker]="pickerValidade" (dateChange)="searchMovimentosBancarios()">
+                        <mat-datepicker-toggle matSuffix [for]="pickerValidade"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerValidade></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field *ngIf="movimentosBancariosFilter.dateFilterBegin" class="date" appearance="outline">
+                        <mat-label>{{'general.dtFim' | translate}}</mat-label>
+                        <input [(ngModel)]="movimentosBancariosFilter.dateFilterEnd" matInput [matDatepicker]="pickerValidade" (dateChange)="searchMovimentosBancarios()">
+                        <mat-datepicker-toggle matSuffix [for]="pickerValidade"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerValidade></mat-datepicker>
+                    </mat-form-field>
+                    <a (click)="clearFilter()" class="clearFilterButton" type="button" mat-raised-button>
+                        <mat-icon class="clearFilterIcon">clear</mat-icon>
+                        <mat-label>{{'guiaPagamentoListagem.clearFilter' | translate}}</mat-label>
+                    </a>
+                </div>
+
+                <div class="movimentos_bancarios_list" *ngIf="resultsMovimentosBancarios || noResultsMovimentosBancarios">
+                    <table mat-table [dataSource]="movimentosBancariosList" class="mat-elevation-z8">
+                        <ng-container matColumnDef="descricao">
+                            <th mat-header-cell *matHeaderCellDef> {{'gerirCampos.Descricao' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="dataValor">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.movimentoDataValor' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> {{formatDatePT(element.dataValor)}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="credito">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.credito' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> <div *ngIf="element.credito">{{element.credito}} $</div></td>
+                        </ng-container>
+                        <ng-container matColumnDef="debito">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.debito' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> <div *ngIf="element.debito">{{element.debito}} $</div></td>
+                        </ng-container>
+                        <ng-container matColumnDef="acoes">
+                            <th mat-header-cell *matHeaderCellDef> {{'processo.actions' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button *ngIf="!element.conciliado && addEditMovimentosBancariosPermission" matTooltip="{{'general.Editar' | translate}}" (click)="editMovimentosBancariosPopUp(element)" mat-icon-button>
+                                    <mat-icon class="editIcon">edit</mat-icon>
+                                  </button>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef> {{'conta_corrente.selecao' | translate}}
+                                <mat-checkbox *ngIf="conciliatePermission" color="primary" class="select_all_checkbox" (change)="$event ? masterToggle() : null"
+                                    [checked]="movimentosBancariosSelection.hasValue() && isAllSelected()"
+                                    [indeterminate]="movimentosBancariosSelection.hasValue() && !isAllSelected()"
+                                    [disabled]="!(!disableCheckAllMovimentosBancarios && resultsMovimentos)">
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                              <mat-checkbox *ngIf="!element.conciliado && conciliatePermission" color="primary" (click)="$event.stopPropagation()" (change)="selectHandlerMovimentosBancarios(element.id)"
+                              [checked]="movimentosBancariosSelection.isSelected(element.id)"
+                              [disabled]="!(((element.debito && !isReceita) || (element.credito && isReceita)) && resultsMovimentos)">
+                              </mat-checkbox>
+                            </td>
+                          </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="movimentosBancariosdisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: movimentosBancariosdisplayedColumns;"></tr>
+                    </table>
+                    <mat-paginator class="paginator" [length]="this.movimentosBancariostotalRowsTable"
+                        [pageSize]="this.movimentosBancariospageSizeTable" (page)="updateTableMovimentosBancarios($event)"
+                        [pageIndex]="movimentosBancariospageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons>
+                    </mat-paginator>
+                    <div class="inputs-grid__cell--full-width">
+                        <button class="buttonfilter {{activeVerConciliadosBancarios ? 'active' : ''}}" mat-raised-button>
+                            <mat-label class="buttonLabel" (click)="filterByVerConciliados()">{{'conciliacaoComponent.verConciliados' | translate}}</mat-label>
+                        </button>
+                        <button class="buttonfilter {{activeVerNaoConciliadosBancarios ? 'active' : ''}}" mat-raised-button>
+                            <mat-label class="buttonLabel" (click)="filterByVerNaoConciliados()">{{'conciliacaoComponent.verNaoConciliados' | translate}}</mat-label>
+                        </button>
+                        <button class="buttonfilter {{activeVerTodosBancarios ? 'active' : ''}}" mat-raised-button>
+                            <mat-label class="buttonLabel" (click)="filterByVerTodos()">{{'conciliacaoComponent.verTodos' | translate}}</mat-label>
+                        </button>
+                        <button class="buttonfilter {{activeVerSeleccionadosBancarios ? 'active' : ''}}" mat-raised-button>
+                            <mat-label class="buttonLabel" (click)="filterBySelecionados()">{{'conciliacaoComponent.verSelecionados' | translate}}</mat-label>
+                        </button>
+                    </div>
+                </div>
+                <div class="buttonContainer" *ngIf="(contaSelectedId || caixaSelectedId) && addEditMovimentosBancariosPermission">
+                    <button class="button float_right" (click)="openMovimentosBancariosPopUp()" mat-raised-button>
+                        <mat-label class="buttonLabel">{{'conciliacaoComponent.addMovimentosBancarios' | translate}}</mat-label>
+                    </button>
+                </div>
+
+                <div class="grid-container_sum" *ngIf="saldoTotal">
+                    <div class="inputs-grid__cell headerLiner"></div>
+                    <div class="inputs-grid__cell headerLiner">{{'tarefa.credito' | translate}}</div>
+                    <div class="inputs-grid__cell headerLiner">{{'tarefa.debito' | translate}}</div>
+                    <div class="inputs-grid__cell headerLiner">{{'resumoDeclaracao.total' | translate}}</div>
+                    <div class="inputs-grid__cell contentLiner"><div class="textContent">{{'preencherTarefa.conciliado' | translate}}</div> </div>
+                    <div class="inputs-grid__cell contentLiner"><div *ngIf="saldoTotal.saldoConciliadoCredit > 0" class="valueContent">{{saldoTotal.saldoConciliadoCredit}} $</div></div>
+                    <div class="inputs-grid__cell contentLiner"><div *ngIf="saldoTotal.saldoConciliadoDebit < 0" class="valueContent">{{saldoTotal.saldoConciliadoDebit}} $</div></div>
+                    <div class="inputs-grid__cell contentLiner"><div class="valueContent">{{saldoTotal.saldoConciliadoTotal}} $</div></div>
+                    <div class="inputs-grid__cell contentLiner"><div class="textContent">{{'preencherTarefa.saldoConciliar' | translate}}</div></div>
+                    <div class="inputs-grid__cell contentLiner"><div *ngIf="saldoTotal.saldoPorConciliarCredit > 0" class="valueContent">{{saldoTotal.saldoPorConciliarCredit}} $</div></div>
+                    <div class="inputs-grid__cell contentLiner"><div *ngIf="saldoTotal.saldoPorConciliarDebit < 0" class="valueContent">{{saldoTotal.saldoPorConciliarDebit}} $</div></div>
+                    <div class="inputs-grid__cell contentLiner"><div class="valueContent">{{saldoTotal.saldoPorConciliarTotal}} $</div></div>
+                    <div class="inputs-grid__cell sumLiner"><div class="textContent">{{'preencherTarefa.saldoTotal' | translate}}</div></div>
+                    <div class="inputs-grid__cell sumLiner"><div *ngIf="saldoTotal.saldoTotalCredit > 0" class="valueContent">{{saldoTotal.saldoTotalCredit}} $</div></div>
+                    <div class="inputs-grid__cell sumLiner"><div *ngIf="saldoTotal.saldoTotalDebit < 0" class="valueContent">{{saldoTotal.saldoTotalDebit}} $</div></div>
+                    <div class="inputs-grid__cell sumLiner"><div class="valueContent">{{saldoTotal.saldoTotal}} $</div></div>
+                </div>
+
+            </div>
+            <div class="inputs-grid__cell containerLiner" >
+                <div class="title">
+                    <!-- <div *ngIf="noResultsMovimentos">{{'suspensao.semResultados' | translate}} </div> -->
+                </div>
+
+                <div class="inputs-grid__cell--full-width" *ngIf="resultsMovimentos">
+                    <button matTooltip="{{'general.pesquisar' | translate}}" class="SearchButton" mat-fab color="green" aria-label="Search"
+                        (click)="searchMovimentosAConciliar()">
+                        <mat-icon class="SearchIcon">search</mat-icon>
+                    </button>
+                    <mat-form-field class="pesquisar" appearance="outline">
+                        <mat-label>{{'gerirCampos.Descricao' | translate}}</mat-label>
+                        <input matInput maxlength="100" type="text" [(ngModel)]="movimentosfilterBy" (keydown.enter)="searchMovimentosAConciliar()" name="stringFilterInput" />
+                    </mat-form-field>
+                </div>
+
+                <div class="movimentos_list" *ngIf="resultsMovimentos || noResultsMovimentos">
+                    <table mat-table [dataSource]="movimentosList" class="mat-elevation-z8">
+                        <ng-container matColumnDef="descricao">
+                            <th mat-header-cell *matHeaderCellDef> {{'gerirCampos.Descricao' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> {{element.descricao.descricao}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="comprovativo">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.comprovativoPagamento' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <fa-icon *ngIf="element.comprovativo" class="pdfIconTable" (click)="gerarPDFComprovativo(element.comprovativo)" [icon]="faFilePdf"></fa-icon>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="documento">
+                            <th mat-header-cell *matHeaderCellDef> {{'general.document' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <fa-icon class="pdfIconTable" (click)="gerarPDFDocumento(element)" [icon]="faFilePdf"></fa-icon>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="numPagamentoGuia">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.numeroPagamento_guia' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">{{element.numeroDocumento}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="valor">
+                            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valor' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> {{element.valor}} $</td>
+                        </ng-container>
+                        <ng-container matColumnDef="acoes">
+                            <th mat-header-cell *matHeaderCellDef>
+                              {{'processo.actions' | translate}}
+                              <mat-checkbox *ngIf="conciliatePermission && !isReceita && movimentosDisplayType != 0" color="primary" class="select_all_checkbox" (change)="$event ? toggleAllDespesasAConciliar() : null"
+                                    [checked]="despesasClassificacaoSelection.hasValue() && allDespesasSelected()"
+                                    [indeterminate]="despesasClassificacaoSelection.hasValue() && !allDespesasSelected()">
+                              </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button *ngIf="!element.conciliado && isReceita && addEditMovimentosPermission" matTooltip="{{'general.Editar' | translate}}" (click)="editMovimentosPopUp(element)" mat-icon-button>
+                                    <mat-icon class="editIcon">edit</mat-icon>
+                                  </button>
+                                <mat-checkbox *ngIf="!element.conciliado && conciliatePermission && !isReceita" color="primary"  (click)="$event.stopPropagation()" (change)="selectHandlerDespesasAConciliar(element.id)"
+                                    [checked]="despesasClassificacaoSelection.isSelected(element.id)">
+                                </mat-checkbox>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="select">
+                            <th mat-header-cell *matHeaderCellDef> {{'conta_corrente.selecao' | translate}}
+                                <mat-checkbox *ngIf="conciliatePermission" color="primary" class="select_all_checkbox" (change)="$event ? masterMovimentosToggle() : null"
+                                    [checked]="movimentosSelection.hasValue() && isMovimentosAllSelected()"
+                                    [indeterminate]="movimentosSelection.hasValue() && !isMovimentosAllSelected()"
+                                    [disabled]="disableCheckAllMovimentos">
+                                </mat-checkbox>
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-checkbox *ngIf="!element.conciliado && conciliatePermission && !element.isClassificada" color="primary" matTooltip="{{'classificacaoContabilistica.warning' | translate}}" [disabled]="!element.isClassificada" (click)="$event.stopPropagation()"
+                                [checked]="movimentosSelection.isSelected(element.id)">
+                                </mat-checkbox>
+                                <mat-checkbox *ngIf="!element.conciliado && conciliatePermission && element.isClassificada" color="primary" (click)="$event.stopPropagation()" (change)="selectHandlerMovimentos(element.id)"
+                                [checked]="movimentosSelection.isSelected(element.id)">
+                                </mat-checkbox>
+                            </td>
+                          </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="movimentosdisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: movimentosdisplayedColumns;"></tr>
+                    </table>
+                    <mat-paginator class="paginator" [length]="this.movimentosTotalRowsTable"
+                        [pageSize]="this.movimentosPageSizeTable" (page)="updateTableMovimentos($event)"
+                        [pageIndex]="movimentosPageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons>
+                    </mat-paginator>
+                    <div class="inputs-grid__cell--full-width">
+                        <button class="buttonfilter {{activeVerConciliados ? 'active' : ''}}" mat-raised-button>
+                            <mat-label class="buttonLabel" (click)="filterByVerMovimentosConciliados()">{{'conciliacaoComponent.verConciliados' | translate}}</mat-label>
+                        </button>
+                        <button class="buttonfilter {{activeVerNaoConciliados  ? 'active' : ''}}" mat-raised-button>
+                            <mat-label class="buttonLabel" (click)="filterByVerMovimentosNaoConciliados()">{{'conciliacaoComponent.verNaoConciliados' | translate}}</mat-label>
+                        </button>
+                        <button class="buttonfilter {{activeVerTodos  ? 'active' : ''}}" mat-raised-button>
+                            <mat-label class="buttonLabel" (click)="filterByVerMovimentosTodos()">{{'conciliacaoComponent.verTodos' | translate}}</mat-label>
+                        </button>
+                        <button class="buttonfilter {{activeVerSeleccionados  ? 'active' : ''}}" mat-raised-button>
+                            <mat-label class="buttonLabel" (click)="filterByMovimentosSelecionados()">{{'conciliacaoComponent.verSelecionados' | translate}}</mat-label>
+                        </button>
+                    </div>
+                </div>
+                <div class="buttonContainer" *ngIf="movimentosTypeSelected && addEditMovimentosPermission && isReceita">
+                    <button class="button float_right" (click)="openMovimentosPopUp()" mat-raised-button>
+                        <mat-label class="buttonLabel">{{'conciliacaoComponent.addMovimentos' | translate}}</mat-label>
+                    </button>
+                </div>
+                <div class="buttonContainer" *ngIf="resultsMovimentos && addEditMovimentosPermission && !isReceitaSelected">
+                    <button class="button float_right" (click)="classificarDespesaContabilistica()" [disabled]="!despesasClassificacaoSelection.hasValue()" mat-raised-button>
+                        <mat-label class="buttonLabel">{{'classificacaoContabilistica.add' | translate}}</mat-label>
+                    </button>
+                </div>
+                <div class="grid_container_selected" *ngIf="movimentosTypeSelected && viewSelectedToConciliatePermission">
+                    <div class="inputs-grid__cell selectedHeaderFooter"><div class="titleContent">{{ 'conciliacaoComponent.amountsSelectedInAccount' | translate }} (1)</div></div>
+                    <div class="inputs-grid__cell selectedHeaderFooter"><div class="titleContent">{{ 'conciliacaoComponent.amountsSelectedInTransactions' | translate }} (2)</div></div>
+                    <div class="inputs-grid_column">
+                        <div class="inputs-grid__cell selectedContent" *ngFor="let element of selectedMovimentosBancarios">
+                            <div>{{element.value}} $</div>
+                        </div>
+                    </div>
+                    <div class="inputs-grid_column">
+                        <div class="inputs-grid__cell selectedContent" *ngFor="let element of selectedMovimentos">
+                            <div>{{element.value}} $</div>
+                        </div>
+                    </div>
+                    <div class="inputs-grid__cell selectedHeaderFooter"><div class="titleContent">{{ 'conciliacaoComponent.difference' | translate }} (1-2)</div></div>
+                    <div class="inputs-grid__cell selectedHeaderFooter">
+                        <div class="valueContent">{{totalSum}} $</div>
+                    </div>
+                </div>
+                <div class="bottom_buttons">
+                    <button *ngIf="resultsMovimentos && conciliatePermission" class="button float_right" [disabled]="!(totalSum == 0 && selectedMovimentosBancarios.length > 0 && selectedMovimentos.length > 0)"
+                        (click)="conciliarMovimentos()" mat-raised-button>
+                        <mat-label class="buttonLabel">{{'tarefa.movimentosConciliar' | translate}}</mat-label>
+                    </button>
+                    <button *ngIf="undoConciliationPermission" class="button float_left" (click)="openDesfazerConciliacoesPopUp()" mat-raised-button>
+                        <mat-label class="buttonLabel">{{'tarefa.movimentosDesfazerConciliar' | translate}}</mat-label>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-expansion-panel>

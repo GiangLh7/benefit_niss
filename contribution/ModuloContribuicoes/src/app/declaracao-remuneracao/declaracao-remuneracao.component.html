@@ -1,0 +1,183 @@
+<div class="declaracaoPagina">
+  <div class="subHeader">
+    <div class="secondLineContainers datePicker">
+      <app-date-picker [min]="beginDate" [max]="endDate" [(date)]="date" (dateSetEvent)="dateUpdated()" [clear]="false"></app-date-picker>
+    </div>
+    <div class="adicionarTrabalhador">
+      <a routerLink="../vincularTrabalhador" [skipLocationChange]="true" class="adicionarTrabalhadorButton" type="button" mat-raised-button>
+        <mat-icon class="adicionarTrabalhadorIcon">person_add</mat-icon>
+        <mat-label>{{'general.adicionarTrabalhador' | translate}}</mat-label>
+      </a>
+    </div>
+  </div>
+  <div class="bodyDeclaracao">
+    <div class="bodyDeclaracaoHeader">
+      <mat-icon class="bodyDeclaracaoHeaderIcon">description</mat-icon>
+      {{'declaracaoremunerao.declaracaoRumenracoes' | translate}} | {{translatedMonth | translate}}, {{year}}
+    </div>
+    <div class="DadosContainer">
+      <div class="dadosEntidade">
+        <div class="subtitleDiv">
+          <mat-icon class="subtitleIcon">account_balance</mat-icon>
+          <div class="subtittle">{{'general.entidadeEmpregadoraCaps' | translate}}</div>
+        </div>
+        <div class="dadosEntidadeDiv">
+          <div class="secondLineContainers">
+            <label>{{'general.nome' | translate}}:</label>
+            <span>{{this.entidade.nome}}</span>
+          </div>
+          <div class="secondLineContainers">
+            <label>{{'general.niss' | translate}}:</label>
+            <span>{{this.entidade.niss}}</span>
+          </div>
+          <div class="secondLineContainers">
+            <label>{{'general.tin' | translate}}:</label>
+            <span>{{this.entidade.tin}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dadosDeclaracao">
+      <div class="DadosContainer">
+        <div class="guiasContainer">
+          <div *ngFor="let conta of contas; let ind = index;" class="guiaStateDivList">
+            <div [ngClass]="{'contaSelected': conta.month == selectedMonth + 1}" class="contaStateDiv" (click)="goToDeclaracaoMonth(conta.month)">
+              <div class="contaStateText" matTooltip="{{'month.' + (conta.month - 1) | translate}}">{{'monthAbrev.' + (conta.month - 1) | translate}}</div>
+              <mat-icon matTooltip="{{'dropdownDominio.SITUACAOPAGAMENTO.' + conta.stateId | translate}}" class="guiaIcon" [ngClass]="'guiaStateColor' + conta.stateId">fiber_manual_record</mat-icon>
+            </div>
+          </div>
+        </div>
+        <form (keydown.enter)="$event.preventDefault()" (ngSubmit)="saveDeclaracao(declaracaoForm)" #declaracaoForm="ngForm">
+          <table [fixedLayout]="true" mat-table [dataSource]="declaracoes" matSort class="mat-elevation-z8 tabelaListagem">
+            <ng-container matColumnDef="niss">
+              <th matTooltip="{{'general.nissDesc' | translate}}" mat-header-cell *matHeaderCellDef> {{'general.niss' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <a class="tableLink" [routerLink]="['../novoTrabalhador', element.declaracao.declaracaoRelEntidadeTrabalhadorFk]" [skipLocationChange]="true">
+                  {{element.trabalhadorInfo.niss}}
+                </a>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="nome">
+              <th matTooltip="{{'declaracaoremunerao.tabelaHeader2ToolTip' | translate}}" mat-header-cell *matHeaderCellDef> {{'general.nome' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <a class="tableLink" [routerLink]="['../novoTrabalhador', element.declaracao.declaracaoRelEntidadeTrabalhadorFk]" [skipLocationChange]="true">
+                  {{element.trabalhadorInfo.nome}}
+                </a>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="nacionalidade">
+              <th matTooltip="{{'general.nacionalidade' | translate}}" mat-header-cell *matHeaderCellDef> {{'general.nacionalidade' | translate}} </th>
+              <td mat-cell *matCellDef="let element"> {{element.trabalhadorInfo.nacionalidade}} </td>
+            </ng-container>
+            <ng-container matColumnDef="regime">
+              <th matTooltip="{{'general.regime' | translate}}" mat-header-cell *matHeaderCellDef> {{'general.regime' | translate}} </th>
+              <td mat-cell *matCellDef="let element"> {{element.trabalhadorInfo.regime}} </td>
+            </ng-container>
+            <ng-container matColumnDef="diasContrato">
+              <th matTooltip="{{'declaracaoremunerao.tabelaHeader5ToolTip' | translate}}" mat-header-cell *matHeaderCellDef> {{'declaracaoremunerao.tabelaHeader5' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="inputTable">
+                  <mat-form-field class="tableField" appearance="outline">
+                    <input disabled="true" matInput #name="ngModel" [ngModel]="element.declaracao.diasContrato | number:'':'pt-TL'" name="{{'DiasContrato' + element.declaracao.declaracaoRelEntidadeTrabalhadorFk}}"/>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="faltasInjustific">
+              <th matTooltip="{{'declaracaoremunerao.tabelaHeader8' | translate}}" mat-header-cell *matHeaderCellDef> {{'declaracaoremunerao.tabelaHeader8' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="inputTable">
+                  <mat-form-field class="tableField" appearance="outline">
+                    <input [disabled]="element.declaracao.flagImportado" #name="ngModel" [errorStateMatcher]="maxMonthDateMatcher" (focusout)="checkFaltasInjustific(element)" [pattern]="availableRegex.intPattern" maxLength="2" matInput type="text" [(ngModel)]="element.declaracao.faltasInjustific" name="{{'FaltasInjustific' + element.declaracao.declaracaoRelEntidadeTrabalhadorFk}}"/>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="diasParentalidade">
+              <th matTooltip="{{'declaracaoremunerao.tabelaHeader9' | translate}}" mat-header-cell *matHeaderCellDef> {{'declaracaoremunerao.tabelaHeader9' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="inputTable">
+                  <mat-form-field class="tableField" appearance="outline">
+                    <input [disabled]="element.declaracao.flagImportado" #name="ngModel" [errorStateMatcher]="maxMonthDateMatcher" (focusout)="checkDiasParentalidade(element)" [pattern]="availableRegex.intPattern" maxLength="2" matInput type="text" [(ngModel)]="element.declaracao.diasParentalidade" name="{{'DiasParentalidade' + element.declaracao.declaracaoRelEntidadeTrabalhadorFk}}"/>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="diasEfecTrabalhados">
+              <th matTooltip="{{'declaracaoremunerao.tabelaHeader7ToolTip' | translate}}" mat-header-cell *matHeaderCellDef> {{'declaracaoremunerao.tabelaHeader7' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="inputTable">
+                  <mat-form-field class="tableField" appearance="outline">
+                    <input disabled="true" #name="ngModel" matInput type="text" [ngModel]="element.declaracao.diasEfecTrabalhados | number:'':'pt-TL'" name="{{'DiasEfecTrabalhados' + element.declaracao.declaracaoRelEntidadeTrabalhadorFk}}"/>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="diasTrabcontabSegSocial">
+              <th matTooltip="{{'declaracaoremunerao.tabelaHeader10ToolTip' | translate}}" mat-header-cell *matHeaderCellDef> {{'declaracaoremunerao.tabelaHeader10' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="inputTable">
+                  <mat-form-field class="tableField" appearance="outline">
+                    <input #name="ngModel" disabled="true" maxLength="2" matInput type="text" [(ngModel)]="element.declaracao.diasTrabcontabSegSocial" name="{{'DiasTrabcontabSegSocial' + element.declaracao.declaracaoRelEntidadeTrabalhadorFk}}"/>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="remunDeclarada">
+              <th matTooltip="{{'declaracaoremunerao.tabelaHeader11' | translate}}" mat-header-cell *matHeaderCellDef> {{'declaracaoremunerao.tabelaHeader11' | translate}} </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="inputTable">
+                  <mat-form-field class="tableField" appearance="outline">
+                    <input [disabled]="element.declaracao.flagImportado || element.trabalhadorInfo.tipoRegime == 'E'" (focusout)="checkRemuneracaoDeclarada(element)" #name="ngModel" (click)="focusCurrency($event)" matInput currencyMask [options]="currencyOptions" [(ngModel)]="element.declaracao.remunDeclarada" name="{{'RemunDeclarada' + element.declaracao.declaracaoRelEntidadeTrabalhadorFk}}"/>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="decimoTerceiro">
+              <th matTooltip="{{'declaracaoremunerao.tabelaHeader12' | translate}}" mat-header-cell *matHeaderCellDef> {{'declaracaoremunerao.tabelaHeader12' | translate}}
+                <mat-icon class="infoLegalButton" (click)="showInfoLegalRemuneracao()">help</mat-icon>
+              </th>
+              <td mat-cell *matCellDef="let element">
+                <div class="inputTable">
+                  <mat-form-field class="tableField" appearance="outline">
+                    <input #name="ngModel" [disabled]="element.declaracao.flagImportado || element.trabalhadorInfo.tipoRegime == 'E'" (click)="focusCurrency($event)" matInput currencyMask [options]="currencyOptions" [(ngModel)]="element.declaracao.decimoTerceiro" name="{{'DecimoTerceiro' + element.declaracao.declaracaoRelEntidadeTrabalhadorFk}}"/>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <div class="buttons">
+            <div class="secondLineContainers">
+              <button class="resumoButton" type="button" mat-raised-button [disabled]="!declaracaoForm.valid" (click)="showResumo(declaracaoForm)">
+                <mat-icon class="adicionarIcon">poll</mat-icon>
+                <mat-label>{{'declaracaoremunerao.resumo' | translate}}</mat-label>
+              </button>
+            </div>
+            <div class="secondLineContainers">
+              <button class="saveButton" [disabled]="saving" mat-raised-button [disabled]="!declaracaoForm.valid || !canOverWrite" type="submit">
+                <mat-icon class="adicionarIcon">archive</mat-icon>
+                <mat-label>{{'declaracaoremunerao.submeter' | translate}}</mat-label>
+              </button>
+            </div>
+            <div class="secondLineContainers">
+              <button class="cancelButton" mat-raised-button type="button" (click)="cancelDeclaracao()">
+                <mat-icon class="adicionarIcon">cancel</mat-icon>
+                <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+              </button>
+            </div>
+            <div class="secondLineContainers" style="visibility: hidden; display:inline;">
+              <input hidden #excelUploader type="file" (click)="excelUploader.value = ''" (change)="onFileChange($event)" multiple="false" />
+              <button class="excelUploadButton" [disabled]="!canOverWrite" mat-raised-button (click)="excelUploader.click()" type="button">
+                <mat-icon class="adicionarIcon">upload_file</mat-icon>
+                <mat-label>{{'declaracaoremunerao.uploadExcel' | translate}}</mat-label>
+              </button>
+              <mat-icon matTooltip="{{'declaracaoremunerao.template' | translate}}" class="templateButton" (click)="createXLSX()">help</mat-icon>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

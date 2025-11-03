@@ -1,0 +1,792 @@
+<div class="configurarTarefas">
+    <mat-icon class="configurarTarefasIcon">build</mat-icon>
+    <div class="configurarTarefasText">
+        {{'general.configurarTarefas' | translate}}
+    </div>
+</div>
+
+<form (ngSubmit)="adicionartarefa()" #componentForm="ngForm">
+
+    <div>
+        <mat-form-field class="nomeTarefa" appearance="outline">
+            <mat-label>{{'tarefa.nome' | translate}}</mat-label>
+            <input matInput maxlength="100" type="text" [(ngModel)]="nomeTarefa" name="nomeTarefa"
+                [errorStateMatcher]="matcher" [required]="submittedTry" />
+            <mat-error>{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="container">
+        <h2 class="title">{{'tarefa.componente' | translate}}</h2>
+        <table mat-table #table [dataSource]="dataSourceComponentes" class="mat-elevation-z8 tabelaComponentes"
+            cdkDropList [cdkDropListData]="dataSourceComponentes" (cdkDropListDropped)="dropTable($event)">
+            <ng-container matColumnDef="expandir">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{'tarefa.tootipExpandir' | translate}}">
+                    {{'tarefa.expandir' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-checkbox color="primary" [checked]="element.expandir"
+                        (change)="updateExpandir($event,element)">
+                    </mat-checkbox>
+
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="descricao">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{'tarefa.tooltipDescricao' | translate}}">
+                    {{'tarefa.descricao' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef matTooltip="{{'tarefa.tooltipSelecionar' | translate}}">
+                    {{'tarefa.selecionar' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                    <mat-checkbox color="primary" [checked]="element.select" (change)="updateSelect($event,element)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnscomponentes"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnscomponentes;" cdkDrag [cdkDragData]="row">
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <mat-accordion multi>
+            <mat-expansion-panel class="mat-expansion" #textComponent (afterExpand)="scroll(textComponent)"
+                [expanded]="componenteTextoOpenState" *ngIf="componenteTextoOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componenteTexto' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div id="compTexto">
+                    <mat-checkbox class="checkbox" color="primary" [checked]="componenteTexto.expandir1"
+                        (change)="updateExpandir1($event,componenteTexto)">
+                        {{'tarefa.expandir' | translate}}
+                    </mat-checkbox>
+                    <mat-checkbox class="checkbox" color="primary" [checked]="componenteTexto.texto1"
+                        [required]="componenteTextoOpenState" (change)="updateTexto1($event,componenteTexto)">
+                        {{'tarefa.componenteTexto' | translate}}
+                    </mat-checkbox>
+                    <mat-form-field class="titulo" appearance="outline">
+                        <mat-label>{{'tarefa.titulo' | translate}}</mat-label>
+                        <input matInput maxlength="100" type="text" [(ngModel)]="componenteTexto.titulo1" name="titulo1"
+                            [errorStateMatcher]="dependentMatcher" [required]="componenteTextoOpenState" />
+                        <mat-error>{{'general.required' | translate}}</mat-error>
+                    </mat-form-field>
+
+                    <span class="span">{{'tarefa.quantCaracteres' | translate}}</span>
+                    <mat-form-field class="numCaracteres" appearance="outline">
+                        <input matInput maxlength="3" type="number" [(ngModel)]="componenteTexto.quantCaracteres1"
+                            name="quantCaracteres1" [errorStateMatcher]="dependentMatcher"
+                            [required]="componenteTextoOpenState" />
+                    </mat-form-field>
+
+                    <mat-checkbox class="checkbox" color="primary" [checked]="componenteTexto.obrigatorio1"
+                        (change)="updateObrigatorio1($event,componenteTexto)">
+                        {{'tarefa.obrigatorio' | translate}}
+                    </mat-checkbox>
+                    <mat-checkbox class="checkbox" color="primary" [checked]="componenteTexto.obrigatorioArquivar1"
+                        (change)="updateObrigatorioArquivar1($event,componenteTexto)">
+                        {{'tarefa.obrigatorioArquivar' | translate}}
+                    </mat-checkbox>
+                </div>
+                <div>
+                    <mat-checkbox class="checkbox" color="primary" [checked]="componenteTexto.expandir2"
+                        (change)="updateExpandir2($event,componenteTexto)">
+                        {{'tarefa.expandir' | translate}}
+                    </mat-checkbox>
+                    <mat-checkbox class="checkbox" color="primary" [checked]="componenteTexto.texto2"
+                        (change)="updateTexto2($event,componenteTexto)">
+                        {{'tarefa.componenteTexto' | translate}}
+                    </mat-checkbox>
+                    <mat-form-field class="titulo" appearance="outline">
+                        <mat-label>{{'tarefa.titulo' | translate}}</mat-label>
+                        <input matInput maxlength="100" type="text" [(ngModel)]="componenteTexto.titulo2" name="titulo2"
+                            [errorStateMatcher]="dependentMatcher" [required]="componenteTexto.texto2" />
+                        <mat-error>{{'general.required' | translate}}</mat-error>
+                    </mat-form-field>
+
+                    <span class="span">{{'tarefa.quantCaracteres' | translate}}</span>
+                    <mat-form-field class="numCaracteres" appearance="outline">
+                        <input matInput maxlength="3" type="number" [(ngModel)]="componenteTexto.quantCaracteres2"
+                            name="quantCaracteres2" [errorStateMatcher]="dependentMatcher"
+                            [required]="componenteTexto.texto2" />
+                    </mat-form-field>
+
+                    <mat-checkbox class="checkbox" color="primary" [checked]="componenteTexto.obrigatorio2"
+                        (change)="updateObrigatorio2($event,componenteTexto)">
+                        {{'tarefa.obrigatorio' | translate}}
+                    </mat-checkbox>
+                    <mat-checkbox class="checkbox" color="primary" [checked]="componenteTexto.obrigatorioArquivar2"
+                        (change)="updateObrigatorioArquivar2($event,componenteTexto)">
+                        {{'tarefa.obrigatorioArquivar' | translate}}
+                    </mat-checkbox>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mat-expansion" #prazoTarefaComponent
+                (afterExpand)="scroll(prazoTarefaComponent)" [expanded]="componentePrazoTarefaOpenState"
+                *ngIf="componentePrazoTarefaOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componentePrazoTarefa' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div id="prazoTarefa">
+                    <mat-form-field class="prazoTarefa" appearance="outline">
+                        <mat-label>{{'tarefa.componentePrazoTarefa' | translate}}</mat-label>
+                        <input #name="ngModel" [errorStateMatcher]="dependentMatcher"
+                            [required]="componentePrazoTarefaOpenState" matInput type="number"
+                            [pattern]="availableRegex.intPattern" maxLength="3" [(ngModel)]="prazoTarefa"
+                            name="prazoTarefa" />
+                        <fa-icon *ngIf="prazoTarefa" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                            (click)="clearPrazoTarefa()"></fa-icon>
+                        <mat-error>{{'general.wrongFormat' | translate}}</mat-error>
+                    </mat-form-field>
+                </div>
+            </mat-expansion-panel>
+
+
+            <mat-expansion-panel class="mat-expansion" #accoesTarefaComponent
+                (afterExpand)="scroll(accoesTarefaComponent)" [expanded]="componenteAccoesTarefaOpenState"
+                *ngIf="componenteAccoesTarefaOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componenteAccoesTarefa' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div id="accoesTarefa">
+                    <mat-form-field class="accoesTarefa" appearance="outline">
+                        <mat-label>{{'tarefa.tarefaASeguir' | translate}}</mat-label>
+                        <mat-select [(ngModel)]="componenteAccoesTarefa.idTarefa"
+                            [(value)]="componenteAccoesTarefa.idTarefa" name="tarefaASeguir"
+                            (selectionChange)="updateApelidoTarefa()" [errorStateMatcher]="dependentMatcher"
+                            [required]="componenteAccoesTarefaOpenState && dataSourceAccoesTarefa.length <= 0 ">
+                            <ng-container *ngIf="tarefaListagem.length > 1">
+                                <mat-option *ngFor="let tarefa of tarefaListagem" [value]="tarefa.id">
+                                    {{tarefa.nome}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error>{{'general.required' | translate}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="accoesTarefa" appearance="outline">
+                        <mat-label>{{'tarefa.apelidoTarefa' | translate}}</mat-label>
+                        <input #name="ngModel" [errorStateMatcher]="dependentMatcher"
+                            [required]="componenteAccoesTarefaOpenState && dataSourceAccoesTarefa.length <= 0" matInput
+                            type="text" maxLength="100" [(ngModel)]="componenteAccoesTarefa.apelidoTarefa"
+                            name="apelidoTarefa" />
+                    </mat-form-field>
+                    <mat-icon class="arrowIcon" *ngIf="componenteAccoesTarefa.idTarefa > 0 && componenteAccoesTarefa.apelidoTarefa != null &&
+                        componenteAccoesTarefa.apelidoTarefa != ''"
+                        (click)="adicionarAccao(componenteAccoesTarefa.idTarefa,componenteAccoesTarefa.apelidoTarefa)"
+                        matTooltip="{{'general.Add' | translate}}">arrow_downward
+                    </mat-icon>
+
+                </div>
+
+                <div class="tables">
+                    <table mat-table [dataSource]="dataSourceAccoesTarefa" class="mat-elevation-z8 tabelasTarefa">
+                        <ng-container matColumnDef="tarefa">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.nome' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> {{element.nomeTarefa}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="apelidoTarefa">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.apelidoTarefa' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> {{element.apelidoTarefa}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="eliminar">
+                            <th mat-header-cell *matHeaderCellDef> {{'general.Eliminar' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary">
+                                    <mat-icon class="deleteIconTable" (click)="deleteAccao(element)"
+                                        matTooltip="{{'general.Eliminar' | translate}}">clear</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsAccoesTarefa"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsAccoesTarefa;"></tr>
+                    </table>
+                </div>
+                <div *ngIf="dataSourceAccoesTarefa.length <= 0" class="searchResultsNotFound">
+                    {{'tarefa.semResultados' | translate}}
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mat-expansion" #documentoTarefaComponent
+                (afterExpand)="scroll(documentoTarefaComponent)" [expanded]="componenteDocumentoTarefaOpenState"
+                *ngIf="componenteDocumentoTarefaOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componenteDocumentoTarefa' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="documentosTarefa">
+                    <a class="link" href="/camposEditaveis">{{'tarefa.adicionarNovoDocumento' | translate}}
+                    </a>
+                </div>
+
+                <div id="documentosTarefa">
+                    <mat-form-field class="documentosTarefa" appearance="outline">
+                        <mat-label>{{'tarefa.componenteDocumentoTarefa' | translate}}</mat-label>
+                        <mat-select [(ngModel)]="componenteDocumentosTarefa.idDocumento"
+                            [(value)]="componenteDocumentosTarefa.idDocumento" name="documento"
+                            [errorStateMatcher]="dependentMatcher"
+                            [required]="componenteDocumentoTarefaOpenState && dataSourceDocumentoTarefa.length <= 0">
+                            <ng-container *ngIf="documentoListagem.length > 1">
+                                <mat-option *ngFor="let documento of documentoListagem" [value]="documento.id">
+                                    {{documento.descricao}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error>{{'general.required' | translate}}</mat-error>
+                    </mat-form-field>
+                    <mat-checkbox class="checkbox" color="primary"
+                        (change)="updateObrigatorio($event,componenteDocumentosTarefa)"
+                        [checked]="componenteDocumentosTarefa.obrigatorio">
+                        {{'tarefa.obrigatorio' | translate}}
+                    </mat-checkbox>
+
+                    <mat-icon class="arrowIcon" *ngIf="componenteDocumentosTarefa.idDocumento > 0"
+                        (click)="adicionarDocumento(componenteDocumentosTarefa.idDocumento,componenteDocumentosTarefa.obrigatorio)"
+                        matTooltip="{{'general.Add' | translate}}">arrow_downward
+                    </mat-icon>
+                </div>
+
+                <div class="tables">
+                    <table mat-table [dataSource]="dataSourceDocumentoTarefa" class="mat-elevation-z8 tabelasTarefa">
+                        <ng-container matColumnDef="documento">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.componenteDocumentoTarefa' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.nomeDocumento}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="obrigatorio">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.obrigatorio' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <mat-icon class="checkIcon" *ngIf="element.obrigatorio == true">
+                                    check</mat-icon>
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="eliminar">
+                            <th mat-header-cell *matHeaderCellDef> {{'general.Eliminar' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary">
+                                    <mat-icon class="deleteIconTable" (click)="deleteDocumento(element)"
+                                        matTooltip="{{'general.Eliminar' | translate}}">clear</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsDocumentosTarefa"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsDocumentosTarefa;"></tr>
+                    </table>
+                </div>
+                <div *ngIf="dataSourceDocumentoTarefa.length <= 0" class="searchResultsNotFound">
+                    {{'tarefa.semResultados' | translate}}
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mat-expansion" #classificacaoSubClassificTarefaComponent
+                (afterExpand)="scroll(classificacaoSubClassificTarefaComponent)"
+                [expanded]="componenteClassificSubClassificOpenState" *ngIf="componenteClassificSubClassificOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componenteClassificSubClassificTarefa' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="classificacaoTarefa">
+                    <a class="link" href="/camposEditaveis">{{'tarefa.adicionarNovaClassificacaoSubClassific' |
+                        translate}}
+                    </a>
+                </div>
+                <div id="classificacaoSubClassificTarefa">
+
+                    <mat-form-field class="classificacaoTarefa" appearance="outline">
+                        <mat-label>{{'tarefa.classificacao' | translate}}</mat-label>
+                        <mat-select [(ngModel)]="classificacaoTarefa.id" name="classificacao"
+                            (selectionChange)="updateSubClassificacao()" [errorStateMatcher]="dependentMatcher"
+                            [required]="componenteClassificSubClassificOpenState && dataSourceClassificacaoTarefa.length <= 0">
+                            <mat-option *ngFor="let classificacao of classificacaoListagem" [value]="classificacao.id">
+                                {{classificacao.nome}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="classificacaoTarefa" appearance="outline">
+                        <mat-label>{{'tarefa.subClassificacao' | translate}}</mat-label>
+                        <mat-select [(ngModel)]="subClassificacaoTarefa.id" name="subClassificacao"
+                            [errorStateMatcher]="dependentMatcher"
+                            [required]="componenteClassificSubClassificOpenState && dataSourceClassificacaoTarefa.length <= 0">
+                            <mat-option *ngFor="let subClassific of subClassificacaoListagemFilter"
+                                [value]="subClassific.id">
+                                {{subClassific.nome}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-icon class="arrowIcon" *ngIf="classificacaoTarefa.id > 0 && subClassificacaoTarefa.id > 0"
+                        (click)="adicionarClassificacao(classificacaoTarefa.id,subClassificacaoTarefa.id)"
+                        matTooltip="{{'general.Add' | translate}}">arrow_downward
+                    </mat-icon>
+
+                </div>
+                <div class="tables">
+                    <table mat-table [dataSource]="dataSourceClassificacaoTarefa"
+                        class="mat-elevation-z8 tabelasTarefa">
+                        <ng-container matColumnDef="classificacao">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.classificacao' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.nomeClassificacao}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="subClassificacao">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.subClassificacao' | translate}} </th>
+                            <td mat-cell *matCellDef="let element"> {{element.nomeSubClassificacao}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="eliminar">
+                            <th mat-header-cell *matHeaderCellDef> {{'general.Eliminar' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary">
+                                    <mat-icon class="deleteIconTable" (click)="deleteClassificacao(element)"
+                                        matTooltip="{{'general.Eliminar' | translate}}">clear</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsClassificacaoTarefa"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsClassificacaoTarefa;"></tr>
+                    </table>
+                </div>
+                <div *ngIf="dataSourceClassificacaoTarefa.length <= 0" class="searchResultsNotFound">
+                    {{'tarefa.semResultados' | translate}}
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mat-expansion" #perfilUtilizadorTarefaComponent
+                (afterExpand)="scroll(perfilUtilizadorTarefaComponent)" [expanded]="componentePerfilUtilizadorOpenState"
+                *ngIf="componentePerfilUtilizadorOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componentePerfilUtilizadorTarefa' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div id="perfilUtilizadorTarefa">
+
+                    <mat-form-field class="perfilUtilizadorTarefa" appearance="outline">
+                        <mat-label>{{'tarefa.profile' | translate}}</mat-label>
+                        <mat-select [(ngModel)]="perfilTarefa.id" name="perfil" 
+                            
+                            [errorStateMatcher]="dependentMatcher"
+                            [required]="(componentePerfilUtilizadorOpenState && dataSourcePerfil.length <= 0) &&
+                            (componentePerfilUtilizadorOpenState && dataSourceUtilizador.length <= 0)">
+                            <mat-option *ngFor="let perfil of perfilListagem" [value]="perfil.id">
+                                {{perfil.nome}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-icon class="arrowIcon" *ngIf="perfilTarefa.id > 0" (click)="adicionarPerfil(perfilTarefa.id)"
+                        matTooltip="{{'general.Add' | translate}}">arrow_downward
+                    </mat-icon>
+
+                    <mat-form-field class="perfilUtilizadorTarefa" appearance="outline">
+                        <mat-label>{{'tarefa.user' | translate}}</mat-label>
+                        <mat-select [(ngModel)]="utilizadorTarefa.id" name="user" [errorStateMatcher]="dependentMatcher"
+                            [required]="(componentePerfilUtilizadorOpenState && dataSourcePerfil.length <= 0) &&
+                            (componentePerfilUtilizadorOpenState && dataSourceUtilizador.length <= 0)">
+                            <mat-option *ngFor="let utilizador of utilizadorListagem" [value]="utilizador.id">
+                                {{utilizador.utilizador}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-icon class="arrowIcon" *ngIf="utilizadorTarefa.id > 0"
+                        (click)="adicionarUtilizador(utilizadorTarefa.id)" matTooltip="{{'general.Add' | translate}}">
+                        arrow_downward
+                    </mat-icon>
+                </div>
+
+
+                <div class="tabelaControloAcesso">
+                    <table mat-table [dataSource]="dataSourcePerfil" class="mat-elevation-z8 tabelaPerfil">
+                        <ng-container matColumnDef="perfil">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.profile' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.nomePerfil}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="eliminar">
+                            <th mat-header-cell *matHeaderCellDef> {{'general.Eliminar' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary">
+                                    <mat-icon class="deleteIconTable" (click)="deletePerfil(element)"
+                                        matTooltip="{{'general.Eliminar' | translate}}">clear</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsPerfilTarefa"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsPerfilTarefa;"></tr>
+                    </table>
+                </div>
+
+
+
+                <div class="tabelaControloAcesso">
+                    <table mat-table [dataSource]="dataSourceUtilizador" class="mat-elevation-z8 tabelaUtilizador">
+                        <ng-container matColumnDef="utilizador">
+                            <th mat-header-cell *matHeaderCellDef> {{'tarefa.user' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let element"> {{element.nomeUtilizador}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="eliminar">
+                            <th mat-header-cell *matHeaderCellDef> {{'general.Eliminar' | translate}} </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button color="primary">
+                                    <mat-icon class="deleteIconTable" (click)="deleteUtilizador(element)"
+                                        matTooltip="{{'general.Eliminar' | translate}}">clear</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsUtilizadorTarefa"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsUtilizadorTarefa;"></tr>
+                    </table>
+                </div>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mat-expansion" #orcamentoComponent (afterExpand)="scroll(orcamentoComponent)"
+                [expanded]="componenteOrcamentoTarefaOpenState" *ngIf="componenteOrcamentoTarefaOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componenteOrcamento' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div id="orcamentoComponent" class="bodyComponenteOrcamento">
+
+                    <mat-radio-group class="orcamentoRadioGroup" [(ngModel)]="componenteOrcamento.permissaoDatas"
+                        [value]="componenteOrcamento.permissaoDatas" name="PeriodoOrcamento">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.PeriodoOrcamento' | translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="1">
+                            {{'tarefa.apenasVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup" [(ngModel)]="componenteOrcamento.permissaoInsercoes"
+                        [value]="componenteOrcamento.permissaoInsercoes" name="InsercaoOrcamento">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.InsercaoOrcamento' | translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup" [(ngModel)]="componenteOrcamento.permissaoDetalhes"
+                        [value]="componenteOrcamento.permissaoDetalhes" name="DetalhesOrcamento">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.DetalhesOrcamento' | translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="1">
+                            {{'tarefa.apenasVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup" [(ngModel)]="componenteOrcamento.permissaoAprovacao"
+                        [value]="componenteOrcamento.permissaoAprovacao" name="AprovacaoOrcamento">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.AprovacaoOrcamento' | translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                </div>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mat-expansion" #despesaComponent (afterExpand)="scroll(despesaComponent)"
+                [expanded]="componenteDespesaTarefaOpenState" *ngIf="componenteDespesaTarefaOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componenteDespesa' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div id="despesaComponent" class="bodyComponenteDespesa">
+
+                    <mat-radio-group class="despesaRadioGroup" [(ngModel)]="componenteDespesa.registarDespesa"
+                        [value]="componenteDespesa.registarDespesa" name="RegistoDespesa">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.registarDespesa' | translate}}</label>
+                        <mat-radio-button [disabled]="disabledRegistar" class="despesaRadioButton" color="primary"
+                            [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button [disabled]="disabledRegistar" class="despesaRadioButton" color="primary"
+                            [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="despesaRadioGroup" [(ngModel)]="componenteDespesa.visualizarDespesaRParaA"
+                        [value]="componenteDespesa.visualizarDespesaRParaA" name="visualizarDespesaRParaA">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.visualizarDespesaRegistParaAutorizacao'
+                            | translate}}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0"
+                            (change)="EditRegistar()">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="2"
+                            (change)="EditRegistar()">{{'tarefa.edicao' |translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+
+                    <mat-radio-group class="despesaRadioGroup" [(ngModel)]="componenteDespesa.visualizarDespesaAParaC"
+                        [value]="componenteDespesa.visualizarDespesaAParaC" name="visualizarDespesaAParaC">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.visualizarDespesaAutorizadasParaCabimentacao'
+                            | translate}}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="despesaRadioGroup" [(ngModel)]="componenteDespesa.visualizarDespesaR"
+                        [value]="componenteDespesa.visualizarDespesaR" name="VisualizarDespesaR">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.visualizarDespesaRegistada' |
+                            translate}}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="1">
+                            {{'tarefa.apenasVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="2"
+                            (change)="EditRegistar()">{{'tarefa.edicao' |translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="despesaRadioGroup" [(ngModel)]="componenteDespesa.visualizarDespesaA"
+                        [value]="componenteDespesa.visualizarDespesaA" name="VisualizarDespesaA">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.visualiazarDespesaAutorizada' |
+                            translate}}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="1">
+                            {{'tarefa.apenasVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="despesaRadioGroup" [(ngModel)]="componenteDespesa.visualiazarDespesaC"
+                        [value]="componenteDespesa.visualiazarDespesaC" name="VisualizarDespesaC">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.visualiazarDespesaCabimentada' |
+                            translate}}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="despesaRadioGroup" [(ngModel)]="componenteDespesa.visualizarDespesaComCompromisso"
+                        [value]="componenteDespesa.visualizarDespesaComCompromisso" name="visualizarDespesaComCompromisso">
+                        <label class="despesaRadioGroupLabel">{{ 'tarefa.visualizarDespesasCompromisso' | translate }}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="1">
+                            {{'tarefa.apenasVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="despesaRadioGroup" [(ngModel)]="componenteDespesa.executarPagamentos"
+                        [value]="componenteDespesa.executarPagamentos" name="ExecutarPagamentos">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.executarPagamentos' | translate}}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="despesaRadioGroup"
+                        [(ngModel)]="componenteDespesa.emitirOrdemPagamento"
+                        [value]="componenteDespesa.emitirOrdemPagamento"
+                        name="EmitirOrdemPagamento">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.emitirOrdemPagaamento' |
+                            translate}}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="2">
+                            {{'tarefa.edicao' | translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+
+                    <mat-radio-group class="despesaRadioGroup"
+                        [(ngModel)]="componenteDespesa.visualizarExecucaoDespesaCabimentada"
+                        [value]="componenteDespesa.visualizarExecucaoDespesaCabimentada"
+                        name="VisualizarExecucaoDespesaCabimentada">
+                        <label class="despesaRadioGroupLabel">{{'tarefa.visualizarExecucaoDespesaCabimentada' |
+                            translate}}</label>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="despesaRadioButton" color="primary" [value]="1">
+                            {{'tarefa.apenasVisualizacao' | translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                </div>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mat-expansion" #conciliacaoMovimentosComponent
+                (afterExpand)="scroll(conciliacaoMovimentosComponent)"
+                [expanded]="componenteConciliacaoMovimentosOpenState" *ngIf="componenteConciliacaoMovimentosOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componenteConciliacaoMovimentos' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div id="conciliacaoMovimentosComponent" class="bodyComponenteOrcamento">
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteConciliacaoMovimentos.permissaoSelecionarMovimentos"
+                        [value]="componenteConciliacaoMovimentos.permissaoSelecionarMovimentos"
+                        name="selecionarMovimentos">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.selecionarMovimentos' | translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteConciliacaoMovimentos.permissaoMovimentosConciliar"
+                        [value]="componenteConciliacaoMovimentos.permissaoMovimentosConciliar"
+                        name="addEditMovimentosConciliar">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.addEditMovimentosConciliar' |
+                            translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteConciliacaoMovimentos.permissaoMovimentosBancarios"
+                        [value]="componenteConciliacaoMovimentos.permissaoMovimentosBancarios"
+                        name="addEditMovimentosBancarios">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.addEditMovimentosBancarios' |
+                            translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteConciliacaoMovimentos.permissaoVerMovimentosAconciliar"
+                        [value]="componenteConciliacaoMovimentos.permissaoVerMovimentosAconciliar"
+                        name="visualizarMovimentosTabela">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.visualizarMovimentosTabela' |
+                            translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="1">
+                            {{'tarefa.apenasVisualizacao' | translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteConciliacaoMovimentos.permissaoConciliar"
+                        [value]="componenteConciliacaoMovimentos.permissaoConciliar" name="movimentosConciliar">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.movimentosConciliar' | translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteConciliacaoMovimentos.permissaoDesfazerConciliar"
+                        [value]="componenteConciliacaoMovimentos.permissaoDesfazerConciliar"
+                        name="movimentosDesfazerConciliar">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.movimentosDesfazerConciliar' |
+                            translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                </div>
+
+            </mat-expansion-panel>
+
+            <mat-expansion-panel class="mat-expansion" #receitaComponent (afterExpand)="scroll(receitaComponent)"
+                [expanded]="componenteReceitaOpenState" *ngIf="componenteReceitaOpenState">
+                <mat-expansion-panel-header class="disable_ripple">
+                    <mat-panel-title>
+                        {{'tarefa.componenteReceita' | translate}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div id="receitaComponent" class="bodyComponenteOrcamento">
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteReceita.classificarMovSelecionados"
+                        [value]="componenteReceita.classificarMovSelecionados" name="classificarMovimentos">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.classificarMovSelecionados' |
+                            translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteReceita.selecionarMovRecebidosParaRegisto"
+                        [value]="componenteReceita.selecionarMovRecebidosParaRegisto" name="selecionarMovimentos">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.selecionarMovRecebidosParaRegisto' |
+                            translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="orcamentoRadioGroup"
+                        [(ngModel)]="componenteReceita.verificarExecucaoOrcamentoEditarSelecao"
+                        [value]="componenteReceita.verificarExecucaoOrcamentoEditarSelecao"
+                        name="verificarExecucaoOrcamentoEditarSelecao">
+                        <label class="orcamentoRadioGroupLabel">{{'tarefa.verificarExecucaoOrcamentoEditarSelecao' |
+                            translate}}</label>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="0">
+                            {{'tarefa.naoVisualizacao' | translate}}</mat-radio-button>
+                        <mat-radio-button class="orcamentoRadioButton" color="primary" [value]="2">{{'tarefa.edicao' |
+                            translate}}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </mat-expansion-panel>
+
+
+        </mat-accordion>
+    </div>
+
+    <div class="buttons">
+        <button class="gravarButtton" type="submit" (click)="submitConfiguracao()"
+            [disabled]="!componentForm.valid
+        || nomeTarefa == null || nomeTarefa == '' || (!componenteTextoOpenState && !componentePrazoTarefaOpenState && !componenteCabecalhoProcessoOpenState &&
+        (!componenteAccoesTarefaOpenState || dataSourceAccoesTarefa.length <= 0) &&
+        (!componenteDocumentoTarefaOpenState || dataSourceDocumentoTarefa.length <= 0) &&
+        (!componenteClassificSubClassificOpenState || dataSourceClassificacaoTarefa.length <= 0) &&
+        (!componentePerfilUtilizadorOpenState || (dataSourcePerfil.length <= 0 && dataSourceUtilizador.length <= 0)) && !componenteDespesaTarefaOpenState
+        && !componenteOrcamentoTarefaOpenState && !componenteConciliacaoMovimentosOpenState && !componenteReceitaOpenState)" mat-raised-button>
+            <mat-icon>check</mat-icon>
+            <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+        </button>
+
+        <button class="cancelarButton" type="submit" (click)="cancelar()" mat-raised-button>
+            <mat-icon>close</mat-icon>
+            <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+        </button>
+    </div>
+</form>

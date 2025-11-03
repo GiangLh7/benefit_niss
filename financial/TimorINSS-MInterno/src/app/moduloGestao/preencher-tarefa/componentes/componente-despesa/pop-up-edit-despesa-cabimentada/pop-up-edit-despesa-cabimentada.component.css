@@ -1,0 +1,183 @@
+.titulo {
+    height: 13%;
+    color: #2A81CC;
+    text-align: -webkit-center;  
+    font-weight: bold;
+  }
+  .popUpIcon {
+    top: 5px;
+    position: relative;
+    font-size: 1.3em;
+  }
+.tabelaDespesa {
+    margin-left: 100px;
+    margin-top: 5px;
+    width:80%;
+    text-align: left;
+    background-color: white;
+}
+
+.displayPanel {
+    width: 80%;
+    margin: 0 25px 25px 20px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 20px;
+}
+
+  
+.containerLine{
+    width: 100%;
+    display: inline-block;
+}
+
+.nissTinContainer{
+    margin-left: 10px;
+    width: 30%;
+    top: 10px;
+  }
+  
+  .pesquisarDestinatarioButton {
+    width: 32px;
+    height: 32px;
+    margin-left: 10px;
+    top: 20px;
+    background-color:#2A81CC;
+    color: white;
+  }
+  
+  
+  .pesquisarDestinatarioIcon {
+    position: relative;
+    bottom: 13px;
+    left: 1px;
+  }
+  
+  .novoDestinatarioButton {
+    margin-left:10px;
+    background: rgba(52, 176, 43, 100);
+    color: white;
+    top: 10px;
+  }
+
+  .despesaAExecutar{
+    margin-left: 10px;
+    width: 40%;
+    top: 20px;
+  }
+
+  .novoDestinatarioButton {
+    margin-left:10px;
+    background: rgba(52, 176, 43, 100);
+    color: white;
+    top: 10px;
+  }
+
+  .rightButton {
+    margin-right: 10px;
+    margin-left:50px;
+    background: rgba(52, 176, 43, 100);
+    color: white;
+    margin-top: 10px;
+  }
+
+  .panel {
+    width: 90%;
+    margin-left: 100px;
+    margin-right: 50px;
+    margin-top: 20px;
+  }
+  
+  .dados{
+    border: 2px solid #2A81CC;
+    border-radius: 15px;
+    display: grid;
+    width:90%;
+  }
+
+  .associarDespesaButton {
+    margin-left:10px;
+    background: rgba(52, 176, 43, 100);
+    color: white;
+    margin-top: 10px;
+  }
+
+table td,
+table th {
+width: 20%;
+text-align: center;
+}
+
+table th {
+font-weight: bold;
+}
+table th {
+background-color: rgb(211, 211, 211);
+}
+
+.tabelaTitulo {
+  width: 100%;
+  margin-left: 50px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 10px;
+}
+
+.tabelaTituloText {
+  padding-top: 10px;
+}
+
+.terminarButton {
+  margin-left:58%;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 10px;
+}
+
+.closeButton {
+  margin-left:5px;
+  background: darkred;
+  color: white;
+  margin-top: 10px;
+}
+
+.editIconTable {
+  color: #2A81CC;
+  cursor: pointer;
+}
+
+.deleteIconTable {
+  color: darkred;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.excelIcon {
+  color: green;
+  background-color: transparent;
+  cursor: pointer;
+  border-color: transparent;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+  background-color: #2A81CC;
+}
+
+.exportExcelButton {
+  margin-left:80%;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 10px;
+}
+
+.orcamentoRadioGroupLabel {
+  margin-top: 30px;
+  display:inline-block
+}
+
+.orcamentoRadioButton {
+  padding-left: 10px;
+}

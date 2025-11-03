@@ -1,0 +1,493 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteDespesa
+  (afterExpand)="scroll(componenteDespesa)">
+  <mat-expansion-panel-header>
+    {{'componenteDespesa.title' | translate}}
+  </mat-expansion-panel-header>
+
+  <div class="exiteOrcamentoAprovado" *ngIf="naoExisteOrcamentoAprovado == true">
+    {{'componenteDespesa.naoExisteOrcamentoAprovado' | translate}}
+  </div>
+  <div class="panel" id="registoDepartamento"
+    *ngIf="componenteDespesaConfig.registarDespesa == 2 && naoExisteOrcamentoAprovado == false">
+    <div class="dados">
+      <form (ngSubmit)="registarEditarDespesa()" #despesaForm="ngForm">
+
+        <div>
+
+          <div class="tabelaTitulo">
+            <div class="tabelaTituloText">
+              {{'componenteDespesa.registarDespesa' | translate}}
+            </div>
+          </div>
+
+
+          <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.departamentoINSS' | translate}}</mat-label>
+            <mat-select [(ngModel)]="departamentoINSS.id" [(value)]="departamentoINSS.id" name="departamento">
+              <ng-container *ngIf="departamentoINSSListagem.length > 1">
+                <mat-option *ngFor="let departamento of departamentoINSSListagem" [value]="departamento.id"
+                  matTooltip="{{departamento.nome}}">
+                  {{departamento.nome}}
+                </mat-option>
+              </ng-container>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.centroCusto' | translate}}</mat-label>
+            <mat-select [(ngModel)]="centroCusto.id" [(value)]="centroCusto.id" name="centroCusto"
+              [errorStateMatcher]="matcher" [required]="submittedTry">
+              <ng-container *ngIf="centroCustoListagem.length > 0">
+                <mat-option *ngFor="let centro of centroCustoListagem" [value]="centro.id">
+                  {{centro.nome}}
+                </mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.tipoConta' | translate}}</mat-label>
+            <mat-select
+              [(ngModel)]="tipoConta.id" [(value)]="tipoConta.id" name="tipoConta" [errorStateMatcher]="matcher"
+              [required]="submittedTry">
+              <ng-container *ngIf="tipoContaFiltered.length > 1">
+                <mat-option *ngFor="let tipo of tipoContaFiltered" [value]="tipo.id">
+                  {{tipo.descricao}}
+                </mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <!-- <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.contabilidade' | translate}}</mat-label>
+            <mat-select (selectionChange)="updateFilteredAgrupamentos(tipoConta.id, false)"
+              #name="ngModel" name="selectComponenteContabilidade" [(ngModel)]="contabilidade.id"
+              [errorStateMatcher]="matcher" [required]="submittedTry">
+              <mat-option>
+                <ngx-mat-select-search #name="ngModel"
+                  noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                  placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
+                  (ngModelChange)="filterCustomOptionsContabilidade($event)" name="ContabilidadeFilterSearch">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let value of filtersContabilidadeFiltered" [value]="value.id"
+                matTooltip="{{value.designacao}}">
+                {{value.designacao}}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field> -->
+
+          <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.contaOSS' | translate}}</mat-label>
+            <mat-select #name="ngModel" name="selectComponenteContaOSS" [(ngModel)]="contaOSS.id"
+              [errorStateMatcher]="matcher" [required]="submittedTry">
+              <mat-option>
+                <ngx-mat-select-search #name="ngModel"
+                  noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                  placeholderLabel="{{'componenteDespesa.contaOSS' | translate}}" ngModel
+                  (ngModelChange)="filterCustomOptionsContaOSS($event)" name="ContaOSSFilterSearch">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let value of filtersContaOSSFiltered" [value]="value.id"
+                matTooltip="{{value.designacao}}">
+                {{value.designacao}}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="descricaoDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.descricao' | translate}}</mat-label>
+            <input matInput maxlength="50" type="text" [(ngModel)]="descricaoDespesa" name="DescricaoDespesa"
+              [errorStateMatcher]="matcher" [required]="submittedTry" />
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field class="componenteDespesa" appearance="outline">
+            <mat-label>{{'componenteDespesa.valorDespesa' | translate}}</mat-label>
+            <input autocomplete="off" matInput #name="ngModel" currencyMask [options]="currencyOptions"
+              name="ValorDespesa" [(ngModel)]="valorDespesa" [errorStateMatcher]="matcher" [required]="submittedTry">
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+
+          <button [disabled]="!despesaForm.valid" class="registarDespesaButton" type="submit" (click)="submitDespesa()"
+            mat-raised-button>
+            <mat-label>{{'componenteDespesa.buttonRegistarEditarDespesa' | translate}}</mat-label>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="panel"
+    *ngIf="naoExisteOrcamentoAprovado == false &&
+    ((listaDespesaRegistadas != null && listaDespesaRegistadas.length > 0) || (listaDespesaAutorizadas != null && listaDespesaAutorizadas.length > 0))">
+    <div class="dados">
+      <!-- <div>
+        <span class="title"> <b>{{'componenteDespesa.contabilidade' | translate}}:</b> </span>
+        <mat-form-field class="description" appearance="outline">
+          <input matInput maxlength="50" type="text" [(ngModel)]="despesaRegistadaAutorizada.descricaoContabilidade"
+            name="descricaoContabilidade" disabled />
+        </mat-form-field>
+      </div> -->
+
+      <div>
+        <span class="title"> <b>{{'componenteDespesa.orcamentoOSS' | translate}}:</b> </span>
+        <mat-form-field class="description" appearance="outline">
+          <input matInput maxlength="50" type="text" [(ngModel)]="despesaRegistadaAutorizada.descricaoOrcamento"
+            name="descricaoOrcamentoOSS" disabled />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <span class="title"> <b>{{'componenteDespesa.descricao' | translate}}:</b> </span>
+        <mat-form-field class="description" appearance="outline">
+          <mat-select [(ngModel)]="despesaRegistadaAutorizada.id" (selectionChange)="updateDespesaRegistada()"
+            name="DescricaoDespesaRegistada">
+            <ng-container *ngIf="despesaRegistadaAutorizadaListagem.length > 0">
+              <mat-option *ngFor="let descricao of despesaRegistadaAutorizadaListagem" [value]="descricao.id">
+                {{descricao.descricaoDespesa}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <span class="title"> <b>{{'componenteDespesa.valorRegistado' | translate}}:</b> </span>
+        <mat-form-field class="description" appearance="outline">
+          <input autocomplete="off" matInput #name="ngModel" currencyMask [options]="currencyOptions"
+            name="valorRegistado" [(ngModel)]="despesaRegistadaAutorizada.valorRegistado" disabled>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <table mat-table [dataSource]="valorDespesaListagem" class="mat-elevation-z8 tabelaValoresDespesa">
+          <ng-container matColumnDef="descricao">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+          </ng-container>
+          <ng-container matColumnDef="valorOrcamentado">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorOrcamentado' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.valorOrcamentado !=null ? '$' + element.valorOrcamentado:
+              '-'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="valorExecutado">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorExecutado' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.valorExecutado != null ? '$' + element.valorExecutado:
+              '-'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="valorCabimentado">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorCabimentado' | translate}} </th>
+            <td [ngClass]="{'valorNegativo': element.valorCabimentado < 0}" mat-cell *matCellDef="let element">
+              {{element.valorCabimentado !=null ? '$' + element.valorCabimentado.toFixed(2) : '-'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="valorAutorizado">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorAutorizado' | translate}} </th>
+            <td [ngClass]="{'valorNegativo': element.valorAutorizado < 0}" mat-cell *matCellDef="let element">
+              {{element.valorAutorizado != null ? '$' + element.valorAutorizado.toFixed(2) : '-'}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <div>
+        <button *ngIf="despesaRegistadaAutorizada.estado == 'R' " class="rightButton" type="submit"
+          (click)="deleteDespesaRegistada()" mat-raised-button>
+          <mat-label>{{'general.Eliminar' | translate}}</mat-label>
+        </button>
+
+        <button *ngIf="despesaRegistadaAutorizada.estado == 'R'" class="rightButton" type="submit"
+          (click)="editarDespesaRegistada()" mat-raised-button>
+          <mat-label>{{'general.Editar' | translate}}</mat-label>
+        </button>
+
+        <button *ngIf="componenteDespesaConfig.visualizarDespesaAParaC == 2 && allDespesasAutorizadas == true "
+          class="cabimentarButton" type="submit" (click)="cabimentarDespesa()" mat-raised-button>
+          <mat-label>{{'componenteDespesa.cabimentar' | translate}}</mat-label>
+        </button>
+
+        <button *ngIf="componenteDespesaConfig.visualizarDespesaRParaA == 2 && despesaRegistadaAutorizada.estado == 'R'"
+          class="rightButton" type="submit" (click)="autorizarDespesa()" mat-raised-button>
+          <mat-label>{{'componenteDespesa.autorizar' | translate}}</mat-label>
+        </button>
+      </div>
+      <div *ngIf=" listaDespesaRegistadas != null && listaDespesaRegistadas.length > 0">
+        <button class="rightButton" type="submit" (click)="deleteAllDespesasRegistadas()" mat-raised-button>
+          <mat-label>{{'componenteDespesa.eliminarTodos' | translate}}</mat-label>
+        </button>
+      </div>
+      <div class="rightButton">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel"
+    *ngIf="(componenteDespesaConfig.visualizarDespesaR == 1 || componenteDespesaConfig.visualizarDespesaR == 2) && listaDespesaRegistadas != null && listaDespesaRegistadas.length > 0 && naoExisteOrcamentoAprovado == false">
+    <div class="dados">
+      <div>
+        <div class="tabelaTitulo">
+          <div class="tabelaTituloText">
+            {{'componenteDespesa.descricaoDespesaRegistada' | translate}}
+          </div>
+        </div>
+        <table mat-table [dataSource]="listaDespesaRegistadas" class="mat-elevation-z8 tabelaValoresDespesa">
+          <ng-container matColumnDef="descricao">
+            <th mat-header-cell *matHeaderCellDef>{{'componenteDespesa.descricaoDespesaRegistada' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.descricaoDespesa}} </td>
+            <td mat-footer-cell *matFooterCellDef> {{ 'general.total' | translate }} </td>
+          </ng-container>
+          <!-- <ng-container matColumnDef="codigoContabilistico">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.codigoContabilistico' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.codigoContabilidade}} </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+          </ng-container> -->
+          <ng-container matColumnDef="contaOSS">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.codigoOSS' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.codigoOrcamento}} </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+          </ng-container>
+          <ng-container matColumnDef="valor">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valor' | translate}} </th>
+            <td mat-cell *matCellDef="let element">$ {{element.valorRegistado}} </td>
+            <td mat-footer-cell *matFooterCellDef>$ {{totalDespesasRegistadas}}</td>
+          </ng-container>
+          <ng-container matColumnDef="accoes">
+            <th mat-header-cell *matHeaderCellDef> {{'general.Editar' | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon *ngIf="componenteDespesaConfig.visualizarDespesaR == 2" class="editIconTable"
+                (click)="editarComponente(element)">edit</mat-icon>
+              <mat-icon *ngIf="componenteDespesaConfig.visualizarDespesaR == 2" class="deleteIconTable"
+                (click)="deleteComponente(element)">clear</mat-icon>
+            </td>
+            <td mat-footer-cell *matFooterCellDef> </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsListaDespesaRegistada"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsListaDespesaRegistada;"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumnsListaDespesaRegistada; sticky: true"></tr>
+        </table>
+      </div>
+      <div class="rightButton">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel"
+    *ngIf="(componenteDespesaConfig.visualizarDespesaA == 1 || componenteDespesaConfig.visualizarDespesaA == 2) && listaDespesaAutorizadas != null && listaDespesaAutorizadas.length > 0 && naoExisteOrcamentoAprovado == false">
+    <div class="dados">
+      <div>
+        <div class="tabelaTitulo">
+          <div class="tabelaTituloText">
+            {{'componenteDespesa.despesaAutorizada' | translate}}
+          </div>
+        </div>
+        <table mat-table [dataSource]="listaDespesaAutorizadas" class="mat-elevation-z8 tabelaValoresDespesa">
+          <ng-container matColumnDef="descricao">
+            <th mat-header-cell *matHeaderCellDef>{{'componenteDespesa.descricaoDespesaRegistada' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.descricaoDespesa}} </td>
+            <td mat-footer-cell *matFooterCellDef>{{ 'general.total' | translate }}</td>
+          </ng-container>
+          <!-- <ng-container matColumnDef="codigoContabilistico">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.codigoContabilistico' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.codigoContabilidade}} </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+
+          </ng-container> -->
+          <ng-container matColumnDef="contaOSS">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.codigoOSS' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.codigoOrcamento}} </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
+          <ng-container matColumnDef="valor">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valor' | translate}} </th>
+            <td mat-cell *matCellDef="let element">$ {{element.valorRegistado}} </td>
+            <td mat-footer-cell *matFooterCellDef>$ {{totalDespesasAutorizadas}}</td>
+          </ng-container>
+          <ng-container matColumnDef="accoes">
+            <th mat-header-cell *matHeaderCellDef> {{'general.Eliminar' | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon *ngIf="componenteDespesaConfig.visualizarDespesaA == 2" class="deleteIconTable"
+                (click)="deleteComponente(element)">clear</mat-icon>
+            </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsListaDespesaRegistada"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsListaDespesaRegistada;"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumnsListaDespesaRegistada; sticky: true"></tr>
+        </table>
+      </div>
+      <div class="rightButton">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel"
+    *ngIf="(componenteDespesaConfig.visualiazarDespesaC == 1 || componenteDespesaConfig.visualiazarDespesaC == 2) && listaDespesaCabimentadas != null && listaDespesaCabimentadas.length > 0 &&  naoExisteOrcamentoAprovado == false">
+    <div class="dados">
+      <div>
+        <div class="tabelaTitulo">
+          <div class="tabelaTituloText">
+            {{'componenteDespesa.despesaCabimentada' | translate}}
+          </div>
+        </div>
+        <table mat-table [dataSource]="listaDespesaCabimentadas" class="mat-elevation-z8 tabelaValoresDespesa">
+          <ng-container matColumnDef="descricao">
+            <th mat-header-cell *matHeaderCellDef>{{'componenteDespesa.descricaoDespesaRegistada' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.descricaoDespesa}} </td>
+            <td mat-footer-cell *matFooterCellDef>{{ 'general.total' | translate }}</td>
+          </ng-container>
+          <!-- <ng-container matColumnDef="codigoContabilistico">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.codigoContabilistico' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.codigoContabilidade}} </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container> -->
+          <ng-container matColumnDef="contaOSS">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.codigoOSS' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.codigoOrcamento}} </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
+          <ng-container matColumnDef="valor">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valor' | translate}} </th>
+            <td mat-cell *matCellDef="let element">$ {{element.valorRegistado}} </td>
+            <td mat-footer-cell *matFooterCellDef>$ {{totalDespesasCabimentadas}}</td>
+          </ng-container>
+          <ng-container matColumnDef="accoes">
+            <th mat-header-cell *matHeaderCellDef> {{'general.Editar' | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon *ngIf="componenteDespesaConfig.visualiazarDespesaC == 2" class="editIconTable" style="margin-right: 5px;"
+                (click)="editarDespesaCabimentada(element)">edit</mat-icon>
+              <mat-icon *ngIf="componenteDespesaConfig.visualiazarDespesaC == 2" class="deleteIconTable"
+                (click)="deleteComponente(element)">clear</mat-icon>
+            </td>
+            <td mat-footer-cell *matFooterCellDef></td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsListaDespesaRegistada"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsListaDespesaRegistada;"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumnsListaDespesaRegistada; sticky: true"></tr>
+        </table>
+      </div>
+      <div class="rightButton">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" *ngIf="(componenteDespesaConfig.visualizarDespesaComCompromisso == 1 || componenteDespesaConfig.visualizarDespesaComCompromisso == 2) && listaDespesaCabimentadas != null && listaDespesaCabimentadas.length > 0">
+    <div class="dados">
+
+      <div class="tabelaTitulo">
+        <div class="tabelaTituloText">
+          {{ 'general.compromissos' | translate }}
+        </div>
+      </div>
+
+        <button *ngIf="componenteDespesaConfig.visualizarDespesaComCompromisso == 2" class="executarPagamentosButton" type="submit" (click)="registarCompromisso()" mat-raised-button>
+          <mat-icon>payments</mat-icon>
+          <mat-label>{{'despesas.registarCompromisso' | translate}}</mat-label>
+        </button>
+
+      <div class="containerLine">
+        <table mat-table [dataSource]="listaCompromissos" class="mat-elevation-z8 tabelaValoresDespesa">
+
+          <ng-container matColumnDef="despesaCabimentada">
+            <th mat-header-cell *matHeaderCellDef>{{ 'componenteDespesa.despesaCabimentada' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.descricaoDespesa}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="compromisso">
+            <th mat-header-cell *matHeaderCellDef>{{ 'general.compromisso' | translate }} </th>
+            <td mat-cell *matCellDef="let element"> {{element.nomeCompromisso}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="valorCompromisso">
+            <th mat-header-cell *matHeaderCellDef> {{ 'componenteDespesa.valorCompromisso' | translate }} </th>
+            <td mat-cell *matCellDef="let element">$ {{element.valorCompromisso}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="accoes">
+            <th mat-header-cell *matHeaderCellDef> {{'general.Editar' | translate}} </th>
+            <td mat-cell *matCellDef="let element">
+              <mat-icon *ngIf="componenteDespesaConfig.visualizarDespesaComCompromisso == 2" class="editIconTable" style="margin-right: 5px;"
+                (click)="editarCompromisso(element)">edit</mat-icon>
+              <mat-icon *ngIf="componenteDespesaConfig.visualizarDespesaComCompromisso == 2" class="deleteIconTable"
+                (click)="deleteCompromisso(element)">clear</mat-icon>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsCompromissos"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsCompromissos;"></tr>
+        </table>
+      </div>
+      <div class="rightButton">
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" *ngIf="listaDespesaCompromissoAExecutar != null && listaDespesaCompromissoAExecutar.length > 0 && naoExisteOrcamentoAprovado == false
+    && componenteDespesaConfig.executarPagamentos == 2">
+    <div class="dados">
+
+      <div class="containerLine">
+        <button class="listaPagamentosButton" type="submit" (click)="listarPagamentos()" mat-raised-button>
+          <fa-icon class="excel" [icon]="faFileExcel"></fa-icon>
+          <mat-label>{{'componenteDespesa.listaPagamentosExcel' | translate}}</mat-label>
+        </button>
+
+        <button class="listaPagamentosExcel" type="submit" (click)="listarPagamentosPDF()" mat-raised-button>
+          <mat-icon class="pdf">picture_as_pdf</mat-icon>
+          <mat-label>{{'componenteDespesa.listaPagamentosPDF' | translate}}</mat-label>
+        </button>
+
+        <button class="executarPagamentosButton" type="submit" (click)="executarPagamento()" mat-raised-button>
+          <mat-icon>payments</mat-icon>
+          <mat-label>{{'componenteDespesa.executarPagamentos' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="containerLine">
+        <table mat-table [dataSource]="listaDespesaCompromissoAExecutar" class="mat-elevation-z8 tabelaValoresDespesa">
+
+          <ng-container matColumnDef="descricao">
+            <th mat-header-cell *matHeaderCellDef>{{'componenteDespesa.descricaoDespesaParaExecutar' | translate}} </th>
+            <td mat-cell *matCellDef="let element"> {{element.descricaoDespesa}} </td>
+            <td mat-footer-cell *matFooterCellDef>{{ 'general.total' | translate }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="valor">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valor' | translate}} </th>
+            <td mat-cell *matCellDef="let element">$ {{element.valorCabimentado}} </td>
+            <td mat-footer-cell *matFooterCellDef>$ {{totalValorCabimentado}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="valorExecutado">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorExecutado' | translate}} </th>
+            <td mat-cell *matCellDef="let element">$ {{element.valorExecutado}} </td>
+            <td mat-footer-cell *matFooterCellDef>$ {{totalValorExecutado}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="faltaExecutar">
+            <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.faltaExecutar' | translate}} </th>
+            <td mat-cell *matCellDef="let element">$ {{element.faltaExecutar}} </td>
+            <td mat-footer-cell *matFooterCellDef>$ {{totalValorFaltaExecutar}}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsDespesasAExecutar"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsDespesasAExecutar;"></tr>
+          <tr mat-footer-row *matFooterRowDef="displayedColumnsDespesasAExecutar; sticky: true"></tr>
+        </table>
+      </div>
+      <div class="rightButton">
+      </div>
+    </div>
+  </div>
+</mat-expansion-panel>

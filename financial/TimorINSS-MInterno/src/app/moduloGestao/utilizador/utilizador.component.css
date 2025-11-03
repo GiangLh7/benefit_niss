@@ -1,0 +1,121 @@
+  .mat-form-field {
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .gestaoUtilizadores{
+    position:relative;
+    min-height: 85%;
+  }
+
+  .painelListagemUtilizadores {
+    width: 80%;
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-top: 2%;
+    text-align: center;
+  }
+
+  .tabelaUtilizadores {
+    width:100%;
+    text-align: left;
+    background-color: white;
+  }
+  .painelListagem{
+    width: 85%;
+    margin-left: 8%;
+    margin-top: 2%;
+  }
+
+  .tabletitleText {
+    padding-top: 10px;
+  }
+
+  table th {
+    background-color: rgb(211, 211, 211);
+  }
+
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+.mat-form-field {
+  font-size: 11px;
+  min-width: 150px;
+  width: calc(100% - 32px);
+}
+
+table th {
+  font-weight: bold;
+}
+
+table td,
+table th {
+  width: 16%;
+  text-align: center;
+}
+
+.editIconTable {
+  color: #2A81CC;
+  cursor: pointer;
+  padding-right: 40%;
+  float: right;
+}
+
+.visualizar {
+  margin-left: 35%;
+  color: green;
+  cursor: pointer;
+}
+
+.subHeader {
+  min-height: 50px;
+  background: rgba(207, 207, 207, 0.966);
+  width: 90%;
+  padding-left: 10%;
+}
+
+
+.searchContainer {
+  width: 20%;
+  min-width: 192px;
+  display: inline-flex;
+  position: relative;
+}
+
+.pesquisar{
+  height: 50px;
+ }
+
+ .utilizadorSearchButton {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  top: 10px;
+  background-color:#2A81CC;
+  color: white;
+}
+
+.utilizadorSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.tabelaUtilizadoresTitulo {
+  width: 100%;
+  padding-bottom: 1%;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 20px;
+}
+
+.tableTitleIcon {
+  font-size: 1.7em;
+  padding-right: 10px;
+  top: -5px;
+  position: relative;
+}

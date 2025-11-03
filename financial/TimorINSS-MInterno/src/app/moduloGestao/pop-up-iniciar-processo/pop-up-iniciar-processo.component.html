@@ -1,0 +1,42 @@
+<div class="dialogPositionFix">
+
+    <h1 class="titulo" mat-dialog-title >
+      <mat-icon class="popUpIcon">playlist_add</mat-icon>
+      {{'processo.inciarProcesso' | translate}}
+    </h1>
+    <form class="formSize" #contatoForm="ngForm">
+  
+      <div class="bodyDialog" mat-dialog-content>
+        <div class="DadosContainer">
+          <div class="secondLineContainers">
+            <mat-form-field appearance="outline">
+                <mat-label>{{'processo.title' | translate}}</mat-label>
+                <mat-select #name="ngModel" name="processos"
+                  [(ngModel)]="selectedProcessId">
+                  <ng-container>
+                    <mat-option *ngFor="let processo of data" [value]="processo.id">
+                        {{processo.nome}}
+                    </mat-option>
+                  </ng-container>
+                </mat-select>
+              </mat-form-field>
+          </div>
+          <div class="secondLineContainers" style="vertical-align: super;">
+            <button class="gravarButton" mat-raised-button type="submit" (click)="gravar()" *ngIf="selectedProcessId" >
+              <mat-icon class="icon">check</mat-icon>
+              <mat-label>{{'processo.inciarProcesso' | translate}}</mat-label>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="buttons">  
+        <div class="secondLineContainers">
+          <button class="buttonCancelar" mat-raised-button (click)="closePopUp()">
+            <mat-icon class="icon">close</mat-icon>
+            <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  

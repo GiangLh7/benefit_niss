@@ -1,0 +1,53 @@
+<div class="dialogPositionFix">
+  <h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">settings</mat-icon>
+    <div *ngIf="!data.edicao">
+      {{'gerirCampos.titlePopUpAdicionarRegime' | translate}}
+    </div>
+    <div *ngIf="data.edicao">
+      {{'gerirCampos.titlePopUpEditarRegime' | translate}}
+    </div>
+  </h1>
+  <form (ngSubmit)="saveRegime()" class="formSize" #campoForm="ngForm">
+    <div class="bodyDialog" mat-dialog-content>
+      <div class="DadosContainer">
+        <div class="InnerDadosContainers inputContainer">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'general.nome' | translate}}</mat-label>
+            <input #name="ngModel" matInput [errorStateMatcher]="matcher" [required]="submittedTry" maxlength="100" type="text" [(ngModel)]="data.valorCampo.nome" name="nomeCampo"/>
+            <fa-icon *ngIf="data.valorCampo.nome" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="data.valorCampo.nome = ''"></fa-icon>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="DadosContainer">
+          <div class="InnerDadosContainers">
+            <mat-form-field appearance="outline">
+              <mat-label>{{'gerirCampos.tipoRegime' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="parentFiled" [(ngModel)]="selectedTipoRegime" [errorStateMatcher]="matcher" [required]="submittedTry">
+                <mat-option *ngFor="let regime of tiposDeRegime" [value]="regime">{{regime.descricao}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+          </div>
+      </div>
+    </div>
+    <div class="buttons">
+      <div class="InnerDadosContainers">
+        <button class="gravarButton" mat-raised-button type="submit" (click)="submitRegime()" [disabled]="!campoForm.valid" >
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="InnerDadosContainers">
+        <button class="buttonCancelar" mat-raised-button type="button" (click)="closePopUp()">
+          <mat-icon class="icon">close</mat-icon>
+          <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

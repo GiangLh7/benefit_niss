@@ -1,0 +1,148 @@
+.RegistoSuspensaoTitulo,
+.RegistoSuspensaoSearchDropDowns  {
+  position: relative;
+  display: flex;
+}
+
+.RegistoSuspensaoTitulo {
+  position: relative;
+  background: #2A81CC;
+  height: 50px;
+  color: white;
+  padding-left: 5%;
+  width: 95%;
+  display: flex;
+
+  font-weight: bold;
+}
+
+.RegistoSuspensaoTituloIcon {
+  padding-top: 6px;
+  font-size: 2.2em;
+  position: relative;
+  width: 50px;
+}
+
+.RegistoSuspensaoTituloText {
+  padding-top: 14px;
+  font-size: 1.2em;
+}
+
+.RegistoSuspensaoCorpo {
+  padding-left: 10%;
+  padding-right: 10%;
+  padding-top: 2%;
+  position: relative;
+}
+
+.RegistoSuspensaoSearch {
+  position: relative;
+}
+
+.inputContainer
+{
+  width: 40%;
+  min-width: 175px;
+  margin-top: 5px;
+}
+
+.inputContainerSmall
+{
+  width: 20%;
+  min-width: 150px;
+}
+
+.RegistoSuspensaoSearchDiv {
+  min-height: 81px;
+  display: flex;
+  position: relative;
+}
+
+.secondLineContainers {
+  display: inline-flex;
+  position: relative;
+}
+.secondContainer{
+  display: inline-flex;
+  position: relative;
+  margin-left: 10px;
+}
+
+.mat-form-field {
+  height: 10%;
+  font-size: 14px;
+
+}
+
+.trabalhadorSearchDiv {
+  min-height: 81px;
+  margin-left: 50px;
+  display: flex;
+  position: relative;
+}
+
+.trabalhadorSearchDivButtonDiv {
+  display: flex;
+  position: relative;
+  width:70px;
+}
+
+.trabalhadorSearchDivButton {
+  width: 34px;
+  height: 34px;
+  margin-left: 15px;
+  top: 10px;
+  background-color:#2A81CC;
+  color: white;
+  position: relative;
+}
+
+.trabalhadorSearchDivIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.trabalhadorActionsSearchResultsTitulo {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  padding-bottom: 5px;
+}
+
+.tabelaListagemTrabalhadores {
+  width: 100%;
+}
+
+.trabalhadorActionsSearchResultsNotFound {
+  color: red;
+  font-weight: bold;
+}
+
+.trabalhadorActionsSearchResultsFound {
+  width:80%;
+}
+
+
+.buttons {
+  padding-bottom: 10px;
+  height: 12%;
+  margin-top: 15px;
+}
+
+.adicionarButton {
+  background: rgba(52, 176, 43, 100);
+  color:white;
+  display: inline-flex;
+  position: relative;
+  font-size: 10px;
+}
+
+.buttonCancelar {
+  background:darkred;
+  color:white;
+  display: inline-flex;
+  position: relative;
+  font-size: 10px;
+  margin-left: 10px;
+}

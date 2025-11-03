@@ -1,0 +1,36 @@
+<mat-menu #menu>
+    <ng-container *ngFor="let item of items">
+        <div *ngIf="item.link && !item.category">
+            <button routerLink="{{item.link}}" *ngIf="!item.children; else branch" [skipLocationChange]="true" mat-menu-item>
+                <mat-icon style="color: white;">{{item.icon}}</mat-icon>
+                <span style="color: white;">{{item.name | translate}}</span>  
+            </button>
+        </div>
+        <div *ngIf="!item.link && !item.category">
+            <button *ngIf="!item.children; else branch" mat-menu-item>
+                <mat-icon style="color: white;">{{item.icon}}</mat-icon>
+                <span style="color: white;">{{item.name | translate}}</span>
+            </button>
+        </div>
+        <div *ngIf="item.category">
+          <div class="menu-panel-category">
+              <span style="color: white;">{{item.name | translate}}</span>
+          </div>
+        </div>
+      <ng-template #branch>
+          <div *ngIf="item.link">
+            <button mat-menu-item [matMenuTriggerFor]="innerPanel.menu" routerLink="{{item.link}}" [skipLocationChange]="true">
+                <mat-icon style="color: white;">{{item.icon}}</mat-icon>
+                <span style="color: white;">{{item.name | translate}}</span>    
+            </button>
+          </div>
+          <div *ngIf="!item.link">
+            <button mat-menu-item [matMenuTriggerFor]="innerPanel.menu">
+                <mat-icon style="color: white;">{{item.icon}}</mat-icon>
+                <span style="color: white;">{{item.name | translate}}</span>    
+            </button>
+          </div>
+        <app-menu-panel #innerPanel [items]="item.children"></app-menu-panel>
+      </ng-template>
+    </ng-container>
+  </mat-menu>

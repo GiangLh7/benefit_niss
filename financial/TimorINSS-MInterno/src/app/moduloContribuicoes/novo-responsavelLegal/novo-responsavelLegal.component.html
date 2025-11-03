@@ -1,0 +1,221 @@
+<div class="novoResponsavelLegalPagina">
+    <div class="novoResponsavelLegalHeader">
+      <button class="returnButton" mat-fab color="green" aria-label="Search" (click)="return()">
+        <mat-icon matTooltip="Retornar" class="utilizadorSearchIcon">keyboard_return</mat-icon>
+      </button>
+      <mat-icon class="novoResponsavelLegalIcon">star_rate</mat-icon>
+      <div class="novoResponsavelLegalText">
+          {{'responsavel_legal.title' | translate}}
+      </div>
+    </div>
+    <div class="DadosPrincipais">
+        <div class="DadosContainer">
+            <div class="nameInputContainer">
+                <mat-form-field class="nameInput" appearance="outline">
+                  <mat-label>{{'general.nomeCompleto' | translate}}</mat-label>
+                  <input [disabled]="isLinked" matInput type="text" [(ngModel)]="responsavelLegalrequest.responsavelLegal.nome" [errorStateMatcher]="matcher" [required]="submittedFormError"/>
+                  <fa-icon class="clear-icon" *ngIf="responsavelLegalrequest.responsavelLegal.nome && !isLinked" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="responsavelLegalrequest.responsavelLegal.nome = ''"></fa-icon>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field class="InputSizeSmall" appearance="outline">
+                <mat-label>{{ 'general.tin' | translate }}</mat-label>
+                <input [disabled]="isLinked" matInput type="number" [(ngModel)]="responsavelLegalrequest.responsavelLegal.tin" [errorStateMatcher]="matcher" [required]="submittedFormError"/>
+                <fa-icon class="clear-icon" *ngIf="responsavelLegalrequest.responsavelLegal.tin && !isLinked" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="responsavelLegalrequest.responsavelLegal.tin = ''"></fa-icon>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+                <mat-form-field class="InputSizeSmall" appearance="outline">
+                  <mat-label>{{'general.dataNasc' | translate}}</mat-label>
+                  <input [disabled]="isLinked" [(ngModel)]="responsavelLegalrequest.responsavelLegal.dataNascimento" matInput [matDatepicker]="pickerNascimento" [errorStateMatcher]="matcher" [required]="submittedFormError">
+                  <mat-datepicker-toggle matSuffix [for]="pickerNascimento"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerNascimento></mat-datepicker>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+                <mat-form-field class="InputSizeSmall" appearance="outline">
+                  <mat-label>{{'general.sexo' | translate}}</mat-label>
+                  <mat-select [disabled]="isLinked" [(ngModel)]="responsavelLegalrequest.responsavelLegal.sexo" [errorStateMatcher]="matcher" [required]="submittedFormError">
+                    <mat-option *ngFor="let option of sexoOptions" [value]="option.id">{{'dropdownDominio.SEXO.' + option.value | translate}}</mat-option>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+                <mat-form-field class="InputSizeSmall" appearance="outline">
+                  <mat-label>{{'general.nacionalidade' | translate}}</mat-label>
+                  <mat-select [disabled]="isLinked" [(ngModel)]="responsavelLegalrequest.responsavelLegal.nacionalidade" [errorStateMatcher]="matcher" [required]="submittedFormError">
+                    <mat-option *ngFor="let option of nacionalidadeOptions" [value]="option.id">{{'dropdownDominio.NACIONALIDADE.' + option.value | translate}}</mat-option>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+                <mat-form-field class="InputSizeSmall" appearance="outline">
+                  <mat-label>{{'general.naturalidade' | translate}}</mat-label>
+                  <input [disabled]="isLinked" matInput type="text" [(ngModel)]="responsavelLegalrequest.responsavelLegal.naturalidade" [errorStateMatcher]="matcher" [required]="submittedFormError"/>
+                  <fa-icon class="clear-icon" *ngIf="responsavelLegalrequest.responsavelLegal.naturalidade && !isLinked" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="responsavelLegalrequest.responsavelLegal.naturalidade = ''"></fa-icon>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field class="InputSizeSmall" appearance="outline">
+                <mat-label>{{'general.companyRole' | translate}}</mat-label>
+                <mat-select [(ngModel)]="responsavelLegalrequest.responsavelLegal.funcao"
+                 [errorStateMatcher]="matcher" [required]="submittedFormError"
+                 (selectionChange)="changedValue($event)">
+                  <mat-option *ngFor="let option of funcaoOptions" [value]="option.id">{{option.descricao}}</mat-option>
+                </mat-select>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div *ngIf="isOtherOption" class="secondLineContainers">
+                <mat-form-field class="InputSizeMedium" appearance="outline">
+                  <mat-label>{{'general.companyRole' | translate}}</mat-label>
+                  <input matInput type="text" [(ngModel)]="responsavelLegalrequest.responsavelLegal.funcaoOutro" [errorStateMatcher]="matcher" [required]="submittedFormError"/>
+                  <fa-icon class="clear-icon" *ngIf="responsavelLegalrequest.responsavelLegal.funcaoOutro" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="responsavelLegalrequest.responsavelLegal.funcaoOutro = ''"></fa-icon>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+                <div class="InputSizeMedium-radio" appearance="outline">
+                    <mat-radio-group aria-label="Select an option" [(ngModel)]="responsavelLegalrequest.responsavelLegal.indFuncaoRem" [value]="responsavelLegalrequest.responsavelLegal.indFuncaoRem">
+                        <label class="question-title">{{'responsavel_legal.funcRenum' | translate}}</label>
+                        <mat-radio-button color="primary" [value]="true">{{'general.sim' | translate}}</mat-radio-button>
+                        <mat-radio-button class="righ-radio" color="primary" [value]="false">{{'general.nao' | translate}}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field class="InputSizeSmall" appearance="outline">
+                <mat-label>{{'responsavel_legal.beginDate' | translate}}</mat-label>
+                <input [(ngModel)]="responsavelLegalrequest.dataInicioFuncao" matInput [matDatepicker]="pickerInicioFuncao"
+                (dateChange)="updateDataInicioFuncao()"
+                [errorStateMatcher]="matcher" [required]="submittedFormError">
+                <mat-datepicker-toggle matSuffix [for]="pickerInicioFuncao"></mat-datepicker-toggle>
+                <mat-datepicker #pickerInicioFuncao></mat-datepicker>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field class="InputSizeSmall" appearance="outline">
+                <mat-label>{{'responsavel_legal.endDate' | translate}}</mat-label>
+                <input [(ngModel)]="responsavelLegalrequest.dataFimFuncao" matInput [matDatepicker]="pickerFimFuncao"
+                (dateChange)="updateDataInicioFuncao()"
+                [errorStateMatcher]="matcherDataSuperior" [required]="submittedEndDate">
+                <mat-datepicker-toggle style="display: inline-flex" matSuffix [for]="pickerFimFuncao"></mat-datepicker-toggle>
+                <mat-datepicker style="display: inline-flex" #pickerFimFuncao></mat-datepicker>
+                <fa-icon class="clear-icon" *ngIf="responsavelLegalrequest.dataFimFuncao" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="resetDataFimFuncao()"></fa-icon>
+                <mat-error>{{'responsavel_legal.endDateError' | translate}}</mat-error>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+                <div class="InputSizeMediumWithRadio" appearance="outline">
+                    <mat-radio-group [disabled]="isLinked" [(ngModel)]="IndFacultivaSS" aria-label="Select an option" [value]="IndFacultivaSS">
+                        <label class="question-title">{{'responsavel_legal.facultQuestion' | translate}}</label>
+                        <mat-radio-button color="primary" [value]="true">{{'general.sim' | translate}}</mat-radio-button>
+                        <mat-radio-button class="righ-radio" color="primary" (click)="resetNiss()" [value]="false">{{'general.nao' | translate}}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+            <div class="secondLineContainers" *ngIf="IndFacultivaSS">
+                <mat-form-field class="InputSizeSmall" appearance="outline">
+                  <mat-label>{{ 'general.niss' | translate }}</mat-label>
+                  <input [disabled]="isLinked" matInput type="number" [(ngModel)]="responsavelLegalrequest.niss"/>
+                  <fa-icon class="clear-icon" *ngIf="responsavelLegalrequest.niss && !isLinked" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="resetNiss()"></fa-icon>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <div class="DadosDocumento" *ngIf="!isLinked">
+        <mat-expansion-panel class="mat-expansion" [expanded]="panelOpenState"
+        (opened)="panelOpenState = true"
+        (closed)="panelOpenState = false">
+            <mat-expansion-panel-header class="documentExpansionPanel">
+                {{'general.document' | translate}}
+            </mat-expansion-panel-header>
+          <div class="DadosContainer-expansion">
+            <div class="secondLineContainers">
+              <div class="InputSizeSmall-checkbox" appearance="outline">
+                <mat-checkbox class="question-title" [(ngModel)]="isForeign" (change)="changeDocument()" [color]="'primary'" [labelPosition]="'before'">
+                  {{'general.foreign' | translate}}
+                </mat-checkbox>
+              </div>
+            </div>
+            <div class="expandFirstLineContainer">
+              <mat-form-field class="InputSizeSmall" appearance="outline">
+                <mat-label>{{'general.docType' | translate}}</mat-label>
+                <mat-select [disabled]="disabledDocumentDropdown" [(ngModel)]="responsavelLegalrequest.documentoIdentificacao[0].tpDocIdentificacao" [errorStateMatcher]="matcher" [required]="submittedFormError">
+                  <mat-option *ngFor="let option of documentoOptions" [value]="option.id">{{'dropdownDominio.TIPODOCUMENTO.' + option.value | translate}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field class="InputSizeSmall" appearance="outline">
+                <mat-label>{{'general.docNumber' | translate}}</mat-label>
+                <input matInput type="number" [(ngModel)]="responsavelLegalrequest.documentoIdentificacao[0].numero" [errorStateMatcher]="matcher" [required]="submittedFormError"/>
+                <fa-icon class="clear-icon" *ngIf="responsavelLegalrequest.documentoIdentificacao[0].numero" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="responsavelLegalrequest.documentoIdentificacao[0].numero = ''"></fa-icon>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field class="InputSizeSmall" appearance="outline">
+                <mat-label>{{'general.dtValidade' | translate}}</mat-label>
+                <input [(ngModel)]="responsavelLegalrequest.documentoIdentificacao[0].dataValidade" matInput [matDatepicker]="pickerValidade" [errorStateMatcher]="matcher" [required]="submittedFormError">
+                <mat-datepicker-toggle matSuffix [for]="pickerValidade"></mat-datepicker-toggle>
+                <mat-datepicker #pickerValidade></mat-datepicker>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div class="secondLineContainers">
+              <mat-form-field appearance="outline">
+                <ngx-mat-file-input class="upload-file" placeholder="{{'general.upload' | translate}}"
+                [matTooltip]="responsavelLegalrequest.documentoIdentificacao[0].nomeDocumento"
+                [required]="wrongFormat" [errorStateMatcher]="matcher"
+                [formControl]="fileControl" [accept]="accept" name="documentInput">
+                  <mat-icon ngxMatFileInputIcon>upload</mat-icon>
+                </ngx-mat-file-input>
+                <mat-error>{{'general.requiredAndWrongFormat' | translate}} {{accept}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div *ngIf="isForeign || responsavelLegalrequest.documentoIdentificacao[0].tpDocIdentificacao == passportId" class="secondLineContainers">
+              <mat-form-field class="InputSizeSmall" appearance="outline">
+                <mat-label>{{'responsavel_legal.emitDate' | translate}}</mat-label>
+                <input [(ngModel)]="responsavelLegalrequest.documentoIdentificacao[0].dataEmissao" matInput [matDatepicker]="pickerEmissao" [errorStateMatcher]="matcherDate" [required]="submittedFormError">
+                <mat-datepicker-toggle matSuffix [for]="pickerEmissao"></mat-datepicker-toggle>
+                <mat-datepicker #pickerEmissao></mat-datepicker>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+            <div *ngIf="isForeign || responsavelLegalrequest.documentoIdentificacao[0].tpDocIdentificacao == passportId" class="secondLineContainers">
+              <mat-form-field class="InputSizeMedium" appearance="outline">
+                <mat-label>{{'general.emitLocal' | translate}}</mat-label>
+                <input matInput type="text" [(ngModel)]="responsavelLegalrequest.documentoIdentificacao[0].localEmissao" [errorStateMatcher]="matcher" [required]="submittedFormError"/>
+                <fa-icon class="clear-icon" *ngIf="responsavelLegalrequest.documentoIdentificacao[0].localEmissao" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="responsavelLegalrequest.documentoIdentificacao[0].localEmissao = ''"></fa-icon>
+                <mat-error>{{'general.required' | translate}}</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-expansion-panel>
+    </div>
+    <div class="DadosPrincipais">
+      <div class="DadosContainer">
+        <div class="expandFirstLineContainer">
+          <button class="gravarButton" mat-raised-button (click)="save()">
+            <mat-icon class="icon">check</mat-icon>
+            <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+          </button>
+        </div>
+        <div class="secondLineContainers">
+          <button class="buttonCancelar" mat-raised-button (click)="cancel()">
+            <mat-icon class="icon">close</mat-icon>
+            <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+          </button>
+        </div>
+      </div>
+    </div>
+</div>

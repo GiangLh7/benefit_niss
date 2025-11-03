@@ -1,0 +1,251 @@
+<div>
+  <div class="gerirCamposHeader">
+    <mat-icon class="gerirCamposHeaderIcon">settings_suggest</mat-icon>
+    <div class="gerirCamposHeaderText">
+      {{'gerirCampos.title' | translate}}
+    </div>
+  </div>
+  <div *ngIf="read" class="DadosContainer FirstContainer">
+    <div class="innerContainers stringeContainer">
+      <mat-form-field appearance="outline">
+        <mat-label>{{'gerirCampos.grupoEditavel' | translate}}</mat-label>
+        <mat-select  [(ngModel)]="selectedGroup" name="gruposCamposEditaveis"
+          (selectionChange)="updateCamposEditaveis()">
+          <mat-option *ngFor="let grupo of gruposCampos" [value]="grupo">
+            {{grupo.descricao}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="innerContainers stringeContainer">
+      <mat-form-field appearance="outline">
+        <mat-label>{{'gerirCampos.campoEditavel' | translate}}</mat-label>
+        <mat-select  [(ngModel)]="selectedCampo" name="CamposEditaveis"
+        (selectionChange)="updateValorCampoEditavel()">
+          <mat-option *ngFor="let campo of camposEditaveisSelected" [value]="campo">
+            {{campo.nome}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div *ngIf="selectedCampo.nome && read">
+    <div class="DadosContainer">
+      <div class="innerContainers">
+        <mat-label class="campoHeader">{{selectedCampo.nome}}</mat-label>
+      </div>
+    </div>
+
+    <div class="DadosContainer">
+      <div *ngIf="!selectedCampo.unico && !selectedCampo.naoEditavel && create" class="innerContainers buttonInnerContainer">
+        <button (click)="selectedTable == 1 ? gravarRegime(false) : gravarCampo(false)" type="button" class="adicionarButton" mat-raised-button [disabled]="parentHasInitialValue">
+          <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+          <mat-label>{{'gerirCampos.Add' | translate}}</mat-label>
+        </button>
+      </div>
+
+
+      <div *ngIf="!selectedCampo.naoPesquisavel" class="innerContainers stringeContainer">
+        <button class="searchButton" mat-fab color="green" aria-label="Search" (click)="searchCampo()">
+          <mat-icon class="searchIcon">search</mat-icon>
+        </button>
+        <mat-form-field appearance="outline">
+          <mat-label>{{'general.search' | translate}}</mat-label>
+          <input matInput maxlength="100" type="text" [(ngModel)]="filterByTemp" name="stringFilterInput" (keydown.enter)="searchCampo()"/>
+          <fa-icon *ngIf="filterByTemp" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="clearSearchHtml()"></fa-icon>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf="selectedCampo.nome" class="DadosContainer">
+      <div *ngIf="selectedTable == 0" class="TableInnerContainer">
+        <table mat-table [dataSource]="valoresCamposEditaveis" class="mat-elevation-z8">
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef>{{selectedCampo.nome}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+          </ng-container>
+          <ng-container *ngIf="valoresCamposEditavelParent"  matColumnDef="{{valoresCamposEditavelParent.nome}}">
+            <th class="pointer" matTooltip="{{('gerirCampos.goToParent' | translate) + valoresCamposEditavelParent.nome}}" (click)="goToParent()" mat-header-cell *matHeaderCellDef>{{valoresCamposEditavelParent.nome}}</th>
+            <td class="pointer" matTooltip="{{('gerirCampos.goToParent' | translate) + valoresCamposEditavelParent.nome}}" (click)="goToParent()" mat-cell *matCellDef="let element; let i = index "> {{selectedParents[i]}} </td>
+          </ng-container>
+          <ng-container matColumnDef="editarEliminar">
+            <th mat-header-cell *matHeaderCellDef>
+              <ng-container *ngIf="kids.length">
+                {{'gerirCampos.HierarquiaEditarEliminar' | translate}}
+              </ng-container>
+              <ng-container *ngIf="!kids.length">
+                {{'general.EditarEliminar' | translate}}
+              </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngFor="let kid of kids">
+                <button matTooltip="{{kid.nome}}" (click)="goToChild(element, kid)" mat-icon-button>
+                  <mat-icon>device_hub</mat-icon>
+                </button>
+              </ng-container>
+              <button matTooltip="{{'general.Editar' | translate}}" *ngIf="!selectedCampo.naoEditavel && !element.naoEditavelEliminavel && update" (click)="gravarCampo(true, element)" mat-icon-button>
+                <mat-icon class="editIcon">edit</mat-icon>
+              </button>
+              <button matTooltip="{{'general.Eliminar' | translate}}" *ngIf="!selectedCampo.naoEliminavel && !selectedCampo.naoEditavel && !element.naoEditavelEliminavel && delete" (click)="confirmDeleteCampo(element)" mat-icon-button>
+                <mat-icon class="deleteIcon">clear</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="totalRows" [pageIndex]="pageIndex"
+          [pageSize]="pageSize" (page)="updateTablePaginator($event)"
+          [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> </mat-paginator>
+      </div>
+
+      <div *ngIf="selectedTable == 1" class="TableInnerContainer">
+        <table mat-table [dataSource]="valoresCamposEditaveis" class="mat-elevation-z8">
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef>{{selectedCampo.nome}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+          </ng-container>
+          <ng-container matColumnDef="editarEliminar">
+            <th mat-header-cell *matHeaderCellDef>{{'gerirCampos.HierarquiaEditarEliminar' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <button *ngIf="element.parametros[0].valor == 'E'" matTooltip="Escalão" (click)="goToEscalao(element)" mat-icon-button>
+                <mat-icon>device_hub</mat-icon>
+              </button>
+              <button matTooltip="Dados Regime" (click)="goToDadosRegime(element)" mat-icon-button>
+                <mat-icon>device_hub</mat-icon>
+              </button>
+              <button *ngIf="update" matTooltip="{{'general.Editar' | translate}}" (click)="gravarRegime(true, element)" mat-icon-button>
+                <mat-icon class="editIcon">edit</mat-icon>
+              </button>
+              <button  *ngIf="delete" matTooltip="{{'general.Eliminar' | translate}}" (click)="confirmDeleteCampo(element)" mat-icon-button>
+                <mat-icon class="deleteIcon">clear</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="totalRows" [pageIndex]="pageIndex"
+          [pageSize]="pageSize" (page)="updateTablePaginator($event)"
+          [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> </mat-paginator>
+      </div>
+
+      <div *ngIf="selectedTable == 2" class="TableInnerContainer">
+        <table mat-table [dataSource]="valoresCamposEditaveis" class="mat-elevation-z8">
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef>{{selectedCampo.nome}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+          </ng-container>
+          <ng-container *ngIf="valoresCamposEditavelParent" matColumnDef="{{valoresCamposEditavelParent.nome}}">
+            <th class="pointer" matTooltip="{{('gerirCampos.goToParent' | translate) + valoresCamposEditavelParent.nome}}" (click)="goToParent()" mat-header-cell *matHeaderCellDef>{{valoresCamposEditavelParent.nome}}</th>
+            <td class="pointer" matTooltip="{{('gerirCampos.goToParent' | translate) + valoresCamposEditavelParent.nome}}" (click)="goToParent()" mat-cell *matCellDef="let element; let i = index "> {{selectedParents[i]}} </td>
+          </ng-container>
+          <ng-container matColumnDef="dataInicio">
+            <th mat-header-cell *matHeaderCellDef>{{'general.dtInicio' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.parametros[0].valor}} </td>
+          </ng-container>
+          <ng-container matColumnDef="dataFim">
+            <th mat-header-cell *matHeaderCellDef>{{'general.dtFim' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.parametros[1].valor}} </td>
+          </ng-container>
+          <ng-container matColumnDef="editarEliminar">
+            <th mat-header-cell *matHeaderCellDef>{{'general.EditarEliminar' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <button *ngIf="update" matTooltip="{{'general.Editar' | translate}}" (click)="gravarCampo(true, element)" mat-icon-button>
+                <mat-icon class="editIcon">edit</mat-icon>
+              </button>
+              <button *ngIf="delete" matTooltip="{{'general.Eliminar' | translate}}" (click)="confirmDeleteCampo(element)" mat-icon-button>
+                <mat-icon class="deleteIcon">clear</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="totalRows" [pageIndex]="pageIndex"
+          [pageSize]="pageSize" (page)="updateTablePaginator($event)"
+          [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> </mat-paginator>
+      </div>
+
+      <div *ngIf="selectedTable == 3" class="TableInnerContainer">
+        <table mat-table [dataSource]="valoresCamposEditaveis" class="mat-elevation-z8">
+          <ng-container matColumnDef="dataInicio">
+            <th mat-header-cell *matHeaderCellDef>{{'general.dtInicio' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.parametros[0].valor}} </td>
+          </ng-container>
+          <ng-container matColumnDef="dataFim">
+            <th mat-header-cell *matHeaderCellDef>{{'general.dtFim' | translate}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.parametros[1].valor}} </td>
+          </ng-container>
+          <ng-container matColumnDef="editarEliminar">
+            <th mat-header-cell *matHeaderCellDef>{{'gerirCampos.HierarquiaEditarEliminar' | translate}}</th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngFor="let kid of kids">
+                <button matTooltip="{{kid.nome}}" (click)="goToChild(element, kid)" mat-icon-button>
+                  <mat-icon>device_hub</mat-icon>
+                </button>
+              </ng-container>
+              <button *ngIf="!selectedCampo.naoEditavel && update" (click)="gravarCampo(true, element)" mat-icon-button>
+                <mat-icon matTooltip="{{'general.Editar' | translate}}" class="editIcon">edit</mat-icon>
+              </button>
+              <button matTooltip="{{'general.Eliminar' | translate}}" *ngIf="!selectedCampo.naoEliminavel && !selectedCampo.naoEditavel && delete" (click)="confirmDeleteCampo(element)" mat-icon-button>
+                <mat-icon class="deleteIcon">clear</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="totalRows" [pageIndex]="pageIndex"
+          [pageSize]="pageSize" (page)="updateTablePaginator($event)"
+          [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> </mat-paginator>
+      </div>
+
+      <div *ngIf="selectedTable == 4" class="TableInnerContainer">
+        <table mat-table [dataSource]="valoresCamposEditaveis" class="mat-elevation-z8">
+          <ng-container matColumnDef="codigo">
+            <th mat-header-cell *matHeaderCellDef>{{selectedCampo.parametros[0].nome}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.parametros[0].valor}} </td>
+          </ng-container>
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef>{{selectedCampo.nome}}</th>
+            <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+          </ng-container>
+          <ng-container *ngIf="valoresCamposEditavelParent"  matColumnDef="{{valoresCamposEditavelParent.nome}}">
+            <th class="pointer" matTooltip="{{('gerirCampos.goToParent' | translate) + valoresCamposEditavelParent.nome}}" (click)="goToParent()" mat-header-cell *matHeaderCellDef>{{valoresCamposEditavelParent.nome}}</th>
+            <td class="pointer" matTooltip="{{('gerirCampos.goToParent' | translate) + valoresCamposEditavelParent.nome}}" (click)="goToParent()" mat-cell *matCellDef="let element; let i = index "> {{selectedParents[i]}} </td>
+          </ng-container>
+          <ng-container matColumnDef="editarEliminar">
+            <th mat-header-cell *matHeaderCellDef>
+              <ng-container *ngIf="kids.length">
+                {{'gerirCampos.HierarquiaEditarEliminar' | translate}}
+              </ng-container>
+              <ng-container *ngIf="!kids.length">
+                {{'general.EditarEliminar' | translate}}
+              </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <ng-container *ngFor="let kid of kids">
+                <button matTooltip="{{kid.nome}}" (click)="goToChild(element, kid)" mat-icon-button>
+                  <mat-icon>device_hub</mat-icon>
+                </button>
+              </ng-container>
+              <button matTooltip="{{'general.Editar' | translate}}" *ngIf="!selectedCampo.naoEditavel && !element.naoEditavelEliminavel && update" (click)="gravarCampo(true, element)" mat-icon-button>
+                <mat-icon class="editIcon">edit</mat-icon>
+              </button>
+              <button matTooltip="{{'general.Eliminar' | translate}}" *ngIf="!selectedCampo.naoEliminavel && !selectedCampo.naoEditavel && !element.naoEditavelEliminavel && delete" (click)="confirmDeleteCampo(element)" mat-icon-button>
+                <mat-icon class="deleteIcon">clear</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [length]="totalRows" [pageIndex]="pageIndex"
+          [pageSize]="pageSize" (page)="updateTablePaginator($event)"
+          [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> </mat-paginator>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,23 @@
+<div>
+  <div class="processoDetalheHeader">
+    <mat-icon class="processoDetalheHeaderIcon">assignment</mat-icon>
+    <div class="processoDetalheHeaderText">
+      {{'processo.detalhe' | translate}}
+    </div>
+  </div>
+  <mat-accordion multi>
+    <div>
+      <componente-cabecalho-processo *ngIf="processoData" [nome]="processoData.nome"
+        [tarefas]="processoData.quantidadeTarefas" [user]="processoData.nomeUtilizadorUltimaEdicao"
+        [data]="formatDatePT(processoData.data)" [arquivado]="processoData.arquivado" [isExpanded]="true"></componente-cabecalho-processo>
+      <app-componente-historico-texto [processoId]="processoId"></app-componente-historico-texto>
+      <app-componente-list-documentos [readOnly]="true" [processoId]="processoId" [refreshTable]="refreshDocTable" (tableIsRefreshed)= "tableRefreshed($event)"></app-componente-list-documentos>
+    </div>
+  </mat-accordion>
+  <div class="buttons">
+    <button (click)="voltar()" class="voltarButton" type="submit" mat-raised-button>
+      <mat-icon class="arrowIcon">keyboard_arrow_left</mat-icon>
+      <mat-label>{{'general.voltar' | translate}}</mat-label>
+    </button>
+  </div>
+</div>

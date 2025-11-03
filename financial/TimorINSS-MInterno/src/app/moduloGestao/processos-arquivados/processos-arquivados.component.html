@@ -1,0 +1,56 @@
+<div class="gestaoProcessos">
+
+    <div class="subHeader">
+        <div class="searchContainer">
+            <button class="processosSearchButton" mat-fab color="green" aria-label="Search"
+                (click)="pesquisarProcessos()">
+                <mat-icon class="processosSearchIcon">search</mat-icon>
+            </button>
+            <mat-form-field class="pesquisar" appearance="outline">
+                <mat-label>{{'general.pesquisar' | translate}}</mat-label>
+                <input matInput maxlength="100" type="text" [(ngModel)]="filterBy" (keydown.enter)="pesquisarProcessos()" name="stringFilterInput" />
+                <fa-icon *ngIf="filterBy" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                    (click)="clearPesquisarProcessos()">
+                </fa-icon>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div>
+        <div class="painelListagemProcessos">
+
+            <div class="tabelaProcessosTitulo">
+                <mat-icon class="tableTitleIcon">toc</mat-icon>
+                {{'processo.gestaoProcessosArquivados' | translate}}
+            </div>
+
+            <table mat-table [dataSource]="processosList" class="mat-elevation-z8 tabelaProcessos">
+                <ng-container matColumnDef="numero">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.numero' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.numero}} </td>
+                </ng-container>
+                <ng-container matColumnDef="nome">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.nome' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.dataArquivado' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{formatDatePT(element.data)}} </td>
+                </ng-container>
+                <ng-container matColumnDef="acoes">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.actions' | translate}} </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-icon class="visualizar" (click)="consultarProcesso(element.id)" matTooltip="{{'processo.consultarProcesso' | translate}}">visibility</mat-icon>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsTable"
+                [pageSize]="this.pageSizeTable" (page)="updateProcessosTable($event)"
+                [pageIndex]="pageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons>
+            </mat-paginator>
+
+        </div>
+    </div>
+</div>

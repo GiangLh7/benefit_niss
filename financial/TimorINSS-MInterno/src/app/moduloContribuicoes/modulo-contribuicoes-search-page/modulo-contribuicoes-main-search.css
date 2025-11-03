@@ -1,0 +1,232 @@
+  .mat-form-field {
+    font-size: 12px;
+    width: 100%;
+  }
+  .moduloContribuicoes{
+    position:relative;
+    min-height: 85%;
+  }
+  .Header {
+    position: relative;
+    background: #2A81CC;
+    height: 50px;
+    color: white;
+    padding-left: 5%;
+    width: 95%;
+    display: flex;
+    font-weight: bold;
+  }
+
+  .HeaderIcon {
+    padding-top: 10px;
+    font-size: 2.2em;
+    position: relative;
+    width: 50px;
+  }
+
+  .HeaderText {
+    padding-top: 14px;
+    font-size: 1.2em;
+  }
+
+  .moduloContribHomePage{
+    position:relative;
+    min-height: 85%;
+  }
+
+  .dados{
+    border: 2px solid #2A81CC;
+    border-radius: 15px;
+    display: grid;
+    width: 50%;
+  }
+
+  .dados_2{
+    border: 2px solid #2A81CC;
+    border-radius: 15px;
+    display: grid;
+    margin-right: 10%;
+    margin-left: 10%;
+  }
+
+  .mainPanel {
+    width: 80%;
+    margin-right: 10%;
+    margin-left: 10%;
+    margin-top: 5%;
+  }
+
+  .mainPanel_2 {
+    width: 100%;
+    margin-top: 2%;
+  }
+
+  .tabelaUtilizadoresTitulo {
+    width: 100%;
+    padding-bottom: 1%;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #2A81CC;
+    padding-top: 20px;
+    display: inline-flex;
+    position: relative;
+    float: left;
+    margin-bottom: 20px;
+    margin-left: 2%;
+  }
+
+  .tableTitleIcon {
+    font-size: 1.7em;
+    padding-right: 10px;
+    top: -5px;
+    position: relative;
+  }
+
+  .utilizadorSearchButton {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+    top: 10px;
+    background-color:#2A81CC;
+    color: white;
+  }
+
+  .addEditEntidade {
+    background-color: green;
+    color: #fff;
+    min-width: unset;
+    float: right;
+    height: 100%;
+  }
+
+  .utilizadorSearchIcon {
+    position: relative;
+    bottom: 13px;
+    left: 1px;
+  }
+
+  .pesquisar{
+    height: 50px;
+    max-width: 200px;
+   }
+
+   .searchContainer {
+    min-width: 250px;
+    position: relative;
+    float: left;
+    margin: 0 30px 20px;
+  }
+
+  .container {
+    border-radius: 5px;
+    padding-bottom: 15px;
+    padding-left: 70px;
+  }
+
+  .DadosContainer {
+    margin-right: 5%;
+    padding-bottom: 10px;
+  }
+
+  .secondLineContainers {
+    display: inline-flex;
+    position: relative;
+    margin-left: 50px;
+    margin-bottom: 15px;
+    color: #2A81CC;
+  }
+
+  .font {
+    color: black;
+    margin-left: 5px;
+  }
+
+  .shortcut-home{
+    display: flex;
+    position: relative;
+    margin-top: 50px;
+    width: 100%;
+    place-content: center;
+}
+
+  .shortcutContainer{
+    position: relative;
+    display: grid;
+    width: 20%;
+    grid-auto-rows: 25%;
+}
+
+.profile-icon{
+  font-size: 50px;
+  color: #2A81CC;
+  height: fit-content;
+  justify-self: center;
+  margin-top: 5px;
+  width: auto;
+}
+
+.title-txt{
+  position: relative;
+  color: #2A81CC;
+  font-size: 18px;
+  text-align: center;
+  line-height: normal;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.description-txt{
+  position: relative;
+  font-size: 10px;
+  text-align: center;
+  margin-top: 15px;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+
+.button{
+  margin-bottom: 10%;
+  margin-left: 20%;
+  margin-right: 20%;
+  font-size: smaller;
+  position: relative;
+  white-space: normal;
+  line-height: normal;
+  height: 30px;
+  margin-top: 10px;
+}
+
+.shortcutContainer{
+  width: 18%;
+
+}
+
+.returnButton{
+  width: 32px;
+    height: 32px;
+    background-color: #2A81CC;
+    color: white;
+    margin-left: 5%;
+    display: block;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.errorContainer{
+    display: inline-flex;
+    position: relative;
+    float: left;
+    margin-left: 15%;
+    margin-bottom: 20px;
+    color: red;
+}

@@ -1,0 +1,24 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteCabecalhoProcesso (afterExpand)="scroll(componenteCabecalhoProcesso)">
+    <mat-expansion-panel-header>
+        {{'tarefa.componenteCabecalhoProcesso' | translate}}
+    </mat-expansion-panel-header>
+    <div class="containerBody">
+        <div class="txt-box">
+            {{'processo.nome' | translate}}
+            <a class="txt">{{nome}}</a>
+        </div>
+        <div class="txt-box">
+            {{'processo.tarefas' | translate}}
+            <a class="txt">{{tarefas}}</a>
+        </div>
+        <div *ngIf="arquivado" class="txt-box">
+            {{'processo.arquivadoPor' | translate}}
+            <a class="txt">{{user}}</a>
+        </div>
+        <div class="txt-box">
+            <span *ngIf="arquivado">{{'processo.dataArquivamento' | translate}}</span>
+            <span *ngIf="!arquivado">{{'processo.dataUltimaAtualizacao' | translate}}</span>
+            <a class="txt">{{data}}</a>
+        </div>
+    </div>
+</mat-expansion-panel>

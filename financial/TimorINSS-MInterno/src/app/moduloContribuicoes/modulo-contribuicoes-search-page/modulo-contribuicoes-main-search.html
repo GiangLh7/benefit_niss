@@ -1,0 +1,104 @@
+
+<div class="moduloContribuicoes" *ngIf="isLoggedIn">
+    <div class="Header">
+        <mat-icon class="HeaderIcon">account_balance</mat-icon>
+        <div class="HeaderText">
+            {{'general.moduloContrib' | translate}}
+        </div>
+    </div>
+    <div class="mainPanel" *ngIf="!presentEntidade">
+        <div class="dados">
+            <div class="tabelaUtilizadoresTitulo">
+                <mat-icon class="tableTitleIcon">account_balance</mat-icon>
+                {{ 'general.pesquisarEntidade' | translate }}
+            </div>
+            <div class="searchContainer">
+                <button class="utilizadorSearchButton" mat-fab color="green" aria-label="Search" (click)="pesquisarEntidade()">
+                    <mat-icon matTooltip="{{'general.pesquisar' | translate}}" class="utilizadorSearchIcon">search</mat-icon>
+                </button>
+                <mat-form-field class="pesquisar" appearance="outline">
+                    <mat-label>{{ 'general.insertNiss' | translate }}</mat-label>
+                    <input matInput maxlength="10" type="number" min="0" [(ngModel)]="nissRequest" name="stringFilterInput" (keydown.enter)="pesquisarEntidade()"
+                    [errorStateMatcher]="matcher" [required]="submittedTry"/>
+                    <fa-icon *ngIf="nissRequest" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                        (click)="clearPesquisarEntidade()">
+                    </fa-icon>
+                    <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+                <button class="addEditEntidade" mat-raised-button (click)="openAddEditPopup()">
+                  {{'entidadeEmpregadora.addEditEntidade' | translate}}
+                </button>
+            </div>
+            <div class="errorContainer">
+                <div *ngIf="nissIsNegative">{{'general.cannotBeNegative' | translate}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="mainPanel_2" *ngIf="presentEntidade">
+        <button class="returnButton" mat-fab color="green" aria-label="Search" (click)="return()">
+            <mat-icon matTooltip="Retornar" class="utilizadorSearchIcon">keyboard_return</mat-icon>
+        </button>
+        <div class="dados_2">
+            <div class="tabelaUtilizadoresTitulo">
+                <mat-icon class="tableTitleIcon">account_balance</mat-icon>
+                {{ 'home.entidadeResume' | translate }}
+            </div>
+            <div class="container">
+                <div class="header">
+                  <div class="DadosContainer">
+                    <div class="secondLineContainers">
+                      <span> <b>{{'entidadeEmpregadora.nomeEntidade' | translate}}</b> </span>
+                      <span class="font">{{entidadeEmpregadoraConsulta.nome}}</span>
+                    </div>
+                  </div>
+                  <div class="DadosContainer">
+                    <div class="secondLineContainers">
+                      <span> <b>{{'entidadeEmpregadora.tin' | translate}}</b> </span>
+                      <span class="font">{{entidadeEmpregadoraConsulta.tin}}</span>
+                    </div>
+                    <div class="secondLineContainers">
+                      <span> <b>{{'entidadeEmpregadora.niss' | translate}}</b> </span>
+                      <span class="font">{{entidadeEmpregadoraConsulta.niss}}</span>
+                    </div>
+                    <div class="secondLineContainers">
+                      <span> <b>{{'entidadeEmpregadora.situacaoInscricao' | translate}}</b></span>
+                      <span class="font">{{sitInscricao}}</span>
+                    </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+        <div class="shortcut-home">
+            <div class="shortcutContainer">
+                <mat-icon class="profile-icon">account_circle</mat-icon>
+                <div class="title-txt">{{'home.declaracaoTitle' | translate}}</div>
+                <div class="description-txt">{{'home.declaracaoResume' | translate}}</div>
+                <button mat-raised-button class="button" color="primary" [routerLink]="'/declaracaoRemuneracao'" [skipLocationChange]="true">{{'home.declaracaoButtonText' | translate}}</button>
+            </div>
+            <div class="shortcutContainer">
+                <mat-icon class="profile-icon">donut_small</mat-icon>
+                <div class="title-txt">{{'home.contaCorrenteTitle' | translate}}</div>
+                <div class="description-txt">{{'home.contaCorrenteResume' | translate}}</div>
+                <button mat-raised-button class="button" color="primary" [routerLink]="'/contaCorrente'" [skipLocationChange]="true">{{'home.contaCorrenteButtonText' | translate}}</button>
+            </div>
+            <div class="shortcutContainer">
+                <mat-icon class="profile-icon">assignment</mat-icon>
+                <div class="title-txt">{{'home.guiasTitle' | translate}}</div>
+                <div class="description-txt">{{'home.guiasResume' | translate}}</div>
+                <button mat-raised-button class="button" color="primary" [routerLink]="'/guiaPagamento'" [skipLocationChange]="true">{{'home.guiasButtonText' | translate}}</button>
+            </div>
+            <div class="shortcutContainer">
+                <mat-icon class="profile-icon">account_balance</mat-icon>
+                <div class="title-txt">{{'home.entidadeTitle' | translate}}</div>
+                <div class="description-txt">{{'home.entidadeResume' | translate}}</div>
+                <button mat-raised-button class="button" color="primary" [routerLink]="'/entidadeEmpregadora'" [skipLocationChange]="true">{{'home.moreInfo' | translate}}</button>
+            </div>
+            <div class="shortcutContainer">
+                <mat-icon class="profile-icon">people</mat-icon>
+                <div class="title-txt">{{'home.trabalhadoresTitle' | translate}}</div>
+                <div class="description-txt">{{'home.trabalhadoresResume' | translate}}</div>
+                <button mat-raised-button class="button" color="primary" [routerLink]="'/trabalhadores'" [skipLocationChange]="true">{{'home.moreInfo' | translate}}</button>
+            </div>
+        </div>
+    </div>
+</div>

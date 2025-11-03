@@ -1,0 +1,39 @@
+
+<div *ngIf="hasPermission">
+  <div class="preencherTarefaHeader">
+    <mat-icon class="preencherTarefaHeaderIcon">assignment</mat-icon>
+    <div class="preencherTarefaHeaderText">
+      {{'processo.processo' | translate}}: {{tarefaObject.cabecalho.numProcesso}} - {{'tarefa.tarefa' | translate}}: {{tarefaObject.cabecalho.nomeTarefa}}
+    </div>
+  </div>
+  <mat-accordion multi>
+    <div *ngFor="let rel of rels;">
+      <componente-cabecalho *ngIf="rel.descricao === 'Cabeçalho de Processo'" [isExpanded]="rel.expandir" [numProcesso]="tarefaObject.cabecalho.numProcesso" [nomeProcesso]="tarefaObject.cabecalho.nomeProcesso" [nomeTarefa]="tarefaObject.cabecalho.nomeTarefa"></componente-cabecalho>
+      <app-componente-historico-texto *ngIf="rel.descricao === 'Histórico de Texto'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></app-componente-historico-texto>
+      <app-componente-orcamento *ngIf="rel.descricao === 'Orçamento'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></app-componente-orcamento>
+      <app-componente-texto *ngIf="rel.descricao === 'Texto'" [(request)]="tarefaObject.textos"></app-componente-texto>
+      <app-componente-despesa *ngIf="rel.descricao === 'Despesa' || rel.descricao === 'Expense' " [tarefaActivoId]="tarefaActivoId" [isExpanded]="rel.expandir"></app-componente-despesa>
+      <app-componente-prazo *ngIf="rel.descricao === 'Prazo da Tarefa'" [limit]="tarefaObject.prazoTarefa.deadline" [expireDate]="tarefaObject.prazoTarefa.limitDate"></app-componente-prazo>
+      <app-componente-documentos *ngIf="rel.descricao === 'Carregar Documentos'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId" (refreshDocTable)="refreshDocTableEvent($event)"></app-componente-documentos>
+      <app-componente-list-documentos *ngIf="rel.descricao === 'Listagem de Documentos Associados'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId" [refreshTable]="refreshDocTable" (tableIsRefreshed)= "tableRefreshed($event)"></app-componente-list-documentos>
+      <app-componente-classificacao-sub *ngIf="rel.descricao === 'Classificação / Sub-Classificação'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId" [(subClassificacaoId)]="tarefaObject.classificacaoSubClass"></app-componente-classificacao-sub>
+      <app-componente-tarefa-a-seguir *ngIf="rel.descricao === 'Acções da Tarefa'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId" [(nextTarefaId)]="tarefaObject.nextTarefaNumber"></app-componente-tarefa-a-seguir>
+      <app-componente-receita *ngIf="rel.descricao === 'Receita' || rel.descricao === 'Revenue'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></app-componente-receita>
+      <componente-concilicacao *ngIf="rel.descricao === 'Conciliação de Movimentos'" [isExpanded]="rel.expandir" [tarefaActivoId]="tarefaActivoId"></componente-concilicacao>
+    </div>
+  </mat-accordion>
+  <div class="buttons">
+    <button class="gravarButton" mat-raised-button type="submit" (click)="gravarTarefa()">
+      <mat-icon class="icon">check</mat-icon>
+      <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+    </button>
+    <button class="cancelarButton" type="submit" (click)="cancelar()" mat-raised-button>
+      <mat-icon>close</mat-icon>
+      <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+    </button>
+    <button *ngIf="tarefaObject.hasArchive" class="arquivarButton" type="submit" (click)="arquivarTarefa()" mat-raised-button>
+      <mat-icon class="fileIcon">assignment_returned</mat-icon>
+      <mat-label>{{'general.arquivar' | translate}}</mat-label>
+    </button>
+  </div>
+</div>

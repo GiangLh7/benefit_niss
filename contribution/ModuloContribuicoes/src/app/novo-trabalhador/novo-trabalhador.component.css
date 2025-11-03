@@ -1,0 +1,246 @@
+.DadosPrincipais {
+  padding-top: 20px;
+}
+
+.DadosContainer {
+  margin-left: 5%;
+  margin-right: 5%;
+  padding-bottom: 5px;
+}
+
+.secondLineContainers {
+  display: inline-flex;
+  position: relative;
+  margin-left: 50px;
+}
+
+.mat-form-field {
+  font-size: 12px;
+}
+
+.novoTrabalhadorHeader {
+  position: relative;
+  background: #2A81CC;
+  height: 50px;
+  color: white;
+  padding-left: 5%;
+  width: 95%;
+  display: flex;
+
+  font-weight: bold;
+}
+
+.novoTrabalhadorHeaderIcon {
+  padding-top: 6px;
+  font-size: 2.2em;
+  position: relative;
+  width: 50px;
+}
+
+.novoTrabalhadorHeaderText {
+  padding-top: 14px;
+  font-size: 1.2em;
+}
+
+.iconsBottom {
+  bottom: 12px;
+  display: inline-flex;
+  height: 0px;
+  position: relative;
+}
+
+.dataContainer {
+  width: 228px;
+  margin-bottom: 15px;
+}
+
+.fa-icon {
+  position: relative;
+  top: 9px;
+}
+
+.mat-form-field {
+  width:100%;
+}
+
+.nomeContainer
+{
+  width: 50%;
+  min-width: 300px;
+}
+
+.inputContainer
+{
+  width: 30%;
+  min-width: 175px;
+}
+
+.inputContainerSmall
+{
+  width: 20%;
+  min-width: 150px;
+}
+
+.novoTrabalhadorExpansions
+{
+  margin-top: 10px;
+}
+
+.expandFirstContainer{
+  padding-left: calc(5% - 24px);
+  padding-right: calc(5% - 24px);
+  padding-bottom: 0;
+  padding-top: 20px;
+}
+
+.expandTableContainer {
+  padding-left: calc(10% - 24px);
+  padding-right: calc(10% - 24px);
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.DadosContainer-expansion{
+  padding-left: calc(5% - 24px);
+  padding-right: calc(5% - 24px);
+  padding-bottom: 0;
+}
+
+.mat-expansion-panel-header:hover {
+  background: #1f64a1 !important;
+}
+
+.mat-expansion-panel-header {
+  position: relative;
+  background: #2A81CC !important;
+  height: 50px;
+  font-weight: bold;
+  color: white;
+  padding-left: 5%;
+  display: flex;
+  font-size: 15px;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+.tabelaListagem {
+  width: 100%;
+}
+
+
+.buttons {
+  margin-left: 0px;
+}
+
+.adicionarButton {
+  background: rgba(52, 176, 43, 100);
+  margin-right: 10px;
+  color:white;
+
+  font-size: 10px;
+}
+
+.editarButton {
+  background: rgba(42, 129, 204, 100);
+  margin-right: 10px;
+  color:white;
+
+  font-size: 10px;
+}
+
+.buttonCancelar {
+  background:darkred;
+  color:white;
+
+  font-size: 10px;
+}
+
+.adicionarIcon {
+  padding-right: 5px;
+}
+
+.radioContainer {
+  padding-bottom: 1.34375em;
+}
+
+.mat-radio-button {
+  padding-left: 8px;
+}
+
+.disabledLabel {
+  color:rgba(0, 0, 0, 0.38);
+}
+
+.table {
+  width:100%;
+}
+
+.AdicionarTrabalhadorActionDiv {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.AdicionarTrabalhadorButton {
+  background-color: green;
+  color: white;
+}
+
+.ngx-mat-file-input {
+  align-items: center;
+  display: flex;
+  height: 1em;
+  line-height: 1em;
+}
+
+.deleteIconTable {
+  color: darkred;
+  cursor: pointer;
+}
+
+.editIconTable {
+  color: #2A81CC;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+
+table td,
+table th {
+  text-align: center;
+}
+
+table th {
+  font-weight: bold;
+}
+
+.mat-column-moradaPrincipal,
+.mat-column-verEditar{
+  width: 10%;
+}
+
+.moradaCheckIcon {
+  color: rgba(52, 176, 43, 100);
+  font-size: 20px;
+}
+
+.mat-expansion-panel {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+}
+
+.expansion{
+  padding-left: calc(10% - 24px);
+}
+
+.pdfIconTable{
+  cursor: pointer;
+  color: red;
+  font-size: 20px;
+}

@@ -1,0 +1,41 @@
+.mat-expansion-panel-header:hover {
+  background: #1f64a1 !important;
+}
+
+.mat-expansion-panel-header {
+  position: relative;
+  background: #2a81cc !important;
+  height: 50px;
+  font-weight: bold;
+  color: white;
+  padding-left: 5%;
+  display: flex;
+  font-size: 15px;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.mat-expansion-panel {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+}
+
+.containerBody{
+  margin-top: 25px;
+  width: 60%;
+  margin-left: 2%;
+}
+
+.txt-box {
+  margin-top: 20px;
+  margin-left: 10%;
+  color: #2a81cc;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.txt {
+  color: black;
+  display: inline-flex;
+  font-weight: normal;
+  margin-left: 5px;
+}

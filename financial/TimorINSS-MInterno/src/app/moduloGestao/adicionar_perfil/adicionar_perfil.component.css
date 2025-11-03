@@ -1,0 +1,143 @@
+.mat-form-field {
+  font-size: 12px;
+  width: 100%;
+}
+
+.pageAddPerfil{
+  position:relative;
+  min-height: 85%;
+}
+
+.addPerfilHeader {
+  position: relative;
+  background: #2A81CC;
+  height: 50px;
+  font-weight: bold;
+  font-weight: 400;
+  color: white;
+  padding-left: 5%;
+  display: flex;
+
+}
+
+.addPerfilIcon {
+  padding-top: 6px;
+  font-size: 2.2em;
+  position: relative;
+  width: 50px;
+}
+
+.addPerfilText {
+  padding-left: 2%;
+  padding-top: 14px;
+  font-size: 1.2em;
+}
+
+.nomePerfil{
+    width: 50%;
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+.title{
+  color:#2A81CC;
+}
+.example-container {
+    width: 35%;
+    margin: 0 25px 25px 50px;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .arrow {
+    width: 5%;
+    margin: 0 25px 25px 50px;
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .arrowIcon {
+    color:#2A81CC;
+    font-size: 2.2em;
+  }
+
+  .tabelaFuncionalidades {
+    width:100%;
+    text-align: left;
+    background-color: white;
+  }
+
+  .example-list {
+    border: solid 1px #ccc;
+    min-height: 60px;
+    background: white;
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+  }
+
+  .example-box {
+    padding: 20px 10px;
+    border-bottom: solid 1px #ccc;
+    color: rgba(0, 0, 0, 0.87);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    cursor: move;
+    background: white;
+    font-size: 14px;
+  }
+
+  .cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    vertical-align: middle;
+    display: inline-table;
+  }
+
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+
+  .cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .example-box:last-child {
+    border: none;
+  }
+
+  .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  .buttons{
+    padding-bottom: 10px;
+    height: 12%;
+    margin-top: 15px;
+  }
+
+  .adicionarEditarPerfilButton {
+    margin-left: 50px;
+    background: rgba(52, 176, 43, 100);
+    color: white;
+    top: -3px;
+  }
+
+  .cancelarButton {
+    margin-left: 30px;
+    background: darkred;
+    color: white;
+    top: -3px;
+  }
+
+  .emptyTable{
+    color:darkred;
+    font: bold;
+    margin-left: 30%;
+  }

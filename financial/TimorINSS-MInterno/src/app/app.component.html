@@ -1,0 +1,63 @@
+<div class="app mat-typography">
+  <div class="navbar">
+    <div class="firstLineHeader">
+
+      <!-- TODO remove this when down code is uncomment-->
+      <div class="headerEsquerda" routerLinkActive="active">
+        <a href="" routerLink="">
+          <img class="img-Icon" src="{{ssIcon}}">
+        </a>
+
+        <a href="" class="app-title" routerLink="">{{ 'general.inssCore' | translate }}</a>
+      </div>
+
+      <div class="right-header">
+
+        <div  class="user-nav" *ngIf="isLoggedIn">
+          <mat-icon class="profile-icon_2">account_circle</mat-icon>
+          <div class="user-txt-box">
+            {{'general.user' | translate}}:
+            <a matTooltip="{{username}}" class="user-txt">{{username}}</a>
+          </div>
+          <div class="niss-txt-box">
+            {{'general.profile' | translate}}:
+            <a matTooltip="{{profiles}}" class="user-txt">{{profiles}}</a>
+          </div>
+        </div>
+
+        <div class="logged-container">
+          <div class="nav-link" *ngIf="isLoggedIn">
+            <mat-icon (click)="logout()" class="logout-icon" matTooltip="{{'general.logout' | translate}}">power_settings_new</mat-icon>
+          </div>
+
+          <select class="language-form" [(ngModel)]="selectLang" name="selectLang" (change)="setTransLanguage()">
+            <option *ngFor="let lang of TransLang" value="{{lang}}">{{ lang }}</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="navigation-header" >
+      <button *ngIf="isLoggedIn" mat-button [matMenuTriggerFor]="panel.menu">
+        <span style="color: white;">{{ 'general.menu' | translate }}</span>
+        <mat-icon class="menuIcon">menu</mat-icon>
+      </button>
+      <app-menu-panel #panel [items]="menuItems"></app-menu-panel>
+    </div>
+
+  </div>
+
+  <div class="scrollContainer">
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+    <footer>
+      <div class="disclaimer">© 2020 {{ 'general.disclaimer' | translate }}</div>
+    </footer>
+  </div>
+  <ngx-spinner class="spinner" [fullScreen]="true" [color]="'#2A81CC'" [type]="'ball-climbing-dot'">
+    {{'general.pleaseWait' | translate}}
+  </ngx-spinner>
+  <importer-toasts></importer-toasts>
+</div>

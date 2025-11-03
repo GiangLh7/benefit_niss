@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; margin: 0; }
+
+html{
+    background-image: url("https://image.freepik.com/free-photo/top-view-work-from-home-concept-with-keyboard-calculator-notebook-white-background-graphic-designer-creative-designer-concept_160097-213.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+body {
+
+}
+
+.modalWithBorder {
+  border-style: solid;
+  border-color: #2A81CC;
+  border-width: 4px;
+  border-radius: 8px;
+  min-height: 100px !important;
+}
+
+.warningModal {
+  border-style: solid;
+  border-color: rgb(248,177,23);
+  border-width: 8px;
+  border-radius: 8px;
+  min-height: 100px !important;
+}
+
+.green-snackbar {
+  background: green;
+}
+
+.red-snackbar {
+  background: rgb(168, 45, 45);
+}
+
+.spinner {
+  font-size: 20px;
+  color: #2A81CC;
+  font-weight:bold;
+}
+
+/* app-home{
+  width: 100% !important;
+} */

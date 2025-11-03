@@ -1,0 +1,14 @@
+<mat-form-field appearance="outline"  [matTooltipDisabled]="!clear" matTooltip="{{'general.datePickerTooltip' | translate}}" class="searchDateFormField">
+  <mat-label >{{'general.mesEAno' | translate}}</mat-label>
+  <input matInput [(ngModel)]="dateFormated" readonly="true" name="dateFilterFormattedInput"/>
+  <input [min]="min" [max]="max" matInput hidden [matDatepicker]="dp" [(ngModel)]="date" name="dateFilterInput"/>
+  <div [ngClass]="{'iconsBottom': date && clear}" class="icons" matSuffix>
+    <fa-icon class="fa-icon" *ngIf="date && clear" aria-label="Clear" [icon]="faTimesCircle" (click)="clearDate()"></fa-icon>
+    <mat-datepicker-toggle [for]="dp">
+      <mat-icon class="datePickerIcon" matDatepickerToggleIcon>today</mat-icon>
+    </mat-datepicker-toggle>
+  </div>
+  <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event)"
+                  (monthSelected)="chosenMonthHandler($event, dp)" panelClass="month-picker">
+  </mat-datepicker>
+</mat-form-field>

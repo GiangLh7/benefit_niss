@@ -1,0 +1,118 @@
+<div class="dialogPositionFix">
+  <h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">settings</mat-icon>
+    <div *ngIf="!data.edicao">
+      {{'general.Add' | translate}} {{data.campo.nome}}
+    </div>
+    <div *ngIf="data.edicao">
+      {{'general.Editar' | translate}} {{data.campo.nome}}
+    </div>
+  </h1>
+  <form (ngSubmit)="changesValidation(campoForm)" class="formSize" #campoForm="ngForm">
+    <div class="bodyDialog" mat-dialog-content>
+      <div class="DadosContainer">
+        <div *ngIf="!data.campo.nomeNaoEditavel" class="InnerDadosContainers inputContainer">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'general.nome' | translate}}</mat-label>
+            <input #name="ngModel" matInput [errorStateMatcher]="matcher" [required]="submittedTry" [maxlength]="data.campo.nomeSize" type="text" [(ngModel)]="data.valorCampo.nome" name="nomeCampo"/>
+            <fa-icon *ngIf="data.valorCampo.nome" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="data.valorCampo.nome = ''"></fa-icon>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="data.valorCampo.parentId && data.edicao" class="InnerDadosContainers">
+          <mat-form-field appearance="outline">
+            <mat-label>{{data.valoresCamposEditavelParent.nome}}</mat-label>
+            <mat-select #name="ngModel" name="parentFiled" [(ngModel)]="data.valorCampo.parentId" [errorStateMatcher]="matcher" [required]="submittedTry" #singleSelect>
+              <mat-option>
+                <ngx-mat-select-search noEntriesFoundLabel="{{'general.semResultados' | translate}}" #name="ngModel" name="parentFiledFilter" placeholderLabel="{{data.valoresCamposEditavelParent.nome}}" ngModel (ngModelChange)="filterMyOptions($event)">
+                </ngx-mat-select-search>
+              </mat-option>
+              <mat-option *ngFor="let parent of parentsF" [value]="parent.id">{{parent.nome}}
+              </mat-option>
+            </mat-select>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="DadosContainer">
+        <ng-container *ngFor="let parametro of data.valorCampo.parametros; let ind = index;">
+          <div *ngIf="!parametro.naoVisivel" class="InnerDadosContainers" [ngClass]="{'inputContainerSmall': parametro.type == 'decimal' || parametro.type == 'number'}">
+            <mat-form-field *ngIf="parametro.type == 'date' && !data.valorCampo.hasKids" appearance="outline">
+              <mat-label>{{'gerirCampos.' + parametro.nome | translate}}</mat-label>
+              <input #name="ngModel" [errorStateMatcher]="matcher" [(ngModel)]="parametro.dateValor" name="{{parametro.nome + 'Campo'}}" matInput [matDatepicker]="picker" [required]="submittedTry && (!parametro.optional || initialValueFilled)">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field  *ngIf="parametro.type == 'currency' && !data.valorCampo.hasKids" appearance="outline">
+              <mat-label>{{'gerirCampos.' + parametro.nome | translate}}</mat-label>
+              <input #name="ngModel" matInput currencyMask [options]="currencyOptions" [required]="submittedTry && (!parametro.optional || initialValueFilled)"  [errorStateMatcher]="matcher" [(ngModel)]="parametro.valor" (ngModelChange)="addedValue(parametro.valor)" name="{{parametro.nome + 'Campo'}}"/>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+            <!-- <mat-form-field *ngIf="parametro.type == 'multipleSelectCheck'" appearance="outline">
+              <mat-label>{{'gerirCampos.' + parametro.nome | translate}}</mat-label>
+              <mat-select multiple #name="ngModel" [ngModel]="parametro.selectedValuesList" name="{{'gerirCampos.' + parametro.nome + 'search'}}" [errorStateMatcher]="matcher" [required]="submittedTry && !parametro.optional">
+                <mat-option>
+                  <ngx-mat-select-search #name="ngModel" noEntriesFoundLabel="{{'general.semResultados' | translate}}" placeholderLabel="{{'gerirCampos.' + parametro.nome | translate}}" ngModel (ngModelChange)="filterCustomOptions($event, parametro)"  name="{{'gerirCampos.' + parametro.nome + 'filter'}}">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option  matTooltip="{{value.nome}}" (onSelectionChange)="selectMultiples($event, parametro)" *ngFor="let value of parametro.filteredValuesList" [value]="value.id">{{value.nome}}</mat-option>
+              </mat-select>
+            </mat-form-field> -->
+            <mat-form-field  *ngIf="parametro.type == 'mesAno'" appearance="outline" class="MonthlyDateFormField">
+              <mat-label>{{'gerirCampos.' + parametro.nome | translate}}</mat-label>
+              <input matInput [(ngModel)]="parametro.dateValorFormatted" readonly="true" name="{{parametro.nome + 'dateFilterFormattedInput'}}"/>
+              <input matInput hidden [matDatepicker]="dp" [(ngModel)]="parametro.dateValor" name="{{parametro.nome + 'dateFilterInput'}}"/>
+              <div class="icons" matSuffix>
+                <mat-datepicker-toggle [for]="dp">
+                  <mat-icon class="datePickerIcon" matDatepickerToggleIcon>today</mat-icon>
+                </mat-datepicker-toggle>
+              </div>
+              <mat-datepicker #dp startView="multi-year" (yearSelected)="chosenYearHandler($event, parametro)"
+                              (monthSelected)="chosenMonthHandler($event, dp, parametro)" panelClass="month-picker">
+              </mat-datepicker>
+            </mat-form-field>
+            <mat-form-field *ngIf="parametro.type != 'multipleSelectCheck' && parametro.type != 'date' && parametro.type != 'currency' &&  parametro.type != 'mesAno' && parametro.type != 'dropdown' && parametro.type != 'checkbox'" appearance="outline">
+              <mat-label>{{'gerirCampos.' + parametro.nome | translate}}</mat-label>
+              <input #name="ngModel" [ngClass]="{'inputRight': parametro.suffix}" matInput [errorStateMatcher]="matcher" maxlength="{{parametro.size}}" [pattern]="parametro.type == 'number' ? availableRegex.intPattern : (parametro.type == 'decimal' ? availableRegex.decimal2Cases : '')" type="text" [(ngModel)]="parametro.valor" name="{{parametro.nome + 'Campo'}}" [required]="submittedTry && !parametro.optional"/>
+              <label matSuffix class="maxSuffixFix" *ngIf="parametro.suffix">%</label>
+              <fa-icon *ngIf="parametro.valor && parametro.type == 'text'" matSuffix aria-label="Clear" [icon]="faTimesCircle" (click)="parametro.valor = ''"></fa-icon>
+              <mat-error *ngIf="parametro.valor">{{'general.wrongFormat' | translate}}</mat-error>
+              <mat-error *ngIf="!parametro.valor">{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+            <mat-form-field *ngIf="parametro.type == 'dropdown'"  appearance="outline">
+              <mat-label>{{'gerirCampos.' + parametro.nome | translate}}</mat-label>
+              <mat-select #name="ngModel" [(ngModel)]="parametro.selectedDropdown" name="{{'gerirCampos.' + parametro.nome}}" [errorStateMatcher]="matcher" [required]="submittedTry" #singleSelect>
+                <mat-option *ngFor="let value of parametro.dropdownList" [value]="value.id">{{value.nome}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="!parametro.selectedDropdown">{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+
+              <mat-radio-group *ngIf="parametro.type == 'checkbox' && initialValueFilled && !data.valorCampo.hasKids" [(ngModel)]="parametro.credit" name="checkbox">
+                <mat-radio-button [value]="true" color="primary" [checked]="parametro.credit === true" >{{'tarefa.credito' | translate}}</mat-radio-button>
+                <mat-radio-button style="margin-left: 10px;" [value]="false" color="primary" [checked]="parametro.credit === false" >{{'tarefa.debito' | translate}}</mat-radio-button>
+              </mat-radio-group>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="buttons">
+      <div class="InnerDadosContainers">
+        <button class="gravarButton" mat-raised-button type="submit" (click)="submitCampo()" [disabled]="!campoForm.valid" >
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="InnerDadosContainers">
+        <button class="buttonCancelar" mat-raised-button type="button" (click)="closePopUp()">
+          <mat-icon class="icon">close</mat-icon>
+          <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,250 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteReceita
+    (afterExpand)="scroll(componenteReceita)">
+    <mat-expansion-panel-header>
+        {{'tarefa.componenteReceita' | translate}}
+    </mat-expansion-panel-header>
+
+    <div class="exiteOrcamentoAprovado" *ngIf="naoExisteOrcamentoAprovado == true">
+        {{'componente_receita.naoExisteOrcamentoAprovado' | translate}}
+    </div>
+
+    <div class="containerBody" *ngIf="(componenteReceitaConfig.classificarMovSelecionados != null && componenteReceitaConfig.classificarMovSelecionados == 2) && naoExisteOrcamentoAprovado == false">
+        <div class="inputs-grid column_gap">
+            <div id="firstPanel" class="inputs-grid__cell containerLiner">
+
+                <button *ngIf="(componenteReceitaConfig.selecionarMovRecebidosParaRegisto != null && componenteReceitaConfig.selecionarMovRecebidosParaRegisto == 2)"
+                type="button" class="selecionarMovimentosButton" (click)="selecionarMovimentos()"
+                    mat-raised-button>
+                    <mat-label>{{'componente_receita.selecionarMovimentos' | translate}}</mat-label>
+                </button>
+
+                <form (ngSubmit)="registarEditarReceita()" #receitaForm="ngForm">
+
+                    <div>
+                        <mat-form-field class="select_box" appearance="outline">
+                            <mat-label>{{'componenteDespesa.departamentoINSS' | translate}}</mat-label>
+                            <mat-select [(ngModel)]="departamentoINSS.id" [(value)]="departamentoINSS.id"
+                                name="departamento">
+                                <ng-container *ngIf="departamentoINSSListagem.length > 1">
+                                    <mat-option *ngFor="let departamento of departamentoINSSListagem"
+                                    matTooltip="{{departamento.nome}}"
+                                        [value]="departamento.id">
+                                        {{departamento.nome}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="select_box" appearance="outline">
+                            <mat-label>{{'componenteDespesa.centroCusto' | translate}}</mat-label>
+                            <mat-select [(ngModel)]="centroCusto.id" [(value)]="centroCusto.id" name="centroCusto"
+                                [errorStateMatcher]="matcher" [required]="submittedTry">
+                                <ng-container *ngIf="centroCustoListagem.length > 0">
+                                    <mat-option *ngFor="let centro of centroCustoListagem" [value]="centro.id">
+                                        {{centro.nome}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error>{{'general.required' | translate}}</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="select_box" appearance="outline">
+                            <mat-label>{{'componenteDespesa.tipoConta' | translate}}</mat-label>
+                            <mat-select
+
+                                [(ngModel)]="tipoConta.id" [(value)]="tipoConta.id" name="tipoConta"
+                                [errorStateMatcher]="matcher" [required]="submittedTry">
+                                <ng-container *ngIf="tipoContaFiltered.length > 1">
+                                    <mat-option *ngFor="let tipo of tipoContaFiltered" [value]="tipo.id">
+                                        {{tipo.descricao}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error>{{'general.required' | translate}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <mat-form-field class="select_box" appearance="outline">
+                            <mat-label>{{'componenteDespesa.contabilidade' | translate}} {{'tarefa.credito' | translate}}</mat-label>
+                            <mat-select
+                                (selectionChange)="updateContabilidadeDebito(contabilidade.id)"
+                                #name="ngModel" name="selectComponenteContabilidade" [(ngModel)]="contabilidade.id"
+                                [errorStateMatcher]="matcher" [required]="submittedTry">
+                                <mat-option>
+                                    <ngx-mat-select-search #name="ngModel"
+                                        noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                                        placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
+                                        (ngModelChange)="filterCustomOptionsContabilidadeCredito($event)"
+                                        name="ContabilidadeFilterSearch">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let value of filtersContabilidadeFilteredCredito" [value]="value.id"
+                                matTooltip="{{value.designacao}}">
+                                    {{value.designacao}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>{{'general.required' | translate}}</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="select_box" appearance="outline">
+                            <mat-label>{{'componenteDespesa.contabilidade' | translate}} {{'tarefa.debito' | translate}}</mat-label>
+                            <mat-select
+                                (selectionChange)="updateContabilidadeCredito(contabilidadeDebito.id)"
+                                #name="ngModel" name="selectComponenteContabilidadeDebito" [(ngModel)]="contabilidadeDebito.id"
+                                [errorStateMatcher]="matcher" [required]="submittedTry">
+                                <mat-option>
+                                    <ngx-mat-select-search #name="ngModel"
+                                        noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                                        placeholderLabel="{{'componenteDespesa.contabilidade' | translate}}" ngModel
+                                        (ngModelChange)="filterCustomOptionsContabilidadeDebito($event)"
+                                        name="ContabilidadeFilterSearch">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let value of filtersContabilidadeFilteredDebito" [value]="value.id"
+                                matTooltip="{{value.designacao}}">
+                                    {{value.designacao}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>{{'general.required' | translate}}</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="select_box" appearance="outline">
+                            <mat-label>{{'componenteDespesa.contaOSS' | translate}}</mat-label>
+                            <mat-select #name="ngModel" name="selectComponenteContaOSS" [(ngModel)]="contaOSS.id"
+                                [errorStateMatcher]="matcher" [required]="submittedTry">
+                                <mat-option>
+                                    <ngx-mat-select-search #name="ngModel"
+                                        noEntriesFoundLabel="{{'general.codigoContaInvalido' | translate}}"
+                                        placeholderLabel="{{'componenteDespesa.contaOSS' | translate}}" ngModel
+                                        (ngModelChange)="filterCustomOptionsContaOSS($event)"
+                                        name="ContaOSSFilterSearch">
+                                    </ngx-mat-select-search>
+                                </mat-option>
+                                <mat-option *ngFor="let value of filtersContaOSSFiltered" [value]="value.id"
+                                matTooltip="{{value.designacao}}">
+                                    {{value.designacao}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error>{{'general.required' | translate}}</mat-error>
+
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <mat-form-field class="descricaoReceita" appearance="outline">
+                            <mat-label>{{'gerirCampos.Descricao' | translate}}</mat-label>
+                            <input matInput maxlength="50" type="text" [(ngModel)]="descricaoReceita"
+                                name="DescricaoReceita" [errorStateMatcher]="matcher" [required]="submittedTry" />
+                            <mat-error>{{'general.required' | translate}}</mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div>
+                        <mat-form-field class="select_box" appearance="outline">
+                            <mat-label>{{'componenteDespesa.valorDespesa' | translate}}</mat-label>
+                            <input autocomplete="off" matInput #name="ngModel" currencyMask [options]="currencyOptions"
+                                name="ValorReceita" [(ngModel)]="valorReceita" [errorStateMatcher]="matcher"
+                                [required]="submittedTry">
+                            <mat-error>{{'general.required' | translate}}</mat-error>
+                        </mat-form-field>
+
+                        <button
+                            [disabled]="!receitaForm.valid || (movimentosSelecionados == null || movimentosSelecionados.length <= 0)"
+                            class="registarReceitaButton" type="submit" mat-raised-button (click)="submitReceita()">
+                            <mat-label>{{'componenteDespesa.buttonRegistarEditarDespesa' | translate}}</mat-label>
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div id="valoresOrcamento" class="containerBody" *ngIf="isRegistado && componenteReceitaConfig.verificarExecucaoOrcamentoEditarSelecao == 2 && naoExisteOrcamentoAprovado == false">
+        <div class="inputs-grid column_gap">
+            <div class="inputs-grid__cell containerLiner">
+
+                <table mat-table [dataSource]="valoresReceitaListagem" class="mat-elevation-z8 tabelaValoresReceita">
+                    <ng-container matColumnDef="descricao">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorOrcamentado">
+                        <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorOrcamentado' | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.valorOrcamentado !=null ? '$' +
+                            element.valorOrcamentado:
+                            '-'}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="valorExecutado">
+                        <th mat-header-cell *matHeaderCellDef> {{'componenteDespesa.valorExecutado' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.valorExecutado != null ? '$' +
+                            element.valorExecutado:
+                            '-'}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="movimentosRegistados" class="containerBody" *ngIf="isRegistado && componenteReceitaConfig.verificarExecucaoOrcamentoEditarSelecao == 2 && naoExisteOrcamentoAprovado == false">
+        <div class="inputs-grid column_gap">
+            <div class="inputs-grid__cell containerLiner">
+
+                <table mat-table [dataSource]="receitasMovimentos" class="mat-elevation-z8 tabelaValoresReceita">
+
+                    <ng-container matColumnDef="descricao">
+                        <th mat-header-cell *matHeaderCellDef> {{'componente_receita.descricao' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> {{element.descricao.descricao}} </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+                    <ng-container matColumnDef="documentoAssociado">
+                        <th mat-header-cell *matHeaderCellDef> {{'componente_receita.documentoAssociado' | translate}}
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.numeroDocumento}} </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="comprovativo">
+                        <th mat-header-cell *matHeaderCellDef> {{'componente_receita.comprovativo' | translate}} </th>
+                        <td mat-cell *matCellDef="let element">
+                            <fa-icon class="pdfIconTable" (click)="openPdf(element)" [icon]="faFilePdf"></fa-icon>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef>{{'componente_receita.totalSelecionado' | translate}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="valor">
+                        <th mat-header-cell *matHeaderCellDef> {{'componente_receita.valor' | translate}} </th>
+                        <td mat-cell *matCellDef="let element"> $ {{element.valor}} </td>
+                        <td mat-footer-cell *matFooterCellDef>$ {{totalMovimentosRegistados}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acoes">
+                        <th mat-header-cell *matHeaderCellDef> {{'general.EditarEliminar' | translate}} </th>
+                        <td mat-cell *matCellDef="let element">
+                          <mat-icon class="editIconTable" (click)="editarMovimento(element)">edit</mat-icon>
+                          <mat-icon class="deleteIconTable" (click)="deleteMovimento(element)">clear</mat-icon>
+                        </td>
+                        <td mat-footer-cell *matFooterCellDef></td>
+                      </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsMovimentos"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsMovimentos;"></tr>
+                    <tr mat-footer-row *matFooterRowDef="displayedColumnsMovimentos; sticky: true"></tr>
+                </table>
+                <mat-paginator class="paginator" [length]="this.totalRows" [pageSize]="this.pageSize"
+                    (page)="updateTable($event)" [pageIndex]="pageIndex" [pageSizeOptions]="[5,10,25,50,100,500,1000]"
+                    showFirstLastButtons>
+                </mat-paginator>
+
+            </div>
+        </div>
+    </div>
+</mat-expansion-panel>

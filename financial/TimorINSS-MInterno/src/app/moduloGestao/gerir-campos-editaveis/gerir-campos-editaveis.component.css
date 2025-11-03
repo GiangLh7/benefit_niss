@@ -1,0 +1,126 @@
+
+.mat-form-field {
+  font-size: 12px;
+  width: 100%;
+}
+
+
+.stringeContainer
+{
+  width: 35%;
+  min-width: 300px;
+}
+
+.gerirCamposHeader {
+  position: relative;
+  background: #2A81CC;
+  height: 50px;
+  color: white;
+  padding-left: 5%;
+  width: 95%;
+  display: flex;
+  font-weight: bold;
+}
+
+.gerirCamposHeaderIcon {
+  padding-top: 6px;
+  font-size: 2.2em;
+  position: relative;
+  width: 50px;
+}
+
+.gerirCamposHeaderText {
+  padding-top: 14px;
+  font-size: 1.2em;
+}
+
+.FirstContainer {
+  padding-top: 20px;
+}
+
+.DadosContainer {
+  margin-left: 5%;
+  margin-right: 5%;
+  padding-bottom: 5px;
+}
+
+.TableInnerContainer {
+  margin-left: 50px;
+  margin-right: 50px;
+  padding-bottom: 10px;
+}
+
+.innerContainers {
+  display: inline-flex;
+  position: relative;
+  margin-left: 50px;
+}
+
+.campoHeader {
+  width: 100%;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+}
+
+.buttonInnerContainer {
+  bottom: 6px;
+}
+
+.adicionarButton {
+  background: rgba(52, 176, 43, 100);
+  margin-right: 10px;
+  color:white;
+  font-size: 10px;
+}
+
+.adicionarIcon {
+  padding-right: 5px;
+}
+
+.searchButton {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  top: 10px;
+  background-color:#2A81CC;
+  color: white;
+}
+
+.searchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+table{
+  width: 100%;
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+.mat-column-editarEliminar{
+  width: 20%;
+}
+
+.mat-column-parent{
+  width: 40%;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.deleteIcon {
+  color: darkred;
+}
+
+.editIcon {
+  color: #2A81CC;
+}

@@ -1,0 +1,135 @@
+.dialogPositionFix {
+  position: relative;
+  height: 100%;
+}
+
+.titulo {
+  margin: 0;
+  font-weight: 1000;
+  color: #2A81CC;
+  height: 32px;
+  width: 100%;
+  text-align: center;
+}
+
+.mat-icon {
+  vertical-align: middle;
+}
+
+.titleIconFix {
+  margin-top: -3px;
+}
+
+.chart {
+  position: relative;
+  margin-top: 15px;
+}
+
+.chartAndRadio {
+  position: relative;
+  height: 50%;
+  width: 25%;
+}
+
+.chartRadio {
+  margin-top: 15px;
+  position: relative;
+  font-size: 0.7em;
+}
+
+mat-radio-button {
+  padding-bottom: 5px;
+  width: 50%;
+}
+
+.nacionalidadesBody,
+.regimesBody {
+  display: flex;
+}
+
+table {
+  height: 50%;
+  width: 75%;
+  position: relative;
+}
+
+.resumoDeclaracaoSegmentoTitle {
+  font-family: 'Montserrat';
+  margin-top: 2px;
+}
+
+.resumoDeclaracaoTitle {
+  margin-top: -4px;
+}
+
+.nacionalidade-cor {
+  width: 10%;
+}
+
+.mat-column-nacionalidade,
+.mat-column-renumeracoes,
+.mat-column-trabalhadores {
+  width: 30;
+  text-align: center;
+}
+
+.regime-cor {
+  width: 9%;
+  text-align: center;
+}
+
+
+.mat-column-remuneracoes,
+.mat-column-quotizacoes,
+.mat-column-contribuicoes,
+.mat-column-total {
+  width: 13%;
+  text-align: center;
+}
+
+.mat-column-taxaTrabalhador,
+.mat-column-taxaEntidade {
+  width: 9%;
+  text-align: center;
+}
+
+.mat-column-regime {
+  width: 17%;
+  text-align: center;
+}
+
+.tableTitle {
+  width: 100%;
+  padding-bottom: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+}
+
+.mat-dialog-content {
+  max-height: unset;
+  height: calc(100% - 32px);
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+table th {
+  font-weight: bold;
+}
+
+.ResumoGroup {
+  border: 2px solid #2A81CC;
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.secondGroup {
+  margin-top: 20px;
+}

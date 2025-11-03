@@ -1,0 +1,24 @@
+<div class="dialogPositionFix">
+  <h1 class="titulo" mat-dialog-title>
+    <mat-icon class="tituloIcon">edit</mat-icon>
+    {{'componenteOrcamento.editarOrcamentoValor' | translate}}
+  </h1>
+  <form (ngSubmit)="edit()" class="formSize" #desvincularForm="ngForm">
+    <div class="bodyDialog" mat-dialog-content>
+      <mat-form-field appearance="outline">
+        <mat-label>{{'componenteOrcamento.valor' | translate}}</mat-label>
+        <input autocomplete="off"  max="999999999999999999.99" matInput #name="ngModel" currencyMask [options]="currencyOptions" name="ValorCompoenteOrcamentoValor"
+          [errorStateMatcher]="matcher" [required]="orcamentoValorSubmitted" [(ngModel)]="data.componenteOrcamentoValor.valor">
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="buttons">
+      <button class="editarButton" [disabled]="!desvincularForm.valid" type="submit" mat-button (click)="submit()">
+        <mat-icon class="editarIcon">check</mat-icon>
+        <mat-label>{{'general.buttonGravar' | translate}}</mat-label></button>
+      <button type="button" class="buttonCancelar" mat-button (click)="onNoClick()">
+        <mat-icon class="editarIcon">close</mat-icon>
+        <mat-label>{{'general.buttonCancelar' | translate}}</mat-label></button>
+    </div>
+  </form>
+</div>

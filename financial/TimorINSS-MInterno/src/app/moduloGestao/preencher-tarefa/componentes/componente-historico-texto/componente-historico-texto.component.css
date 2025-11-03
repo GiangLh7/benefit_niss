@@ -1,0 +1,83 @@
+.mat-expansion-panel-header:hover {
+    background: #1f64a1 !important;
+  }
+  
+  .mat-expansion-panel-header {
+    position: relative;
+    background: #2A81CC !important;
+    height: 50px;
+    font-weight: bold;
+    color: white;
+    padding-left: 5%;
+    display: flex;
+    font-size: 15px;
+    border: 1px solid rgb(255, 255, 255);
+  }
+  
+  .mat-expansion-panel {
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+  }
+
+.containerBody{
+  margin-top: 25px;
+  margin-left: 4%;
+  margin-right: 4%;
+  }
+
+  .tarefaClass {
+    float: right;
+    display: inline-flex;
+    margin-right: 15px;
+    margin-left: 15px;
+  }
+  
+  .usernameClass {
+    float: left;
+    display: inline-flex;
+    max-width: 50%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 15px;
+    margin-left: 15px;    
+    margin-top: 10px;
+  }
+
+  .full-width{
+    width: -webkit-fill-available;
+    font-weight: 500;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.firstDiv {
+  display: flow-root;
+  margin-top: 10px;
+}
+
+.textContainer{
+  margin-top: 20px;
+  border: 2px solid #2A81CC;
+  border-radius: 15px;
+}
+
+.title{
+    color:  #2A81CC;
+    font-weight: bold;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.titleClass {
+  float: left;
+  display: inline-flex;
+  max-width: 50%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 15px;
+  margin-left: 15px;
+  font-size: 19px;
+  font-weight: 500;
+}

@@ -1,0 +1,177 @@
+.gestaoTarefas {
+  position: relative;
+  min-height: 85%;
+}
+
+.mat-form-field {
+  font-size: 12px;
+  width: 100%;
+}
+
+.subHeader {
+  min-height: 50px;
+  background: rgba(207, 207, 207, 0.966);
+  width: 90%;
+  padding-left: 10%;
+  height: 71px;
+}
+
+.searchContainer {
+  width: 20%;
+  height: 100%;
+  min-width: 192px;
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  column-gap: 14px;
+}
+
+.tarefaSearchButton {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  background-color: #2A81CC;
+  color: white;
+}
+
+.tarefaSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+::ng-deep.mat-form-field-wrapper {
+  padding: 0;
+}
+
+
+.configurarTarefa {
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 50px;
+}
+
+.configurarTarefaButton {
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  top: -3px;
+}
+
+.painelListagemTarefas {
+  width: 80%;
+  margin-right: 10%;
+  margin-left: 10%;
+  margin-top: 2%;
+  text-align: center;
+}
+
+.tabelaTarefaTitulo {
+  width: 100%;
+  padding-bottom: 1%;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 20px;
+}
+
+.tableTitleIcon {
+  font-size: 1.7em;
+  padding-right: 10px;
+  top: -5px;
+  position: relative;
+}
+
+.tabelaTarefa {
+  width: 100%;
+  text-align: left;
+  background-color: white;
+}
+
+.editIconTable {
+  color: #2A81CC;
+  cursor: pointer;
+}
+
+.tabletitleText {
+  padding-top: 10px;
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+
+table tr:nth-child(even) {
+  background-color: rgb(231, 231, 231);
+}
+
+.mat-form-field {
+  font-size: 11px;
+  min-width: 150px;
+  width: calc(100% - 32px);
+}
+
+table th {
+  font-weight: bold;
+}
+
+table td,
+table th {
+  width: 16%;
+  text-align: center;
+}
+
+.buttons {
+  padding-bottom: 10px;
+  height: 12%;
+  margin-top: 50px;
+  text-align: left;
+}
+
+.firstButton {
+  background: #2A81CC;
+  color: white;
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+.secondButton {
+  background: #2A81CC;
+  color: white;
+  font-size: 10px;
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+.estadoEmPrazo {
+  color: green;
+  padding-left: 5%;
+  vertical-align: middle;
+}
+
+.estadoPendente {
+  color: yellow;
+  padding-left: 5%;
+  vertical-align: middle;
+}
+
+.estadoEmAtraso {
+  color: red;
+  padding-left: 5%;
+  vertical-align: middle;
+}
+
+.descriptionBanner {
+  margin-top: 20px;
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.lined_text {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 3px;
+}

@@ -1,0 +1,399 @@
+<div class="consultaEntidadeEmpregadora">
+  <div class="dadosEntidadeEmpregadoraHeader">
+    <mat-icon class="dadosEntidadeEmpregadoraIcon">account_balance</mat-icon>
+    <div class="dadosEntidadeEmpregadoraText">
+      {{'entidadeEmpregadora.title' | translate}} </div>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <div class="DadosContainer">
+        <div class="secondLineContainers">
+          <span> <b>{{'entidadeEmpregadora.nomeEntidade' | translate}}</b> </span>
+          <span class="font">{{entidadeEmpregadoraConsulta.nome}}</span>
+        </div>
+      </div>
+
+      <div class="DadosContainer">
+        <div class="secondLineContainers">
+          <span> <b>{{'entidadeEmpregadora.tin' | translate}}</b> </span>
+          <span class="font">{{entidadeEmpregadoraConsulta.tin}}</span>
+
+        </div>
+        <div class="secondLineContainers">
+          <span> <b>{{'entidadeEmpregadora.niss' | translate}}</b> </span>
+          <span class="font">{{entidadeEmpregadoraConsulta.niss}}</span>
+
+        </div>
+      </div>
+      <div class="DadosContainer">
+        <div class="secondLineContainers">
+          <span> <b>{{'entidadeEmpregadora.situacaoInscricao' | translate}}</b></span>
+          <span class="font">{{sitInscricao}}</span>
+        </div>
+      </div>
+      <div class="registarSuspensao">
+        <button class="registarSuspensaoButton" mat-raised-button (click)="adicionarSuspensao()">
+          <mat-icon>add_circle_outline</mat-icon>
+          <mat-label>{{'entidadeEmpregadora.registarSuspensao' | translate}}</mat-label>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <mat-accordion multi>
+      <mat-expansion-panel class="mat-expansion" #panelelementosRelativosAtividade (afterExpand)="scroll(panelelementosRelativosAtividade)">
+        <mat-expansion-panel-header class="disable_ripple">
+          <mat-panel-title>
+            {{'entidadeEmpregadora.elementosRelativosAtividade' | translate}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="container">
+          <form class="header" (ngSubmit)="updateEntidade()" #elementosAtividadeForm="ngForm">
+            <div class="DadosContainer">
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'entidadeEmpregadora.naturezaJuridica' | translate}}</mat-label>
+                  <mat-select [(ngModel)]="entidadeEmpregadoraConsulta.idNaturezaJuridica" [errorStateMatcher]="matcher"
+                    [(value)]="entidadeEmpregadoraConsulta.idNaturezaJuridica" name="naturezaJuridica"
+                    [required]="submittedTry" [disabled]="disable">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="naturezaJuridica.length > 1">
+                      <mat-optgroup *ngFor="let group of naturezaJuridica" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let natureza of group.array" [value]="natureza.id">{{natureza.nome}}
+                        </mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="naturezaJuridica.length == 1">
+                      <mat-option *ngFor="let natureza of naturezaJuridica[0]?.array"
+                        [disabled]="naturezaJuridica[0]?.disabled" [value]="natureza.id">{{natureza.nome}}
+                      </mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'entidadeEmpregadora.atividadeEconomica' | translate}}</mat-label>
+                  <mat-select [(ngModel)]="entidadeEmpregadoraConsulta.idActividadeEconomica"
+                    [errorStateMatcher]="matcher" [(value)]="entidadeEmpregadoraConsulta.idActividadeEconomica"
+                    name="actividadeEconomica" [required]="submittedTry" [disabled]="disable">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="actividadeEconomica.length > 1">
+                      <mat-optgroup *ngFor="let group of actividadeEconomica" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let actividade of group.array" [value]="actividade.id">{{actividade.nome}}
+                        </mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="actividadeEconomica.length == 1">
+                      <mat-option *ngFor="let actividade of actividadeEconomica[0]?.array"
+                        [disabled]="actividadeEconomica[0]?.disabled" [value]="actividade.id">{{actividade.nome}}
+                      </mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="DadosContainer">
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'entidadeEmpregadora.sectorAtividade' | translate}}</mat-label>
+                  <mat-select [(ngModel)]="entidadeEmpregadoraConsulta.idSectorActividade" [errorStateMatcher]="matcher"
+                    [(value)]="entidadeEmpregadoraConsulta.idSectorActividade" name="sectorActividade"
+                    [required]="submittedTry" [disabled]="disable">
+                    <!-- select with groups -->
+                    <ng-container *ngIf="sectorActividade.length > 1">
+                      <mat-optgroup *ngFor="let group of sectorActividade" [label]="group.name | translate"
+                        [disabled]="group.disabled">
+                        <mat-option *ngFor="let sector of group.array" [value]="sector.id">{{sector.nome}}</mat-option>
+                      </mat-optgroup>
+                    </ng-container>
+                    <!-- select without groups -->
+                    <ng-container *ngIf="sectorActividade.length == 1">
+                      <mat-option *ngFor="let sector of sectorActividade[0]?.array"
+                        [disabled]="sectorActividade[0]?.disabled" [value]="sector.id">{{sector.nome}}
+                      </mat-option>
+                    </ng-container>
+                  </mat-select>
+                  <mat-error>{{'general.required' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="DadosContainer">
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'entidadeEmpregadora.dataInicioAtividade' | translate}}</mat-label>
+                  <input [matDatepicker]="pickerInicioAtividade"
+                    [(ngModel)]="entidadeEmpregadoraConsulta.dataInicioActiv" matInput [errorStateMatcher]="matcherDateInicioAtividade"
+                    [required]="submittedTry" [disabled]="disable" name="dataInicioActiv">
+                  <mat-datepicker-toggle matSuffix [for]="pickerInicioAtividade"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerInicioAtividade></mat-datepicker>
+                  <mat-error>{{'general.requiredDateInferior' | translate}}</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="secondLineContainers">
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'entidadeEmpregadora.dataInicioTrabServico' | translate}}</mat-label>
+                  <input [(ngModel)]="entidadeEmpregadoraConsulta.dataInicioTrabServico" matInput
+                    [matDatepicker]="pickerTrabServicoDesde" disabled name="dataInicioTrabServico">
+                  <mat-datepicker-toggle matSuffix [for]="pickerTrabServicoDesde"></mat-datepicker-toggle>
+                  <mat-datepicker #pickerTrabServicoDesde></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+
+          <div class="buttons">
+            <button type="button" class="editarButton" mat-raised-button (click)="enableSelect()"
+              [disabled]="disableEdit">
+              <mat-icon class="adicionarIcon">edit</mat-icon>
+              <mat-label>{{'general.buttonEdit' | translate}}</mat-label>
+            </button>
+            <button [disabled]="!elementosAtividadeForm.valid || disable" type="submit" class="adicionarButton" mat-raised-button
+              (click)="submitEntidade()">
+              <mat-icon class="adicionarIcon">check</mat-icon>
+              <mat-label>{{'general.buttonSubstituirDados' | translate}}</mat-label>
+            </button>
+            <button type="button" class="buttonCancelar" mat-raised-button [disabled]="disable"
+              (click)="disableSelect()">
+              <mat-icon class="adicionarIcon">close</mat-icon>
+              <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+            </button>
+          </div>
+        </form>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-expansion" #panelmorada (afterExpand)="scroll(panelmorada)">
+        <mat-expansion-panel-header class="disable_ripple">
+          <mat-panel-title>
+            {{'morada.title' | translate}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="container">
+          <div class="painelListagem">
+            <div class="tabelaTitulo">
+              <div class="tabelaTituloText">
+                {{'morada.subTitle' | translate}}
+              </div>
+            </div>
+            <table mat-table [dataSource]="dataSourceMorada" matSort class="mat-elevation-z8 tabelaListagem">
+              <ng-container matColumnDef="rua">
+                <th mat-header-cell *matHeaderCellDef> {{'morada.rua' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.ruaNumPorta}} </td>
+              </ng-container>
+              <ng-container matColumnDef="municipio">
+                <th mat-header-cell *matHeaderCellDef> {{'morada.municipio' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.municipio}} </td>
+              </ng-container>
+              <ng-container matColumnDef="postoAdministrativo">
+                <th mat-header-cell *matHeaderCellDef> {{'morada.postoAdministrativo' | translate}}</th>
+                <td mat-cell *matCellDef="let element"> {{element.postoAdministrativo}} </td>
+              </ng-container>
+              <ng-container matColumnDef="suco">
+                <th mat-header-cell *matHeaderCellDef>{{'morada.suco' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.suco}} </td>
+              </ng-container>
+              <ng-container matColumnDef="aldeia">
+                <th mat-header-cell *matHeaderCellDef>{{'morada.aldeia' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.aldeia}} </td>
+              </ng-container>
+              <ng-container matColumnDef="pais">
+                <th mat-header-cell *matHeaderCellDef>{{'morada.pais' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.pais}} </td>
+              </ng-container>
+              <ng-container matColumnDef="moradaPrincipal">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'morada.moradaPrincipal' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="moradaCheckIcon" *ngIf="element.moradaPrincipal">check</mat-icon>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="verEditar">
+                <th mat-header-cell *matHeaderCellDef> {{'morada.editarEliminar' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="editIconTable" (click)="editarMorada(element)">edit</mat-icon>
+                  <mat-icon class="deleteIconTable" (click)="deleteMorada(element)">clear</mat-icon>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsMorada"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsMorada;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsMoradaTable" [pageSize]="this.pageSizeMoradaTable"
+              (page)="updateMoradaTable($event)" [pageIndex]="pageIndexMoradaTable"
+              [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons> </mat-paginator>
+
+            <div class="adicionarDiv">
+              <button class="adicionarButton" mat-raised-button (click)="adicionarMorada()">
+                <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+                <mat-label>{{'morada.buttonAdicionarMorada' | translate}}</mat-label>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+
+
+      <mat-expansion-panel class="mat-expansion" #panelcontacto (afterExpand)="scroll(panelcontacto)">
+        <mat-expansion-panel-header class="disable_ripple">
+          <mat-panel-title>
+            {{'contacto.title' | translate}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="container">
+          <div class="painelListagem">
+            <div class="tabelaTitulo">
+              <div class="tabelaTituloText">
+                {{'contacto.title' | translate}}
+              </div>
+            </div>
+            <table mat-table [dataSource]="dataSourceContacto" matSort class="mat-elevation-z8 tabelaListagem">
+              <ng-container matColumnDef="telemovel">
+                <th mat-header-cell *matHeaderCellDef> {{'contacto.telemovel' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.telemovel}} </td>
+              </ng-container>
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef> {{'contacto.email' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+              </ng-container>
+              <ng-container matColumnDef="verEditar">
+                <th mat-header-cell *matHeaderCellDef> {{'contacto.editarEliminar' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="editIconTable" (click)="editarContato(element)">edit</mat-icon>
+                  <mat-icon class="deleteIconTable" (click)="deleteContato(element)">clear</mat-icon>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsContacto"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsContacto;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsContatoTable"
+              [pageSize]="this.pageSizeContatoTable" (page)="updateContatoTable($event)"
+              [pageIndex]="pageIndexContatoTable" [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons>
+            </mat-paginator>
+
+            <div class="adicionarDiv">
+              <button class="adicionarButton" mat-raised-button (click)="adicionarContato()">
+                <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+                <mat-label> {{'contacto.buttonAdicionarContato' | translate}}</mat-label>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <mat-expansion-panel class="mat-expansion" #panelsuspensao (afterExpand)="scroll(panelsuspensao)" [expanded]="suspensaoOpenState" (opened)="suspensaoOpenState = true"
+        (closed)="suspensaoOpenState = false">
+        <mat-expansion-panel-header class="disable_ripple">
+          <mat-panel-title>
+            {{'suspensao.title' | translate}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div id="suspensaoGrid" class="container">
+          <div class="painelListagem">
+            <div class="tabelaTitulo">
+              <div class="tabelaTituloText">
+                {{'suspensao.subTitle' | translate}}
+              </div>
+            </div>
+            <table mat-table [dataSource]="dataSourceSuspensao" matSort class="mat-elevation-z8 tabelaListagem">
+              <ng-container matColumnDef="dataInicioSuspensao">
+                <th mat-header-cell *matHeaderCellDef> {{'suspensao.dataInicioSuspensao' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{formatDate(element.dataInicioSuspensao)}} </td>
+              </ng-container>
+              <ng-container matColumnDef="dataFimSuspensao">
+                <th mat-header-cell *matHeaderCellDef>{{'suspensao.dataFimSuspensao' | translate}}  </th>
+                <td mat-cell *matCellDef="let element"> {{formatDate(element.dataFimSuspensao)}} </td>
+              </ng-container>
+              <ng-container matColumnDef="verEditar">
+                <th mat-header-cell *matHeaderCellDef>{{'suspensao.editarEliminar' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="deleteIconTable" (click)="deleteSuspensao(element)">clear</mat-icon>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsSuspensao"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsSuspensao;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsSuspensaoTable"
+              [pageSize]="this.pageSizeSuspensaoTable" (page)="updateSuspensaoTable($event)"
+              [pageIndex]="pageIndexSuspensaoTable" [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons>
+            </mat-paginator>
+
+            <div class="adicionarDiv">
+              <button class="adicionarButton" mat-raised-button (click)="adicionarSuspensao()">
+                <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+                <mat-label>{{'suspensao.adiconarSuspensao' | translate}} </mat-label>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+
+
+      <mat-expansion-panel class="mat-expansion" #panelrespLegal (afterExpand)="scroll(panelrespLegal)" [expanded]="respLegalOpenState" (opened)="respLegalOpenState = true"
+        (closed)="respLegalOpenState = false">
+        <mat-expansion-panel-header class="disable_ripple">
+          <mat-panel-title>
+            {{'responsavelLegalListagem.title' | translate}}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div id="respLegalGrid" class="container">
+          <div class="painelListagem">
+            <div class="tabelaTitulo">
+              <div class="tabelaTituloText">
+                {{'responsavelLegalListagem.subTitle' | translate}}
+              </div>
+            </div>
+            <table mat-table [dataSource]="dataSourceResponsavelLegal" matSort class="mat-elevation-z8 tabelaListagem">
+              <ng-container matColumnDef="nome">
+                <th mat-header-cell *matHeaderCellDef>  {{'responsavelLegalListagem.nome' | translate}}  </th>
+                <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+              </ng-container>
+              <ng-container matColumnDef="tin">
+                <th mat-header-cell *matHeaderCellDef>  {{'responsavelLegalListagem.tin' | translate}}  </th>
+                <td mat-cell *matCellDef="let element"> {{element.tin}} </td>
+              </ng-container>
+              <ng-container matColumnDef="funcao">
+                <th mat-header-cell *matHeaderCellDef>  {{'responsavelLegalListagem.funcao' | translate}}  </th>
+                <td mat-cell *matCellDef="let element"> {{element.funcaoString}} </td>
+              </ng-container>
+              <ng-container matColumnDef="verEditar">
+                <th mat-header-cell *matHeaderCellDef>  {{'responsavelLegalListagem.editarEliminar' | translate}}  </th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-icon class="editIconTable" (click)="editarResponsavelLegal(element)">edit</mat-icon>
+                  <mat-icon class="deleteIconTable" (click)="deleteResponsavelLegal(element)">clear</mat-icon>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsResponsavelLegal"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsResponsavelLegal;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsRespLegalTable"
+              [pageSize]="this.pageSizeRespLegalTable" (page)="updateResponsavelLegalTable($event)"
+              [pageIndex]="pageIndexRespLegalTable" [pageSizeOptions]="[5,10,25,50,100,500,1000]" showFirstLastButtons>
+            </mat-paginator>
+
+            <div class="adicionarDiv">
+              <button class="adicionarButton" mat-raised-button (click)="adicionarResponsavelLegal()">
+                <mat-icon class="adicionarIcon">add_circle_outline</mat-icon>
+                <mat-label> {{'responsavelLegalListagem.adiconarResponsavel' | translate}} </mat-label>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

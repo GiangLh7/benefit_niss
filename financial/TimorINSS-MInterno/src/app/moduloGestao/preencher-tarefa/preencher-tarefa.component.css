@@ -1,0 +1,57 @@
+.buttons{
+  padding-bottom: 10px;
+  height: 12%;
+  margin-top: 15px;
+}
+
+.gravarButton {
+  background: rgba(52, 176, 43, 100);
+  color:white;
+  font-size: 14px;
+  margin-left: 4%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.cancelarButton {
+  background:darkred;
+  color:white;
+  font-size: 14px;
+  margin-left: 2%;
+  margin-top: 5px;
+}
+
+.arquivarButton {
+  background:#2A81CC;
+  color:white;
+  font-size: 10px;
+  margin-left: 2%;
+  margin-top: 5px;
+}
+
+.fileIcon{
+  margin-right: 5px;
+}
+
+.preencherTarefaHeader {
+  position: relative;
+  background: #2A81CC;
+  height: 50px;
+  color: white;
+  padding-left: 5%;
+  width: 95%;
+  display: flex;
+  font-weight: bold;
+}
+
+.preencherTarefaHeaderIcon {
+  padding-top: 9px;
+  font-size: 2.2em;
+  position: relative;
+  width: 50px;
+}
+
+.preencherTarefaHeaderText {
+  padding-top: 14px;
+  font-size: 1.2em;
+}

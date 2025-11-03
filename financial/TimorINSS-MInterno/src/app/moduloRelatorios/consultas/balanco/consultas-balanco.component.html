@@ -1,0 +1,144 @@
+<div class="situacoes">
+
+  <div class="subHeader">
+    <div class="searchContainer inputs-grid inputs-grid--6">
+      <button class="situacoesSearchButton inputs-grid__cell" mat-fab color="green" aria-label="Search"
+        (click)="getReceitasTable()">
+        <mat-icon class="situacoesSearchIcon">search</mat-icon>
+      </button>
+      <mat-form-field appearance="outline" class="input inputs-grid__cell">
+          <mat-label>{{'balanco.nivel' | translate}}</mat-label>
+          <mat-select [(ngModel)]="nivel" name="nivel" [errorStateMatcher]="matcher" [required]="submittedTry">
+              <mat-option *ngFor="let option of nivelOptions" [value]="option">{{ option }}</mat-option>
+          </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="input inputs-grid__cell">
+          <mat-label>{{'balanco.comparar' | translate}}</mat-label>
+          <mat-select [(ngModel)]="comparar" name="nivel" [errorStateMatcher]="matcher" [required]="submittedTry">
+              <mat-option *ngFor="let option of compararOptions" [value]="option.id"> {{ option.key | translate }} </mat-option>
+          </mat-select>
+      </mat-form-field>
+      <mat-form-field class="input inputs-grid__cell" appearance="outline">
+        <mat-label>{{'perfil.data' | translate}}</mat-label>
+        <input [(ngModel)]="beginDate" matInput [matDatepicker]="beginDatePicker" name="BeginDate" [errorStateMatcher]="matcher" [required]="submittedTry">
+        <mat-datepicker-toggle matSuffix [for]="beginDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #beginDatePicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="input inputs-grid__cell" appearance="outline">
+        <mat-label>{{'general.dtFim' | translate}}</mat-label>
+        <input [(ngModel)]="endDate" matInput [matDatepicker]="endDatePicker" name="EndDate" [errorStateMatcher]="matcher" [required]="submittedTry">
+        <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatePicker></mat-datepicker>
+      </mat-form-field>
+      <a (click)="clearFilter()" class="clearFilterButton input inputs-grid__cell" type="button" mat-raised-button>
+        <mat-icon class="clearFilterIcon">clear</mat-icon>
+        <mat-label>{{'general.clearFilter' | translate}}</mat-label>
+      </a>
+    </div>
+  </div>
+
+  <div>
+    <div class="painelListagemSituacoes">
+
+      <div class="tabelaSituacoesTitulo">
+        <mat-icon class="tableTitleIcon">toc</mat-icon>
+        {{'balanco.consultasBalanco' | translate}}
+      </div>
+
+      <div class="no-results" *ngIf="!resultsShown">
+        {{ 'general.filtroNecessarioParaListagem' | translate }}
+      </div>
+
+      <table mat-table [dataSource]="contasList" class="mat-elevation-z8 tabelaSituacoes" *ngIf="resultsShown && beginDate && endDate">
+        <ng-container matColumnDef="icon">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"></th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon *ngIf="element.temFilhos && groupsExpanded[element.id].expandido">expand_less</mat-icon>
+            <mat-icon *ngIf="element.temFilhos && !groupsExpanded[element.id].expandido">expand_more</mat-icon>
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="rowspan-column-right"> {{'balanco.conta' | translate}} </th>
+          <td mat-cell *matCellDef="let element">{{ element.codigo }} - {{ element.nome }}</td>
+          <td mat-footer-cell *matFooterCellDef>{{ 'general.total' | translate }}</td>
+        </ng-container>
+        <ng-container matColumnDef="date1">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="rowspan-column-right"> {{ formatDate(beginDate) }} - {{ formatDate(endDate) }} </th>
+        </ng-container>
+        <ng-container matColumnDef="date2">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"> {{ formatDateLastYear(beginDate) }} - {{ formatDateLastYear(endDate) }}
+          </th>
+        </ng-container>
+        <ng-container matColumnDef="percentage">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="rowspan-column-left">%</th>
+        </ng-container>
+
+
+        <ng-container matColumnDef="credito">
+          <th mat-header-cell *matHeaderCellDef class="rowspan-column-right"> {{'balanco.credito' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{ formataCurrency(element.credito) }} </td>
+          <td mat-footer-cell *matFooterCellDef> {{ formataCurrency(totais.credito) }} </td>
+        </ng-container>
+        <ng-container matColumnDef="debito">
+          <th mat-header-cell *matHeaderCellDef class="rowspan-column-right"> {{'balanco.debito' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{ formataCurrency(element.debito) }} </td>
+          <td mat-footer-cell *matFooterCellDef>{{ formataCurrency(totais.debito) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="credito2">
+          <th mat-header-cell *matHeaderCellDef class="rowspan-column-right"> {{'balanco.credito' | translate}} </th>
+          <td mat-cell *matCellDef="let element"><span *ngIf="comparar">{{ formataCurrency(element.creditoAntes) }}</span></td>
+          <td mat-footer-cell *matFooterCellDef><span *ngIf="comparar">{{ formataCurrency(totais.credito2) }}</span></td>
+        </ng-container>
+        <ng-container matColumnDef="debito2">
+          <th mat-header-cell *matHeaderCellDef class="rowspan-column-right"> {{'balanco.debito' | translate}} </th>
+          <td mat-cell *matCellDef="let element"><span *ngIf="comparar">{{ formataCurrency(element.debitoAntes) }}</span></td>
+          <td mat-footer-cell *matFooterCellDef><span *ngIf="comparar">{{ formataCurrency(totais.credito2) }}</span></td>
+        </ng-container>
+
+        <ng-container matColumnDef="creditoPerc">
+          <th mat-header-cell *matHeaderCellDef class="rowspan-column-right"> {{'balanco.credito' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> <span *ngIf="comparar && element.credito != 0 && element.creditoAntes != 0">{{ element.credito / element.creditoAntes * 100 }}%</span> </td>
+          <td mat-footer-cell *matFooterCellDef><span *ngIf="comparar && totais.credito != 0 && totais.credito2 != 0">{{ totais.credito / totais.credito2 * 100 }}%</span></td>
+        </ng-container>
+        <ng-container matColumnDef="debitoPerc">
+          <th mat-header-cell *matHeaderCellDef> {{'balanco.debito' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> <span *ngIf="comparar && element.debito != 0 && element.debitoAntes != 0">{{ element.debito / element.debitoAntes * 100 }}%</span> </td>
+          <td mat-footer-cell *matFooterCellDef><span *ngIf="comparar && totais.debito != 0 && totais.debito2 != 0">{{ totais.debito / totais.debito2 * 100 }}%</span></td>
+        </ng-container>
+
+        <ng-container matColumnDef="ghost-column">
+          <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"></th>
+        </ng-container>
+
+        <ng-container matColumnDef="empty-footer">
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <ng-container matColumnDef="creditoDebitoPercentage">
+          <td mat-footer-cell *matFooterCellDef [attr.colspan]="2"><span *ngIf="totais.credito != 0 && totais.debito != 0">{{ totais.credito / totais.debito * 100 }}%</span></td>
+        </ng-container>
+
+        <ng-container matColumnDef="creditoDebito2Percentage">
+          <td mat-footer-cell *matFooterCellDef [attr.colspan]="2"><span *ngIf="comparar && totais.credito2 != 0 && totais.debito2 != 0">{{ totais.credito2 / totais.debito2 * 100 }}%</span></td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="['icon', 'nome', 'date1', 'date2', 'percentage']"></tr>
+        <tr mat-header-row *matHeaderRowDef="['ghost-column', 'ghost-column', 'credito', 'debito', 'credito2', 'debito2', 'creditoPerc', 'debitoPerc']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['icon', 'nome', 'credito', 'debito', 'credito2', 'debito2', 'creditoPerc', 'debitoPerc'];" (click)="toggleExpand(row.id)"
+          [ngClass]="{'hasChild': row.temFilhos}"></tr>
+        <tr mat-footer-row *matFooterRowDef="['icon', 'nome', 'credito', 'debito', 'credito2', 'debito2', 'creditoPerc', 'debitoPerc']; sticky: true"></tr>
+        <tr mat-footer-row *matFooterRowDef="['empty-footer', 'empty-footer', 'creditoDebitoPercentage', 'creditoDebito2Percentage', 'empty-footer', 'empty-footer']; sticky: true"></tr>
+      </table>
+
+
+      <div class="buttons" *ngIf="resultsShown">
+          <button class="firstButton" mat-raised-button (click)="exportExcelRelatorio()">
+            <mat-label>{{'general.gerarExcel' | translate}}</mat-label>
+          </button>
+      </div>
+
+    </div>
+  </div>
+</div>

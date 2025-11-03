@@ -1,0 +1,162 @@
+<div class="pageNovoUtilizador">
+
+  <div class="novoUtilizadorHeader">
+    <mat-icon class="novoUtilizadorIcon">border_color</mat-icon>
+    <div class="novoUtilizadorText">
+      {{'utilizador.hearder' | translate}} </div>
+  </div>
+
+  <form (ngSubmit)="adicionarEditarUtilizador()" #utilizadorForm="ngForm">
+    <div>
+      <mat-form-field class="nomeUtilizador" appearance="outline">
+        <mat-label>{{'utilizador.nomeUtilizador' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="dadosUtilizador.nomeTrabalhador" name="nomeUtilizador"
+          [errorStateMatcher]="matcher" [required]="submittedTry" disabled />
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field class="dadosUtilizador" appearance="outline">
+        <mat-label>{{'utilizador.documentoIdentificacao' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="dadosUtilizador.documentoIdentificacao"
+          name="documentoIdentificacao" [errorStateMatcher]="matcher" [required]="submittedTry" disabled />
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="dadosUtilizador" appearance="outline">
+        <mat-label>{{'utilizador.numeroDocumento' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="dadosUtilizador.numeroDocumento" name="numeroDocumento"
+          [errorStateMatcher]="matcher" [required]="submittedTry" disabled />
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="dadosUtilizador" appearance="outline">
+        <mat-label>{{'utilizador.dataValidade' | translate}}</mat-label>
+        <input matInput [(ngModel)]="dadosUtilizador.dataValidade" name="dataValidade" [errorStateMatcher]="matcher"
+          [required]="submittedTry" disabled />
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+    </div>
+
+
+    <div>
+      <mat-form-field class="dadosUtilizador" appearance="outline">
+        <mat-label>{{'utilizador.dataNascimento' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="dadosUtilizador.dataNascimento" name="dataNascimento"
+          [errorStateMatcher]="matcher" [required]="submittedTry" disabled />
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="dadosUtilizador" appearance="outline">
+        <mat-label>{{'utilizador.email' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="dadosUtilizador.email" name="email"
+          [errorStateMatcher]="matcher" [required]="submittedTry" disabled />
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+      <mat-form-field class="dadosUtilizador" appearance="outline">
+        <mat-label>{{'utilizador.telefone' | translate}}</mat-label>
+        <input matInput maxlength="100" type="text" [(ngModel)]="dadosUtilizador.telefone" name="telefone"
+          [errorStateMatcher]="matcher" [required]="submittedTry" disabled />
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="example-container" *ngIf="editUtilizador">
+      <a class="link1" href="/camposEditaveis">{{ 'utilizador.addDepartment' | translate }}</a>
+
+      <a class="link2" href="/perfil">{{ 'utilizador.addProfile' | translate }}</a>
+    </div>
+    <div class="example-container" *ngIf="editUtilizador">
+
+      <mat-form-field class="secondLineContainer" appearance="outline">
+        <mat-label>{{'utilizador.departamento' | translate}}</mat-label>
+        <mat-select [(ngModel)]="idDepartamento" [errorStateMatcher]="matcher" [(value)]="idDepartamento"
+          name="departamento" [required]="submittedTry">
+          <ng-container *ngIf="departamento.length > 1">
+            <mat-option *ngFor="let depart of departamento" [value]="depart.id">{{depart.nome}}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+
+      <mat-icon class="arrowIcon" *ngIf="idDepartamento > 0" (click)="addDepartamento(idDepartamento)"
+        matTooltip="{{'utilizador.arrowDepartamentoInfo' | translate}}">arrow_downward
+      </mat-icon>
+
+      <mat-form-field class="secondLineContainer" appearance="outline">
+        <mat-label>{{'utilizador.perfil' | translate}}</mat-label>
+        <mat-select [(ngModel)]="idPerfil" [errorStateMatcher]="matcher" [(value)]="idPerfil" name="perfil"
+          [required]="submittedTry">
+          <ng-container *ngIf="perfil.length > 1">
+            <mat-option *ngFor="let pf of perfil" [value]="pf.id">{{pf.nome}}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+        <mat-error>{{'general.required' | translate}}</mat-error>
+      </mat-form-field>
+
+      <mat-icon class="arrowIcon" *ngIf="idPerfil > 0" (click)="addPerfil(idPerfil)"
+        matTooltip="{{'utilizador.arrowPerfilInfo' | translate}}">arrow_downward
+      </mat-icon>
+    </div>
+
+    <div class="tables">
+
+      <table mat-table [dataSource]="dataSourceDepartamento" class="mat-elevation-z8 tabelaDepartamento">
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef> {{'utilizador.departamento' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="eliminar">
+          <th mat-header-cell *matHeaderCellDef> {{'utilizador.delete' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button *ngIf="editUtilizador" color="primary">
+              <mat-icon class="deleteIconTable" (click)="deleteDepartamento(element.nome)"
+                matTooltip="{{'utilizador.delete' | translate}}">clear</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsDepartamento"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsDepartamento;"></tr>
+      </table>
+    </div>
+    <div class="tables">
+
+      <table mat-table [dataSource]="dataSourcePerfil" class="mat-elevation-z8 tabelaPerfil">
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef> {{'utilizador.perfil' | translate}} </th>
+          <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="eliminar">
+          <th mat-header-cell *matHeaderCellDef> {{'utilizador.delete' | translate}} </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button *ngIf="editUtilizador" color="primary">
+              <mat-icon class="deleteIconTable" (click)="deletePerfil(element.descricao)"
+                matTooltip="{{'utilizador.delete' | translate}}">clear</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsPerfil"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsPerfil"></tr>
+      </table>
+    </div>
+
+    <div class="buttons">
+      <button class="editarUtilizadorButton" *ngIf="editUtilizador" type="submit" (click)="submitUtilizador()"
+        [disabled]="!utilizadorForm.valid || dataSourceDepartamento.length === 0 || dataSourcePerfil.length === 0"
+        mat-raised-button>
+        <mat-icon>person</mat-icon>
+        <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+      </button>
+      <button class="cancelarButton" type="submit" (click)="cancelar()" mat-raised-button>
+        <mat-icon>close</mat-icon>
+        <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+      </button>
+    </div>
+
+
+
+  </form>
+</div>

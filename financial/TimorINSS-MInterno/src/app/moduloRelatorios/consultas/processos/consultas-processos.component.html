@@ -1,0 +1,101 @@
+<div class="processos">
+
+    <div class="subHeader">
+        <div class="searchContainer inputs-grid inputs-grid--6">
+            <button class="processosSearchButton inputs-grid__cell" mat-fab color="green" aria-label="Search"
+                (click)="getProcessosTable()">
+                <mat-icon class="processosSearchIcon">search</mat-icon>
+            </button>
+            <mat-form-field appearance="outline" class="input inputs-grid__cell">
+                <mat-label>{{'processo.tipoProcesso' | translate}}</mat-label>
+                <mat-select [(ngModel)]="processoConfigId" name="tipoProcesso">
+                    <mat-option *ngFor="let option of tipoProcessos" [value]="option.id">{{ option.nome }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="input inputs-grid__cell">
+                <mat-label>{{'processo.status' | translate}}</mat-label>
+                <mat-select [(ngModel)]="viewType" name="ViewType" (selectionChange)="viewTypeChange()" [errorStateMatcher]="matcher" [required]="submittedTry">
+                    <mat-option *ngFor="let option of viewTypeOptions" [value]="option.id">{{ option.nome | translate }}
+                    </mat-option>
+                </mat-select>
+                <!-- <mat-error>{{'general.required' | translate}}</mat-error> -->
+            </mat-form-field>
+            <mat-form-field class="input inputs-grid__cell" appearance="outline" matTooltip="{{ datepickerTooltip | translate }}">
+                <mat-label>{{'perfil.data' | translate}}</mat-label>
+                <input [(ngModel)]="filter.dateFilterBegin" matInput [matDatepicker]="pickerValidade" name="BeginDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerValidade"></mat-datepicker-toggle>
+                <mat-datepicker #pickerValidade></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field *ngIf="filter.dateFilterBegin" class="input inputs-grid__cell" appearance="outline" matTooltip="{{ datepickerTooltip | translate }}">
+                <mat-label>{{'general.dtFim' | translate}}</mat-label>
+                <input [(ngModel)]="filter.dateFilterEnd" matInput [matDatepicker]="pickerValidade" name="EndDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerValidade"></mat-datepicker-toggle>
+                <mat-datepicker #pickerValidade></mat-datepicker>
+            </mat-form-field>
+            <a (click)="clearFilter()" class="clearFilterButton input inputs-grid__cell" type="button" mat-raised-button>
+                <mat-icon class="clearFilterIcon">clear</mat-icon>
+                <mat-label>{{'general.clearFilter' | translate}}</mat-label>
+            </a>
+        </div>
+    </div>
+
+    <div>
+        <div class="painelListagemProcessos">
+
+            <div class="tabelaProcessosTitulo">
+                <mat-icon class="tableTitleIcon">toc</mat-icon>
+                {{'processo.consultasProcessos' | translate}}
+            </div>
+
+            <div class="no-results" *ngIf="!resultsShown">
+                {{ 'general.filtroNecessarioParaListagem' | translate }}
+            </div>
+
+            <table mat-table [dataSource]="processosList" class="mat-elevation-z8 tabelaProcessos" *ngIf="resultsShown">
+                <ng-container matColumnDef="tipoProcesso">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.tipoProcesso' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+                </ng-container>
+                <ng-container matColumnDef="estado">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.status' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{ (!element.arquivado ? 'processo.emTramitacao'  : 'processo.arquivado') | translate }} </td>
+                </ng-container>
+                <ng-container matColumnDef="ultimaTarefa">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.ultimaTarefaNoPeriodo' | translate}} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ultimaTarefa.nome}} </td>
+                </ng-container>
+                <ng-container matColumnDef="perfis">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.perfisResponsaveis' | translate}} </th>
+                    <td mat-cell *matCellDef="let element" class="perfil-cell">
+                        <div class="perfil" *ngFor="let perf of element.perfis">
+                            {{ perf }}
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="acoes">
+                    <th mat-header-cell *matHeaderCellDef> {{'processo.actions' | translate}} </th>
+                    <td mat-cell *matCellDef="let element">
+                        <a (click)="processoArquivadoNavigation(element.id)" class="visibilityButton" mat-icon-button *ngIf="element.arquivado">
+                            <mat-icon class="visibilityIcon">visibility</mat-icon>
+                        </a>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator class="paginator" [length]="this.totalRowsTable"
+                [pageSize]="this.pageSizeTable" (page)="updateProcessosTable($event)"
+                [pageIndex]="pageIndexTable" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons *ngIf="resultsShown">
+            </mat-paginator>
+            
+
+            <div class="buttons" *ngIf="resultsShown">
+                <button class="firstButton" mat-raised-button (click)="exportExcelRelatorio()" [disabled]="!processosList.length || !filter.dateFilterBegin || !filter.dateFilterEnd">
+                  <mat-label>{{'general.gerarExcel' | translate}}</mat-label>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

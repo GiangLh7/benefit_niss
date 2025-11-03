@@ -1,0 +1,40 @@
+.mat-expansion-panel-header:hover {
+    background: #1f64a1 !important;
+  }
+  
+  .mat-expansion-panel-header {
+    position: relative;
+    background: #2A81CC !important;
+    height: 50px;
+    font-weight: bold;
+    color: white;
+    padding-left: 5%;
+    display: flex;
+    font-size: 15px;
+    border: 1px solid rgb(255, 255, 255);
+  }
+  
+  .mat-expansion-panel {
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+  }
+
+.containerBody{
+    margin-top: 25px;
+    width: 80%;
+    margin-left: 2%;
+    margin-bottom: 20px;
+  }
+
+  .secondLineContainers {
+    display: inline-flex;
+    position: relative;
+    margin-left: 50px;
+  }
+
+  .gravarButton {
+    background: rgba(52, 176, 43, 100);
+    color:white;
+  
+    font-size: 10px;
+  }

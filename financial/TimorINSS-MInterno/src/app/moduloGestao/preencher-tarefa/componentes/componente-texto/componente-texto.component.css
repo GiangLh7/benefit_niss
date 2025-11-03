@@ -1,0 +1,43 @@
+.mat-expansion-panel-header:hover {
+    background: #1f64a1 !important;
+  }
+  
+  .mat-expansion-panel-header {
+    position: relative;
+    background: #2A81CC !important;
+    height: 50px;
+    font-weight: bold;
+    color: white;
+    padding-left: 5%;
+    display: flex;
+    font-size: 15px;
+    border: 1px solid rgb(255, 255, 255);
+  }
+  
+  .mat-expansion-panel {
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+  }
+
+  .txtBody{
+    margin-top: 25px;
+    width: 60%;
+    margin-left: 2%;
+  }
+
+  .full-width{
+      width: 100%;
+  }
+
+  .charClass {
+    float: right;
+    display: inline-flex;
+  }
+  .titleClass {
+    float: left;
+    display: inline-flex;
+    max-width: 50%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }

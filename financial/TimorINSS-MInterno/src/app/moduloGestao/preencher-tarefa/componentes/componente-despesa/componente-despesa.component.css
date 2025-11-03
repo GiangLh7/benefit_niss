@@ -1,0 +1,288 @@
+.mat-expansion-panel-header:hover {
+  background: #1f64a1 !important;
+}
+
+.mat-expansion-panel-header {
+  position: relative;
+  background: #2A81CC !important;
+  height: 50px;
+  font-weight: bold;
+  color: white;
+  padding-left: 5%;
+  display: flex;
+  font-size: 15px;
+  border: 1px solid rgb(255, 255, 255);
+}
+
+.mat-expansion-panel {
+  background-color: rgba(0, 0, 0, 0);
+  box-shadow: none;
+}
+
+.exiteOrcamentoAprovado{
+  color: darkred;
+  font-size: 20px;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.panel {
+  width: 95%;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-top: 20px;
+}
+
+.dados{
+  border: 2px solid #2A81CC;
+  border-radius: 15px;
+}
+
+.dadosMiniPanel{
+  border: 2px solid #2A81CC;
+  border-radius: 15px;
+  display: grid;
+  width: 97%;
+}
+
+.componenteDespesa{
+  width: 25%;
+  margin-top: 10px;
+  margin-left: 50px;
+}
+
+.mat-form-field {
+  font-size: 12px;
+  width: 25%;
+}
+
+.descricaoDespesa{
+  width: 83%;
+  margin-top: 10px;
+  margin-left: 50px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.registarDespesaButton {
+  margin-left:800px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 10px;
+}
+
+.title{
+  color: #2A81CC;
+  margin-top: 20px;
+  margin-left: 50px;
+}
+
+.description{
+  width: 50%;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+
+.tabelaValoresDespesa {
+  margin-left: 50px;
+  margin-top: 5px;
+  width:90%;
+  text-align: left;
+  background-color: white;
+}
+
+.rightButton {
+  margin-right: 10px;
+  margin-left:50px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 10px;
+}
+
+.cabimentarButton {
+  margin-left:50px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 10px;
+}
+
+.editIconTable {
+  color: #2A81CC;
+  cursor: pointer;
+}
+
+.deleteIconTable {
+  color: darkred;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.tabelaTitulo {
+  width: 100%;
+  margin-left: 50px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 10px;
+}
+
+.tabelaTituloText {
+  padding-top: 10px;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+  background-color: #2A81CC;
+}
+
+.valorNegativo{
+  color: red;
+}
+
+
+.executarPagamentosButton {
+  margin-left:50px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 10px;
+}
+
+.listaPagamentosButton {
+  margin-left:50px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 10px;
+}
+
+.containerLine{
+  width: 100%;
+  display: inline-block;
+}
+.despesaAExecutar{
+  margin-left: 10px;
+  width: 40%;
+  top: 20px;
+}
+
+.nissTinContainer{
+  margin-left: 10px;
+  width: 30%;
+  top: 10px;
+}
+
+.pesquisarDestinatarioButton {
+  width: 32px;
+  height: 32px;
+  margin-left: 10px;
+  top: 20px;
+  background-color:#2A81CC;
+  color: white;
+}
+
+
+.pesquisarDestinatarioIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.novoDestinatarioButton {
+  margin-left:10px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  top: 10px;
+}
+
+.labelBorder {
+  width: 80px;
+  height: 40px;
+  border: 1px lightslategray solid;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+
+.blueBox {
+  background: #1a6aaf;
+  color: white;
+  top: -4px;
+  position: relative;
+}
+
+.right-margin {
+  margin-right: 30px;
+  margin-left: 15px;
+}
+.bottomMargin {
+  margin-bottom: 16px;
+}
+
+.centeredLabel {
+  padding-left: 10px;
+  display: block;
+  text-align: center;
+  text-align: left;  
+}
+
+.leftButton {
+  margin-left:10px;
+  background: rgba(52, 176, 43, 100);
+  color: white;
+  margin-top: 10px;
+}
+
+.displayPanelLeft {
+  width: 45%;
+  margin: 0 25px 25px 20px;
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 20px;
+}
+
+.tabelaPagamentosExecutados {
+  margin-left: 10px;
+  margin-top: 5px;
+  width:90%;
+  text-align: left;
+  background-color: white;
+}
+
+table td,
+table th {
+  width: 20%;
+  text-align: center;
+}
+
+table th {
+  font-weight: bold;
+}
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+.pdf{
+  color: red;
+}
+
+.excel{
+  color: white;
+}
+
+.listaPagamentosExcel {
+  margin-left:50px;
+  background: black;
+  color: white;
+  margin-top: 10px;
+}

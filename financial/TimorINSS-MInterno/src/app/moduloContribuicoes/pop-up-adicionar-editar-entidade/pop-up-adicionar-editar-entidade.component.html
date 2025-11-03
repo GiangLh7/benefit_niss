@@ -1,0 +1,221 @@
+<div class="dialogPositionFix">
+
+  <h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">account_balance</mat-icon>
+    <span> {{'entidadeEmpregadora.addEditEntidade' | translate}}</span>
+  </h1>
+  <form (ngSubmit)="saveEntidade()" class="formSize" #movimentoForm="ngForm">
+
+    <div class="bodyDialog" mat-dialog-content>
+      <div class="inputs-grid inputs-grid--2">
+
+        <div class="full-columns">
+          <button type="button" class="utilizadorSearchButton" mat-fab color="green" aria-label="Search" (click)="pesquisarEntidade()" [disabled]="!search">
+            <mat-icon matTooltip="{{'general.pesquisar' | translate}}" class="utilizadorSearchIcon">search</mat-icon>
+          </button>
+          <mat-form-field class="pesquisar" appearance="outline">
+              <mat-label>{{ 'general.insertNiss' | translate }}</mat-label>
+              <input matInput maxlength="10" type="number" min="0" [(ngModel)]="search" name="stringFilterInput" (keydown.enter)="pesquisarEntidade()"/>
+              <fa-icon *ngIf="search" matSuffix aria-label="Clear" [icon]="faTimesCircle"
+                  (click)="clearPesquisarEntidade()">
+              </fa-icon>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="isNew || isEdit" class="full-columns line-separator"></div>
+
+        <mat-form-field *ngIf="isNew || isEdit" appearance="outline" class="inputs-grid__cell">
+          <mat-label>{{ 'entidadeEmpregadora.nomeEntidade' | translate }}</mat-label>
+            <input
+              [errorStateMatcher]="matcher"
+              [required]="submittedTry"
+              matInput
+              name="Nome"
+              [(ngModel)]="name"
+            />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline" class="inputs-grid__cell">
+          <mat-label>{{ 'entidadeEmpregadora.tin' | translate }}</mat-label>
+            <input
+              [errorStateMatcher]="matcher"
+              [required]="submittedTry"
+              matInput
+              name="tin"
+              [(ngModel)]="tin"
+            />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline" class="inputs-grid__cell">
+          <mat-label>{{ 'entidadeEmpregadora.niss' | translate }}</mat-label>
+            <input
+              [errorStateMatcher]="matcher"
+              [required]="submittedTry"
+              matInput
+              name="niss"
+              [(ngModel)]="niss"
+              disabled
+            />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew || isEdit" appearance="outline" class="inputs-grid__cell">
+          <mat-label>{{'entidadeEmpregadora.situacaoInscricao' | translate}}</mat-label>
+          <mat-select [(ngModel)]="active" [(value)]="active" name="situacaoInscricao"
+            [errorStateMatcher]="matcher" [required]="submittedTry">
+            <ng-container>
+              <mat-option *ngFor="let opt of situacaoInscricaoOptions" [value]="opt.value">
+                {{ opt.text | translate }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error>{{'general.required' | translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline" class="inputs-grid__cell">
+          <mat-label>{{ 'contacto.email' | translate }}</mat-label>
+            <input
+              [errorStateMatcher]="matcher"
+              [required]="submittedTry"
+              matInput
+              name="email"
+              [(ngModel)]="email"
+            />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline">
+          <mat-label>{{'contacto.telemovel' | translate}}</mat-label>
+          <input [errorStateMatcher]="matcher" [required]="submittedTry" [(ngModel)]="telemovel"
+            type="text" [pattern]="availableRegex.phonelPattern" maxlength="20" name="Telemovel" matInput>
+          <mat-error *ngIf="telemovel">{{'general.wrongFormat' | translate}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline" class="inputs-grid__cell">
+          <mat-label>{{ 'entidadeEmpregadora.quantidadeTrabalhadores' | translate }}</mat-label>
+            <input
+              maxlength="10"
+              type="number"
+              min="0"
+              [errorStateMatcher]="matcher"
+              [required]="submittedTry"
+              matInput
+              name="numTrabalhador"
+              [(ngModel)]="numTrabalhador"
+            />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline">
+          <mat-label>{{'entidadeEmpregadora.naturezaJuridica' | translate}}</mat-label>
+          <mat-select [(ngModel)]="idNaturezaJuridica" [errorStateMatcher]="matcher"
+            [(value)]="idNaturezaJuridica" name="naturezaJuridica"
+            [required]="submittedTry">
+            <!-- select with groups -->
+            <ng-container *ngIf="naturezaJuridica.length > 1">
+              <mat-optgroup *ngFor="let group of naturezaJuridica" [label]="group.name | translate"
+                [disabled]="group.disabled">
+                <mat-option *ngFor="let natureza of group.array" [value]="natureza.id">{{natureza.nome}}
+                </mat-option>
+              </mat-optgroup>
+            </ng-container>
+            <!-- select without groups -->
+            <ng-container *ngIf="naturezaJuridica.length == 1">
+              <mat-option *ngFor="let natureza of naturezaJuridica[0]?.array"
+                [disabled]="naturezaJuridica[0]?.disabled" [value]="natureza.id">{{natureza.nome}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline">
+          <mat-label>{{'entidadeEmpregadora.atividadeEconomica' | translate}}</mat-label>
+          <mat-select [(ngModel)]="idActividadeEconomica"
+            [errorStateMatcher]="matcher" [(value)]="idActividadeEconomica"
+            name="actividadeEconomica" [required]="submittedTry">
+            <!-- select with groups -->
+            <ng-container *ngIf="actividadeEconomica.length > 1">
+              <mat-optgroup *ngFor="let group of actividadeEconomica" [label]="group.name | translate"
+                [disabled]="group.disabled">
+                <mat-option *ngFor="let actividade of group.array" [value]="actividade.id">{{actividade.nome}}
+                </mat-option>
+              </mat-optgroup>
+            </ng-container>
+            <!-- select without groups -->
+            <ng-container *ngIf="actividadeEconomica.length == 1">
+              <mat-option *ngFor="let actividade of actividadeEconomica[0]?.array"
+                [disabled]="actividadeEconomica[0]?.disabled" [value]="actividade.id">{{actividade.nome}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline">
+          <mat-label>{{'entidadeEmpregadora.sectorAtividade' | translate}}</mat-label>
+          <mat-select [(ngModel)]="idSectorActividade" [errorStateMatcher]="matcher"
+            [(value)]="idSectorActividade" name="sectorActividade"
+            [required]="submittedTry">
+            <!-- select with groups -->
+            <ng-container *ngIf="sectorActividade.length > 1">
+              <mat-optgroup *ngFor="let group of sectorActividade" [label]="group.name | translate"
+                [disabled]="group.disabled">
+                <mat-option *ngFor="let sector of group.array" [value]="sector.id">{{sector.nome}}</mat-option>
+              </mat-optgroup>
+            </ng-container>
+            <!-- select without groups -->
+            <ng-container *ngIf="sectorActividade.length == 1">
+              <mat-option *ngFor="let sector of sectorActividade[0]?.array"
+                [disabled]="sectorActividade[0]?.disabled" [value]="sector.id">{{sector.nome}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline">
+          <mat-label>{{'entidadeEmpregadora.dataInicioAtividade' | translate}}</mat-label>
+          <input [matDatepicker]="pickerInicioAtividade"
+            [max]="today"
+            [(ngModel)]="dataInicioActiv" matInput [errorStateMatcher]="matcherDateInicioAtividade"
+             [required]="submittedTry" name="dataInicioActiv">
+          <mat-datepicker-toggle matSuffix [for]="pickerInicioAtividade"></mat-datepicker-toggle>
+          <mat-datepicker #pickerInicioAtividade></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline">
+          <mat-label>{{'entidadeEmpregadora.dataInicioTrabServico' | translate}}</mat-label>
+          <input [(ngModel)]="dataInicioTrabServico" matInput
+            [matDatepicker]="pickerTrabServicoDesde" [errorStateMatcher]="matcherDateInicioTrabServ"
+            [required]="submittedTry"
+            [max]="today"
+            name="dataInicioTrabServico">
+          <mat-datepicker-toggle matSuffix [for]="pickerTrabServicoDesde"></mat-datepicker-toggle>
+          <mat-datepicker #pickerTrabServicoDesde></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="isNew" appearance="outline">
+          <mat-label>{{'entidadeEmpregadora.dataInscricao' | translate}}</mat-label>
+          <input [(ngModel)]="dataInscricao" matInput
+            [matDatepicker]="pickerDataInscricao" [errorStateMatcher]="matcherDateInicioTrabServ"
+            [required]="submittedTry"
+            [max]="today"
+            name="dataInscricao">
+          <mat-datepicker-toggle matSuffix [for]="pickerDataInscricao"></mat-datepicker-toggle>
+          <mat-datepicker #pickerDataInscricao></mat-datepicker>
+        </mat-form-field>
+
+      </div>
+    </div>
+    <div class="buttons">
+      <div class="secondLineContainers">
+        <button class="gravarButton" mat-raised-button type="submit" (click)="submit()" [disabled]="!canSubmit()">
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="secondLineContainers">
+        <button class="buttonCancelar" type="button" mat-raised-button (click)="closePopUp()">
+          <mat-icon class="icon">close</mat-icon>
+          <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,199 @@
+.paginaListagemTrabalhadores {
+  position:relative;
+  min-height: 85%;
+}
+
+.month-picker .mat-calendar-period-button {
+  pointer-events: none;
+}
+
+.subHeader {
+  min-height: 50px;
+  background: rgba(207, 207, 207, 0.966);
+  width: 90%;
+  padding: 10px 0 10px 10%;
+}
+
+.painelListagemTrabalhadores {
+  width: 80%;
+  margin-right: 10%;
+  margin-left: 10%;
+}
+
+.tabelaTrabalhadores {
+  width:100%;
+}
+
+.paginadorTrabalhadores{
+  width:100%;
+}
+
+table td,
+table th {
+  width: 16%;
+  text-align: center;
+}
+
+table th {
+  font-weight: bold;
+}
+
+.personSearchButton {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  top: 10px;
+  background-color:#2A81CC;
+  color: white;
+}
+
+.personSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.adicionarTrabalhadorButton {
+  background: #2A81CC;
+  color: white;
+  top: -3px;
+  margin-right: 10px;
+}
+
+.adicionarTrabalhadorIcon {
+  padding-right: 5px;
+}
+
+.registarSuspensaoButton {
+  background: #2A81CC;
+  color: white;
+  top: -3px;
+}
+
+.registarSuspensaoIcon {
+  padding-right: 5px;
+}
+
+.tabelaTrabalhadoresTitulo {
+  width: 100%;
+  padding-bottom: 1%;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 20px;
+}
+
+.trabalhadorVisibilityIcon {
+  font-size: 1.5em;
+}
+
+.trabalhadorVisibilityButton {
+  color: #2fcc2a;
+  position: relative;
+  margin-right: 5%;
+}
+
+.trabalhadorRemoveIcon {
+  font-size: 1.6em;
+}
+
+.trabalhadorRemoveButton {
+  color: darkred;
+  position: relative;
+  top: 1px;
+}
+
+.trabalhadorEditIcon {
+  font-size: 1.2em;
+}
+
+.trabalhadorEditButton {
+  margin-right: 5%;
+  color: #2A81CC;
+}
+
+.tableTitleIcon {
+  font-size: 1.7em;
+  padding-right: 10px;
+  top: -5px;
+  position: relative;
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+.mat-form-field {
+  font-size: 11px;
+  min-width: 150px;
+  width: calc(100% - 32px);
+}
+
+.pesquisar{
+ height: 50px;
+}
+
+.align-left {
+  text-align: left !important;
+}
+
+.searchContainer {
+  width: 20%;
+  min-width: 192px;
+  display: inline-flex;
+  position: relative;
+  margin-left: 30px;
+}
+
+.secondLineContainers {
+  display: inline-flex;
+  position: relative;
+}
+
+.datePicker {
+  top: 2px;
+}
+
+.sorter {
+  display: inline-block;
+  vertical-align: 3px;
+  margin-left: 20px;
+}
+
+.divButtonList {
+  display: inline-flex;
+}
+
+.adicionarTrabalhador {
+  float: unset;
+  display: inline-flex;
+  position: relative;
+}
+
+.returnButton{
+  width: 30px;
+  height: 30px;
+  background-color: #2A81CC;
+  color: white;
+  top: 9px;
+  margin-right: 10px;
+}
+
+.utilizadorSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+@media only screen and (min-width: 980px) {
+  .adicionarTrabalhador {
+    float: right;
+    top: 9px;
+    margin-right: 11.12%;
+  }
+}

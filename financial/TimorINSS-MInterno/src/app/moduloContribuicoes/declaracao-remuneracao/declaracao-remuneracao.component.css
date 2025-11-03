@@ -1,0 +1,322 @@
+.declaracaoPagina {
+  position:relative;
+  min-height: 85%;
+}
+
+.adicionarTrabalhador {
+  display: inline-flex;
+  position: relative;
+  float: right;
+  top: 9px;
+  margin-right: 5%;
+}
+
+.subHeader {
+  min-height: 50px;
+  background: rgba(207, 207, 207, 0.966);
+  width: 95%;
+  padding-left: 5%;
+}
+
+.align-left {
+  text-align: left !important;
+}
+
+.adicionarTrabalhadorButton {
+  background: #2A81CC;
+  color: white;
+  top: -3px;
+  margin-right: 10px;
+}
+
+.adicionarTrabalhadorIcon {
+  padding-right: 5px;
+}
+
+.secondLineContainers {
+  display: inline-flex;
+  position: relative;
+}
+
+.datePicker {
+  top: 2px;
+}
+
+.bodyDeclaracao {
+  width: 100%;
+}
+
+.bodyDeclaracaoHeader {
+  width: 90%;
+  margin-right: 5%;
+  margin-left: 5%;
+  padding-bottom: 5px;
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #2A81CC;
+  display: flex;
+  padding-top: 15px;
+}
+
+.bodyDeclaracaoHeaderIcon {
+  font-size: 1.6em;
+  padding-right: 15px;
+  top: -5px;
+  position: relative;
+}
+
+.tabelaListagem {
+  margin-top: 15px;
+}
+
+.DadosContainer {
+  margin-left: 5%;
+  margin-right: 5%;
+  padding-bottom: 5px;
+}
+
+.secondLineContainers {
+  display: inline-flex;
+  position: relative;
+  padding-left: 50px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: rgba(42, 129, 204, 100);
+  padding-right: 10px;
+  padding-bottom: 5px;
+}
+
+span {
+  font-size: 1.1em;
+  padding-bottom: 5px;
+}
+
+.subtitleDiv {
+  color: #2A81CC;
+  display: inline-flex;
+  width: 25%;
+  padding-top: 5px;
+  position: relative;
+}
+
+.subtitleIcon {
+  top: -3px;
+  position: relative;
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+.subtitleIconPeople {
+  top: 8px;
+}
+
+.subtittle {
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.guiasContainer {
+  margin-left: 50px;
+}
+
+.contaStateDiv {
+  background-color: rgba(86, 119, 252, 100);
+  color: white;
+  min-width: 80px;
+  display: inline-flex;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 20px;
+}
+
+.contaSelected {
+  background-color: black;
+}
+
+.guiaStateDivList {
+  display: inline-flex;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.guiaStateDivList:first-child {
+  margin-left: 0;
+}
+
+.guiaIcon {
+  padding-top: 3px;
+  margin-right: 5px;
+}
+
+.guiaStateColor1 {
+  color: green;
+}
+
+.guiaStateColor2 {
+  color: grey;
+}
+
+.guiaStateColor3 {
+  color: yellow;
+}
+
+.guiaStateColor4 {
+  color: red;
+}
+
+.guiaStateColor5 {
+  color: orange;
+}
+
+.guiaStateColor6 {
+  color: blue;
+}
+
+
+.contaStateText {
+  font-weight: 500;
+  margin-right: 10px;
+  margin-left: 12px;
+}
+
+table {
+  margin-left: 50px;
+  width: calc(100% - 100px);
+}
+
+table th,
+table td {
+  text-align: center;
+}
+
+.mat-column-niss {
+  width: 7%;
+}
+
+.mat-column-nome {
+  width: 17%;
+}
+
+.mat-column-nacionalidade {
+  width: 8%;
+}
+
+.mat-column-regime {
+  width: 9%;
+}
+
+.inputTable {
+  width: 90%;
+}
+
+table th {
+  font-weight: bold;
+}
+
+.dadosEntidadeDiv {
+  position: relative;
+  width: 75%;
+  padding-top: 20px;
+}
+
+.dadosEntidade {
+  border: 2px solid #2A81CC;
+  margin-right: 50px;
+  margin-left: 50px;
+  display: flex;
+  min-height: 45px;
+  border-radius: 15px;
+}
+
+.tableLink {
+  text-decoration: none;
+  color: black;
+}
+
+.mat-form-field {
+  width:100%;
+}
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  padding-left: 5px;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+  padding-right: 5px;
+}
+
+table th {
+  background-color: rgb(211, 211, 211);
+}
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+.buttons {
+  padding-top: 15px;
+}
+
+.adicionarIcon {
+  padding-right: 5px;
+}
+
+.saveButton,
+.resumoButton,
+.cancelButton,
+.excelUploadButton
+{
+  color:white;
+  margin-bottom: 15px;
+}
+
+.saveButton {
+  background: rgba(52, 176, 43, 100);
+}
+
+.resumoButton {
+  background: rgba(42, 129, 204, 100);
+}
+
+.cancelButton {
+  background:darkred;
+}
+
+.excelUploadButton {
+  background:rgb(187, 1, 187);
+}
+
+.infoLegalButton,
+.templateButton {
+  font-size: 14px;
+  display: inline-flex;
+  position: relative;
+  color: #2A81CC;
+  cursor: pointer;
+}
+
+
+.infoLegalButton {
+  top: 10px;
+}
+
+.templateButton {
+  top: 25px;
+}
+
+.returnButton{
+  width: 30px;
+  height: 30px;
+  background-color: #2A81CC;
+  color: white;
+  margin-right: 25%;
+  margin-top: 8px;
+}
+
+.utilizadorSearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}

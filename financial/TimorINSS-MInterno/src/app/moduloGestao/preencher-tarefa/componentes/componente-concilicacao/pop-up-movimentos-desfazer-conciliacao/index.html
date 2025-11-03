@@ -1,0 +1,147 @@
+<div class="dialogPositionFix desfazer-conciliacao">
+
+  <h1 class="titulo" mat-dialog-title>
+    <mat-icon class="popUpIcon">contact_page</mat-icon>
+    {{'tarefa.desfazerConciliacoes' | translate}}
+  </h1>
+  <form (ngSubmit)="saveConciliacao()" class="formSize" #conciliarForm="ngForm">
+
+    <div class="bodyDialog" mat-dialog-content>
+
+      <div class="buttons-wrapper">
+        <button mat-raised-button class="{{fromTable == 1 ? 'active' : ''}}" (click)="alterarDirection(1)" >
+          <mat-label>{{'tarefa.verPorMovimentoBancario' | translate}}</mat-label>
+        </button>
+
+        <button mat-raised-button class="{{fromTable == 2 ? 'active' : ''}}" (click)="alterarDirection(2)">
+          <mat-label>{{'tarefa.verPorMovimentoAConciliar' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="filters-wrapper" style="grid-row: 2;" *ngIf="fromTable">
+        <button matTooltip="{{'general.pesquisar' | translate}}" class="SearchButton" mat-fab color="green" aria-label="Search"
+            (click)="search($event)">
+            <mat-icon class="SearchIcon">search</mat-icon>
+        </button>
+        <mat-form-field class="pesquisar" appearance="outline">
+            <mat-label>{{'gerirCampos.Descricao' | translate}}</mat-label>
+            <input matInput maxlength="100" type="text" [(ngModel)]="filter.filterBy" (keydown.enter)="search($event)" name="DescricaoMB" />
+        </mat-form-field>
+        <mat-form-field class="date" *ngIf="fromTable == 1" appearance="outline">
+            <mat-label>{{'perfil.data' | translate}}</mat-label>
+            <input [(ngModel)]="filter.dateFilterBegin" matInput [matDatepicker]="pickerValidade" name="BeginDateMB">
+            <mat-datepicker-toggle matSuffix [for]="pickerValidade"></mat-datepicker-toggle>
+            <mat-datepicker #pickerValidade></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field *ngIf="fromTable == 1 && filter.dateFilterBegin" class="date" appearance="outline">
+            <mat-label>{{'general.dtFim' | translate}}</mat-label>
+            <input [(ngModel)]="filter.dateFilterEnd" matInput [matDatepicker]="pickerValidade" name="EndDateMB">
+            <mat-datepicker-toggle matSuffix [for]="pickerValidade"></mat-datepicker-toggle>
+            <mat-datepicker #pickerValidade></mat-datepicker>
+        </mat-form-field>
+        <a (click)="clearFilter()" class="clearFilterButton" type="button" mat-raised-button>
+            <mat-icon class="clearFilterIcon">clear</mat-icon>
+            <mat-label>{{'guiaPagamentoListagem.clearFilter' | translate}}</mat-label>
+        </a>
+      </div>
+      <div class="inputs-grid inputs-grid--2 tables-wrapper from-table-{{fromTable}}">
+
+        
+        <div class="inputs-grid__cell" *ngIf="fromTable == 1 || (fromTable == 2 && selectedItem)">
+          <table mat-table [dataSource]="movimentosBancarios" class="mat-elevation-z8">
+            <ng-container matColumnDef="descricao">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.movimentoDescricao' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="dataValor">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.movimentoDataValor' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{formatDatePT(element.dataValor)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="credito">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.credito' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.credito}}{{element.credito ? '$' : ''}} </td>
+            </ng-container>
+            <ng-container matColumnDef="debito">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.debito' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.debito}}{{element.debito ? '$' : ''}} </td>
+            </ng-container>
+            <ng-container matColumnDef="acoes">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                  <mat-checkbox *ngIf="fromTable == 1" color="primary" [checked]="selectedItem == element.id"
+                    (change)="updateSelected(element)">
+                  </mat-checkbox>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsMB"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsMB;"></tr>
+          </table>
+          <mat-paginator class="paginator" [length]="this.totalRowsTableMB"
+              [pageSize]="this.pageSizeTableMB" (page)="updateMovimentosBancariosTable($event)"
+              [pageIndex]="pageIndexTableMB" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons>
+          </mat-paginator>
+        </div>
+
+
+        <div class="inputs-grid__cell" *ngIf="fromTable == 2 || (fromTable == 1 && selectedItem)">
+          <table mat-table [dataSource]="movimentosPorConciliar" class="mat-elevation-z8">
+            <ng-container matColumnDef="descricao">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.movimentoDescricao' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.descricao.descricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="documento">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.documento' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <fa-icon class="pdfIconTable" (click)="gerarPDF(element)" [icon]="faFilePdf"></fa-icon>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="comprovativo">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.comprovativoPagamento' | translate}} </th>
+                <td mat-cell *matCellDef="let element">
+                  <fa-icon class="pdfIconTable" (click)="openPdf(element.comprovativo)" [icon]="faFilePdf"></fa-icon>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="numeroPagamento">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.numeroPagamento_guia' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.numeroDocumento}} </td>
+            </ng-container>
+            <ng-container matColumnDef="valor">
+                <th mat-header-cell *matHeaderCellDef> {{'tarefa.movimentoValor' | translate}} </th>
+                <td mat-cell *matCellDef="let element"> {{element.valor}}$ </td>
+            </ng-container>
+            <ng-container matColumnDef="acoes">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-checkbox *ngIf="fromTable == 2" color="primary" [checked]="selectedItem == element.id"
+                      (change)="updateSelected(element)">
+                    </mat-checkbox>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsMC"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsMC;"></tr>
+          </table>
+          <mat-paginator class="paginator" [length]="this.totalRowsTableMC"
+              [pageSize]="this.pageSizeTableMC" (page)="updateMovimentosPorConciliarTable($event)"
+              [pageIndex]="pageIndexTableMC" [pageSizeOptions]="[20,25,50,100,500,1000]" showFirstLastButtons>
+          </mat-paginator>
+        </div>
+
+      </div>
+    </div>
+    <div class="buttons">
+      <div class="secondLineContainers">
+        <button class="gravarButton" mat-raised-button type="submit" [disabled]="!conciliarForm.valid || !selectedItem" (click)="submitConciliacao()" >
+          <mat-icon class="icon">check</mat-icon>
+          <mat-label>{{'general.buttonGravar' | translate}}</mat-label>
+        </button>
+      </div>
+
+      <div class="secondLineContainers">
+        <button class="buttonCancelar" type="button" mat-raised-button (click)="closePopUp()">
+          <mat-icon class="icon">close</mat-icon>
+          <mat-label>{{'general.buttonCancelar' | translate}}</mat-label>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

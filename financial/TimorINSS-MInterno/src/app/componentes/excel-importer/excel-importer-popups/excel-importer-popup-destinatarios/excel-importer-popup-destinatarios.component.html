@@ -1,0 +1,36 @@
+<div class="dialogPositionFix">
+    <h1 class="export-err-titulo" mat-dialog-title>
+      <mat-icon class="personRemoveIcon">warning</mat-icon>
+      {{'general.warning' | translate}}
+    </h1>
+    <div class="bodyDialog" mat-dialog-content>
+      <div *ngIf="data.MissingFields.length" class="text">{{ 'excelImports.missingFields' | translate }}: <div class="export-err-badge">{{ data.MissingFields.length }}</div></div>
+      <div *ngIf="data.MissingFields.length" class="export-err-list">
+        <div class="export-list-item" *ngFor="let line of data.MissingFields">{{ line }}</div>
+      </div>
+      <div *ngIf="data.DiffNissAndTinEntities.length" class="text">{{ 'excelImports.diffNissAndTinEntities' | translate }}: <div class="export-err-badge">{{ data.DiffNissAndTinEntities.length }}</div></div>
+      <div *ngIf="data.DiffNissAndTinEntities.length" class="export-err-list">
+        <div class="export-list-item" *ngFor="let line of data.DiffNissAndTinEntities">{{ line }}</div>
+      </div>
+      <div *ngIf="data.DiffNissAndTinWorkers.length" class="text">{{ 'excelImports.diffNissAndTinWorkers' | translate }}: <div class="export-err-badge">{{ data.DiffNissAndTinWorkers.length }}</div></div>
+      <div *ngIf="data.DiffNissAndTinWorkers.length" class="export-err-list">
+        <div class="export-list-item" *ngFor="let line of data.DiffNissAndTinWorkers">{{ line }}</div>
+      </div>
+      <div *ngIf="data.AmountHigherThanZero.length" class="text">{{ 'excelImports.amountHigherThanZero' | translate }}: <div class="export-err-badge">{{ data.AmountHigherThanZero.length }}</div></div>
+      <div *ngIf="data.AmountHigherThanZero.length" class="export-err-list">
+        <div class="export-list-item" *ngFor="let line of data.AmountHigherThanZero">{{ line }}</div>
+      </div>
+      <div *ngIf="data.AmountHigherThanZero.length" class="text">{{ 'excelImports.amountHigherThanZero' | translate }}: <div class="export-err-badge">{{ data.AmountHigherThanZero.length }}</div></div>
+      <div *ngIf="data.AmountHigherThanZero.length" class="export-err-list">
+        <div class="export-list-item" *ngFor="let line of data.AmountHigherThanZero">{{ line }}</div>
+      </div>
+      <div *ngIf="data.InvalidIBAN.length" class="text">{{ 'excelImports.invalidIBAN' | translate }}: <div class="export-err-badge">{{ data.InvalidIBAN.length }}</div></div>
+      <div *ngIf="data.InvalidIBAN.length" class="export-err-list">
+        <div class="export-list-item" *ngFor="let line of data.InvalidIBAN">{{ line }}</div>
+      </div>
+      <div *ngIf="data.InvalidAccountNumber.length" class="text">{{ 'excelImports.invalidAccountNumber' | translate }}: <div class="export-err-badge">{{ data.InvalidAccountNumber.length }}</div></div>
+      <div *ngIf="data.InvalidAccountNumber.length" class="export-err-list">
+        <div class="export-list-item" *ngFor="let line of data.InvalidAccountNumber">{{ line }}</div>
+      </div>
+    </div>
+</div>

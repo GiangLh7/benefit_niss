@@ -1,0 +1,245 @@
+<mat-expansion-panel class="mat-expansion" [expanded]="isExpanded" #componenteOrcamento
+  (afterExpand)="scroll(componenteOrcamento)">
+  <mat-expansion-panel-header>
+    {{'tarefa.componenteOrcamento' | translate}}
+  </mat-expansion-panel-header>
+  <div>
+    <ngx-spinner class="spinner" name="spinner1" [fullScreen]="false" [color]="'#2A81CC'" [type]="'ball-climbing-dot'">
+      {{'general.pleaseWait' | translate}}
+    </ngx-spinner>
+    <div *ngIf="componenteConfig.permissaoDatas > 0" class="container">
+      <mat-label class="containerHeader">{{'componenteOrcamento.datasHeader' | translate}}</mat-label>
+      <div class="innerContainer">
+
+        <div class="containerLine">
+          <mat-form-field appearance="outline">
+            <mat-label>{{'general.dtInicio' | translate}}</mat-label>
+            <input [disabled]="componenteConfig.permissaoDatas == 1" #name="ngModel" name="dataInicio"
+              [errorStateMatcher]="matcher" [required]="submitted" (dateChange)="changeDatas()"
+              [(ngModel)]="registoOrcamento.dataInicio" matInput [matDatepicker]="pickerInicio">
+            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio></mat-datepicker>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{'general.dtFim' | translate}}</mat-label>
+            <input [disabled]="componenteConfig.permissaoDatas == 1" #name="ngModel" name="dataFim"
+              [errorStateMatcher]="matcher" [required]="submitted" (dateChange)="changeDatas()"
+              [(ngModel)]="registoOrcamento.dataFim" matInput [matDatepicker]="pickerFim">
+            <mat-datepicker-toggle matSuffix [for]="pickerFim"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFim></mat-datepicker>
+            <mat-error>{{'general.required' | translate}}</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="componenteConfig.permissaoInsercoes == 2  && datasRegistadas && !registoOrcamento.aprovado" class="container">
+      <mat-label class="containerHeader">{{'componenteOrcamento.adicaoHeader' | translate}}</mat-label>
+      <div class="innerContainer">
+        <form (ngSubmit)="addOrcamentoValor()" #orcamentoValorForm="ngForm">
+          <div class="containerLine">
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{'utilizador.departamento' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="selectedDepartamento" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" [(ngModel)]="componenteOrcamentoValor.departamentoFk">
+                <mat-option matTooltip="{{departamento.nome}}" *ngFor="let departamento of departamentos"
+                  [value]="departamento.id">{{departamento.nome}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{'componenteOrcamento.centroDeCusto' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="selectedCentroCusto" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" [(ngModel)]="componenteOrcamentoValor.centroCustoFk">
+                <mat-option *ngFor="let centroCusto of centrosCusto" [value]="centroCusto.id">{{centroCusto.nome}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+
+          </div>
+
+          <div class="containerLine">
+
+            <!-- <div class="labelBorder greyBox">
+              <mat-label class="centeredLabel">{{'componenteOrcamento.contaOSS' | translate}}</mat-label>
+            </div> -->
+
+            <mat-form-field appearance="outline" class="tipoConta">
+              <mat-label>{{'componenteOrcamento.tipoDeConta' | translate}}</mat-label>
+              <mat-select (selectionChange)="updateFilteredAgrupamentos()" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" #name="ngModel" name="selectedTipoDeConta"
+                [(ngModel)]="componenteOrcamentoValor.tipoContaFk">
+                <mat-option *ngFor="let tipoDeConta of tiposDeConta" [value]="tipoDeConta.id">{{tipoDeConta.descricao}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{'componenteOrcamento.conta' | translate}}</mat-label>
+              <mat-select #name="ngModel" name="selectedAgrupamento" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" [(ngModel)]="selectedAgrupamento">
+                <mat-option>
+                  <ngx-mat-select-search #name="ngModel" noEntriesFoundLabel="{{'general.semResultados' | translate}}"
+                    placeholderLabel="{{'componenteOrcamento.selecionarConta' | translate}}" ngModel
+                    (ngModelChange)="filterCustomOptions($event)" name="{{'selectedAgrupamentofilter'}}">
+                  </ngx-mat-select-search>
+                </mat-option>
+                <mat-option *ngFor="let agrupamento of filteredAgrupamentosSearch" [disabled]="!agrupamento.final"
+                matTooltip="{{agrupamento.designacao}}"
+                  [value]="agrupamento.id">{{agrupamento.designacao}}
+                </mat-option>
+              </mat-select>
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>{{'componenteOrcamento.valor' | translate}}</mat-label>
+              <input autocomplete="off" max="999999999999999999.99" matInput #name="ngModel" currencyMask
+                [options]="currencyOptions" name="ValorCompoenteOrcamentoValor" [errorStateMatcher]="matcher"
+                [required]="orcamentoValorSubmitted" [(ngModel)]="componenteOrcamentoValor.valor">
+              <mat-error>{{'general.required' | translate}}</mat-error>
+            </mat-form-field>
+
+
+            <button class="button" (click)="submitOrcamentoValorForm()" [disabled]="!orcamentoValorForm.valid"
+            type="submit" mat-raised-button>
+            <mat-icon class="buttonIcon">add_circle_outline</mat-icon>
+            <mat-label class="buttonLabel">{{'componenteOrcamento.adiconarEditar' | translate}}</mat-label>
+          </button>
+
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div *ngIf="componenteConfig.permissaoDetalhes > 0 && datasRegistadas" class="container">
+      <mat-label class="containerHeader">{{'componenteOrcamento.detalhes' | translate}}</mat-label>
+      <div class="innerContainer">
+        <div class="containerLine">
+
+          <div class="labelBorder blueBox right-margin bottomMargin">
+            <mat-label class="centeredLabel">{{'componenteOrcamento.vizualizarPor' | translate}}</mat-label>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{'componenteOrcamento.departamentos' | translate}}</mat-label>
+            <mat-select multiple #name="ngModel" [(ngModel)]="filtersDepartamento" name="DepartamentoFilter">
+              <mat-option matTooltip="{{value.nome}}" *ngFor="let value of departamentos" [value]="value.id">
+                {{value.nome}}</mat-option>
+            </mat-select>
+            <button matTooltip="{{'general.limparSelecao' | translate}}" mat-button
+              *ngIf="filtersDepartamento.length > 0" matSuffix mat-icon-button aria-label="Clear"
+              (click)="clearDepartamentoSelection($event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{'componenteOrcamento.centrosDeCusto' | translate}}</mat-label>
+            <mat-select multiple #name="ngModel" name="CentroDeCustoFilter" [(ngModel)]="filtersCentrosDeCusto">
+              <mat-option matTooltip="{{centroCusto.nome}}" *ngFor="let centroCusto of centrosCusto"
+                [value]="centroCusto.id">{{centroCusto.nome}}
+              </mat-option>
+            </mat-select>
+            <button matTooltip="{{'general.limparSelecao' | translate}}" mat-button
+              *ngIf="filtersCentrosDeCusto.length > 0" matSuffix mat-icon-button aria-label="Clear"
+              (click)="clearCentroDeCustoSelection($event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{'componenteOrcamento.tiposDeConta' | translate}}</mat-label>
+            <mat-select multiple #name="ngModel" name="TipoDeContaFilter" [(ngModel)]="filtersTipoDeConta">
+              <mat-option matTooltip="{{tipoDeConta.descricao}}" *ngFor="let tipoDeConta of tiposDeConta"
+                [value]="tipoDeConta.id">{{tipoDeConta.descricao}}
+              </mat-option>
+            </mat-select>
+            <button matTooltip="{{'general.limparSelecao' | translate}}" mat-button
+              *ngIf="filtersTipoDeConta.length > 0" matSuffix mat-icon-button aria-label="Clear"
+              (click)="clearTipoDeContaSelection($event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <button (click)="updateTable()" class="button filterButton" mat-raised-button>
+            <mat-icon class="buttonIcon">filter_alt</mat-icon>
+            <mat-label class="buttonLabel">{{'componenteOrcamento.aplicarFiltros' | translate}}</mat-label>
+          </button>
+        </div>
+
+
+        <div class="tableContainer bottomMargin">
+          <table mat-table [dataSource]="filteredOrcamentoValores" class="mat-elevation-z8">
+            <ng-container matColumnDef="tipo">
+              <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.tipoDeConta' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element.tipoDeContaDescricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="departamento">
+              <th mat-header-cell *matHeaderCellDef>{{'utilizador.departamento' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element.departamentoDescricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="centroCusto">
+              <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.centroDeCusto' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{element.centroCustoDescricao}} </td>
+            </ng-container>
+            <ng-container matColumnDef="contaOSS">
+              <th mat-header-cell *matHeaderCellDef>{{'componenteOrcamento.contaOSS' | translate}}</th>
+              <td mat-cell *matCellDef="let element"> {{ element.agrupamentoFk ? element.codigo + ' - ' + element.descricao : '' }} </td>
+            </ng-container>
+            <ng-container matColumnDef="valor">
+              <th mat-header-cell *matHeaderCellDef>{{'gerirCampos.Valor' | translate}}</th>
+              <td mat-cell *matCellDef="let element">${{formatDecimal(element.valor)}}</td>
+            </ng-container>
+            <ng-container matColumnDef="editar">
+              <th mat-header-cell *matHeaderCellDef>{{'general.EditarEliminar' | translate}}</th>
+              <td mat-cell *matCellDef="let element">
+                <button *ngIf="element.editavel &&  componenteConfig.permissaoDetalhes == 2 && !registoOrcamento.aprovado"
+                  matTooltip="{{'general.Editar' | translate}}" (click)="editPopUpComponenteOrcamentoValor(element)"
+                  mat-icon-button>
+                  <mat-icon class="editIcon">edit</mat-icon>
+                </button>
+                <button *ngIf="element.editavel && componenteConfig.permissaoDetalhes == 2 && !registoOrcamento.aprovado"
+                  matTooltip="{{'general.Eliminar' | translate}}" (click)="deleteComponenteOrcamentoValor(element)"
+                  mat-icon-button>
+                  <mat-icon class="deleteIcon">clear</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+            <tr class="{{'codeLength6'}}" mat-row *matRowDef="let row; columns: displayedColumns;">
+            </tr>
+          </table>
+        </div>
+
+        <div class="containerLine bottomMargin">
+          <button (click)="extractToExcel()" class="button right-margin" mat-raised-button>
+            <fa-icon [icon]="faFileExcel"></fa-icon>
+            <mat-label class="buttonLabel">{{'componenteOrcamento.extExcel' | translate}}</mat-label>
+          </button>
+
+          <button (click)="extractToPDF()" class="button" mat-raised-button>
+            <fa-icon [icon]="faFilePdf"></fa-icon>
+            <mat-label class="buttonLabel">{{'componenteOrcamento.extPDF' | translate}}</mat-label>
+          </button>
+        </div>
+
+        <div *ngIf="componenteConfig.permissaoAprovacao == 2 && !registoOrcamento.aprovado" class="containerLine">
+          <button class="button" (click)="AprovarOrcamento()" mat-raised-button>
+            <mat-icon>done_outline</mat-icon>
+            <mat-label class="buttonLabel">{{'componenteOrcamento.aprovarOrcamento' | translate}}</mat-label>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</mat-expansion-panel>

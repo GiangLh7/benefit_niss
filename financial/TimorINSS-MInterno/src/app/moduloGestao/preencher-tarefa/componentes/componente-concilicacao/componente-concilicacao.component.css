@@ -1,0 +1,251 @@
+.mat-expansion-panel-header:hover {
+    background: #1f64a1 !important;
+  }
+  
+  .mat-expansion-panel-header {
+    position: relative;
+    background: #2A81CC !important;
+    height: 50px;
+    font-weight: bold;
+    color: white;
+    padding-left: 5%;
+    display: flex;
+    font-size: 15px;
+    border: 1px solid rgb(255, 255, 255);
+  }
+  
+  .mat-expansion-panel {
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: none;
+  }
+
+  table th {
+    background-color: rgb(211, 211, 211);
+}
+
+.mat-table {
+  width: 100%;
+}
+
+table tr:nth-child(even)  {
+  background-color: rgb(231, 231, 231);
+}
+
+
+table th {
+  font-weight: bold;
+}
+
+table td,
+table th {
+  width: 16%;
+  text-align: center;
+}
+
+.containerBody{
+    margin-top: 25px;
+    margin-left: 2%;
+  }
+
+.containerLiner {
+  border: 2px solid #2A81CC;
+  border-radius: 15px;
+}
+
+.select_box{
+  margin: 10px 10px 0px 10px;
+}
+
+.column_gap{
+  column-gap: 10px;
+}
+
+.button {
+  background-color: green;
+  color: white;
+  vertical-align: super;
+  margin: 0px 20px 20px 20px;
+}
+
+.buttonIcon {
+  padding-right: 5px;
+}
+
+.buttonLabel {
+  padding-left: 5px;
+}
+
+.title{
+  color:  #2A81CC;
+  height: 30px;
+  font-weight: bold;
+  font-size: 14px;
+  margin: 10px;
+}
+
+.movimentos_bancarios_list {
+  margin: 0px 20px 20px 20px;
+}
+
+.buttonContainer {
+  min-height: 50px
+}
+
+.buttonfilter {
+  background-color: black;
+  color: white;
+  vertical-align: super;
+  margin: 10px;
+}
+
+.active {
+  background-color: #2A81CC;
+}
+
+.float_right{
+  float: right;
+}
+
+.float_left{
+  float: left;
+}
+
+.editIcon {
+  color: #2A81CC;
+}
+
+.SearchButton {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  margin-left: 20px;
+  margin-top: 5px;
+  top: 10px;
+  background-color:green;
+  color: white;
+}
+
+.SearchIcon {
+  position: relative;
+  bottom: 13px;
+  left: 1px;
+}
+
+.pesquisar{
+  height: 25px;
+  margin-left: 10px;
+  max-width: 150px;
+}
+
+.date {
+  margin-left: 20px;
+  max-width: 150px;
+}
+
+.clearFilterButton{
+  background: green;
+  color: white;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  vertical-align: -webkit-baseline-middle;
+}
+
+.select_all_checkbox{
+  margin-left: 5px;
+}
+
+.grid-container_sum {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 1px;
+  row-gap: 1px;
+  box-sizing: border-box;
+  margin: 40px 20px 40px 20px;
+}
+
+.grid_container_selected {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 1px;
+  row-gap: 1px;
+  box-sizing: border-box;
+  margin: 80px 20px 20px 20px;
+}
+
+.headerLiner {
+  background-color:rgb(31, 78, 121);
+  color: white;
+  text-align: -webkit-center;
+  font-weight: 500;
+  height: 30px;
+}
+
+.contentLiner {
+  background-color:rgb(157, 195, 230);
+  color: black;
+  height: 30px;
+}
+
+.textContent {
+  text-align: left;
+  margin-left: 10px;
+}
+
+.valueContent {
+  text-align: right;
+  margin-right: 10px;
+}
+
+.sumLiner {
+  background-color:rgb(46, 117, 182);
+  color: black;
+  height: 30px;
+}
+
+.movimentos_list {
+  margin: 40px 20px 20px 20px;
+}
+
+.bottom_buttons {
+  width: 100%;
+  display: inline-block;
+}
+
+.selectedHeaderFooter {
+  background-color:rgb(91, 155, 213);
+  color: white;
+  font-weight: 500;
+  height: 30px;
+}
+
+.selectedContent {
+  background-color:rgb(210, 222, 239);
+  color: black;
+  text-align: -webkit-center;
+  font-weight: 500;
+  height: 30px;
+}
+
+.inputs-grid_column{
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  column-gap: 1px;
+  row-gap: 1px;
+  box-sizing: border-box;
+}
+
+.titleContent {
+  margin-left: 10px;
+}
+
+.pdfIconTable{
+  cursor: pointer;
+  color: red;
+  font-size: 18px;
+  margin-left: 10%;
+}
+
+.checkbox-process-transactions-only {
+  padding: 0 0 12px 12px;
+  vertical-align: middle;
+}

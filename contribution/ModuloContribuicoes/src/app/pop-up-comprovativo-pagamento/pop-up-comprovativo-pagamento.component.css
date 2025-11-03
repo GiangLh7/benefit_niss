@@ -1,0 +1,132 @@
+.titulo {
+    height: 13%;
+    margin: 0;
+    color: #2A81CC;
+  
+    font-weight: bold;
+  }
+  
+  .mat-dialog-title {
+    text-align: center;
+  }
+  
+  .dialogPositionFix {
+    position: relative;
+    height: 100%;
+  }
+  
+  .popUpIcon {
+    top: 5px;
+    position: relative;
+    font-size: 1.3em;
+  }
+  
+  .bodyDialog {
+    height: 90%;
+    position: relative;
+    margin-top: 30px;
+    display: flex;
+  }
+
+  .creditBodyDialog {
+    height: 77%;
+    position: relative;
+    margin-top: 30px;
+    display: flex;
+    place-content: center;
+  }
+  
+  .DadosContainer {
+    margin-left: calc(5% - 50px);
+    margin-right: 5%;
+    padding-bottom: 5px;
+    max-width: 70%;
+  }
+  
+  .secondLineContainers {
+    display: inline-flex;
+    position: relative;
+    margin-left: 50px;
+  }
+  
+  .buttons {
+    margin-bottom: 5px;
+    position: absolute;
+    height: 12%;
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 12px;
+  }
+  
+  .gravarButton {
+    background: rgba(52, 176, 43, 100);
+    color:white;
+  
+    font-size: 10px;
+    margin-left: 5%;
+  }
+  
+  .buttonCancelar {
+    background:darkred;
+    color:white;
+  
+    font-size: 10px;
+    margin-left: 5%;
+  }
+  .icon {
+    padding-right: 5px;
+  }
+  
+  .error {
+    font-size: 10px;
+    color: red;
+  }
+
+  .warningText{
+    margin: 25px 10px 25px 10px;
+    color: #2A81CC;
+    font-size: 25px;
+    text-align-last: center;
+  }
+  
+  .warningBox {
+    border: 2px solid #2A81CC;
+    height: fit-content;
+    border-radius: 15px;
+    width: 90%;
+  }
+
+  pdf-viewer{
+    display: flex;
+    position: relative;
+    max-height: 180px;
+  }
+
+  .PdfContainer{
+    padding-bottom: 5px;
+    overflow: hidden;
+  }
+
+  .pdfLineContainers{
+    display: inline-flex;
+    position: relative;
+  }
+
+  .downloadIcon{
+    font-size: 30px;
+    margin-top: 10px;
+    margin-right: 20px;
+    color: #3f51b5;
+    cursor: pointer;
+    display: flex;
+  }
+
+  :host ::ng-deep .ng2-pdf-viewer-container {
+    overflow: hidden !important;
+  }
+
+  .formSize {
+    height: 85%;
+  }
