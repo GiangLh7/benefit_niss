@@ -35,13 +35,12 @@ ul {
   }
 
 .right-header{
-    margin-top: 15px;
     position: relative;
-    width: 45%
+    margin-right: 16px;
  }
 
 .headerEsquerda {
-  width: 55%;
+  flex: 1;
   display: inline-flex;
 }
 
@@ -231,9 +230,10 @@ footer {
 }
 
 .firstLineHeader {
-  height: 70%;
   display: inline-flex;
   width: 100%;
+  gap: 24px;
+  align-items: center;
   background: white;
 }
 

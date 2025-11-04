@@ -42,6 +42,7 @@ import { PopUpEditDespesaCabimentadaComponent } from "./pop-up-edit-despesa-cabi
 
 
 @Component({
+  standalone: false,
   selector: 'app-componente-despesa',
   templateUrl: './componente-despesa.component.html',
   styleUrls: ['./componente-despesa.component.css']

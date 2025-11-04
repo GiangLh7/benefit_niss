@@ -27,7 +27,8 @@ import * as QRCode from 'qrcode';
 @Component({
   selector: 'app-modulo-contrib-validator',
   templateUrl: './modulo-contribuicoes-validation-main-search.html',
-  styleUrls: ['./modulo-contribuicoes-validation-main-search.css']
+  styleUrls: ['./modulo-contribuicoes-validation-main-search.css'],
+  standalone: false
 })
 export class ContribValidationHomeSearchComponent implements OnInit {
 

@@ -6,6 +6,7 @@ import { ImporterToastsService } from 'src/app/services/importerToasts.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
+  standalone: false,
   selector: 'importer-toasts',
   templateUrl: './importer-toasts.component.html',
   styleUrls: ['./importer-toasts.component.css'],

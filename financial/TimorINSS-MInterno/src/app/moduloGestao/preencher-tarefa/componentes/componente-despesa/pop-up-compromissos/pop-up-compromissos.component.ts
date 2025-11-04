@@ -26,6 +26,7 @@ export interface PopUpCompromissosData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-compromissos',
   templateUrl: './pop-up-compromissos.component.html',
   styleUrls: ['./pop-up-compromissos.component.css']

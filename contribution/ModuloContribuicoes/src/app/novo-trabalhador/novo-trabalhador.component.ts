@@ -492,7 +492,7 @@ export class NovoTrabalhadorComponent implements OnInit {
       this.hideLoader();
       this.submittedTry = false;
       openSnackBar(this.translate.instant('snackBar.saveTrabalhador'), this.snackBar);
-      this.router.navigate(['/trabalhadores'], { skipLocationChange: true });
+      this.router.navigate(['/trabalhadores'],);
     },
       err => {
         err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
@@ -1474,7 +1474,7 @@ export class NovoTrabalhadorComponent implements OnInit {
   }
 
   public adicionarSuspensao() {
-    this.router.navigate(['/registoSuspensao/', { suspensao: 'trabalhador', niss: this.trabalhador.niss, idTrabalhador: this.trabalhador.idTrabalhador, idRel: this.contrato.idRelEntidadeTrabalhador }], { skipLocationChange: true })
+    this.router.navigate(['/registoSuspensao/', { suspensao: 'trabalhador', niss: this.trabalhador.niss, idTrabalhador: this.trabalhador.idTrabalhador, idRel: this.contrato.idRelEntidadeTrabalhador }],)
   }
 
   public clearDtIniFimTrabalhador() {

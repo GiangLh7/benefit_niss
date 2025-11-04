@@ -24,13 +24,14 @@ import { DominiosService } from './../services/dominios.service';
 import { EntidadeEmpregadoraService } from './../services/entidadeEmpregadora.service';
 import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
-const XLSTYLE = require('ng-xlsx-style');
+import XLSTYLE from 'ng-xlsx-style';
 
 
 @Component({
   selector: 'app-declaracao-remuneracao',
   templateUrl: './declaracao-remuneracao.component.html',
-  styleUrls: ['./declaracao-remuneracao.component.css']
+  styleUrls: ['./declaracao-remuneracao.component.css'],
+  standalone: false
 })
 export class DeclaracaoRemuneracaoComponent implements OnInit {
   public selectedMonth = 0;

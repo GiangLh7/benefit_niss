@@ -16,6 +16,7 @@ import { Funcionalidades } from "../../models/utils";
 
 
 @Component({
+  standalone: false,
   selector: 'app-utilizador',
   templateUrl: './utilizador.component.html',
   styleUrls: ['./utilizador.component.css']
@@ -128,12 +129,12 @@ export class UtilizadorComponent implements OnInit {
 
   public editarUtilizador(idUtilizador: number, idTrabalhador: number) {
     this.showLoader();
-    this.router.navigate(['/novoUtilizador/', { idUtilizador: idUtilizador, idTrabalhador: idTrabalhador }], { skipLocationChange: true });
+    this.router.navigate(['/novoUtilizador/', { idUtilizador: idUtilizador, idTrabalhador: idTrabalhador }],);
     this.hideLoader();
   }
 
   public consultarUtilizador(id: number, idTrabalhador: number) {
-    this.router.navigate(['/novoUtilizador/', { idUtilizador: id, idTrabalhador:idTrabalhador, isConsultar: true }], { skipLocationChange: true });
+    this.router.navigate(['/novoUtilizador/', { idUtilizador: id, idTrabalhador:idTrabalhador, isConsultar: true }],);
   }
 
   public showLoader() {

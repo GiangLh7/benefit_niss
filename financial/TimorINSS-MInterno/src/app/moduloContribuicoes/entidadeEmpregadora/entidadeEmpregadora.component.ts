@@ -44,6 +44,7 @@ import { SelectDescription } from '../../models/utils';
 
 
 @Component({
+  standalone: false,
   selector: 'app-entidadeEmpregadora',
   templateUrl: './entidadeEmpregadora.component.html',
   styleUrls: ['./entidadeEmpregadora.component.css']
@@ -155,7 +156,7 @@ export class EntidadeEmpregadoraComponent implements OnInit {
     this.showLoader();
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate([''], { skipLocationChange: true })
+      this.router.navigate([''],)
     }
 
     if (this.tokenStorage.getToken()) {
@@ -667,11 +668,11 @@ export class EntidadeEmpregadoraComponent implements OnInit {
   }
 
   public editarResponsavelLegal(data: any) {
-    this.router.navigate(['/editarResponsavelLegal/' + data.idResponsavelLegal], { skipLocationChange: true });
+    this.router.navigate(['/editarResponsavelLegal/' + data.idResponsavelLegal],);
   }
 
   public adicionarSuspensao() {
-    this.router.navigate(['/registoSuspensao/', { suspensao: 'entidade' }], { skipLocationChange: true })
+    this.router.navigate(['/registoSuspensao/', { suspensao: 'entidade' }],)
   }
 
   deleteSuspensao(data: any) {
@@ -702,6 +703,6 @@ export class EntidadeEmpregadoraComponent implements OnInit {
   }
 
   public return(): void {
-    this.router.navigate(['/contribHomePage/'], { skipLocationChange: true });
+    this.router.navigate(['/contribHomePage/'],);
   }
 }

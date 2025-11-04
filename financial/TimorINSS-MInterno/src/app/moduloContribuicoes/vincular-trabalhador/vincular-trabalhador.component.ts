@@ -18,6 +18,7 @@ import { TrabalhadoresService } from '../../services/trabalhadores.service';
 import { openErrorsDialog, openSnackBar, showExpiredError } from '../../utils';
 
 @Component({
+  standalone: false,
   selector: 'app-vincular-trabalhador',
   templateUrl: './vincular-trabalhador.component.html',
   styleUrls: ['./vincular-trabalhador.component.css']
@@ -234,6 +235,6 @@ export class VincularTrabalhadorComponent implements OnInit {
   }
 
   public return(): void {
-    this.router.navigate(['/contribHomePage/'], { skipLocationChange: true });
+    this.router.navigate(['/contribHomePage/'],);
   }
 }

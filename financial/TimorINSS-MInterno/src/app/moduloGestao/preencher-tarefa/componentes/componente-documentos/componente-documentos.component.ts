@@ -1,4 +1,4 @@
-import { MaxSizeValidator } from '@angular-material-components/file-input';
+import { MaxSizeValidator } from 'src/app/utils/file-validators';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -17,6 +17,7 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { base64ArrayBuffer, openErrorSnackBar, openSnackBar, showExpiredError } from 'src/app/utils';
 
 @Component({
+  standalone: false,
   selector: 'app-componente-documentos',
   templateUrl: './componente-documentos.component.html',
   styleUrls: ['./componente-documentos.component.css']
@@ -128,7 +129,7 @@ export class ComponenteDocumentosComponent implements OnInit {
   }
 
   public addDocumentoRequired() {
-    this.fileControlDocumento.get('Documento')?.setValidators([Validators.required, MaxSizeValidator(this.maxSize)]);
+    this.fileControlDocumento.get('Documento')?.setValidators([Validators.required, MaxSizeValidator.maxContentSize(this.maxSize)]);
   }
 
   public clearDocumentoRequired() {

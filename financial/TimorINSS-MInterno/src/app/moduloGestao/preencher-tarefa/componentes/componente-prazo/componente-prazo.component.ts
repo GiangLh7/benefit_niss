@@ -5,6 +5,7 @@ import { MyErrorStateMatcher } from 'src/app/matcher';
 import { formatDatePT } from 'src/app/utils';
 
 @Component({
+  standalone: false,
   selector: 'app-componente-prazo',
   templateUrl: './componente-prazo.component.html',
   styleUrls: ['./componente-prazo.component.css'],

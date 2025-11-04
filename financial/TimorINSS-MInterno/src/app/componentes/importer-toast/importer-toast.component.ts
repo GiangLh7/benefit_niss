@@ -10,6 +10,7 @@ import { ExcelImporterPopupDestinatarioComponent } from '../excel-importer/excel
 import { ExcelImporterPopupMovimentosComponent } from '../excel-importer/excel-importer-popups/excel-importer-popup-movimentos/excel-importer-popup-movimentos.component';
 
 @Component({
+  standalone: false,
   selector: 'importer-toast',
   templateUrl: './importer-toast.component.html',
   styleUrls: ['./importer-toast.component.css'],

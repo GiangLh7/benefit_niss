@@ -1,4 +1,3 @@
-import { browser } from 'protractor';
 import { Component, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { TranslateService } from '@ngx-translate/core';
@@ -8,9 +7,10 @@ export interface DialogData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-dialog',
   templateUrl: 'dialog.component.html',
-  styleUrls: ['./dialog.component.css']
+  styleUrls: ['./dialog.component.css'],
 })
 export class DialogComponent {
   constructor(

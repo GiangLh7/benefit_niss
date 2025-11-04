@@ -51,20 +51,20 @@
 
   .arrow {
     width: 5%;
-    margin: 0 25px 25px 50px;
+    margin: 36px 25px 25px 50px;
     display: inline-block;
     vertical-align: top;
   }
 
   .arrowIcon {
     color:#2A81CC;
-    font-size: 2.2em;
   }
 
   .tabelaFuncionalidades {
-    width:100%;
+    width: 100%;
     text-align: left;
     background-color: white;
+    min-height: 150px;
   }
 
   .example-list {

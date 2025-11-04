@@ -17,6 +17,7 @@ import { Funcionalidades } from "../../models/utils";
 
 
 @Component({
+  standalone: false,
   selector: 'app-perfil',
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.css']
@@ -117,7 +118,7 @@ export class PerfilComponent implements OnInit {
   }
 
   public editPerfil(id: number, nomePerfil: string) {
-    this.router.navigate(['/adicionarPerfil/', { idPerfil: id, nomePerfil: nomePerfil }], { skipLocationChange: true });
+    this.router.navigate(['/adicionarPerfil/', { idPerfil: id, nomePerfil: nomePerfil }],);
   }
 
   public updatePerfisTable(event: any) {
@@ -159,7 +160,7 @@ export class PerfilComponent implements OnInit {
   }
 
   public adicionarPerfil() {
-    this.router.navigate(['/adicionarPerfil/'], { skipLocationChange: true })
+    this.router.navigate(['/adicionarPerfil/'],)
   }
 
   public showLoader() {

@@ -79,9 +79,7 @@ table th {
 }
 
 .VincularTrabalhadorSearchDivIcon {
-  position: relative;
-  bottom: 13px;
-  left: 1px;
+
 }
 
 .VincularTrabalhadorSearchDivButtonDiv {
@@ -181,6 +179,4 @@ table td[isChecked='true']{
 
 .utilizadorSearchIcon {
   position: relative;
-  bottom: 13px;
-  left: 1px;
 }

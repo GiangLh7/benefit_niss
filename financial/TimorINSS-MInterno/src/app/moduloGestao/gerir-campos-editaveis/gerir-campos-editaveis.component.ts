@@ -21,6 +21,7 @@ import { PopUpGravarRegimeComponent } from '../pop-up-gravar-regime/pop-up-grava
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 
 @Component({
+  standalone: false,
   selector: 'app-gerir-campos-editaveis',
   templateUrl: './gerir-campos-editaveis.component.html',
   styleUrls: ['./gerir-campos-editaveis.component.css']

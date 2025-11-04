@@ -11,6 +11,7 @@ export interface ExcelImporterPopupMovimentosData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-excel-importer-popup-movimentos',
   templateUrl: 'excel-importer-popup-movimentos.component.html',
   styleUrls: ['./excel-importer-popup-movimentos.component.css']

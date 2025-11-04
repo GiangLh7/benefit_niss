@@ -8,6 +8,7 @@ import { TokenStorageService } from "../../services/token-storage.service";
 import { blobZipSaveAs } from "../../utils";
 
 @Component({
+  standalone: false,
     selector: 'app-logs',
     templateUrl: './logs.component.html',
     styleUrls: ['./logs.component.css']
@@ -30,7 +31,7 @@ export class LogsComponent implements OnInit {
             this.isLoggedIn = true;
         }
         else
-            this.router.navigate([''], { skipLocationChange: true });
+            this.router.navigate([''],);
     }
 
     showError(error: string[]) {

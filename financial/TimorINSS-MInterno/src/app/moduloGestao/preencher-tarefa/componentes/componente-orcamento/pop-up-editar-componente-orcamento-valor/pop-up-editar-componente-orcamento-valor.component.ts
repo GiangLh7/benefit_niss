@@ -11,6 +11,7 @@ export interface PopUpEditarComponenteOrcamentoValorData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-editar-componente-orcamento-valor',
   templateUrl: './pop-up-editar-componente-orcamento-valor.component.html',
   styleUrls: ['./pop-up-editar-componente-orcamento-valor.component.css']

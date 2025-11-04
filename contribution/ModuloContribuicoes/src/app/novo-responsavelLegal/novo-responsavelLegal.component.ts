@@ -171,7 +171,7 @@ export class NovoResponsavelLegalComponent implements OnInit {
                     dialogRef.afterClosed().subscribe(result => {
                         if (result){
                             this.responsavelLegalService.savedSuccessfully = true;
-                            this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+                            this.router.navigate(['/entidadeEmpregadora'],);
                         }
                     });
                 })
@@ -180,7 +180,7 @@ export class NovoResponsavelLegalComponent implements OnInit {
                 this.responsavelLegalService.saveResponsavelLegal(this.responsavelLegalrequest).subscribe(x => {
                     this.spinner.hide();
                     this.responsavelLegalService.savedSuccessfully = true;
-                    this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+                    this.router.navigate(['/entidadeEmpregadora'],);
                   },
                   err => {
                     this.spinner.hide();
@@ -198,7 +198,7 @@ export class NovoResponsavelLegalComponent implements OnInit {
 
     public cancel(): void{
         this.responsavelLegalService.traceBack = true;
-        this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+        this.router.navigate(['/entidadeEmpregadora'],);
     }
 
     private validatedAllFields(): boolean{

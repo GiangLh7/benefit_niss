@@ -17,6 +17,7 @@ import { TokenStorageService } from "src/app/services/token-storage.service";
 import { blobExcelSaveAs, formataCurrency, formatDatePT, openErrorsDialog, showExpiredError } from "src/app/utils";
 
 @Component({
+  standalone: false,
   selector: 'app-consultas-extratos-bancarios',
   templateUrl: './consultas-extratos-bancarios.component.html',
   styleUrls: ['./consultas-extratos-bancarios.component.css']
@@ -74,7 +75,7 @@ export class ConsultasExtratosBancariosComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
       this.getContasBancariasDropdown();

@@ -6,25 +6,16 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from "@ngx-translate/core";
 import { MyErrorStateMatcher } from "src/app/matcher";
 import { TokenStorageService } from "src/app/services/token-storage.service";
-import { blobExcelSaveAs, customCurrencyMaskConfig, formatDatePT, JsPdf_centerText, openErrorsDialog, openSnackBar, RegexPatterns, showExpiredError } from "src/app/utils";
-import { DespesaCabimentadasParaExecucao, DespesaRegistada } from "src/app/models/despesaRegistada";
+import { blobExcelSaveAs, customCurrencyMaskConfig, openErrorsDialog, openSnackBar, RegexPatterns, showExpiredError } from "src/app/utils";
 import { Destinatario } from "src/app/models/destinatario";
-import { ClassificacaoContabilisticaExecucao, PagamentoExecutado, PagamentoExecutadoDestinatario } from "src/app/models/pagamentos_executados";
+import { ClassificacaoContabilisticaExecucao, PagamentoExecutadoDestinatario } from "src/app/models/pagamentos_executados";
 import { GetDestinatarioRequest, SaveDestinatarioRequest } from "src/app/request-models/destinatario-request";
 import { DestinatarioService } from "src/app/services/destinatario.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { PagamentoExecutadoService } from "src/app/services/pagamentoExecutado.service";
-import { EditPagamentoExecutadoRequest, GetDestinatarioPagamentoRequest, GetPagamentoExecutadoRequest, SaveClassificacaoContabilisticaExecucaoRequest, SavePagamentoExecutadoRequest } from "src/app/request-models/pagamentoExecutado-request";
-import { forkJoin } from "rxjs";
-import { GetAllDespesaRegistadaRequest } from "src/app/request-models/componenteDespesaRegisto-request";
+import { GetPagamentoExecutadoRequest, SaveClassificacaoContabilisticaExecucaoRequest } from "src/app/request-models/pagamentoExecutado-request";
 import { ComponenteDespesaRegistoService } from "src/app/services/componenteDespesaRegisto.service";
 import { faFileExcel } from '@fortawesome/free-solid-svg-icons';
-import { PopUpWarningComponent } from "src/app/componentes/pop-up-warning/pop-up-warning.component";
-import * as XLSX from 'xlsx';
-import { Despesa } from "src/app/models/despesa";
-import { ComponenteDespesaConfig } from "src/app/models/componenteDespesaConfig";
-import jsPDF from "jspdf";
-import { environment } from "src/environments/environment";
 import { CodigoConta } from "src/app/models/codigoConta";
 import { GetComponenteOrcamentoRegistoAprovadoRequest } from "src/app/request-models/componenteOrcamentoRegisto-request";
 import { componenteOrcamentoRegistoService } from "src/app/services/componenteOrcamentoRegisto.service";
@@ -39,6 +30,7 @@ export interface PopUpClassificacaoContabilisticaData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-classificacao-contabilistica',
   templateUrl: './pop-up-classificacao-contabilistica.component.html',
   styleUrls: ['./pop-up-classificacao-contabilistica.component.css']

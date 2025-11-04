@@ -18,6 +18,7 @@ import { timeStamp } from "console";
 
 
 @Component({
+  standalone: false,
   selector: 'app-adicionar_perfil',
   templateUrl: './adicionar_perfil.component.html',
   styleUrls: ['./adicionar_perfil.component.css']
@@ -196,7 +197,7 @@ export class AdicionarPerfilComponent implements OnInit {
         this.hideLoader();
         openSnackBar(this.translate.instant('snackBar.addPerfil'), this._snackBar);
         this.dataSource2 = [];
-        this.router.navigate(['/perfil/'], { skipLocationChange: true });
+        this.router.navigate(['/perfil/'],);
 
       },
         err => {
@@ -220,7 +221,7 @@ export class AdicionarPerfilComponent implements OnInit {
       this.hideLoader();
       openSnackBar(this.translate.instant('snackBar.editPerfil'), this._snackBar);
       this.dataSource2 = [];
-      this.router.navigate(['/perfil/'], { skipLocationChange: true });
+      this.router.navigate(['/perfil/'],);
 
     },
       err => {
@@ -235,7 +236,7 @@ export class AdicionarPerfilComponent implements OnInit {
   }
 
   public cancelar() {
-    this.router.navigate(['/perfil/'], { skipLocationChange: true });
+    this.router.navigate(['/perfil/'],);
   }
 
   public showLoader() {

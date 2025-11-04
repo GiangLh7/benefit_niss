@@ -11,6 +11,7 @@ import { ProcessoDataResponse } from 'src/app/response-models/processo-response'
 import { DatePipe } from '@angular/common';
 
 @Component({
+  standalone: false,
   selector: 'app-processo-detalhe',
   templateUrl: './processo-detalhe.component.html',
   styleUrls: ['./processo-detalhe.component.css'],
@@ -32,7 +33,7 @@ export class ProcessoDetalheComponent implements OnInit {
     private processoService: ProcessoService,
     private datepipe: DatePipe,
   ) {
-    this.from = this.router.getCurrentNavigation()?.extras.state?.from;
+    this.from = this.router.getCurrentNavigation()?.extras.state?.["from"];
   }
 
   ngOnInit(): void {
@@ -42,7 +43,7 @@ export class ProcessoDetalheComponent implements OnInit {
       this.tokenStorage.getToken() &&
       !this.tokenStorage.tokenExpired()
     ) {
-      let id = this.actRoute.snapshot.params.id;
+      let id = this.actRoute.snapshot.params["id"];
       this.processoId = id;
 
       this.showLoader();
@@ -84,7 +85,7 @@ export class ProcessoDetalheComponent implements OnInit {
   }
 
   public voltar() {    
-    this.router.navigate([this.from || './processosArquivados'], { skipLocationChange: true });
+    this.router.navigate([this.from || './processosArquivados'],);
   }
 
   public refreshDocTableEvent(event: any) {

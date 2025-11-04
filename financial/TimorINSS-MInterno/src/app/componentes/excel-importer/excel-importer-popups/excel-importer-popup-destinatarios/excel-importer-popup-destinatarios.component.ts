@@ -18,6 +18,7 @@ export interface ExcelImporterPopupDestinatarioData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-excel-importer-popup-destinatarios',
   templateUrl: 'excel-importer-popup-destinatarios.component.html',
   styleUrls: ['./excel-importer-popup-destinatarios.component.css']

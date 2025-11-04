@@ -18,6 +18,7 @@ import { TarefaDataResponse } from 'src/app/response-models/tarefa-response';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
+  standalone: false,
   selector: 'app-preencher-tarefa',
   templateUrl: './preencher-tarefa.component.html',
   styleUrls: ['./preencher-tarefa.component.css'],
@@ -48,7 +49,7 @@ export class PreencherTarefaComponent implements OnInit {
     private tarefaService: TarefaService,
     public _snackBar: MatSnackBar,
   ) {
-    this.lockUnlockRequest.id = this.actRoute.snapshot.params.id;
+    this.lockUnlockRequest.id = this.actRoute.snapshot.params["id"];
     this.router.events.subscribe((ev) => {
       if (ev instanceof NavigationEnd) { 
         if (!ev.urlAfterRedirects.includes('preencherTarefa'))
@@ -64,7 +65,7 @@ export class PreencherTarefaComponent implements OnInit {
       this.tokenStorage.getToken() &&
       !this.tokenStorage.tokenExpired()
     ) {
-      let id = this.actRoute.snapshot.params.id;
+      let id = this.actRoute.snapshot.params["id"];
       this.tarefaActivoId = id;
 
       this.showLoader();

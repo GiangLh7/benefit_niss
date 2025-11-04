@@ -34,19 +34,13 @@
   margin-left: 14%;
   margin-right: 14%;
   display: flex;
+  align-items: center;
+  gap: 12px;
   position: relative;
 }
 
-.icon{
-  display: flex;
-  float: left;
-  padding-top: 20px;
-}
-
 .text{
-  margin-left: 10px;
-  width: 693px;
-  height: 64px;
+  flex: 1;
   font-size: inherit;
 }
 

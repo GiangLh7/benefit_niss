@@ -1,4 +1,3 @@
-import { MaxSizeValidator } from '@angular-material-components/file-input';
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
@@ -48,8 +47,10 @@ import { ContatoService } from './../../services/contato.service';
 import { InssEstrangeiroService } from './../../services/inssEstrangeiro.service';
 import { MoradaService } from './../../services/morada.service';
 import { TrabalhadoresService } from './../../services/trabalhadores.service';
+import { MaxSizeValidator } from 'src/app/utils/file-validators';
 
 @Component({
+  standalone: false,
   selector: 'app-novo-trabalhador',
   templateUrl: './novo-trabalhador.component.html',
   styleUrls: ['./novo-trabalhador.component.css']
@@ -239,7 +240,7 @@ export class NovoTrabalhadorComponent implements OnInit {
         requests.push(this.dominiosService.GetAllRegimes());
         requests.push(this.escaloesService.GetAllEscaloes());
 
-        let id = this.actRoute.snapshot.params.id;
+        let id = this.actRoute.snapshot.params["id"];
         if (id) {
           this.isEdicao = true;
           this.contrato.idRelEntidadeTrabalhador = id;
@@ -488,7 +489,7 @@ export class NovoTrabalhadorComponent implements OnInit {
       this.hideLoader();
       this.submittedTry = false;
       openSnackBar(this.translate.instant('snackBar.saveTrabalhador'), this.snackBar);
-      this.router.navigate(['/trabalhadores'], { skipLocationChange: true });
+      this.router.navigate(['/trabalhadores'],);
     },
       err => {
         err.error?.errors ? err.error.errors.map((x: any) => this.errors.push(x.errorCode)) : this.errors.push('-1');
@@ -1433,7 +1434,7 @@ export class NovoTrabalhadorComponent implements OnInit {
   }
 
   public addDocumentoRequired() {
-    this.fileControlDocumento.get('Documento')?.setValidators([Validators.required, MaxSizeValidator(this.maxSize)]);
+    this.fileControlDocumento.get('Documento')?.setValidators([Validators.required, MaxSizeValidator.maxContentSize(this.maxSize)]);
   }
 
   public clearDocumentoRequired() {
@@ -1441,7 +1442,7 @@ export class NovoTrabalhadorComponent implements OnInit {
   }
 
   public addDocumentoINSSRequired() {
-    this.fileControlDocumento.get('Documento')?.setValidators([MaxSizeValidator(this.maxSize)]);
+    this.fileControlDocumento.get('Documento')?.setValidators([MaxSizeValidator.maxContentSize(this.maxSize)]);
   }
 
   public clearDocumentoINSSRequired() {
@@ -1468,7 +1469,7 @@ export class NovoTrabalhadorComponent implements OnInit {
   }
 
   public adicionarSuspensao() {
-    this.router.navigate(['/registoSuspensao/', { suspensao: 'trabalhador', niss: this.trabalhador.niss, idTrabalhador: this.trabalhador.idTrabalhador, idRel: this.contrato.idRelEntidadeTrabalhador }, { skipLocationChange: true }])
+    this.router.navigate(['/registoSuspensao/', { suspensao: 'trabalhador', niss: this.trabalhador.niss, idTrabalhador: this.trabalhador.idTrabalhador, idRel: this.contrato.idRelEntidadeTrabalhador },])
   }
 
   public clearDtIniFimTrabalhador() {
@@ -1508,7 +1509,7 @@ export class NovoTrabalhadorComponent implements OnInit {
   }
 
   public return(): void {
-    this.router.navigate(['/contribHomePage/'], { skipLocationChange: true });
+    this.router.navigate(['/contribHomePage/'],);
   }
 
   public openPdf(element: DocumentoListagem) {

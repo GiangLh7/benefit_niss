@@ -4,6 +4,7 @@ import { TranslateService } from "@ngx-translate/core";
 import { MenuItem } from "../models/utils";
 
 @Component({
+  standalone: false,
   selector: "app-menu-panel",
   templateUrl: "./menu-panel.component.html",
   styleUrls: ["./menu-panel.component.css"]

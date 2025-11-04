@@ -16,6 +16,7 @@ import { TokenStorageService } from "src/app/services/token-storage.service";
 import { blobExcelSaveAs, formataCurrency, formatDate, openErrorsDialog, showExpiredError } from "src/app/utils";
 
 @Component({
+  standalone: false,
   selector: 'app-consultas-situacao',
   templateUrl: './consultas-situacao.component.html',
   styleUrls: ['./consultas-situacao.component.css']
@@ -65,7 +66,7 @@ export class ConsultasSituacoesContributivasComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
       

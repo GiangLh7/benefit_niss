@@ -19,6 +19,7 @@ import { formatDate, formatDatePT, openErrorsDialog, openSnackBar, showExpiredEr
 import { PopUpIniciarProcessoComponent } from "../pop-up-iniciar-processo/pop-up-iniciar-processo.component";
 
 @Component({
+  standalone: false,
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
@@ -101,7 +102,7 @@ export class HomePageComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
       this.isLoggedIn = true;
@@ -225,10 +226,10 @@ export class HomePageComponent implements OnInit {
   }
 
   public consultarProcessosArquivados() {
-    this.router.navigate(['../processosArquivados'], { skipLocationChange: true });
+    this.router.navigate(['../processosArquivados'],);
   }
 
   public updateTarefa(id: number) {
-    this.router.navigate(['../preencherTarefa', id], { skipLocationChange: true });
+    this.router.navigate(['../preencherTarefa', id],);
   }
 }

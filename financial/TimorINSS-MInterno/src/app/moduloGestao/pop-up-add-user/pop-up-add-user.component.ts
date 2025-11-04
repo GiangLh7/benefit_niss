@@ -22,9 +22,10 @@ export interface PopUpAddUserData {
 
 }
 @Component({
+  standalone: false,
   selector: 'app-pop-up-add-user',
   templateUrl: './pop-up-add-user.component.html',
-  styleUrls: ['./pop-up-add-user.component.css']
+  styleUrls: ['./pop-up-add-user.component.scss']
 })
 export class PopUpAddUserComponent implements OnInit {
   public availableRegex = RegexPatterns;

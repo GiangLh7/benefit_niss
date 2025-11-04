@@ -1,5 +1,5 @@
 import { ErrorStateMatcher } from "@angular/material/core";
-import * as moment from "moment";
+import moment from "moment";
 
 //error states
 export class MyErrorStateMatcher implements ErrorStateMatcher {

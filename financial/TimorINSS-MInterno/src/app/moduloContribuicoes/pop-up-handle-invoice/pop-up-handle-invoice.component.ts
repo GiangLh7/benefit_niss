@@ -3,7 +3,6 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
 import {NgxSpinnerService} from "ngx-spinner";
 import {faTimesCircle} from '@fortawesome/free-solid-svg-icons';
-import {TokenStorageService} from '../../services/token-storage.service';
 import {DialogComponent} from '../../componentes/dialog/dialog.component';
 import {
   base64ArrayBuffer,
@@ -15,7 +14,7 @@ import {
   SelectsWDisable
 } from "../../utils";
 import {FormControl, Validators} from "@angular/forms";
-import {MaxSizeValidator} from "@angular-material-components/file-input";
+import {MaxSizeValidator} from '../../utils/file-validators';
 import {MyErrorStateMatcher} from "../../matcher";
 import {TranslateService} from "@ngx-translate/core";
 import {GuiaPagamentoService} from "../../services/guiaPagamento.service";
@@ -36,6 +35,7 @@ export interface PopUpHandleInvoiceComponentData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-handle-invoice',
   templateUrl: './pop-up-handle-invoice.component.html',
   styleUrls: ['./pop-up-handle-invoice.component.css']
@@ -198,7 +198,7 @@ export class PopUpHandleInvoiceComponent {
   }
 
   public addDocumentoRequired() {
-    this.fileControl.get('Documento')?.setValidators([Validators.required, MaxSizeValidator(this.maxSize)]);
+    this.fileControl.get('Documento')?.setValidators([Validators.required, MaxSizeValidator.maxContentSize(this.maxSize)]);
   }
 
   public useCredit(): void {

@@ -22,6 +22,7 @@ import { TokenStorageService } from "src/app/services/token-storage.service";
 import { blobExcelSaveAs, formataCurrency, formatDate, formatDatePT, openErrorsDialog, showExpiredError } from "src/app/utils";
 
 @Component({
+  standalone: false,
   selector: 'app-consultas-balanco',
   templateUrl: './consultas-balanco.component.html',
   styleUrls: ['./consultas-balanco.component.css']
@@ -72,7 +73,7 @@ export class ConsultasBalancoComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
 

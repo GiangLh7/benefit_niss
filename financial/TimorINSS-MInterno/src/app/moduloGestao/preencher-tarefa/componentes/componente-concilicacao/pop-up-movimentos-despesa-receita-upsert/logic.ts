@@ -8,7 +8,7 @@ import { base64ArrayBuffer, openErrorsDialog, base64ToArrayBuffer, customPositiv
 import { MovimentosDespesaReceitaUpsertRequest } from "src/app/request-models/movimentosBancarios-request";
 import { movimentosBancariosService } from "src/app/services/movimentosBancarios.service";
 import { FormControl, Validators } from "@angular/forms";
-import { MaxSizeValidator } from "@angular-material-components/file-input";
+import { MaxSizeValidator } from 'src/app/utils/file-validators';
 import { MyErrorStateMatcher, MyNumberDifferentStateMatcher } from "src/app/matcher";
 import { MovimentoBancarioDropListResponseDominions } from "src/app/response-models/movimentosBancarios-response";
 import { CodigoConta } from "src/app/models/codigoConta";
@@ -29,7 +29,8 @@ import { AgrupamentoConfigService } from "src/app/services/agrupamentoConfig.ser
 @Component({
   selector: 'app-pop-up-movimentos-despesa-receita-upsert',
   templateUrl: './index.html',
-  styleUrls: ['./styles.css']
+  styleUrls: ['./styles.css'],
+  standalone: false
 })
 export class PopUpMovimentosDespesaReceitaUpsertComponent implements OnInit{
 
@@ -167,7 +168,7 @@ export class PopUpMovimentosDespesaReceitaUpsertComponent implements OnInit{
   }
 
   public addDocumentoRequired() {
-    this.fileControlDocumento.get('Documento')?.setValidators([Validators.required, MaxSizeValidator(this.maxSize)]);
+    this.fileControlDocumento.get('Documento')?.setValidators([Validators.required, MaxSizeValidator.maxContentSize(this.maxSize)]);
   }
 
   public closePopUp(): void {

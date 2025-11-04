@@ -15,13 +15,15 @@
 
         <div  class="user-nav" *ngIf="isLoggedIn">
           <mat-icon class="profile-icon_2">account_circle</mat-icon>
-          <div class="user-txt-box">
-            {{'general.user' | translate}}:
-            <a matTooltip="{{username}}" class="user-txt">{{username}}</a>
-          </div>
-          <div class="niss-txt-box">
-            {{'general.profile' | translate}}:
-            <a matTooltip="{{profiles}}" class="user-txt">{{profiles}}</a>
+          <div class="profile-info-wrapper">
+            <div class="user-txt-box">
+              {{'general.user' | translate}}:
+              <a matTooltip="{{username}}" class="user-txt">{{username}}</a>
+            </div>
+            <div class="niss-txt-box">
+              {{'general.profile' | translate}}:
+              <a matTooltip="{{profiles}}" class="user-txt">{{profiles}}</a>
+            </div>
           </div>
         </div>
 

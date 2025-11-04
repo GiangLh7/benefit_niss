@@ -13,6 +13,7 @@ export interface PopUpWarningData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-warning',
   templateUrl: 'pop-up-warning.component.html',
   styleUrls: ['./pop-up-warning.component.css']

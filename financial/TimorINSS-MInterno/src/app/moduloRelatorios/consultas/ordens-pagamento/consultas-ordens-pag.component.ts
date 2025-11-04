@@ -18,6 +18,7 @@ import { blobExcelSaveAs, formataCurrency, formatDatePT, JsPdf_centerText, openE
 import { environment } from "src/environments/environment";
 
 @Component({
+  standalone: false,
   selector: 'app-consultas-ordens-pag',
   templateUrl: './consultas-ordens-pag.component.html',
   styleUrls: ['./consultas-ordens-pag.component.css']
@@ -64,7 +65,7 @@ export class ConsultasOrdensPagamentoComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
       this.getEstadosPagamento();

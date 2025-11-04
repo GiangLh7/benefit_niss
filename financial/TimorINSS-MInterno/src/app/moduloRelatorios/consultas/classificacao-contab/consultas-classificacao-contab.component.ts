@@ -15,6 +15,7 @@ import { TokenStorageService } from "src/app/services/token-storage.service";
 import { blobExcelSaveAs, formataCurrency, formatDate, formatDatePT, openErrorsDialog, showExpiredError } from "src/app/utils";
 
 @Component({
+  standalone: false,
   selector: 'app-consultas-classificacao-contab',
   templateUrl: './consultas-classificacao-contab.component.html',
   styleUrls: ['./consultas-classificacao-contab.component.css']
@@ -67,7 +68,7 @@ export class ConsultasClassificacaoContabilisticaComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
 

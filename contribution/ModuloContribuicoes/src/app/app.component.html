@@ -2,11 +2,11 @@
   <div class="navbar">
     <div class="firstLineHeader">
       <div class="headerEsquerda" routerLinkActive="active">
-        <a href="" routerLink="" (click)="this.isLoginRoute = false" [skipLocationChange]="true">
+        <a href="" routerLink="" (click)="this.isLoginRoute = false">
           <img class="img-Icon" src="{{ssIcon}}">
         </a>
 
-        <a href="" class="app-title" (click)="this.isLoginRoute = false" routerLink="" [skipLocationChange]="true">{{ 'general.inssPortal' | translate }}</a>
+        <a href="" class="app-title" (click)="this.isLoginRoute = false" routerLink="">{{ 'general.inssPortal' | translate }}</a>
       </div>
       <div class="right-header">
 
@@ -22,7 +22,7 @@
           </div>
         </div>
 
-        <div  href="/login" class="login-nav" *ngIf="!isLoggedIn && !isLoginRoute" routerLink="login" (click)="this.isLoginRoute = true" [skipLocationChange]="true">
+        <div  href="/login" class="login-nav" *ngIf="!isLoggedIn && !isLoginRoute" routerLink="login" (click)="this.isLoginRoute = true">
           <mat-icon class="profile-icon">account_circle</mat-icon>
           <a class="login-txt">{{'general.reservedArea' | translate}}</a>
           <a class="login-txt_2">{{'general.login' | translate}}</a>
@@ -42,19 +42,19 @@
     </div>
 
     <div class="navigation-header" *ngIf="isLoggedIn">
-      <a class="routetitle" routerLink="/declaracaoRemuneracao" [routerLinkActive]="['active']" [skipLocationChange]="true">
+      <a class="routetitle" routerLink="/declaracaoRemuneracao" [routerLinkActive]="['active']">
         <span>{{'general.declaracaoRemuneracao' | translate}}</span>
       </a>
-      <a class="routetitle" routerLink="/contaCorrente" [routerLinkActive]="['active']" [skipLocationChange]="true">
+      <a class="routetitle" routerLink="/contaCorrente" [routerLinkActive]="['active']">
         <span>{{'general.contaCorrente' | translate}}</span>
       </a>
-      <a class="routetitle" routerLink="/guiaPagamento" [routerLinkActive]="['active']" [skipLocationChange]="true">
+      <a class="routetitle" routerLink="/guiaPagamento" [routerLinkActive]="['active']">
         <span>{{'general.guiasDePagamento' | translate}}</span>
       </a>
-      <a class="routetitle" routerLink="/entidadeEmpregadora" [routerLinkActive]="['active']" [skipLocationChange]="true">
+      <a class="routetitle" routerLink="/entidadeEmpregadora" [routerLinkActive]="['active']">
         <span>{{'general.entidadeEmpregadora' | translate}}</span>
       </a>
-      <a class="routetitle" routerLink="/trabalhadores" [routerLinkActive]="['active']" [skipLocationChange]="true">
+      <a class="routetitle" routerLink="/trabalhadores" [routerLinkActive]="['active']">
         <span>{{'general.trabalhadores' | translate}}</span>
       </a>
     </div>

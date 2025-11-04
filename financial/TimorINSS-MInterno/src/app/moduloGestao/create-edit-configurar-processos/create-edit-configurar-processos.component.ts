@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, OnInit, signal, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable } from '@angular/material/table';
@@ -7,12 +7,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { MyErrorStateMatcher } from 'src/app/matcher';
 import { SelectDescription } from 'src/app/models/utils';
 import { ProcessoConfigRequest } from 'src/app/request-models/processo-request';
 import { PerfisListagem } from 'src/app/response-models/perfis-response';
-import { ProcessosListagemResponse } from 'src/app/response-models/processo-response';
 import { TarefaConfigListagem } from 'src/app/response-models/tarefa-response';
 import { PerfilService } from 'src/app/services/perfil.service';
 import { ProcessoService } from 'src/app/services/processos.service';
@@ -21,9 +20,10 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { openErrorsDialog, openSnackBar, showExpiredError } from 'src/app/utils';
 
 @Component({
+  standalone: false,
   selector: 'app-create-edit-configurar-processos',
   templateUrl: './create-edit-configurar-processos.component.html',
-  styleUrls: ['./create-edit-configurar-processos.component.css']
+  styleUrls: ['./create-edit-configurar-processos.component.scss']
 })
 export class NovoConfigurarProcessosComponent implements OnInit {
 
@@ -39,20 +39,28 @@ export class NovoConfigurarProcessosComponent implements OnInit {
 
   //Logic objects
   public request = <ProcessoConfigRequest>{};
-  public tarefasList: SelectDescription[] = []
+  private taskList: SelectDescription[] = []
   public filteredTarefasList: SelectDescription[] = []
   public perfisList: SelectDescription[] = []
   public filteredPerfisList: SelectDescription[] = []
-  public selectedTarefaId = <number>{};
-  public selectedPerfilId = <number>{};
+  public selectedTarefaId = 0;
+  public selectedPerfilId = 0;
   @ViewChild('tableTarefa') table!: MatTable<TarefaConfigListagem>;
 
   //Tarefas Table
-  public dataSourceTarefa: TarefaConfigListagem[] = [];
+  readonly dataSourceTasks = signal<TarefaConfigListagem[]>([]);
+  readonly addedTasks = computed(() => {
+    const tasks = this.dataSourceTasks();
+    return new Map(tasks.map(task => [task.id, task]));
+  });
   public displayedColumnsTarefa: string[] = ['nome', 'tarefaInicial', 'eliminar'];
 
   //Perfis Table
-  public dataSourcePerfil: PerfisListagem[] = [];
+  readonly dataSourceProfile = signal<PerfisListagem[]>([]);
+  readonly addedProfiles = computed(() => {
+    const profiles = this.dataSourceProfile();
+    return new Map(profiles.map(profile => [profile.id, profile]));
+  });
   public displayedColumnsPerfil: string[] = ['descricao', 'eliminar'];
 
   constructor(
@@ -75,14 +83,14 @@ export class NovoConfigurarProcessosComponent implements OnInit {
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired())
     {
       this.isLoggedIn = true;
-      let id = this.actRoute.snapshot.params.id;
+      let id = this.actRoute.snapshot.params["id"];
       //Get Tarefas and Perfis List
       this.spinner.show();
       var tarefas = this.tarefaService.getAllTarefaAtivo();
       var perfis = this.perfilService.getAllPerfisAtivo();
       forkJoin([tarefas,perfis]).subscribe(([tarefas,perfis]) => {
-        this.tarefasList = tarefas.selects;
-        this.filteredTarefasList = JSON.parse(JSON.stringify(this.tarefasList));
+        this.taskList = tarefas.selects;
+        this.filteredTarefasList = JSON.parse(JSON.stringify(this.taskList));
         this.perfisList = perfis.selects;
         this.filteredPerfisList = JSON.parse(JSON.stringify(this.perfisList));
         if (!id)
@@ -119,7 +127,7 @@ export class NovoConfigurarProcessosComponent implements OnInit {
       this.request.nome = response.nome;
       this.request.id = response.id;
       response.tarefas.forEach(tarefa => {
-        this.addTarefa(tarefa.id);
+        this.addTask(tarefa.id);
       });
       response.perfis.forEach(perfil => {
         this.addPerfil(perfil);
@@ -135,54 +143,64 @@ export class NovoConfigurarProcessosComponent implements OnInit {
 
   public filterMyTarefaOptions(event: any)
   {
-    this.filteredTarefasList = this.tarefasList.filter(p => p.nome.toLowerCase().includes(event.toLowerCase()));
+    this.filteredTarefasList = this.taskList.filter(p => p.nome.toLowerCase().includes(event.toLowerCase()));
   }
   public filterMyPerfilOptions(event: any)
   {
     this.filteredPerfisList = this.perfisList.filter(p => p.nome.toLowerCase().includes(event.toLowerCase()));
   }
 
-  public addTarefa(selectedTarefaId: number)
+  public addTask(selectedTaskId: number)
   {
-    var tarefa: SelectDescription = this.tarefasList.filter((c: { id: number; }) => c.id === selectedTarefaId)[0]
-
-    var tarefaAdicionar: TarefaConfigListagem;
-    tarefaAdicionar = { id: selectedTarefaId, nome: tarefa.nome, tarefaInicial: false};
-
-    var index = this.dataSourceTarefa.findIndex(x => x.id === selectedTarefaId);
-
-    if (index == null || index == -1) {
-      if (!this.dataSourceTarefa[0])
-        tarefaAdicionar.tarefaInicial = true;
-      this.dataSourceTarefa.push(tarefaAdicionar);
-      this.dataSourceTarefa = [...this.dataSourceTarefa];
+    const task = this.taskList.find(c => c.id === selectedTaskId);
+    if (!task) {
+      return;
     }
+
+    const tasks = [...this.dataSourceTasks()];
+    const newTask = { id: selectedTaskId, nome: task.nome, tarefaInicial: !tasks.length };
+    const isAdded = this.addedTasks().has(selectedTaskId);
+
+    if (isAdded) {
+      return;
+    }
+
+   this.dataSourceTasks.set([
+      ...tasks,
+      newTask
+    ]);
+    this.selectedTarefaId = 0;
   }
 
   public addPerfil(selectedPerfilId: number)
   {
-    var tarefa: SelectDescription = this.perfisList.filter((c: { id: number; }) => c.id === selectedPerfilId)[0]
+    const profile = this.perfisList.find(c => c.id === selectedPerfilId);
 
-    var perfilAdicionar: PerfisListagem;
-    perfilAdicionar = { id: selectedPerfilId, descricao: tarefa.nome, indActivo: tarefa.indActivo, dataCriacao: new Date};
+    if (!profile) {
+      return;
+    }
 
-    var index = this.dataSourcePerfil.findIndex(x => x.id === selectedPerfilId);
+    const perfilAdicionar: PerfisListagem = { id: selectedPerfilId, descricao: profile.nome, indActivo: profile.indActivo, dataCriacao: new Date};
 
-    if (index == null || index == -1) {
-      this.dataSourcePerfil.push(perfilAdicionar);
-      this.dataSourcePerfil = [...this.dataSourcePerfil];
+    if (!this.addedProfiles().has(selectedPerfilId)) {
+      this.dataSourceProfile.set([
+        ...this.dataSourceProfile(),
+        perfilAdicionar,
+      ]);
+
+      this.selectedPerfilId = 0;
     }
   }
 
   public adicionarEditarConfigProcesso() 
   {
     this.submittedTry = true;
-    if (this.dataSourceTarefa.length == 0) {
+    if (this.dataSourceTasks.length == 0) {
       this.tarefaError = true;
     }
     else
       this.tarefaError = false;
-    if (this.dataSourcePerfil.length == 0) {
+    if (this.dataSourceProfile.length == 0) {
       this.perfilError = true;
     } else
       this.perfilError = false;
@@ -195,13 +213,13 @@ export class NovoConfigurarProcessosComponent implements OnInit {
 
     this.request.tarefas = [];
     this.request.perfis = [];
-    this.dataSourceTarefa.forEach(element => {
+    this.dataSourceTasks().forEach(element => {
       this.request.tarefas.push({
         id: element.id,
         tarefaInicial: element.tarefaInicial
       })
     });
-    this.dataSourcePerfil.forEach(element => {
+    this.dataSourceProfile().forEach(element => {
       this.request.perfis.push(element.id)
     });
 
@@ -210,7 +228,7 @@ export class NovoConfigurarProcessosComponent implements OnInit {
       this.processoService.UpdateProcessoConfig(this.request).subscribe(() => {
         this.spinner.hide();
         openSnackBar(this.translate.instant('snackBar.editProcessoConfig'), this._snackBar);
-        this.router.navigate(['/processos'], { skipLocationChange: true });
+        this.router.navigate(['/processos'],);
   
       },
         err => {
@@ -222,7 +240,7 @@ export class NovoConfigurarProcessosComponent implements OnInit {
       this.processoService.CreateProcessoConfig(this.request).subscribe(() => {
         this.spinner.hide();
         openSnackBar(this.translate.instant('snackBar.createProcessoConfig'), this._snackBar);
-        this.router.navigate(['/processos'], { skipLocationChange: true });
+        this.router.navigate(['/processos'],);
   
       },
         err => {
@@ -235,40 +253,36 @@ export class NovoConfigurarProcessosComponent implements OnInit {
 
   public cancelar()
   {
-    this.router.navigate(['/processos'], { skipLocationChange: true });
+    this.router.navigate(['/processos'],);
   }
 
-  public deleteTarefa(id: number)
+  public deleteTask(id: number)
   {
-    var index = this.dataSourceTarefa.findIndex(x => x.id == id);
-    if (this.dataSourceTarefa[index].tarefaInicial) {
-      this.dataSourceTarefa.splice(index, 1);
-      if (this.dataSourceTarefa[0])
-        this.dataSourceTarefa[0].tarefaInicial = true;
-    } else {
-      this.dataSourceTarefa.splice(index, 1)
-    }      
-    this.dataSourceTarefa = [...this.dataSourceTarefa];
+    const tasks = [...this.dataSourceTasks()];
+    const index = tasks.findIndex(task => task.id == id);
+    tasks.splice(index, 1);
+    this.dataSourceTasks.set(tasks);
   }
 
-  public deletePerfil(id: number)
+  deleteProfile(id: number)
   {
-    var index = this.dataSourcePerfil.findIndex(x => x.id == id);
-    this.dataSourcePerfil.splice(index, 1)
-    this.dataSourcePerfil = [...this.dataSourcePerfil];
+    const profiles = [...this.dataSourceProfile()];
+    const index = profiles.findIndex(x => x.id == id);
+    profiles.splice(index, 1);
+    this.dataSourceProfile.set(profiles);
   }
 
-  public dropTable(event: CdkDragDrop<TarefaConfigListagem[]>) {
-    const prevIndex = this.dataSourceTarefa.findIndex((d) => d === event.item.data);
-    moveItemInArray(this.dataSourceTarefa, prevIndex, event.currentIndex);
-    this.dataSourceTarefa.map(x => x.tarefaInicial = false);
-    this.dataSourceTarefa[0].tarefaInicial = true;    
-    this.table.renderRows();
+  dropTable(event: CdkDragDrop<TarefaConfigListagem[]>) {
+    const tasks = [...this.dataSourceTasks()];
+    const prevIndex = tasks.findIndex(task => task === event.item.data);
+    moveItemInArray(tasks, prevIndex, event.currentIndex);
+    this.dataSourceTasks.set(tasks);
   }
 
-  public dropPerfilTable(event: CdkDragDrop<PerfisListagem[]>) {
-    const prevIndex = this.dataSourcePerfil.findIndex((d) => d === event.item.data);
-    moveItemInArray(this.dataSourcePerfil, prevIndex, event.currentIndex);
-    this.table.renderRows();
+  dropPerfilTable(event: CdkDragDrop<PerfisListagem[]>) {
+    const profiles = [...this.dataSourceProfile()];
+    const prevIndex = profiles.findIndex((d) => d === event.item.data);
+    moveItemInArray(profiles, prevIndex, event.currentIndex);
+    this.dataSourceProfile.set(profiles);
   }
 }

@@ -17,6 +17,7 @@ import { TokenStorageService } from "src/app/services/token-storage.service";
 import { formatDate, formatDatePT, openErrorsDialog, openSnackBar, showExpiredError } from "src/app/utils";
 
 @Component({
+  standalone: false,
     selector: 'configurar-processos',
     templateUrl: './configurar-processos.component.html',
     styleUrls: ['./configurar-processos.component.css']
@@ -137,11 +138,11 @@ import { formatDate, formatDatePT, openErrorsDialog, openSnackBar, showExpiredEr
       }
     
       public configurarProcesso() {
-        this.router.navigate(['/novoConfigurarProcesso/'], { skipLocationChange: true })
+        this.router.navigate(['/novoConfigurarProcesso/'],)
       }
     
       public editarProcesso(id: number) {
-        this.router.navigate(['/novoConfigurarProcesso/', { id: id }], { skipLocationChange: true });
+        this.router.navigate(['/novoConfigurarProcesso/', { id: id }],);
       }
     
       public updateProcessoTable(event: any) {

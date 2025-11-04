@@ -20,6 +20,7 @@ import { TokenStorageService } from "src/app/services/token-storage.service";
 import { blobExcelSaveAs, formataCurrency, formatDate, formatDatePT, openErrorsDialog, showExpiredError } from "src/app/utils";
 
 @Component({
+  standalone: false,
   selector: 'app-consultas-receitas-nao-conc',
   templateUrl: './consultas-receitas-nao-conc.component.html',
   styleUrls: ['./consultas-receitas-nao-conc.component.css']
@@ -64,7 +65,7 @@ export class ConsultasReceitasNaoConciliadasComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
 

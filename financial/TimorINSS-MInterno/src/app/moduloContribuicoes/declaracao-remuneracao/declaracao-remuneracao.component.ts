@@ -1,11 +1,11 @@
 import { NgForm } from '@angular/forms';
 import { DatePipe, DecimalPipe } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import * as moment from 'moment';
+import moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { forkJoin } from 'rxjs';
 import { MyErrorStateMatcher, MyMaxNumberStateMatcher } from '../../matcher';
@@ -23,11 +23,12 @@ import { DeclaracaoService } from './../../services/declaracao.service';
 import { DominiosService } from './../../services/dominios.service';
 import { EntidadeEmpregadoraService } from './../../services/entidadeEmpregadora.service';
 import { saveAs } from 'file-saver';
+import XLSTYLE from 'ng-xlsx-style';
 import * as XLSX from 'xlsx';
-const XLSTYLE = require('ng-xlsx-style');
 
 
 @Component({
+  standalone: false,
   selector: 'app-declaracao-remuneracao',
   templateUrl: './declaracao-remuneracao.component.html',
   styleUrls: ['./declaracao-remuneracao.component.css']
@@ -68,8 +69,7 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
               public decimalpipe: DecimalPipe,
               public datepipe: DatePipe,
               public entidadeService: EntidadeEmpregadoraService,
-              public snackBar: MatSnackBar,
-              private elem: ElementRef) { }
+              public snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     if(!this.tokenStorage.getToken()){
@@ -397,14 +397,14 @@ export class DeclaracaoRemuneracaoComponent implements OnInit {
     const reader = new FileReader();
     const file = ev.target.files[0];
     reader.onload = (event) => {
-      const data = reader.result;
-      workBook = XLSX.read(data, { type: 'binary' });
-      jsonData = workBook.SheetNames.reduce((initial: any, name: any) => {
-        const sheet = workBook.Sheets[name];
-        initial[name] = XLSX.utils.sheet_to_json(sheet);
-        return initial;
-      }, {});
-      this.updateDeclaracoes(jsonData);
+      // const data = reader.result;
+      // workBook = XLSX.read(data, { type: 'binary' });
+      // jsonData = workBook.SheetNames.reduce((initial: any, name: any) => {
+      //   const sheet = workBook.Sheets[name];
+      //   initial[name] = XLSX.utils.sheet_to_json(sheet);
+      //   return initial;
+      // }, {});
+      // this.updateDeclaracoes(jsonData);
     }
     reader.readAsBinaryString(file);
   }

@@ -11,11 +11,12 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PopUpDesvincularTrabalhadorComponent } from '../pop-up-desvincular-trabalhador/pop-up-desvincular-trabalhador.component';
-import * as moment from 'moment';
+import moment from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-trabalhadores',
   templateUrl: './trabalhadores.component.html',
   styleUrls: ['./trabalhadores.component.css']
@@ -168,7 +169,7 @@ export class TrabalhadoresComponent implements OnInit {
   }
 
   public adicionarSuspensao() {
-    this.router.navigate(['/registoSuspensao/', { suspensao: 'trabalhador' }], { skipLocationChange: true })
+    this.router.navigate(['/registoSuspensao/', { suspensao: 'trabalhador' }],)
   }
 
   public orderChange(option: any): void {
@@ -176,6 +177,6 @@ export class TrabalhadoresComponent implements OnInit {
   }
 
   public return(): void {
-    this.router.navigate(['/contribHomePage/'], { skipLocationChange: true });
+    this.router.navigate(['/contribHomePage/'],);
   }
 }

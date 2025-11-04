@@ -9,7 +9,7 @@ import { base64ArrayBuffer, RegexPatterns, SelectsWDisable } from "../../utils";
 import { DocumentoService } from "../../services/documento.service";
 import { Documento } from "../../models/documento";
 import { FormControl, Validators } from "@angular/forms";
-import { MaxSizeValidator } from "@angular-material-components/file-input";
+import { MaxSizeValidator } from '../../utils/file-validators';
 import { MyErrorStateMatcher } from "../../matcher";
 import { TranslateService } from "@ngx-translate/core";
 
@@ -23,6 +23,7 @@ export interface PopUpAdicionarEditarDocumentoData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-popUp-adicionar-editar-documento',
   templateUrl: 'pop-up-adicionar-editar-documento.component.html',
   styleUrls: ['./pop-up-adicionar-editar-documento.component.css']
@@ -159,6 +160,6 @@ export class PopUpAdicionarEditarDocumentoComponent {
 
   public addDocumentoRequired()
   {
-    this.fileControl.get('Documento')?.setValidators([Validators.required, MaxSizeValidator(this.maxSize)]);
+    this.fileControl.get('Documento')?.setValidators([Validators.required, MaxSizeValidator.maxContentSize(this.maxSize)]);
   }
 }

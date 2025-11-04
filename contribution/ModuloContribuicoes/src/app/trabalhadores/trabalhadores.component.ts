@@ -165,6 +165,6 @@ export class TrabalhadoresComponent implements OnInit {
   }
 
   public adicionarSuspensao() {
-    this.router.navigate(['/registoSuspensao/',{suspensao:'trabalhador'}], { skipLocationChange: true })
+    this.router.navigate(['/registoSuspensao/',{suspensao:'trabalhador'}],)
   }
 }

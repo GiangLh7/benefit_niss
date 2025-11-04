@@ -18,7 +18,7 @@ import { PopUpWarningComponent } from "../../componentes/pop-up-warning/pop-up-w
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { GuiaPagamentoService } from "../../services/guiaPagamento.service";
 import { GuiaPagamento } from "../../request-models/guiaPagamento-request";
-import * as moment from "moment";
+import moment from "moment";
 import { DecimalPipe } from '@angular/common';
 import { ReservaCreditoListagem } from "../../response-models/reservaCredito-response";
 import { ReservaCreditoListagemRequest } from "../../request-models/reservaCredito-request";
@@ -26,6 +26,7 @@ import { ReservaCreditoService } from "../../services/reservaCredito.service";
 
 
 @Component({
+  standalone: false,
   selector: 'contaCorrente',
   templateUrl: 'conta_corrente.component.html',
   styleUrls: ['./conta_corrente.component.css']
@@ -89,7 +90,7 @@ export class ContaCorrenteComponent {
 
   ngOnInit(): void {
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate([''], { skipLocationChange: true });
+      this.router.navigate([''],);
     }
     else if (this.tokenStorage.getToken() && this.tokenStorage.tokenExpired()) {
       this.translate.get('error.expired').subscribe((translated: string) => {
@@ -524,6 +525,6 @@ export class ContaCorrenteComponent {
   }
 
   public return(): void {
-    this.router.navigate(['/contribHomePage/'], { skipLocationChange: true });
+    this.router.navigate(['/contribHomePage/'],);
   }
 }

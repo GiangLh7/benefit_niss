@@ -73,22 +73,17 @@ table th {
   min-height: 50px;
   background: rgba(207, 207, 207, 0.966);
   width: 90%;
-  padding-left: 10%;
+  padding: 12px 10%;
 }
 
 
 .searchContainer {
-  width: 20%;
   min-width: 192px;
   display: inline-flex;
   position: relative;
 }
 
-.pesquisar{
-  height: 50px;
- }
-
- .utilizadorSearchButton {
+.utilizadorSearchButton {
   width: 32px;
   height: 32px;
   margin-right: 10px;
@@ -99,8 +94,6 @@ table th {
 
 .utilizadorSearchIcon {
   position: relative;
-  bottom: 13px;
-  left: 1px;
 }
 
 .tabelaUtilizadoresTitulo {

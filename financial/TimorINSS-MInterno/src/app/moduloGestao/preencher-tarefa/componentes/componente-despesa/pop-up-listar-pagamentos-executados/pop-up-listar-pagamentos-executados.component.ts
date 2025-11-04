@@ -17,6 +17,7 @@ export interface PopUpListagemPagamentosData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-listar-pagamentos-executados',
   templateUrl: './pop-up-listar-pagamentos-executados.component.html',
   styleUrls: ['./pop-up-listar-pagamentos-executados.component.css']

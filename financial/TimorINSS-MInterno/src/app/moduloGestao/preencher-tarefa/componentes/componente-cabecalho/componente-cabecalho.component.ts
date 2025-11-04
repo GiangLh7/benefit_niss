@@ -4,6 +4,7 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { TrabalhadoresService } from 'src/app/services/trabalhadores.service';
 
 @Component({
+  standalone: false,
   selector: 'componente-cabecalho',
   templateUrl: './componente-cabecalho.component.html',
   styleUrls: ['./componente-cabecalho.component.css']

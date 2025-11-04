@@ -13,6 +13,7 @@ import { TokenStorageService } from "src/app/services/token-storage.service";
 import { formatDate, formatDatePT, openErrorsDialog, showExpiredError } from "src/app/utils";
 
 @Component({
+  standalone: false,
   selector: 'app-processos-arquivados',
   templateUrl: './processos-arquivados.component.html',
   styleUrls: ['./processos-arquivados.component.css']
@@ -125,7 +126,7 @@ export class ProcessosArquivadosComponent implements OnInit {
   }
 
   public consultarProcesso(id: number): void {
-    this.router.navigate([`./processoDetalhe/${id}`], { skipLocationChange: true });
+    this.router.navigate([`./processoDetalhe/${id}`],);
   }
 
 }

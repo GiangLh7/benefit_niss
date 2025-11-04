@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import {HttpClient, HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { NgxSpinnerModule } from "ngx-spinner";
@@ -13,11 +13,34 @@ import { AppRoutingModule } from './app-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PerfilComponent } from './moduloGestao/perfil/perfil.component';
 import { AdicionarPerfilComponent } from './moduloGestao/adicionar_perfil/adicionar_perfil.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from "@angular/common";
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatSortModule } from '@angular/material/sort';
+import { MatRippleModule } from '@angular/material/core';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatNativeDateModule } from '@angular/material/core';
 import { DialogComponent } from './componentes/dialog/dialog.component';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -32,7 +55,7 @@ import { LoginComponent } from './login/login.component';
 import { PopUpGravarRegimeComponent } from './moduloGestao/pop-up-gravar-regime/pop-up-gravar-regime.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import { NgxCurrencyModule } from 'ngx-currency';
+import { NgxCurrencyDirective } from 'ngx-currency';
 import { UtilizadorComponent } from './moduloGestao/utilizador/utilizador.component';
 import { NovoUtilizadorComponent } from './moduloGestao/novo-utilizador/novo-utilizador.component';
 import { MatMenuModule } from '@angular/material/menu';
@@ -61,7 +84,8 @@ import { VincularTrabalhadorComponent } from './moduloContribuicoes/vincular-tra
 import { PopUpVincularTrabalhadorComponent } from './moduloContribuicoes/pop-up-vincular-trabalhador/pop-up-vincular-trabalhador.component';
 import { RegistoSuspensaoComponent } from './moduloContribuicoes/registoSuspensao/registoSuspensao.component';
 import { NovoTrabalhadorComponent } from './moduloContribuicoes/novo-trabalhador/novo-trabalhador.component';
-import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+// TEMPORARILY DISABLED: Not compatible with Angular 20
+// import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { PopUpAdicionarEditarDocumentoComponent } from './moduloContribuicoes/pop-up-adicionar-editar-documento/pop-up-adicionar-editar-documento.component';
 import { PopUpAdicionarEditarEntidadeComponent } from './moduloContribuicoes/pop-up-adicionar-editar-entidade/pop-up-adicionar-editar-entidade.component';
 import { EditarResponsavelLegalComponent } from './moduloContribuicoes/editar-responsavelLegal/editar-responsavelLegal.component';
@@ -70,7 +94,7 @@ import { DeclaracaoRemuneracaoComponent } from './moduloContribuicoes/declaracao
 import { PopUpInfoLegalRemuneracaoComponent } from './moduloContribuicoes/pop-up-info-legal-remuneracao/pop-up-info-legal-remuneracao.component';
 import { PopUpResumoDeclaracaoComponent } from './moduloContribuicoes/pop-up-resumo-declaracao/pop-up-resumo-declaracao.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { ChartsModule } from 'ng2-charts';
+import { provideCharts, withDefaultRegisterables, BaseChartDirective } from 'ng2-charts';
 import { ContaCorrenteComponent } from './moduloContribuicoes/conta_corrente/conta_corrente.component';
 import { GuiaPagamentoComponent } from './moduloContribuicoes/guia-pagamento/guia-pagamento.component';
 import { PopUpComprovativoPagamentoComponent } from './moduloContribuicoes/pop-up-comprovativo-pagamento/pop-up-comprovativo-pagamento.component';
@@ -234,6 +258,29 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatInputModule,
     CommonModule,
     MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatListModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatExpansionModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatSlideToggleModule,
+    MatAutocompleteModule,
+    MatChipsModule,
+    MatBadgeModule,
+    MatTabsModule,
+    MatButtonToggleModule,
+    MatDividerModule,
+    MatGridListModule,
+    MatStepperModule,
+    MatSortModule,
+    MatRippleModule,
+    MatSliderModule,
+    MatTreeModule,
+    MatBottomSheetModule,
+    MatNativeDateModule,
     FormsModule,
     MatDialogModule,
     MatSelectModule,
@@ -243,13 +290,14 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatTooltipModule,
     MatDatepickerModule,
     MatMomentDateModule,
-    NgxCurrencyModule,
+    NgxCurrencyDirective,
     MatRadioModule,
     MatMenuModule,
     NgxMatSelectSearchModule,
     ReactiveFormsModule,
-    NgxMatFileInputModule,
-    ChartsModule,
+    // TEMPORARILY DISABLED: Not compatible with Angular 20
+    // NgxMatFileInputModule,
+    BaseChartDirective,
     PdfViewerModule,
     TranslateModule.forRoot({
       loader: {
@@ -263,10 +311,16 @@ export function HttpLoaderFactory(http: HttpClient) {
     DatePipe,
     DecimalPipe,
     CurrencyPipe,
-    { provide: LOCALE_ID, useValue: 'pt-TL'},
+    { provide: LOCALE_ID, useValue: 'en-US'},
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true} },
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
+    provideCharts(withDefaultRegisterables()),
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: { subscriptSizing: 'dynamic' }
+    }
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

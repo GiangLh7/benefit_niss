@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'componente-cabecalho-processo',
   templateUrl: './componente-cabecalho.component.html',
   styleUrls: ['./componente-cabecalho.component.css']

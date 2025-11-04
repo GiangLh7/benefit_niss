@@ -9,6 +9,7 @@ import { openErrorsDialog } from 'src/app/utils';
 import { environment } from 'src/environments/environment';
 
 @Component({
+  standalone: false,
   selector: 'app-excel-importer',
   templateUrl: './excel-importer.component.html',
   styleUrls: ['./excel-importer.component.css'],

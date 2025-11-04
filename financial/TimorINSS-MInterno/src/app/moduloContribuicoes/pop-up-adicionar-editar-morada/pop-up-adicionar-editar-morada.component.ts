@@ -57,6 +57,7 @@ export interface PopUpAdicionarEditarMoradaData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-popUp-adicionar-editar-morada',
   templateUrl: 'pop-up-adicionar-editar-morada.component.html',
   styleUrls: ['./pop-up-adicionar-editar-morada.component.css']

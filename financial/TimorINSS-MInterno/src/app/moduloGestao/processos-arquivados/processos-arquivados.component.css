@@ -12,8 +12,7 @@
     /* min-height: 50px; */
     background: rgba(207, 207, 207, 0.966);
     width: 90%;
-    padding-left: 10%;
-    height: 71px;
+    padding: 12px 10%;
 }
 
 .searchContainer {
@@ -35,8 +34,6 @@
 
 .processosSearchIcon {
     position: relative;
-    bottom: 13px;
-    left: 1px;
 }
 
 .pesquisar{

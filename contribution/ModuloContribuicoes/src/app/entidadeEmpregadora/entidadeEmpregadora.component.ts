@@ -666,11 +666,11 @@ export class EntidadeEmpregadoraComponent implements OnInit {
   }
 
   public editarResponsavelLegal(data: any) {
-    this.router.navigate(['/editarResponsavelLegal/' + data.idResponsavelLegal], { skipLocationChange: true });
+    this.router.navigate(['/editarResponsavelLegal/' + data.idResponsavelLegal],);
   }
 
   public adicionarSuspensao() {
-    this.router.navigate(['/registoSuspensao/', { suspensao: 'entidade' }], { skipLocationChange: true })
+    this.router.navigate(['/registoSuspensao/', { suspensao: 'entidade' }],)
   }
 
   deleteSuspensao(data: any) {

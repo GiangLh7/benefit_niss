@@ -15,6 +15,7 @@ import { Funcionalidades } from "src/app/models/utils";
 
 
 @Component({
+  standalone: false,
   selector: 'app-tarwfa',
   templateUrl: './tarefa.component.html',
   styleUrls: ['./tarefa.component.css']
@@ -119,11 +120,11 @@ export class TarefaComponent implements OnInit {
   }
 
   public configurarTarefa() {
-    this.router.navigate(['/configurarTarefas/'], { skipLocationChange: true })
+    this.router.navigate(['/configurarTarefas/'])
   }
 
   public editarTarefa(id: number, nome: string) {
-    this.router.navigate(['/configurarTarefas/', { idTarefa: id }], { skipLocationChange: true });
+    this.router.navigate(['/configurarTarefas/', { idTarefa: id }]);
   }
 
   public updateTarefaTable(event: any) {

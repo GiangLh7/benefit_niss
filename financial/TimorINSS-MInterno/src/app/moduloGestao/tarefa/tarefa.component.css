@@ -9,10 +9,9 @@
 }
 
 .subHeader {
-    min-height: 50px;
     background: rgba(207, 207, 207, 0.966);
     width: 90%;
-    padding-left: 10%;
+    padding: 12px 10%;
 }
 
 .searchContainer {
@@ -33,8 +32,6 @@
 
 .tarefaSearchIcon {
     position: relative;
-    bottom: 13px;
-    left: 1px;
 }
 
 .pesquisar{
@@ -63,26 +60,25 @@
 }
 
 .tabelaTarefaTitulo {
-width: 100%;
-padding-bottom: 1%;
-font-size: 1.1em;
-font-weight: bold;
-color: #2A81CC;
-display: flex;
-padding-top: 20px;
+    width: 100%;
+    padding-bottom: 1%;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #2A81CC;
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
 }
 
 .tableTitleIcon {
-font-size: 1.7em;
-padding-right: 10px;
-top: -5px;
-position: relative;
+    padding-right: 10px;
+    position: relative;
 }
 
 .tabelaTarefa {
-width:100%;
-text-align: left;
-background-color: white;
+    width:100%;
+    text-align: left;
+    background-color: white;
 }
   
 .editIconTable {

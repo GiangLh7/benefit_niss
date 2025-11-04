@@ -16,6 +16,7 @@ export interface PopUpGravarRegimeData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-gravar-regime',
   templateUrl: './pop-up-gravar-regime.component.html',
   styleUrls: ['./pop-up-gravar-regime.component.css']

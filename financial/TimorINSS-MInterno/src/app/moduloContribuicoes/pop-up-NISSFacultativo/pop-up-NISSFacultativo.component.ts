@@ -11,6 +11,7 @@ import { MyErrorStateMatcher } from "../../matcher";
 
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-NISSFacultativo.component',
   templateUrl: 'pop-up-NISSFacultativo.component.html',
   styleUrls: ['./pop-up-NISSFacultativo.component.css']
@@ -51,7 +52,7 @@ export class PopUpNissFacultativoComponent {
             this.hideLoader();
             if (x.trabalhadores){
                 this.trabalhadorId = x.trabalhadores[0].id;
-                this.router.navigate(['/novoResponsavelLegal/' + this.trabalhadorId], { skipLocationChange: true });
+                this.router.navigate(['/novoResponsavelLegal/' + this.trabalhadorId],);
             }
             else{
                 this.errors.push('-3');
@@ -69,7 +70,7 @@ export class PopUpNissFacultativoComponent {
       }else
       {
         this.hideLoader();
-        this.router.navigate(['/novoResponsavelLegal'], { skipLocationChange: true });
+        this.router.navigate(['/novoResponsavelLegal'],);
         this.dialogRef.close();
       }
   }

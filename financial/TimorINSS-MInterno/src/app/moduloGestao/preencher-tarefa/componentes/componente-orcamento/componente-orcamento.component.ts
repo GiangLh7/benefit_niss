@@ -28,6 +28,7 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
   selector: 'app-componente-orcamento',
   templateUrl: './componente-orcamento.component.html',
   styleUrls: ['./componente-orcamento.component.css']
@@ -92,7 +93,7 @@ export class ComponenteOrcamentoComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorageService.getToken()) {
-      this.router.navigate([''], { skipLocationChange: true });
+      this.router.navigate([''],);
     }
     else {
       this.getComponenteOrcamentoConfig();

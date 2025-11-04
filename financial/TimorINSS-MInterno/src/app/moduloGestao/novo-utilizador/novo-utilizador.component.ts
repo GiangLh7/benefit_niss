@@ -20,9 +20,10 @@ import { TokenStorageService } from "../../services/token-storage.service";
 
 
 @Component({
+  standalone: false,
   selector: 'app-novo-utilizador',
   templateUrl: './novo-utilizador.component.html',
-  styleUrls: ['./novo-utilizador.component.css']
+  styleUrls: ['./novo-utilizador.component.scss']
 })
 export class NovoUtilizadorComponent implements OnInit {
   public isLoggedIn = false;
@@ -192,7 +193,7 @@ export class NovoUtilizadorComponent implements OnInit {
       this.utilizadorService.AddUtilizador(request).subscribe(x => {
         this.hideLoader();
         openSnackBar(this.translate.instant('snackBar.addPerfil'), this._snackBar);
-        this.router.navigate(['/utilizador/'], { skipLocationChange: true });
+        this.router.navigate(['/utilizador/'],);
 
       },
         err => {
@@ -252,17 +253,17 @@ export class NovoUtilizadorComponent implements OnInit {
   }
 
   public redirectToGestaoCamposEditaveis() {
-    this.router.navigate(['/camposEditaveis'], { skipLocationChange: true });
+    this.router.navigate(['/camposEditaveis'],);
 
   }
 
   public redirectToPerfil() {
-    this.router.navigate(['/perfil'], { skipLocationChange: true });
+    this.router.navigate(['/perfil'],);
 
   }
 
   public cancelar() {
-    this.router.navigate(['/utilizador/'], { skipLocationChange: true });
+    this.router.navigate(['/utilizador/'],);
   }
   public formatDatePT(date: Date): string {
     return formatDatePT(this.datepipe, date);

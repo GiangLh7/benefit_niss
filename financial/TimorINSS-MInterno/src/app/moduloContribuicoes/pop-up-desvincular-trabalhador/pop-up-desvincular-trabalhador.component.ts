@@ -11,6 +11,7 @@ export interface PopUpDesvincularTrabalhadorData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-desvincular-trabalhador',
   templateUrl: 'pop-up-desvincular-trabalhador.component.html',
   styleUrls: ['./pop-up-desvincular-trabalhador.component.css']

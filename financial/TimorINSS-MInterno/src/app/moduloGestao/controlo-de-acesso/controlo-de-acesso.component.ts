@@ -17,6 +17,7 @@ import {openErrorsDialog, openSnackBar, showExpiredError} from 'src/app/utils';
 import {PopUpAddUserComponent} from "../pop-up-add-user/pop-up-add-user.component";
 
 @Component({
+  standalone: false,
   selector: 'app-controlo-de-acesso',
   templateUrl: './controlo-de-acesso.component.html',
   styleUrls: ['./controlo-de-acesso.component.css']

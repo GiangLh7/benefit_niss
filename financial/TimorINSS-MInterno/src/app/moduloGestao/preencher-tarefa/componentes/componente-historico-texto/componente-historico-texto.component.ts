@@ -9,6 +9,7 @@ import { TarefaService } from 'src/app/services/tarefa.service';
 import { formatDatePT, openErrorsDialog } from 'src/app/utils';
 
 @Component({
+  standalone: false,
   selector: 'app-componente-historico-texto',
   templateUrl: './componente-historico-texto.component.html',
   styleUrls: ['./componente-historico-texto.component.css']

@@ -51,7 +51,6 @@ table .mat-icon {
 }
 
 .searchContainer {
-  width: 20%;
   height: 100%;
   min-width: 192px;
   display: inline-flex;
@@ -69,9 +68,7 @@ table .mat-icon {
 }
 
 .situacoesSearchIcon {
-  position: relative;
-  bottom: 13px;
-  left: 1px;
+
 }
 
 .input {

@@ -10,6 +10,15 @@
   text-align: center;
 }
 
+.DadosContainer-expansion {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 12px;
+  @media screen and (min-width: 968px) {
+      grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .dialogPositionFix {
   position: relative;
   height: 100%;

@@ -21,6 +21,7 @@ export interface PopUpGravarCampoData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-gravar-campo',
   templateUrl: './pop-up-gravar-campo.component.html',
   styleUrls: ['./pop-up-gravar-campo.component.css']

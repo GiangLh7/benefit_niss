@@ -22,6 +22,7 @@ import { PopUpWarningComponent } from '../../componentes/pop-up-warning/pop-up-w
 import { MyErrorDataSuperiorStateMatcher, MyErrorDateStateMatcher, MyErrorStateMatcher } from '../../matcher';
 
 @Component({
+  standalone: false,
     selector: 'app-novo-responsavelLegal',
     templateUrl: './novo-responsavelLegal.component.html',
     styleUrls: ['./novo-responsavelLegal.component.css']
@@ -68,7 +69,7 @@ export class NovoResponsavelLegalComponent implements OnInit {
         private actRoute: ActivatedRoute,
         private trabalhadoresService: TrabalhadoresService,
         ) {
-              this.trabalhadorId = this.actRoute.snapshot.params.id;
+              this.trabalhadorId = this.actRoute.snapshot.params["id"];
          }
 
     public ngOnInit(): void {
@@ -172,7 +173,7 @@ export class NovoResponsavelLegalComponent implements OnInit {
                     dialogRef.afterClosed().subscribe(result => {
                         if (result){
                             this.responsavelLegalService.savedSuccessfully = true;
-                            this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+                            this.router.navigate(['/entidadeEmpregadora'],);
                         }
                     });
                 })
@@ -181,7 +182,7 @@ export class NovoResponsavelLegalComponent implements OnInit {
                 this.responsavelLegalService.saveResponsavelLegal(this.responsavelLegalrequest).subscribe(x => {
                     this.spinner.hide();
                     this.responsavelLegalService.savedSuccessfully = true;
-                    this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+                    this.router.navigate(['/entidadeEmpregadora'],);
                   },
                   err => {
                     this.spinner.hide();
@@ -199,7 +200,7 @@ export class NovoResponsavelLegalComponent implements OnInit {
 
     public cancel(): void{
         this.responsavelLegalService.traceBack = true;
-        this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+        this.router.navigate(['/entidadeEmpregadora'],);
     }
 
     private validatedAllFields(): boolean{
@@ -297,6 +298,6 @@ export class NovoResponsavelLegalComponent implements OnInit {
     }
 
     public return(): void {
-      this.router.navigate(['/contribHomePage/'], { skipLocationChange: true });
+      this.router.navigate(['/contribHomePage/'],);
     }
 }

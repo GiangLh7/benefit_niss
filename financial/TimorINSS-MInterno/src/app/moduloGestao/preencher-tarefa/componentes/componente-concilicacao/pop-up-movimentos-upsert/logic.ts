@@ -15,7 +15,8 @@ import { movimentosBancariosService } from "src/app/services/movimentosBancarios
 @Component({
   selector: 'app-pop-up-movimentos-upsert',
   templateUrl: './index.html',
-  styleUrls: ['./styles.css']
+  styleUrls: ['./styles.css'],
+  standalone: false
 })
 export class PopUpMovimentosUpsertComponent {
 

@@ -9,7 +9,7 @@ import { base64ArrayBuffer, buildSelectOptionsWithDisabled, openSnackBar, RegexP
 import { DocumentoService } from "../../services/documento.service";
 import { Documento } from "../../models/documento";
 import { FormControl, Validators } from "@angular/forms";
-import { MaxSizeValidator } from "@angular-material-components/file-input";
+import { MaxSizeValidator } from '../../utils/file-validators';
 import { MyErrorDateSuperiorDataAtualStateMatcher, MyErrorStateMatcher } from "../../matcher";
 import { TranslateService } from "@ngx-translate/core";
 import { EntidadeEmpregadoraService } from "src/app/services/entidadeEmpregadora.service";
@@ -19,9 +19,10 @@ import { ActividadeEconomicaService } from "src/app/services/actividadeEconomica
 import { SectorActividadeService } from "src/app/services/sectorActividade.service";
 import { forkJoin } from "rxjs";
 import { Moment } from "moment";
-import * as moment from "moment";
+import moment from "moment";
 
 @Component({
+  standalone: false,
   selector: 'app-popUp-adicionar-editar-entidade',
   templateUrl: 'pop-up-adicionar-editar-entidade.component.html',
   styleUrls: ['./pop-up-adicionar-editar-entidade.component.css']

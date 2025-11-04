@@ -3,16 +3,9 @@
   width: 100%;
 }
 
-::ng-deep.mat-menu-panel{
-    background-color: #1a6aaf !important;
-}
-
-::ng-deep.mat-menu-item-submenu-trigger::after{
-    color: white !important;
-}
-
 .menu-panel-category {
   font-family: Montserrat;
   font-size: 16px;
   margin: 10px 0 10px 19px;
+  font-weight: 500;
 }

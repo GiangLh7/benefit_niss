@@ -32,6 +32,7 @@ import { ComponenteTarefaConfiguradaResponse } from 'src/app/response-models/tar
 
 
 @Component({
+  standalone: false,
   selector: 'configurar-tarefas',
   templateUrl: './configurar-tarefas.component.html',
   styleUrls: ['./configurar-tarefas.component.css']
@@ -626,7 +627,7 @@ export class ConfigurarTarefasComponent implements OnInit {
       this.tarefaService.addTarefaConfigurada(request).subscribe(x => {
         this.hideLoader();
         openSnackBar(this.translate.instant('snackBar.tarefaConfigurada'), this._snackBar);
-        this.router.navigate(['/tarefa/'], { skipLocationChange: true });
+        this.router.navigate(['/tarefa/'],);
 
       },
         err => {
@@ -819,7 +820,7 @@ export class ConfigurarTarefasComponent implements OnInit {
       .subscribe((updates: any) => {
         this.hideLoader();
         openSnackBar(this.translate.instant('snackBar.tarefaConfigurada'), this._snackBar);
-        this.router.navigate(['/tarefa/'], { skipLocationChange: true });
+        this.router.navigate(['/tarefa/'],);
       },
         err => {
           this.hideLoader();
@@ -1087,7 +1088,7 @@ export class ConfigurarTarefasComponent implements OnInit {
   }
 
   public cancelar() {
-    this.router.navigate(['/tarefa/'], { skipLocationChange: true });
+    this.router.navigate(['/tarefa/'],);
   }
 
   public updateApelidoTarefa (){

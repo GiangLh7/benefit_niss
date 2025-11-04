@@ -48,9 +48,7 @@ table th {
 }
 
 .personSearchIcon {
-  position: relative;
-  bottom: 13px;
-  left: 1px;
+
 }
 
 .adicionarTrabalhadorButton {
@@ -143,7 +141,6 @@ table tr:nth-child(even)  {
 }
 
 .searchContainer {
-  width: 20%;
   min-width: 192px;
   display: inline-flex;
   position: relative;
@@ -186,8 +183,6 @@ table tr:nth-child(even)  {
 
 .utilizadorSearchIcon {
   position: relative;
-  bottom: 13px;
-  left: 1px;
 }
 
 @media only screen and (min-width: 980px) {

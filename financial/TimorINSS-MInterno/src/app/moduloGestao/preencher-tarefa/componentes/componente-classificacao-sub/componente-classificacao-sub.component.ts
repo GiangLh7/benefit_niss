@@ -8,6 +8,7 @@ import { SubClassificacaoService } from 'src/app/services/subClassificacao.servi
 import { openErrorsDialog } from 'src/app/utils';
 
 @Component({
+  standalone: false,
   selector: 'app-componente-classificacao-sub',
   templateUrl: './componente-classificacao-sub.component.html',
   styleUrls: ['./componente-classificacao-sub.component.css']

@@ -20,32 +20,33 @@
                   <mat-error>{{'general.required' | translate}}</mat-error>
                 </mat-form-field>
             </div>
-            <div class="body_block">
-                <mat-form-field class="tarefa_perfil" appearance="outline">
-                    <mat-label>{{'tarefa.title' | translate}}</mat-label>
-                    <mat-select #name="ngModel" name="parentFiled" [(ngModel)]="selectedTarefaId" [errorStateMatcher]="matcher" [required]="submittedTry" #singleSelect>
-                      <mat-option>
-                        <ngx-mat-select-search  #name="ngModel" name="parentFiledFilter" 
-                        placeholderLabel="{{'tarefa.title' | translate}}" noEntriesFoundLabel="{{'general.semResultados' | translate}}"
-                        ngModel (ngModelChange)="filterMyTarefaOptions($event)">
-                        </ngx-mat-select-search>
-                      </mat-option>
-                      <mat-option *ngFor="let tarefa of filteredTarefasList" [value]="tarefa.id">{{tarefa.nome}}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error>{{'general.required' | translate}}</mat-error>
-                </mat-form-field>
-                <mat-icon class="arrowIcon" *ngIf="selectedTarefaId > 0" (click)="addTarefa(selectedTarefaId)"
-                    matTooltip="{{'general.Add' | translate}}">arrow_downward
-                </mat-icon>
-            </div>
+
             <div>
               <div class="tabelaProcessoTitulo">
                 <mat-icon class="tableTitleIcon">playlist_add</mat-icon>
                 {{'tarefa.title' | translate}}
+                <div class="body_block">
+                  <mat-form-field class="tarefa_perfil" appearance="outline">
+                      <mat-label>{{'tarefa.title' | translate}}</mat-label>
+                      <mat-select #name="ngModel" name="parentFiled" [(ngModel)]="selectedTarefaId" [errorStateMatcher]="matcher" [required]="submittedTry" #singleSelect>
+                        <mat-option>
+                          <ngx-mat-select-search  #name="ngModel" name="parentFiledFilter" 
+                          placeholderLabel="{{'tarefa.title' | translate}}" noEntriesFoundLabel="{{'general.semResultados' | translate}}"
+                          ngModel (ngModelChange)="filterMyTarefaOptions($event)">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option [disabled]="addedTasks().has(tarefa.id)" *ngFor="let tarefa of filteredTarefasList" [value]="tarefa.id">{{tarefa.nome}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error>{{'general.required' | translate}}</mat-error>
+                  </mat-form-field>
+                  <mat-icon class="arrowIcon" *ngIf="selectedTarefaId > 0" (click)="addTask(selectedTarefaId)"
+                      matTooltip="{{'general.Add' | translate}}">arrow_downward
+                  </mat-icon>
               </div>
-                <table mat-table #tableTarefa class="mat-elevation-z8 table" [dataSource]="dataSourceTarefa"
-                cdkDropList [cdkDropListData]="dataSourceTarefa" (cdkDropListDropped)="dropTable($event)">
+              </div>
+                <table mat-table #tableTarefa class="mat-elevation-z8 table" [dataSource]="dataSourceTasks()"
+                cdkDropList [cdkDropListData]="dataSourceTasks()" (cdkDropListDropped)="dropTable($event)">
                     <ng-container matColumnDef="nome">
                       <th mat-header-cell *matHeaderCellDef> {{'tarefa.nome' | translate}} </th>
                       <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
@@ -60,7 +61,7 @@
                       <th mat-header-cell *matHeaderCellDef> {{'general.Eliminar' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         <button mat-icon-button color="primary">
-                          <mat-icon class="deleteIconTable" (click)="deleteTarefa(element.id)"
+                          <mat-icon class="deleteIconTable" (click)="deleteTask(element.id)"
                             matTooltip="{{'utilizador.delete' | translate}}">clear</mat-icon>
                         </button>
                       </td>
@@ -69,31 +70,32 @@
                     <tr mat-row style="cursor: all-scroll;" *matRowDef="let row; columns: displayedColumnsTarefa;" cdkDrag [cdkDragData]="row"></tr>
                   </table>
             </div>
-            <div class="body_block">
-                <mat-form-field class="tarefa_perfil" appearance="outline">
-                    <mat-label>{{'perfil.title' | translate}}</mat-label>
-                    <mat-select #name="ngModel" name="parentFiled" [(ngModel)]="selectedPerfilId" [errorStateMatcher]="matcher" [required]="submittedTry" #singleSelect>
-                      <mat-option>
-                        <ngx-mat-select-search  #name="ngModel" name="parentFiledFilter" 
-                        placeholderLabel="{{'perfil.title' | translate}}" noEntriesFoundLabel="{{'general.semResultados' | translate}}"
-                        ngModel (ngModelChange)="filterMyPerfilOptions($event)">
-                        </ngx-mat-select-search>
-                      </mat-option>
-                      <mat-option *ngFor="let perfil of filteredPerfisList" [value]="perfil.id">{{perfil.nome}}
-                      </mat-option>
-                    </mat-select>
-                    <mat-error>{{'general.required' | translate}}</mat-error>
-                </mat-form-field>
-                <mat-icon class="arrowIcon" *ngIf="selectedPerfilId > 0" (click)="addPerfil(selectedPerfilId)"
-                  matTooltip="{{'general.Add' | translate}}">arrow_downward
-              </mat-icon>
-            </div>
+            
             <div>
               <div class="tabelaProcessoTitulo">
                 <mat-icon class="tableTitleIcon">playlist_add</mat-icon>
                 {{'processo.perfisMsg' | translate}}
+                <div class="body_block">
+                  <mat-form-field class="tarefa_perfil" appearance="outline">
+                      <mat-label>{{'perfil.title' | translate}}</mat-label>
+                      <mat-select #name="ngModel" name="parentFiled" [(ngModel)]="selectedPerfilId" [errorStateMatcher]="matcher" [required]="submittedTry" #singleSelect>
+                        <mat-option>
+                          <ngx-mat-select-search  #name="ngModel" name="parentFiledFilter" 
+                          placeholderLabel="{{'perfil.title' | translate}}" noEntriesFoundLabel="{{'general.semResultados' | translate}}"
+                          ngModel (ngModelChange)="filterMyPerfilOptions($event)">
+                          </ngx-mat-select-search>
+                        </mat-option>
+                        <mat-option [disabled]="addedProfiles().has(perfil.id)" *ngFor="let perfil of filteredPerfisList" [value]="perfil.id">{{perfil.nome}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error>{{'general.required' | translate}}</mat-error>
+                  </mat-form-field>
+                  <mat-icon class="arrowIcon" *ngIf="selectedPerfilId > 0" (click)="addPerfil(selectedPerfilId)"
+                    matTooltip="{{'general.Add' | translate}}">arrow_downward
+                </mat-icon>
               </div>
-                <table mat-table class="mat-elevation-z8 table" [dataSource]="dataSourcePerfil">
+              </div>
+                <table mat-table class="mat-elevation-z8 table" [dataSource]="dataSourceProfile()">
                     <ng-container matColumnDef="descricao">
                       <th mat-header-cell *matHeaderCellDef> {{'tarefa.descricao' | translate}} </th>
                       <td mat-cell *matCellDef="let element"> {{element.descricao}} </td>
@@ -102,7 +104,7 @@
                       <th mat-header-cell *matHeaderCellDef> {{'general.Eliminar' | translate}} </th>
                       <td mat-cell *matCellDef="let element">
                         <button mat-icon-button color="primary">
-                          <mat-icon class="deleteIconTable" (click)="deletePerfil(element.id)"
+                          <mat-icon class="deleteIconTable" (click)="deleteProfile(element.id)"
                             matTooltip="{{'utilizador.delete' | translate}}">clear</mat-icon>
                         </button>
                       </td>

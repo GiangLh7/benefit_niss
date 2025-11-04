@@ -13,12 +13,11 @@
     color: white;
     padding-left: 5%;
     display: flex;
-  
+    align-items: center;
   }
   
   .editIcon {
-    padding-top: 6px;
-    font-size: 2.2em;
+    font-size: 2em;
     position: relative;
     width: 50px;
   }
@@ -30,14 +29,15 @@
   }
   
   .text {
-    padding-left: 2%;
-    padding-top: 14px;
     font-size: 1.2em;
   }
 
   .body {
     margin-top: 20px;
-    margin-left: 50px;
+    margin-inline: 16px;
+    @media screen and (min-width: 968px) {
+      margin-inline: 48px;
+    }
   }
 
   .nome{
@@ -48,7 +48,9 @@
   }
 
   .body_block {
-    display: flow-root;
+    display: flex;
+    align-items: center;
+    flex: 1;
   }
 
   .arrowIcon {
@@ -59,6 +61,8 @@
     border-radius: 50px;
     border: 2px solid #2A81CC;
     display: inline;
+    height: 36px;
+    width: 36px;
   }
 
   .table {
@@ -84,7 +88,10 @@
   font-weight: bold;
   color: #2A81CC;
   display: flex;
-  }
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
 
 .buttons{
   padding-bottom: 10px;

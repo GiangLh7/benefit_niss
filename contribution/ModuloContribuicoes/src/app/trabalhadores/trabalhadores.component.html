@@ -15,7 +15,7 @@
       </button>
     </div>
     <div class="adicionarTrabalhador">
-      <a routerLink="../vincularTrabalhador" class="adicionarTrabalhadorButton" [skipLocationChange]="true" mat-raised-button>
+      <a routerLink="../vincularTrabalhador" class="adicionarTrabalhadorButton" mat-raised-button>
         <mat-icon class="adicionarTrabalhadorIcon">person_add</mat-icon>
         <mat-label>{{'general.adicionarTrabalhador' | translate}}</mat-label>
       </a>
@@ -56,7 +56,7 @@
           <th mat-header-cell *matHeaderCellDef>  {{'trabalhadores.detalhesEditar' | translate}} </th>
           <td mat-cell *matCellDef="let element">
             <div class="divButtonList">
-              <a [routerLink]="['../novoTrabalhador', element.idRel]" [skipLocationChange]="true" class="trabalhadorVisibilityButton" mat-icon-button>
+              <a [routerLink]="['../novoTrabalhador', element.idRel]" class="trabalhadorVisibilityButton" mat-icon-button>
                 <mat-icon class="trabalhadorVisibilityIcon">visibility</mat-icon>
               </a>
               <button *ngIf="!element.dtFimDeVinculo" (click)="desvincularTrabalhador(element.idRel)" class="trabalhadorRemoveButton" mat-icon-button>

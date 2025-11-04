@@ -14,6 +14,7 @@ import { TokenStorageService } from "src/app/services/token-storage.service";
 import { blobExcelSaveAs, openErrorsDialog, showExpiredError } from "src/app/utils";
 
 @Component({
+  standalone: false,
   selector: 'app-consultas-processos',
   templateUrl: './consultas-processos.component.html',
   styleUrls: ['./consultas-processos.component.css']
@@ -64,7 +65,7 @@ export class ConsultasProcessosComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
       this.fetchDropdownList();
@@ -81,7 +82,7 @@ export class ConsultasProcessosComponent implements OnInit {
 
 
   public processoArquivadoNavigation(id: number) {
-    this.router.navigate([`./processoDetalhe/${id}`], { skipLocationChange: true, state: { from: './consultasProcessos' } });
+    this.router.navigate([`./processoDetalhe/${id}`], { state: { from: './consultasProcessos' } });
   }
 
 

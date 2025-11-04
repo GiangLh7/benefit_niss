@@ -1,6 +1,5 @@
-import { MaxSizeValidator } from "@angular-material-components/file-input";
 import { Component, OnInit } from "@angular/core";
-import { FormControl, Validators } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { Router, ActivatedRoute } from "@angular/router";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +15,7 @@ import { DominioDescricaoString } from "../response-models/dominios-response";
 import { DominiosService } from "../services/dominios.service";
 import { ResponsavelLegalService } from "../services/responsavelLegal.service";
 import { TokenStorageService } from "../services/token-storage.service";
-import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuffer, blobToSaveAs } from "../utils";
+import { base64ArrayBuffer, openErrorsDialog, showExpiredError, blobToSaveAs } from "../utils";
 
 @Component({
     selector: 'app-editar-responsavelLegal',
@@ -165,10 +164,10 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
                         panelClass: 'warningModal',
                         data: {function: this.responsavelLegalService.saveResponsavelLegal(this.responsavelLegalrequest), msg: translated}
                     });
-                    dialogRef.afterClosed().subscribe(result => {
+                    dialogRef.afterClosed().subscribe((result: any) => {
                         if (result){
                             this.responsavelLegalService.savedSuccessfully = true;
-                            this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+                            this.router.navigate(['/entidadeEmpregadora'],);
                         }
                     });
                 })
@@ -178,7 +177,7 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
                 this.responsavelLegalService.updateResponsavelLegalRequest(this.responsavelLegalrequest).subscribe(x => {
                     this.spinner.hide();
                     this.responsavelLegalService.savedSuccessfully = true;
-                    this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+                    this.router.navigate(['/entidadeEmpregadora'],);
                   },
                   err => {
                     this.spinner.hide();
@@ -195,7 +194,7 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
 
     public cancel(): void{
         this.responsavelLegalService.traceBack = true;
-        this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+        this.router.navigate(['/entidadeEmpregadora'],);
     }
 
     private validatedAllFields(): boolean{

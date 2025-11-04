@@ -20,31 +20,38 @@
 }
 
 .searchContainer {
-    width: 50%;
+    width: 100%;
     min-width: 192px;
-    display: inline-flex;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     position: relative;
+    padding: 10px 0;
+    gap: 16px;
 }
 
 .SearchButton {
-    width: 32px;
-    height: 32px;
-    margin-right: 10px;
-    margin-top: 5px;
-    top: 10px;
-    background-color:#2A81CC;
-    color: white;
+    background-color:#2A81CC !important;
+    color: white !important;
+    flex-shrink: 0;
+}
+
+.SearchButton .mat-icon {
+    color: white !important;
 }
 
 .SearchIcon {
-    position: relative;
-    bottom: 13px;
-    left: 1px;
+    color: white !important;
 }
 
-.pesquisar{
-    height: 50px;
-    margin-top: 10px;
+.pesquisar {
+    min-width: 200px;
+    max-width: 300px;
+    flex: 0 1 auto;
+}
+
+.pesquisar .mat-mdc-form-field {
+    width: 100%;
 }
 
 
@@ -141,16 +148,27 @@ table th {
   }
   
   .thirdLineContainers {
-    margin-left: 20px;
-    width: 60%;
-    margin-top: 10px;
+    min-width: 180px;
+    max-width: 250px;
+    flex: 0 1 auto;
+  }
+  
+  .thirdLineContainers .mat-mdc-form-field {
+    width: 100%;
   }
 
-  .clearFilterButton{
-    background: #2A81CC;
-    color: white;
-    margin-left: 10px;
-    margin-top: 3px;
+  .clearFilterButton {
+    background: #2A81CC !important;
+    color: white !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px !important;
+    white-space: nowrap;
+  }
+  
+  .clearFilterButton .mat-icon {
+    margin-right: 8px;
   }
 
   .checkIconTable {

@@ -13,7 +13,6 @@ import { Router } from "@angular/router";
 import { DatePipe, NgIf } from "@angular/common";
 import { FilterRequest } from "src/app/request-models/utils-request";
 import { MovimentosDespesaReceita, MovimentosPorConciliarListagemType } from "src/app/models/movimentosDespesaReceita";
-import { ThrowStmt } from "@angular/compiler";
 import { environment } from "src/environments/environment";
 import jsPDF from "jspdf";
 
@@ -79,7 +78,8 @@ export function gerarPDF(element: MovimentosDespesaReceita, translate: Translate
 @Component({
   selector: 'app-pop-up-movimentos-desfazer-conciliacao',
   templateUrl: './index.html',
-  styleUrls: ['./styles.css']
+  styleUrls: ['./styles.css'],
+  standalone: false
 })
 export class PopUpMovimentosDesfazerConciliacaoComponent {
 

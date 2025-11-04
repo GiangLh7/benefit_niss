@@ -1,8 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
-import { ChartOptions, ChartType } from 'chart.js';
-import { Label } from 'ng2-charts';
+import { ChartOptions, ChartType, TooltipItem, ChartData } from 'chart.js';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { DeclaracaoService } from '../../services/declaracao.service';
 import { customCurrencyMaskConfig, formataCurrency, openErrorsDialog, populateChartColors } from '../../utils';
@@ -13,6 +12,7 @@ export interface PopUpResumoDeclaracaoData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-resumo-declaracao',
   templateUrl: './pop-up-resumo-declaracao.component.html',
   styleUrls: ['./pop-up-resumo-declaracao.component.css']
@@ -38,34 +38,29 @@ export class PopUpResumoDeclaracaoComponent {
   public displayNacionalidades: NacionalidadeResumoDeclaracao[] = [];
   public displayedColumnsNacionalidade: string[] = ['cor','nacionalidade','renumeracoes','trabalhadores'];
   public numberNacionalidade = 0;
-  public pieChartNacionalidadeLabels: Label[] = [];
+  public pieChartNacionalidadeLabels: string[] = [];
   public pieChartNacionalidadeData: number[] = [];
 
   public pieChartNacionalidadeOptions: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    legend: {
-      position: 'bottom',
-    },
     plugins: {
-        labels: {
-          render: 'percentage',
-          fontColor: []
-        }
-    },
-    tooltips: {
-      enabled: true,
-      mode: 'single',
-      callbacks: {
-        label: (tooltipItem: Chart.ChartTooltipItem, data: Chart.ChartData) => {
-          var label = '';
-          if(data.datasets !== undefined && tooltipItem.index !== undefined && data.datasets[0].data !== undefined && data.labels!= undefined)
-            if(this.nacionalidadeCurrency)
-              label = data.labels[tooltipItem.index] + ': ' + formataCurrency(data.datasets[0].data[tooltipItem.index]) || '';
-            else
-              label = data.labels[tooltipItem.index] + ': ' +  data.datasets[0].data[tooltipItem.index]?.toString() || '';
+      legend: {
+        position: 'bottom',
+      },
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          label: (context: any) => {
+            var label = '';
+            if(context.label && context.parsed !== undefined)
+              if(this.nacionalidadeCurrency)
+                label = context.label + ': ' + formataCurrency(context.parsed) || '';
+              else
+                label = context.label + ': ' +  context.parsed?.toString() || '';
 
-          return label;
+            return label;
+          }
         }
       }
     }
@@ -76,34 +71,29 @@ export class PopUpResumoDeclaracaoComponent {
   public displayRegimes: RegimesResumoDeclaracao[] = [];
   public displayedColumnsRegime: string[] = ['cor','regime','renumeracoes','taxaTrabalhador','taxaEntidade','quotizacoes','contribuicoes','total'];
   public numberRegime = 0;
-  public pieChartRegimeLabels: Label[] = [];
+  public pieChartRegimeLabels: string[] = [];
   public pieChartRegimeData: number[] = [];
 
   public pieChartRegimeOptions: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    legend: {
-      position: 'bottom',
-    },
     plugins: {
-        labels: {
-          render: 'percentage',
-          fontColor: []
-        }
-    },
-    tooltips: {
-      enabled: true,
-      mode: 'single',
-      callbacks: {
-        label: (tooltipItem: Chart.ChartTooltipItem, data: Chart.ChartData) => {
-          var label = '';
-          if(data.datasets !== undefined && tooltipItem.index !== undefined && data.datasets[0].data !== undefined && data.labels!= undefined)
-            if(this.regimeChartType)
-              label = data.labels[tooltipItem.index] + ': ' + formataCurrency(data.datasets[0].data[tooltipItem.index]) || '';
-            else
-              label = data.labels[tooltipItem.index] + ': ' +  data.datasets[0].data[tooltipItem.index]?.toString() || '';
+      legend: {
+        position: 'bottom',
+      },
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          label: (context: any) => {
+            var label = '';
+            if(context.label && context.parsed !== undefined)
+              if(this.regimeChartType)
+                label = context.label + ': ' + formataCurrency(context.parsed) || '';
+              else
+                label = context.label + ': ' +  context.parsed?.toString() || '';
 
-          return label;
+            return label;
+          }
         }
       }
     }

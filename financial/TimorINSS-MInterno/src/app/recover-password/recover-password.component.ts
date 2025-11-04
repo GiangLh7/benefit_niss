@@ -14,6 +14,7 @@ import { openSnackBar, RegexPatterns } from "../utils";
 
 
 @Component({
+  standalone: false,
     selector: 'app-recover-password',
     templateUrl: './recover-password.component.html',
     styleUrls: ['./recover-password.component.css']
@@ -63,7 +64,7 @@ export class RecoverPasswordComponent implements OnInit {
             this.isLoggedIn = true;
             this.router.navigate(['']);
           }
-        this.token = this.actRoute.snapshot.params.token;
+        this.token = this.actRoute.snapshot.params["token"];
         if (this.tokenStorage.recoverTokenExpired(this.token)){
             this.translate.get('login_form.expiredRecoverToken').subscribe((translated: string) => {
                 const dialogRef = this.errorDialog.open(PopUpWarningComponent, {
@@ -82,11 +83,11 @@ export class RecoverPasswordComponent implements OnInit {
         }
         else {
             
-            this.loginService.validToken({token: this.token, isRecover: this.actRoute.snapshot.params.username != undefined}).subscribe(() => {
+            this.loginService.validToken({token: this.token, isRecover: this.actRoute.snapshot.params["username"] != undefined}).subscribe(() => {
                 this.expiredError = false;
-                this.request.Username = this.actRoute.snapshot.params.username ?? '';
+                this.request.Username = this.actRoute.snapshot.params["username"] ?? '';
                 this.isAdmin = this.request.Username.toLocaleLowerCase() == "admin";
-                if (!this.actRoute.snapshot.params.username){
+                if (!this.actRoute.snapshot.params["username"]){
                     this.isFirstAccess = true;
                     this.request.UsernameChange = true;
                 }

@@ -39,7 +39,6 @@
 }
 
 .searchContainer {
-  width: 20%;
   height: 100%;
   min-width: 192px;
   display: inline-flex;
@@ -54,16 +53,6 @@
   margin-right: 10px;
   background-color: #2A81CC;
   color: white;
-}
-
-.ordensSearchIcon {
-  position: relative;
-  bottom: 13px;
-  left: 1px;
-}
-
-.input {
-  height: 44px;
 }
 
 .clearFilterButton{

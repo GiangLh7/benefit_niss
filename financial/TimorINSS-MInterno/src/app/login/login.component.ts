@@ -13,6 +13,7 @@ import { MyErrorStateMatcher } from '../matcher';
 import { PopUpWarningComponent } from '../componentes/pop-up-warning/pop-up-warning.component';
 
 @Component({
+  standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']

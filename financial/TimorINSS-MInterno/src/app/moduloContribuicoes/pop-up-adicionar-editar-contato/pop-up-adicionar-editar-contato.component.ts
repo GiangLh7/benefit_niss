@@ -26,6 +26,7 @@ export interface PopUpAdicionarEditarContatoData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-popUp-adicionar-editar-contato',
   templateUrl: 'pop-up-adicionar-editar-contato.component.html',
   styleUrls: ['./pop-up-adicionar-editar-contato.component.css']

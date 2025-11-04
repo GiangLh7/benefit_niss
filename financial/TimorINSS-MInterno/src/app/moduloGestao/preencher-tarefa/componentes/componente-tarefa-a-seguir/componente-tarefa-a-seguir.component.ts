@@ -8,6 +8,7 @@ import { TarefaService } from 'src/app/services/tarefa.service';
 import { openErrorsDialog } from 'src/app/utils';
 
 @Component({
+  standalone: false,
   selector: 'app-componente-tarefa-a-seguir',
   templateUrl: './componente-tarefa-a-seguir.component.html',
   styleUrls: ['./componente-tarefa-a-seguir.component.css']

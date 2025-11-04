@@ -23,8 +23,10 @@
   
   .DadosContainer {
     margin-left: calc(5% - 50px);
-    margin-right: 5%;
     padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
   }
   
   .secondLineContainers {

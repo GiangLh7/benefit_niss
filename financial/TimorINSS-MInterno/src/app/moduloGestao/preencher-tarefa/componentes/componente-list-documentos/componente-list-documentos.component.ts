@@ -15,6 +15,7 @@ import { DocumentoService } from 'src/app/services/documento.service';
 import { base64ToArrayBuffer, formatDatePT, openErrorsDialog, openSnackBar } from 'src/app/utils';
 
 @Component({
+  standalone: false,
   selector: 'app-componente-list-documentos',
   templateUrl: './componente-list-documentos.component.html',
   styleUrls: ['./componente-list-documentos.component.css']
@@ -63,7 +64,7 @@ export class ComponenteListDocumentosComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
         
-    if(changes.refreshTable.currentValue == true) {
+    if(changes['refreshTable'].currentValue == true) {
       this.spinner.show();
       this.getTableDocumentos().subscribe(x => {
         x.rows == null ? this.totalRowsDocumentosTable = 0 : this.totalRowsDocumentosTable = x.rows;

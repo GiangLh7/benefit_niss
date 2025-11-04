@@ -24,6 +24,7 @@ export interface PopUpExecutarPagamentosData {
 }
 
 @Component({
+  standalone: false,
     selector: 'pop-up-selecionar_valores',
     templateUrl: './pop-up-selecionar_valores.component.html',
     styleUrls: ['./pop-up-selecionar_valores.component.css']

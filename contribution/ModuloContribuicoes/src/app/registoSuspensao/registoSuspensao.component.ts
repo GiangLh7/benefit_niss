@@ -205,15 +205,15 @@ export class RegistoSuspensaoComponent {
   public cancelar(): void {
     if (this.entidadeTrabalhador == '1') {
       this.suspensaoService.savedSuccessfully = true;
-      this.router.navigate(['/entidadeEmpregadora/'], { skipLocationChange: true })
+      this.router.navigate(['/entidadeEmpregadora/'],)
     }
     else {
       if (this.idRel > 0) {
         this.suspensaoService.savedSuccessfully = true;
-        this.router.navigate(['/novoTrabalhador', this.idRel], { skipLocationChange: true });
+        this.router.navigate(['/novoTrabalhador', this.idRel],);
       }
       else {
-        this.router.navigate(['/trabalhadores/'], { skipLocationChange: true });
+        this.router.navigate(['/trabalhadores/'],);
       }
     }
 
@@ -259,7 +259,7 @@ export class RegistoSuspensaoComponent {
           this.hideLoader();
           this.suspensaoService.savedSuccessfully = true;
           openSnackBar(this.translate.instant('snackBar.registoSuspensao'), this._snackBar);
-          this.router.navigate(['/entidadeEmpregadora/'], { skipLocationChange: true })
+          this.router.navigate(['/entidadeEmpregadora/'],)
         },
           err => {
             this.hideLoader();
@@ -270,7 +270,7 @@ export class RegistoSuspensaoComponent {
               this.showError(['-11']);
             }
 
-            this.router.navigate(['/entidadeEmpregadora/'], { skipLocationChange: true })
+            this.router.navigate(['/entidadeEmpregadora/'],)
           });
       }
 
@@ -287,10 +287,10 @@ export class RegistoSuspensaoComponent {
 
           if (this.idRel > 0) {
             this.suspensaoService.savedSuccessfully = true;
-            this.router.navigate(['/novoTrabalhador', this.idRel], { skipLocationChange: true });
+            this.router.navigate(['/novoTrabalhador', this.idRel],);
           }
           else {
-            this.router.navigate(['/trabalhadores/'], { skipLocationChange: true });
+            this.router.navigate(['/trabalhadores/'],);
           }
         },
           err => {
@@ -301,7 +301,7 @@ export class RegistoSuspensaoComponent {
             else {
               this.showError(['-11']);
             }
-            this.router.navigate(['/trabalhadores/'], { skipLocationChange: true });
+            this.router.navigate(['/trabalhadores/'],);
           });
       }
 

@@ -15,7 +15,8 @@ import { PopUpAdicionarEditarEntidadeComponent } from "../pop-up-adicionar-edita
 @Component({
     selector: 'app-modulo-contrib',
     templateUrl: './modulo-contribuicoes-main-search.html',
-    styleUrls: ['./modulo-contribuicoes-main-search.css']
+    styleUrls: ['./modulo-contribuicoes-main-search.css'],
+    standalone: false
 })
 
 export class ContribHomeSearchComponent implements OnInit {

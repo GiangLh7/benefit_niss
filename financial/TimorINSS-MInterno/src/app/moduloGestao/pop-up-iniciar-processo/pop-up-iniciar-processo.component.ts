@@ -18,6 +18,7 @@ import { ProcessoUpdateRequest } from "src/app/request-models/processo-request";
 
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-iniciar-processo',
   templateUrl: './pop-up-iniciar-processo.component.html',
   styleUrls: ['./pop-up-iniciar-processo.component.css']
@@ -59,7 +60,7 @@ export class PopUpIniciarProcessoComponent {
       this.showLoader();
 
       if (!this.tokenStorage.getToken()) {
-        this.router.navigate(['/login'], { skipLocationChange: true });
+        this.router.navigate(['/login'],);
         this.closePopUp();
       }
       else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired())

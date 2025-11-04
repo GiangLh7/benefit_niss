@@ -32,6 +32,7 @@ import { forkJoin, of } from 'rxjs';
 
 
 @Component({
+  standalone: false,
   selector: 'componente-concilicacao',
   templateUrl: './componente-concilicacao.component.html',
   styleUrls: ['./componente-concilicacao.component.css']
@@ -133,7 +134,7 @@ export class ComponenteConcilicacaoComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.tokenStorageService.getToken()) {
-      this.router.navigate([''], { skipLocationChange: true });
+      this.router.navigate([''],);
     }
     else {
       this.spinner.show();

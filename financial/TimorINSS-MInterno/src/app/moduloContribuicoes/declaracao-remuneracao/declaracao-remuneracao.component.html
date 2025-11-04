@@ -7,7 +7,7 @@
       <app-date-picker [min]="beginDate" [max]="endDate" [(date)]="date" (dateSetEvent)="dateUpdated()" [clear]="false"></app-date-picker>
     </div>
     <div class="adicionarTrabalhador">
-      <a routerLink="../vincularTrabalhador" [skipLocationChange]="true" class="adicionarTrabalhadorButton" type="button" mat-raised-button>
+      <a routerLink="../vincularTrabalhador" class="adicionarTrabalhadorButton" type="button" mat-raised-button>
         <mat-icon class="adicionarTrabalhadorIcon">person_add</mat-icon>
         <mat-label>{{'general.adicionarTrabalhador' | translate}}</mat-label>
       </a>
@@ -55,7 +55,7 @@
             <ng-container matColumnDef="niss">
               <th class="align-left" matTooltip="{{'general.nissDesc' | translate}}" mat-header-cell *matHeaderCellDef> {{'general.niss' | translate}} </th>
               <td class="align-left" mat-cell *matCellDef="let element">
-                <a class="tableLink" [routerLink]="['../novoTrabalhador', element.declaracao.declaracaoRelEntidadeTrabalhadorFk]" [skipLocationChange]="true">
+                <a class="tableLink" [routerLink]="['../novoTrabalhador', element.declaracao.declaracaoRelEntidadeTrabalhadorFk]">
                   {{element.trabalhadorInfo.niss}}
                 </a>
               </td>
@@ -63,7 +63,7 @@
             <ng-container matColumnDef="nome">
               <th class="align-left" matTooltip="{{'declaracaoremunerao.tabelaHeader2ToolTip' | translate}}" mat-header-cell *matHeaderCellDef> {{'general.nome' | translate}} </th>
               <td class="align-left" mat-cell *matCellDef="let element">
-                <a class="tableLink" [routerLink]="['../novoTrabalhador', element.declaracao.declaracaoRelEntidadeTrabalhadorFk]" [skipLocationChange]="true">
+                <a class="tableLink" [routerLink]="['../novoTrabalhador', element.declaracao.declaracaoRelEntidadeTrabalhadorFk]">
                   {{element.trabalhadorInfo.nome}}
                 </a>
               </td>

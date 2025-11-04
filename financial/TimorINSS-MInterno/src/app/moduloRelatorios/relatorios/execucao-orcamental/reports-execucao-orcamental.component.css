@@ -47,7 +47,6 @@
 }
 
 .searchContainer {
-  width: 20%;
   height: 100%;
   min-width: 192px;
   display: inline-flex;
@@ -65,9 +64,7 @@
 }
 
 .ordensSearchIcon {
-  position: relative;
-  bottom: 13px;
-  left: 1px;
+
 }
 
 .input {

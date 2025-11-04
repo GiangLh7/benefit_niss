@@ -24,6 +24,7 @@ import { PopUpComprovativoPagamentoComponent } from "../pop-up-comprovativo-paga
 import * as QRCode from 'qrcode';
 
 @Component({
+  standalone: false,
     selector: 'guiaPagamento',
     templateUrl: './guia-pagamento.component.html',
     styleUrls: ['./guia-pagamento.component.css']
@@ -71,7 +72,7 @@ export class GuiaPagamentoComponent implements OnInit {
     public ngOnInit(): void {
 
         if (!this.tokenStorageService.getToken()) {
-            this.router.navigate([''], { skipLocationChange: true });
+            this.router.navigate([''],);
         }
         else if (this.tokenStorageService.getToken() && this.tokenStorageService.tokenExpired()) {
             this.translate.get('error.expired').subscribe((translated: string) => {
@@ -639,6 +640,6 @@ export class GuiaPagamentoComponent implements OnInit {
     }
 
     public return(): void {
-      this.router.navigate(['/contribHomePage/'], { skipLocationChange: true });
+      this.router.navigate(['/contribHomePage/'],);
     }
 }

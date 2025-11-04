@@ -1,6 +1,5 @@
-import { MaxSizeValidator } from "@angular-material-components/file-input";
 import { Component, OnInit } from "@angular/core";
-import { FormControl, Validators } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { Router, ActivatedRoute } from "@angular/router";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
@@ -19,6 +18,7 @@ import { TokenStorageService } from "../../services/token-storage.service";
 import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuffer, blobToSaveAs } from "../../utils";
 
 @Component({
+  standalone: false,
     selector: 'app-editar-responsavelLegal',
     templateUrl: './editar-responsavelLegal.component.html',
     styleUrls: ['./editar-responsavelLegal.component.css']
@@ -66,12 +66,12 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
         public errorDialog: MatDialog,
         private actRoute: ActivatedRoute,
     )   {
-            this.responsavelLegalId = this.actRoute.snapshot.params.id;
+            this.responsavelLegalId = this.actRoute.snapshot.params["id"];
         }
 
     public ngOnInit(): void {
         if(!this.tokenStorage.getToken()){
-            this.router.navigate([''], { skipLocationChange: true });
+            this.router.navigate([''],);
         }
         else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired())
         {
@@ -168,7 +168,7 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
                     dialogRef.afterClosed().subscribe(result => {
                         if (result){
                             this.responsavelLegalService.savedSuccessfully = true;
-                            this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+                            this.router.navigate(['/entidadeEmpregadora'],);
                         }
                     });
                 })
@@ -178,7 +178,7 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
                 this.responsavelLegalService.updateResponsavelLegalRequest(this.responsavelLegalrequest).subscribe(x => {
                     this.spinner.hide();
                     this.responsavelLegalService.savedSuccessfully = true;
-                    this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+                    this.router.navigate(['/entidadeEmpregadora'],);
                   },
                   err => {
                     this.spinner.hide();
@@ -195,7 +195,7 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
 
     public cancel(): void{
         this.responsavelLegalService.traceBack = true;
-        this.router.navigate(['/entidadeEmpregadora'], { skipLocationChange: true });
+        this.router.navigate(['/entidadeEmpregadora'],);
     }
 
     private validatedAllFields(): boolean{
@@ -275,6 +275,6 @@ import { base64ArrayBuffer, openErrorsDialog, showExpiredError, base64ToArrayBuf
     }
 
     public return(): void {
-      this.router.navigate(['/contribHomePage/'], { skipLocationChange: true });
+      this.router.navigate(['/contribHomePage/'],);
     }
 }

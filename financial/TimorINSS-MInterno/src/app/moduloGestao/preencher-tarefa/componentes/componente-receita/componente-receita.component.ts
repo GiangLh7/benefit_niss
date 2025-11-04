@@ -38,6 +38,7 @@ import { PopUpWarningComponent } from "src/app/componentes/pop-up-warning/pop-up
 
 
 @Component({
+  standalone: false,
     selector: 'app-componente-receita',
     templateUrl: './componente-receita.component.html',
     styleUrls: ['./componente-receita.component.css']

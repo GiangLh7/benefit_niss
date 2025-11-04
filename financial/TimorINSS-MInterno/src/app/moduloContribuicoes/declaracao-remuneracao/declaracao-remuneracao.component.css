@@ -12,10 +12,9 @@
 }
 
 .subHeader {
-  min-height: 50px;
   background: rgba(207, 207, 207, 0.966);
   width: 95%;
-  padding-left: 5%;
+  padding: 12px 5%;
 }
 
 .align-left {
@@ -317,6 +316,4 @@ table tr:nth-child(even)  {
 
 .utilizadorSearchIcon {
   position: relative;
-  bottom: 13px;
-  left: 1px;
 }

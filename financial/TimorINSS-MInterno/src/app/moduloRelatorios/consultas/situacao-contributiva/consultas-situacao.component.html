@@ -20,7 +20,7 @@
             <mat-form-field class="input inputs-grid__cell" appearance="outline">
                 <mat-label>{{'perfil.data' | translate}}</mat-label>
                 <input [(ngModel)]="beginDate" matInput readonly="true">
-                <input matInput hidden [matDatepicker]="beginDatePicker" [(ngModel)]="beginDate" name="BeginDate"/>
+                <input matInput style="display: none;" hidden [matDatepicker]="beginDatePicker" [(ngModel)]="beginDate" name="BeginDate"/>
                 <mat-datepicker-toggle matSuffix [for]="beginDatePicker"></mat-datepicker-toggle>
                 <mat-datepicker #beginDatePicker (monthSelected)="chosenMonthHandler($event, beginDatePicker, true)" startView="year"></mat-datepicker>
             </mat-form-field>

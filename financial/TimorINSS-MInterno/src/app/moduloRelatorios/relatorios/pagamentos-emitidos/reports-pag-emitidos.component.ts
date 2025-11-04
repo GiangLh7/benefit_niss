@@ -19,6 +19,7 @@ import { blobExcelSaveAs, formataCurrency, formatDate, formatDatePT, JsPdf_cente
 import { environment } from "src/environments/environment";
 
 @Component({
+  standalone: false,
   selector: 'app-reports-pag-emitidos',
   templateUrl: './reports-pag-emitidos.component.html',
   styleUrls: ['./reports-pag-emitidos.component.css']
@@ -65,7 +66,7 @@ export class RelatoriosPagamentosEmiditosComponent implements OnInit {
   ngOnInit(): void {
 
     if (!this.tokenStorage.getToken()) {
-      this.router.navigate(['/login'], { skipLocationChange: true })
+      this.router.navigate(['/login'],)
     }
     else if (this.tokenStorage.getToken() && !this.tokenStorage.tokenExpired()) {
       // this.getCentrosCusto();
@@ -79,8 +80,6 @@ export class RelatoriosPagamentosEmiditosComponent implements OnInit {
   public showLoader() {
     this.spinner.show();
   }
-
-
 
   public hideLoader() {
     this.spinner.hide();

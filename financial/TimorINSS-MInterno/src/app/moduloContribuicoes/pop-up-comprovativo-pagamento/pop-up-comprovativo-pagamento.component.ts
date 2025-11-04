@@ -3,11 +3,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { NgxSpinnerService } from "ngx-spinner";
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import { TokenStorageService } from '../../services/token-storage.service';
 import { DialogComponent } from '../../componentes/dialog/dialog.component';
 import { base64ArrayBuffer, base64ToArrayBuffer, blobToSaveAs, customCurrencyMaskConfig, focusCurrency, RegexPatterns, SelectsWDisable } from "../../utils";
 import { FormControl, Validators } from "@angular/forms";
-import { MaxSizeValidator } from "@angular-material-components/file-input";
+import { MaxSizeValidator } from '../../utils/file-validators';
 import { MyErrorStateMatcher } from "../../matcher";
 import { TranslateService } from "@ngx-translate/core";
 import { GuiaPagamentoService } from "../../services/guiaPagamento.service";
@@ -25,6 +24,7 @@ export interface PopUpComprovativoPagamentoData {
 
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-comprovativo-pagamento',
   templateUrl: 'pop-up-comprovativo-pagamento.component.html',
   styleUrls: ['./pop-up-comprovativo-pagamento.component.css']
@@ -235,7 +235,7 @@ ngOnInit(): void {
   }
 
   public addDocumentoRequired() {
-    this.fileControl.get('Documento')?.setValidators([Validators.required, MaxSizeValidator(this.maxSize)]);
+    this.fileControl.get('Documento')?.setValidators([Validators.required, MaxSizeValidator.maxContentSize(this.maxSize)]);
   }
 
   public useCredit(): void {

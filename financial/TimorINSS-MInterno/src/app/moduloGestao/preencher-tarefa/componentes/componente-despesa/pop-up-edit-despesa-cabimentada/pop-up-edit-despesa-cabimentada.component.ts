@@ -20,6 +20,7 @@ export interface PopUpEditDespesasCabimentadasData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-pop-up-edit-despesa-cabimentada',
   templateUrl: './pop-up-edit-despesa-cabimentada.component.html',
   styleUrls: ['./pop-up-edit-despesa-cabimentada.component.css']

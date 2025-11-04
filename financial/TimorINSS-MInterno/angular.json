@@ -20,9 +20,10 @@
             "outputPath": "dist/TimorINSS-MInterno",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
-            "aot": true,
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -31,13 +32,17 @@
               "src/custom-theme.scss",
               "src/styles.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "src/xlsx-init.js",
+              "node_modules/xlsx/dist/shim.min.js"
+            ],
             "allowedCommonJsDependencies": [
               "uuid",
               "rxjs",
               "raf",
               "@babel/runtime-corejs3",
-              "jspdf-autotable"
+              "jspdf-autotable",
+              "xlsx"
             ]
           },
           "configurations": {
@@ -51,10 +56,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -68,6 +70,14 @@
                 }
               ]
             },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "buildOptimizer": false,
+              "vendorChunk": true,
+              "namedChunks": true
+            },
             "qa": {
               "fileReplacements": [
                 {
@@ -78,35 +88,39 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
+              "extractLicenses": true
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "TimorINSS-MInterno:build"
+            "buildTarget": "TimorINSS-MInterno:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "TimorINSS-MInterno:build:production"
+              "buildTarget": "TimorINSS-MInterno:build:production"
+            },
+            "development": {
+              "buildTarget": "TimorINSS-MInterno:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "TimorINSS-MInterno:build"
+            "buildTarget": "TimorINSS-MInterno:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
@@ -120,28 +134,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
             ]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "TimorINSS-MInterno:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "TimorINSS-MInterno:serve:production"
-            }
           }
         }
       }

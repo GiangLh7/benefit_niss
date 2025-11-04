@@ -4,6 +4,7 @@ import { MyErrorStateMatcher } from 'src/app/matcher';
 import { TextosComponent } from 'src/app/models/preencherTarefa';
 
 @Component({
+  standalone: false,
   selector: 'app-componente-texto',
   templateUrl: './componente-texto.component.html',
   styleUrls: ['./componente-texto.component.css']

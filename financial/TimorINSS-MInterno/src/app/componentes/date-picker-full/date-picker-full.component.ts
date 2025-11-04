@@ -6,6 +6,7 @@ import { MatDatepicker } from '@angular/material/datepicker';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
+  standalone: false,
   selector: 'app-date-picker-full',
   templateUrl: './date-picker-full.component.html',
   styleUrls: ['./date-picker-full.component.css']

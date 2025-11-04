@@ -1,7 +1,7 @@
 <mat-menu #menu>
     <ng-container *ngFor="let item of items">
         <div *ngIf="item.link && !item.category">
-            <button routerLink="{{item.link}}" *ngIf="!item.children; else branch" [skipLocationChange]="true" mat-menu-item>
+            <button routerLink="{{item.link}}" *ngIf="!item.children; else branch" mat-menu-item>
                 <mat-icon style="color: white;">{{item.icon}}</mat-icon>
                 <span style="color: white;">{{item.name | translate}}</span>  
             </button>
@@ -19,7 +19,7 @@
         </div>
       <ng-template #branch>
           <div *ngIf="item.link">
-            <button mat-menu-item [matMenuTriggerFor]="innerPanel.menu" routerLink="{{item.link}}" [skipLocationChange]="true">
+            <button mat-menu-item [matMenuTriggerFor]="innerPanel.menu" routerLink="{{item.link}}">
                 <mat-icon style="color: white;">{{item.icon}}</mat-icon>
                 <span style="color: white;">{{item.name | translate}}</span>    
             </button>

@@ -23,6 +23,7 @@ export interface PopUpVincularTrabalhadorData {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-popUp-vincular-trabalhador',
   templateUrl: 'pop-up-vincular-trabalhador.component.html',
   styleUrls: ['./pop-up-vincular-trabalhador.component.css']
