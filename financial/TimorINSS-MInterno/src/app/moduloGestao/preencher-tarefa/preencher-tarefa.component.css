@@ -2,23 +2,22 @@
   padding-bottom: 10px;
   height: 12%;
   margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 4%;
 }
 
 .gravarButton {
   background: rgba(52, 176, 43, 100);
   color:white;
   font-size: 14px;
-  margin-left: 4%;
-  margin-top: 5px;
-  margin-bottom: 10px;
 }
 
 .cancelarButton {
   background:darkred;
   color:white;
   font-size: 14px;
-  margin-left: 2%;
-  margin-top: 5px;
 }
 
 .arquivarButton {

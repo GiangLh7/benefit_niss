@@ -54,6 +54,11 @@ const routes: Routes = [
   { path: 'camposEditaveis', component: GerirCamposEditaveisComponent },
   { path: 'login', component: LoginComponent },
   { path: '', component: HomePageComponent },
+  // Benefit Module - Lazy loaded
+  { 
+    path: 'benefit', 
+    loadChildren: () => import('./moduloBenefit/benefit.module').then(m => m.BenefitModule)
+  },
   { path: 'relatoriosExecucaoOrcamental', component: RelatoriosExecucaoOrcamentalComponent },
   { path: 'relatoriosPagamentosEmitidos', component: RelatoriosPagamentosEmiditosComponent },
   { path: 'consultasGuiasPagamento', component: ConsultasGuiasComponent },

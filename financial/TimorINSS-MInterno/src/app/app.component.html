@@ -41,7 +41,7 @@
 
     </div>
     <div class="navigation-header" >
-      <button *ngIf="isLoggedIn" mat-button [matMenuTriggerFor]="panel.menu">
+      <button style="height: 100%;" *ngIf="isLoggedIn" mat-button [matMenuTriggerFor]="panel.menu">
         <span style="color: white;">{{ 'general.menu' | translate }}</span>
         <mat-icon class="menuIcon">menu</mat-icon>
       </button>

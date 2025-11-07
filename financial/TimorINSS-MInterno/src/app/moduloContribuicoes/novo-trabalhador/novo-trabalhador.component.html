@@ -305,11 +305,15 @@
             <div class="secondLineContainers">
               <mat-form-field appearance="outline">
                 <mat-label>{{'general.document' | translate}}</mat-label>
-                <ngx-mat-file-input [errorStateMatcher]="matcher" [required]="submittedTry || wrongFormat"
-                  [formControl]="fileControlDocumento"
-                  [accept]="accept" name="Documento">
-                  <mat-icon ngxMatFileInputIcon>upload</mat-icon>
-                </ngx-mat-file-input>
+                <input matInput type="text" [value]="documento.nomeDocumento || ''" 
+                  readonly (click)="fileInput.click()" 
+                  [placeholder]="'general.document' | translate"
+                  [errorStateMatcher]="matcher" 
+                  [required]="submittedTry || wrongFormat">
+                <input #fileInput type="file" hidden 
+                  [accept]="accept" 
+                  (change)="fileControlDocumento.setValue($any($event.target).files[0])">
+                <mat-icon matSuffix>upload</mat-icon>
                 <mat-error>{{'general.documentRequiredLimitSize' | translate}} {{accept}}</mat-error>
               </mat-form-field>
             </div>
@@ -984,15 +988,17 @@
               </div>
               <div *ngIf="editINSSEstrangeiro" class="secondLineContainers inputContainerSmall">
                 <mat-form-field appearance="outline">
-                  <mat-label *ngIf="inssEstrangeiro.nomeDocumento && !fileControlDocumentoINSSEstrangeiro.pristine">
-                    {{'general.document' | translate}}
-                  </mat-label>
-                  <ngx-mat-file-input [errorStateMatcher]="notRequiredMatcher"
-                    [formControl]="fileControlDocumentoINSSEstrangeiro"
-                    [required]= "wrongFormat"
-                    [placeholder]="documentINESSPlaceholder | translate" [accept]="accept" name="documentInput">
-                    <mat-icon ngxMatFileInputIcon>upload</mat-icon>
-                  </ngx-mat-file-input>
+                  <mat-label>{{'general.document' | translate}}</mat-label>
+                  <input matInput type="text" 
+                    [value]="inssEstrangeiro.nomeDocumento || ''" 
+                    readonly (click)="fileInputINSS.click()" 
+                    [placeholder]="documentINESSPlaceholder | translate"
+                    [errorStateMatcher]="notRequiredMatcher" 
+                    [required]="wrongFormat">
+                  <input #fileInputINSS type="file" hidden 
+                    [accept]="accept" 
+                    (change)="fileControlDocumentoINSSEstrangeiro.setValue($any($event.target).files[0])">
+                  <mat-icon matSuffix *ngIf="!inssEstrangeiro.documento">upload</mat-icon>
                   <fa-icon *ngIf="inssEstrangeiro.documento" matSuffix aria-label="Clear" [icon]="faTimesCircle"
                     (click)="clearInssEstrangeiroDocumento()"></fa-icon>
                   <mat-error>{{'general.documentLimitSize' | translate}} {{accept}}</mat-error>

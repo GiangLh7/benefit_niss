@@ -85,6 +85,8 @@ input[type=number] {
   color: #2A81CC;
   margin-top: 20px;
   margin-left: 50px;
+  width: 20%;
+  display: inline-block;
 }
 
 .description{
@@ -95,10 +97,8 @@ input[type=number] {
 
 
 .tabelaValoresDespesa {
-  margin-left: 50px;
-  margin-top: 5px;
-  width:90%;
-  text-align: left;
+  margin-top: 8px;
+  width: 90%;
   background-color: white;
 }
 

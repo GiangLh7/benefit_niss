@@ -1,0 +1,148 @@
+<div class="benefit-granted-container">
+  <mat-card>
+    <mat-card-header>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="exportAllBenefits()">
+          <mat-icon>download</mat-icon>
+          {{ 'EXPORT_ALL' | translate }}
+        </button>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="isLoading" class="loading-spinner">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <div *ngIf="!isLoading">
+        <!-- Benefits Summary -->
+        <div class="benefits-summary">
+          <mat-card class="summary-card active">
+            <div class="summary-icon">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+            <div class="summary-content">
+              <div class="summary-label">{{ 'ACTIVE_BENEFITS' | translate }}</div>
+              <div class="summary-value">{{ activeBenefits }}</div>
+            </div>
+          </mat-card>
+
+          <mat-card class="summary-card monthly">
+            <div class="summary-icon">
+              <mat-icon>attach_money</mat-icon>
+            </div>
+            <div class="summary-content">
+              <div class="summary-label">{{ 'MONTHLY_AMOUNT' | translate }}</div>
+              <div class="summary-value">$ {{ totalMonthlyAmount | number:'1.2-2' }}</div>
+            </div>
+          </mat-card>
+
+          <mat-card class="summary-card total">
+            <div class="summary-icon">
+              <mat-icon>savings</mat-icon>
+            </div>
+            <div class="summary-content">
+              <div class="summary-label">{{ 'TOTAL_PAID' | translate }}</div>
+              <div class="summary-value">$ {{ totalBenefitsPaid | number:'1.2-2' }}</div>
+            </div>
+          </mat-card>
+        </div>
+
+        <!-- Search/Filter -->
+        <div class="table-controls">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'SEARCH' | translate }}</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="{{ 'SEARCH_BY_TYPE_OR_REFERENCE' | translate }}">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Benefits Table -->
+        <div class="table-container">
+          <table mat-table [dataSource]="dataSource" matSort>
+            <!-- Reference Number Column -->
+            <ng-container matColumnDef="referenceNumber">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'REFERENCE' | translate }}</th>
+              <td mat-cell *matCellDef="let row">
+                <strong>{{ row.referenceNumber }}</strong>
+              </td>
+            </ng-container>
+
+            <!-- Benefit Type Column -->
+            <ng-container matColumnDef="benefitType">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'BENEFIT_TYPE' | translate }}</th>
+              <td mat-cell *matCellDef="let row">{{ row.benefitType | translate }}</td>
+            </ng-container>
+
+            <!-- Start Date Column -->
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'START_DATE' | translate }}</th>
+              <td mat-cell *matCellDef="let row">{{ row.startDate | date:'dd/MM/yyyy' }}</td>
+            </ng-container>
+
+            <!-- Monthly Amount Column -->
+            <ng-container matColumnDef="monthlyAmount">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'MONTHLY_AMOUNT' | translate }}</th>
+              <td mat-cell *matCellDef="let row">
+                <strong>$ {{ row.monthlyAmount | number:'1.2-2' }}</strong>
+              </td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'STATUS' | translate }}</th>
+              <td mat-cell *matCellDef="let row">
+                <span class="status-badge" [ngClass]="row.status.toLowerCase()">
+                  {{ row.status | translate }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Total Paid Column -->
+            <ng-container matColumnDef="totalPaid">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'TOTAL_PAID' | translate }}</th>
+              <td mat-cell *matCellDef="let row">$ {{ row.totalPaid | number:'1.2-2' }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>{{ 'ACTIONS' | translate }}</th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item (click)="viewBenefitDetails(row)">
+                    <mat-icon>visibility</mat-icon>
+                    <span>{{ 'VIEW_DETAILS' | translate }}</span>
+                  </button>
+                  <button mat-menu-item (click)="downloadPaymentHistory(row)">
+                    <mat-icon>download</mat-icon>
+                    <span>{{ 'PAYMENT_HISTORY' | translate }}</span>
+                  </button>
+                  <button mat-menu-item (click)="requestBenefitCertificate(row)">
+                    <mat-icon>description</mat-icon>
+                    <span>{{ 'REQUEST_CERTIFICATE' | translate }}</span>
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="benefit-row"></tr>
+
+            <!-- No Data Row -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                {{ 'NO_BENEFITS_GRANTED' | translate }}
+              </td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

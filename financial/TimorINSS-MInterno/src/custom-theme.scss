@@ -8,7 +8,7 @@
 
 // Define custom typography using Material 2 legacy API with compact sizing
 $custom-typography: mat.m2-define-typography-config(
-  $font-family: 'Montserrat',
+  $font-family: 'Roboto, "Helvetica Neue", sans-serif',
   $body-1: mat.m2-define-typography-level(14px, 20px, 400),
   $body-2: mat.m2-define-typography-level(14px, 24px, 500),
   $button: mat.m2-define-typography-level(14px, 14px, 500),

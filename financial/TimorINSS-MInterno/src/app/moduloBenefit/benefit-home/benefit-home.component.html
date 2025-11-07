@@ -1,0 +1,270 @@
+<div class="benefit-container">
+  <!-- Toolbar -->
+  <mat-toolbar color="primary" class="toolbar-with-search">
+    <div class="toolbar-content">
+      <button mat-icon-button (click)="drawer.toggle()" class="menu-toggle">
+        <mat-icon>menu</mat-icon>
+      </button>
+      
+      <span class="toolbar-title">{{ 'BENEFIT_MODULE' | translate }}</span>
+      
+      <!-- Search container - only visible on citizen-record page -->
+      <div class="search-container" *ngIf="isOnCitizenRecordPage()">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-icon matPrefix>search</mat-icon>
+          <input 
+            matInput 
+            [formControl]="searchControl"
+            [placeholder]="searchPlaceholder"
+            (keyup.enter)="onSearchSubmit()">
+          <button 
+            mat-icon-button 
+            matSuffix 
+            *ngIf="searchControl.value && !isSearching" 
+            (click)="clearSearch()"
+            type="button">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-spinner 
+            matSuffix 
+            diameter="20" 
+            *ngIf="isSearching">
+          </mat-spinner>
+        </mat-form-field>
+        <button 
+          mat-raised-button 
+          color="accent" 
+          class="search-button"
+          (click)="onSearchSubmit()"
+          [disabled]="!searchControl.value || isSearching">
+          <mat-icon>search</mat-icon>
+          {{ 'SEARCH' | translate }}
+        </button>
+      </div>
+      
+      <span class="toolbar-spacer"></span>
+    </div>
+  </mat-toolbar>
+
+  <!-- Sidebar + Content -->
+  <mat-drawer-container class="drawer-container" autosize>
+    <!-- Sidebar -->
+    <mat-drawer #drawer mode="side" opened class="sidenav">
+      <mat-nav-list>
+        <!-- Citizen Record -->
+        <a mat-list-item 
+           routerLink="/benefit/citizen-record"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: false}">
+          <mat-icon matListItemIcon>person</mat-icon>
+          <span matListItemTitle>Citizen Record</span>
+        </a>
+
+        <!-- Benefit Management (with submenu) -->
+        <mat-expansion-panel class="nav-expansion-panel" [expanded]="benefitManagementExpanded">
+          <mat-expansion-panel-header (click)="toggleBenefitManagement()">
+            <mat-panel-title class="nav-panel-title">
+              <mat-icon>card_giftcard</mat-icon>
+              <span>Benefit Management</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          
+          <mat-nav-list class="submenu">
+            <a mat-list-item 
+               routerLink="/benefit/non-contribution"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{exact: false}">
+              <mat-icon matListItemIcon>description</mat-icon>
+              <span matListItemTitle>Non-Contribution</span>
+            </a>
+            
+            <a mat-list-item 
+               routerLink="/benefit/contribution-scheme"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{exact: false}">
+              <mat-icon matListItemIcon>account_balance</mat-icon>
+              <span matListItemTitle>Contribution Scheme</span>
+            </a>
+          </mat-nav-list>
+        </mat-expansion-panel>
+      </mat-nav-list>
+    </mat-drawer>
+
+    <!-- Main Content -->
+    <mat-drawer-content class="main-content">
+      <div class="content">
+        <!-- Citizen Record Content -->
+        <div *ngIf="isMenuActive('citizen-record')">
+          <!-- No citizen selected message -->
+          <mat-card *ngIf="!hasCitizenSelected" class="no-selection-card">
+            <mat-card-content>
+              <div class="no-selection-content">
+                <mat-icon class="large-icon">person_search</mat-icon>
+                <h2>{{ 'SEARCH_CITIZEN' | translate }}</h2>
+                <p>{{ 'SEARCH_CITIZEN_INSTRUCTION' | translate }}</p>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Citizen information (shown when selected) -->
+          <div *ngIf="hasCitizenSelected() && selectedCitizen">
+            <!-- Citizen Info Banner -->
+            <mat-card class="citizen-info-banner">
+              <div class="citizen-info">
+                <div class="citizen-details">
+                  <div class="citizen-name">
+                    <mat-icon>person</mat-icon>
+                    <strong>{{ selectedCitizen?.name }}</strong>
+                  </div>
+                  <div class="citizen-meta">
+                    <span class="meta-item">
+                      <mat-icon>badge</mat-icon>
+                      NISS: {{ selectedCitizen?.niss }}
+                    </span>
+                    <span class="meta-item">
+                      <mat-icon>cake</mat-icon>
+                      DOB: {{ selectedCitizen?.dateOfBirth }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </mat-card>
+
+            <!-- Tabs with citizen data -->
+            <mat-card *ngIf="selectedCitizen">
+              <mat-card-header>
+                <mat-card-title>{{ 'Individual Citizen Record' | translate }}</mat-card-title>
+              </mat-card-header>
+
+              <mat-card-content>
+                <mat-tab-group (selectedIndexChange)="onTabChange($event)">
+                  <mat-tab label="Personal Data">
+                    @if (loadedTabs[0]) {
+                      <app-personal-data />
+                    } @else {
+                      <ng-template matTabContent>
+                        <app-personal-data />
+                      </ng-template>
+                    }
+                  </mat-tab>
+                  <mat-tab label="Professional Situation">
+                    @if (loadedTabs[1]) {
+                      <app-professional-situation />
+                    } @else {
+                      <ng-template matTabContent>
+                        <app-professional-situation />
+                      </ng-template>
+                    }
+                  </mat-tab>
+                  <mat-tab label="Contributory Situation">
+                    @if (loadedTabs[2]) {
+                      <app-contributory-situation />
+                    } @else {
+                      <ng-template matTabContent>
+                        <app-contributory-situation />
+                      </ng-template>
+                    }
+                  </mat-tab>
+                  <mat-tab label="Contributory Career">
+                    @if (loadedTabs[3]) {
+                      <app-contributory-career />
+                    } @else {
+                      <ng-template matTabContent>
+                        <app-contributory-career />
+                      </ng-template>
+                    }
+                  </mat-tab>
+                  <mat-tab label="Benefit granted">
+                    @if (loadedTabs[4]) {
+                      <app-benefit-granted />
+                    } @else {
+                      <ng-template matTabContent>
+                        <app-benefit-granted />
+                      </ng-template>
+                    }
+                  </mat-tab>
+                </mat-tab-group>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+
+        <!-- Non-Contribution Scheme -->
+        <div *ngIf="isMenuActive('non-contribution')">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>description</mat-icon>
+                Non-Contributory Scheme Management
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="benefit-options-grid">
+                <mat-card class="option-card">
+                  <mat-icon class="option-icon">list_alt</mat-icon>
+                  <h3>Payment List Request</h3>
+                  <p>Generate and manage payment requests for Social Old-Age/Disability Pensions.</p>
+                  <button mat-raised-button color="primary">
+                    Proceed
+                  </button>
+                </mat-card>
+
+                <mat-card class="option-card">
+                  <mat-icon class="option-icon">check_circle</mat-icon>
+                  <h3>Payment Request Status</h3>
+                  <p>Monitor the status of payment requests for Non-Contributory Pensions.</p>
+                  <button mat-raised-button color="primary" style="background-color: #4caf50;">
+                    Proceed
+                  </button>
+                </mat-card>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Contribution Scheme -->
+        <div *ngIf="isMenuActive('contribution-scheme')">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>account_balance</mat-icon>
+                Contributory Scheme Management
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="benefit-options-grid">
+                <mat-card class="option-card">
+                  <mat-icon class="option-icon">people</mat-icon>
+                  <h3>Current Beneficiaries</h3>
+                  <p>View and manage the list of current beneficiaries and their benefits.</p>
+                  <button mat-raised-button color="primary">
+                    Proceed
+                  </button>
+                </mat-card>
+
+                <mat-card class="option-card">
+                  <mat-icon class="option-icon">add_circle</mat-icon>
+                  <h3>New Request</h3>
+                  <p>Submit a new request to add a beneficiary to the scheme.</p>
+                  <button mat-raised-button color="primary">
+                    Proceed
+                  </button>
+                </mat-card>
+
+                <mat-card class="option-card">
+                  <mat-icon class="option-icon">list_alt</mat-icon>
+                  <h3>Payment Request Status</h3>
+                  <p>Track the status of payment requests for beneficiaries.</p>
+                  <button mat-raised-button color="primary">
+                    Proceed
+                  </button>
+                </mat-card>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

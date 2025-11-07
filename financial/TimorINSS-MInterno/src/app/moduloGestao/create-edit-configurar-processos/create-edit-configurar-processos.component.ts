@@ -194,13 +194,14 @@ export class NovoConfigurarProcessosComponent implements OnInit {
 
   public adicionarEditarConfigProcesso() 
   {
+    const tasks = this.dataSourceTasks();
     this.submittedTry = true;
-    if (this.dataSourceTasks.length == 0) {
+    if (tasks.length == 0) {
       this.tarefaError = true;
     }
     else
       this.tarefaError = false;
-    if (this.dataSourceProfile.length == 0) {
+    if (this.dataSourceProfile().length == 0) {
       this.perfilError = true;
     } else
       this.perfilError = false;
@@ -213,7 +214,7 @@ export class NovoConfigurarProcessosComponent implements OnInit {
 
     this.request.tarefas = [];
     this.request.perfis = [];
-    this.dataSourceTasks().forEach(element => {
+    tasks.forEach(element => {
       this.request.tarefas.push({
         id: element.id,
         tarefaInicial: element.tarefaInicial

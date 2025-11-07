@@ -27,6 +27,6 @@
 
   .subContainer {
       margin-left: 4%;
-      width: 35%;
-      min-width: 600px;
+      width: 100%;
+      max-width: 500px;
   }

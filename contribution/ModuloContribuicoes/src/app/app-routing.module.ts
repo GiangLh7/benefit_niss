@@ -5,9 +5,6 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { TrabalhadoresComponent } from './trabalhadores/trabalhadores.component';
 import { EntidadeEmpregadoraComponent } from './entidadeEmpregadora/entidadeEmpregadora.component';
-
-
-
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
@@ -47,7 +44,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes),MatFormFieldModule,MatInputModule],
+  imports: [RouterModule.forRoot(routes, {
+    bindToComponentInputs: true
+  }),MatFormFieldModule,MatInputModule],
   exports: [RouterModule,MatTabsModule,MatToolbarModule,MatIconModule,MatFormFieldModule,
   MatSelectModule,MatExpansionModule,MatInputModule]
 })

@@ -5,7 +5,7 @@
 .DadosContainer {
   margin-left: 5%;
   margin-right: 5%;
-  padding-bottom: 5px;
+  padding-bottom: 12px;
 }
 
 .secondLineContainers {
@@ -51,7 +51,6 @@
 
 .dataContainer {
   width: 228px;
-  margin-bottom: 15px;
 }
 
 .fa-icon {
@@ -89,7 +88,7 @@
 .expandFirstContainer{
   padding-left: calc(5% - 24px);
   padding-right: calc(5% - 24px);
-  padding-bottom: 0;
+  padding-bottom: 12px;
   padding-top: 20px;
 }
 
@@ -103,7 +102,7 @@
 .DadosContainer-expansion{
   padding-left: calc(5% - 24px);
   padding-right: calc(5% - 24px);
-  padding-bottom: 0;
+  padding-bottom: 12px;
 }
 
 .mat-expansion-panel-header:hover {

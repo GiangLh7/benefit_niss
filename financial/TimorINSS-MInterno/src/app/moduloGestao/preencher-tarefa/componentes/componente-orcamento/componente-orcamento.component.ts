@@ -31,7 +31,7 @@ import { Router } from '@angular/router';
   standalone: false,
   selector: 'app-componente-orcamento',
   templateUrl: './componente-orcamento.component.html',
-  styleUrls: ['./componente-orcamento.component.css']
+  styleUrls: ['./componente-orcamento.component.scss']
 })
 
 export class ComponenteOrcamentoComponent implements OnInit {

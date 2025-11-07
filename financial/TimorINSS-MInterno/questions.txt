@@ -1,0 +1,12 @@
+- Ai là người tạo benefit claim requests
+- Ai là người thêm người hưởng lương hưu/chế độ
+- Ai là người phê duyệt
+
+
+API:
+1. Get citizen info by NISS
+2. Get citizen professional situation
+3. Get citizen contribution history
+4. Get citizen benefit granted
+
+5. 

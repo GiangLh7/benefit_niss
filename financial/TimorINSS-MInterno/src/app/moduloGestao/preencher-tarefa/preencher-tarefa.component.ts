@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material/dialog';
-import { openErrorsDialog, openSnackBar, showExpiredError } from 'src/app/utils';
+import { openErrorsDialog, openSnackBar } from 'src/app/utils';
 import { TranslateService } from '@ngx-translate/core';
 import { TarefaService } from 'src/app/services/tarefa.service';
 import { GetTarefaDataRequest, SwitchTarefaAtivoRequest, TarefaDataRequest } from 'src/app/request-models/tarefa-request';
@@ -12,8 +12,7 @@ import { HostListener } from '@angular/core';
 import { GetAllRelTarefaComponenteByIdTarefaActivoRequest } from 'src/app/request-models/relTarefaComponente-request';
 import { ComponenteListagem, ComponenteListagemResponse } from 'src/app/response-models/componente-response';
 import { forkJoin } from 'rxjs';
-import { HttpResponseBase } from '@angular/common/http';
-import { PreencherTarefa, TextosComponent } from 'src/app/models/preencherTarefa';
+import { PreencherTarefa } from 'src/app/models/preencherTarefa';
 import { TarefaDataResponse } from 'src/app/response-models/tarefa-response';
 import { MatSnackBar } from '@angular/material/snack-bar';
 

@@ -11,6 +11,7 @@ export enum Modules {
     CONTRIBUICOES = 2,
     FINANCEIRO = 3,
     RELATORIOS = 4,
+    BENEFIT = 5
 }
 
 export enum Funcionalidades {

@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; margin: 0; }
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 html{
     background-image: url("https://image.freepik.com/free-photo/top-view-work-from-home-concept-with-keyboard-calculator-notebook-white-background-graphic-designer-creative-designer-concept_160097-213.jpg");
@@ -9,7 +13,9 @@ html{
 }
 
 body {
-
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .modalWithBorder {
@@ -85,6 +91,7 @@ body {
 
 .inputs-grid__cell {
   grid-column: span 1;
+  padding-block: 16px;
 }
 
 .inputs-grid__cell--full-width {
