@@ -10,7 +10,7 @@ steps:
     args:
       - "build"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
       - "-f"
       - "./benefit/Dockerfile"
       - "./benefit"
@@ -22,7 +22,7 @@ steps:
     args:
       - "build"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
       - "-f"
       - "./financial/TimorINSS-MInterno/Dockerfile"
       - "./financial/TimorINSS-MInterno"
@@ -33,7 +33,7 @@ steps:
     id: "push-benefit"
     args:
       - "push"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
     waitFor: ["build-benefit"]
 
   # Push Financial Image
@@ -41,7 +41,7 @@ steps:
     id: "push-financial"
     args:
       - "push"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
     waitFor: ["build-financial"]
 
 substitutions:
@@ -55,8 +55,8 @@ options:
   substitutionOption: "ALLOW_LOOSE"
 
 images:
-  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
+  - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
+  - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
 
 tags:
   - "dev"

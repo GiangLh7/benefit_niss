@@ -10,11 +10,11 @@ steps:
     args:
       - "build"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:prod-${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:prod-${SHORT_SHA}"
       - "-f"
       - "./benefit/Dockerfile"
       - "./benefit"
@@ -26,11 +26,11 @@ steps:
     args:
       - "build"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:prod-${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:prod-${SHORT_SHA}"
       - "-f"
       - "./financial/TimorINSS-MInterno/Dockerfile"
       - "./financial/TimorINSS-MInterno"
@@ -42,7 +42,7 @@ steps:
     args:
       - "push"
       - "--all-tags"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}"
     waitFor: ["build-benefit"]
 
   # Push Financial Image
@@ -51,7 +51,7 @@ steps:
     args:
       - "push"
       - "--all-tags"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}"
     waitFor: ["build-financial"]
 
   # Deploy Benefit to Cloud Run
@@ -63,7 +63,7 @@ steps:
       - "deploy"
       - "${_BENEFIT_SERVICE_NAME}"
       - "--image"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
       - "--region"
       - "${_REGION}"
       - "--platform"
@@ -94,7 +94,7 @@ steps:
       - "deploy"
       - "${_FINANCIAL_SERVICE_NAME}"
       - "--image"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
       - "--region"
       - "${_REGION}"
       - "--platform"
@@ -130,12 +130,12 @@ options:
   substitutionOption: "ALLOW_LOOSE"
 
 images:
-  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:prod-${SHORT_SHA}"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:prod-${SHORT_SHA}"
+  - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
+  - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
+  - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:prod-${SHORT_SHA}"
+  - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
+  - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
+  - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:prod-${SHORT_SHA}"
 
 tags:
   - "prod"

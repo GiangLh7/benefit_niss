@@ -12,9 +12,9 @@ steps:
     args:
       - "build"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
       - "-f"
       - "./benefit/Dockerfile"
       - "./benefit"
@@ -28,9 +28,9 @@ steps:
     args:
       - "build"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
       - "-t"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
       - "-f"
       - "./financial/TimorINSS-MInterno/Dockerfile"
       - "./financial/TimorINSS-MInterno"
@@ -44,7 +44,7 @@ steps:
     args:
       - "push"
       - "--all-tags"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}"
     waitFor: ["build-benefit"]
 
   # ============================================================================
@@ -55,7 +55,7 @@ steps:
     args:
       - "push"
       - "--all-tags"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}"
+      - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}"
     waitFor: ["build-financial"]
 
   # ============================================================================
@@ -70,7 +70,7 @@ steps:
       - |
         if [ "${_DEPLOY_BENEFIT}" = "true" ]; then
           gcloud run deploy ${_BENEFIT_SERVICE_NAME} \
-            --image ${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA} \
+            --image ${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA} \
             --region ${_REGION} \
             --platform managed \
             --allow-unauthenticated \
@@ -96,7 +96,7 @@ steps:
       - |
         if [ "${_DEPLOY_FINANCIAL}" = "true" ]; then
           gcloud run deploy ${_FINANCIAL_SERVICE_NAME} \
-            --image ${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA} \
+            --image ${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA} \
             --region ${_REGION} \
             --platform managed \
             --allow-unauthenticated \
@@ -149,10 +149,10 @@ options:
 # Images to be pushed to Container Registry
 # ============================================================================
 images:
-  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
-  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
+  - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
+  - "${_REGISTRY}/${PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
+  - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
+  - "${_REGISTRY}/${PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
 
 # ============================================================================
 # Tags (for filtering builds)
