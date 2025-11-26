@@ -5,43 +5,43 @@
       <button mat-icon-button (click)="drawer.toggle()" class="menu-toggle">
         <mat-icon>menu</mat-icon>
       </button>
-      
-      <span class="toolbar-title">{{ 'BENEFIT_MODULE' | translate }}</span>
-      
+
+      <span class="toolbar-title">{{ "BENEFIT MODULE" | translate }}</span>
+
       <!-- Search container - only visible on citizen-record page -->
       <div class="search-container" *ngIf="isOnCitizenRecordPage()">
         <mat-form-field appearance="outline" class="search-field">
           <mat-icon matPrefix>search</mat-icon>
-          <input 
-            matInput 
+          <input
+            matInput
             [formControl]="searchControl"
             [placeholder]="searchPlaceholder"
-            (keyup.enter)="onSearchSubmit()">
-          <button 
-            mat-icon-button 
-            matSuffix 
-            *ngIf="searchControl.value && !isSearching" 
+            (keyup.enter)="onSearchSubmit()"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            *ngIf="searchControl.value && !isSearching"
             (click)="clearSearch()"
-            type="button">
+            type="button"
+          >
             <mat-icon>close</mat-icon>
           </button>
-          <mat-spinner 
-            matSuffix 
-            diameter="20" 
-            *ngIf="isSearching">
+          <mat-spinner matSuffix diameter="20" *ngIf="isSearching">
           </mat-spinner>
         </mat-form-field>
-        <button 
-          mat-raised-button 
-          color="accent" 
+        <button
+          mat-raised-button
+          color="accent"
           class="search-button"
           (click)="onSearchSubmit()"
-          [disabled]="!searchControl.value || isSearching">
+          [disabled]="!searchControl.value || isSearching"
+        >
           <mat-icon>search</mat-icon>
-          {{ 'SEARCH' | translate }}
+          {{ "SEARCH" | translate }}
         </button>
       </div>
-      
+
       <span class="toolbar-spacer"></span>
     </div>
   </mat-toolbar>
@@ -52,18 +52,22 @@
     <mat-drawer #drawer mode="side" opened class="sidenav">
       <mat-nav-list>
         <!-- Citizen Record -->
-        <a mat-list-item 
-           routerLink="/benefit/citizen-record"
-           routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: false}">
+        <a
+          mat-list-item
+          routerLink="/benefit/citizen-record"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }"
+        >
           <mat-icon matListItemIcon>person</mat-icon>
           <span matListItemTitle>Citizen Record</span>
         </a>
 
-        <a mat-list-item 
-           routerLink="/benefit/contribution-scheme"
-           routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: false}">
+        <a
+          mat-list-item
+          routerLink="/benefit/contribution-scheme"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: false }"
+        >
           <mat-icon matListItemIcon>card_giftcard</mat-icon>
           <span matListItemTitle>Benefit Management</span>
         </a>
@@ -80,8 +84,8 @@
             <mat-card-content>
               <div class="no-selection-content">
                 <mat-icon class="large-icon">person_search</mat-icon>
-                <h2>{{ 'SEARCH_CITIZEN' | translate }}</h2>
-                <p>{{ 'SEARCH_CITIZEN_INSTRUCTION' | translate }}</p>
+                <h2>{{ "SEARCH_CITIZEN" | translate }}</h2>
+                <p>{{ "SEARCH_CITIZEN_INSTRUCTION" | translate }}</p>
               </div>
             </mat-card-content>
           </mat-card>
@@ -113,54 +117,56 @@
             <!-- Tabs with citizen data -->
             <mat-card *ngIf="selectedCitizen">
               <mat-card-header>
-                <mat-card-title>{{ 'Individual Citizen Record' | translate }}</mat-card-title>
+                <mat-card-title>{{
+                  "Individual Citizen Record" | translate
+                }}</mat-card-title>
               </mat-card-header>
 
               <mat-card-content>
                 <mat-tab-group (selectedIndexChange)="onTabChange($event)">
                   <mat-tab label="Personal Data">
                     @if (loadedTabs[0]) {
-                      <app-personal-data />
+                    <app-personal-data />
                     } @else {
-                      <ng-template matTabContent>
-                        <app-personal-data />
-                      </ng-template>
+                    <ng-template matTabContent>
+                      <app-personal-data />
+                    </ng-template>
                     }
                   </mat-tab>
                   <mat-tab label="Professional Situation">
                     @if (loadedTabs[1]) {
-                      <app-professional-situation />
+                    <app-professional-situation />
                     } @else {
-                      <ng-template matTabContent>
-                        <app-professional-situation />
-                      </ng-template>
+                    <ng-template matTabContent>
+                      <app-professional-situation />
+                    </ng-template>
                     }
                   </mat-tab>
                   <mat-tab label="Contributory Situation">
                     @if (loadedTabs[2]) {
-                      <app-contributory-situation />
+                    <app-contributory-situation />
                     } @else {
-                      <ng-template matTabContent>
-                        <app-contributory-situation />
-                      </ng-template>
+                    <ng-template matTabContent>
+                      <app-contributory-situation />
+                    </ng-template>
                     }
                   </mat-tab>
                   <mat-tab label="Contributory Career">
                     @if (loadedTabs[3]) {
-                      <app-contributory-career />
+                    <app-contributory-career />
                     } @else {
-                      <ng-template matTabContent>
-                        <app-contributory-career />
-                      </ng-template>
+                    <ng-template matTabContent>
+                      <app-contributory-career />
+                    </ng-template>
                     }
                   </mat-tab>
                   <mat-tab label="Benefit granted">
                     @if (loadedTabs[4]) {
-                      <app-benefit-granted />
+                    <app-benefit-granted />
                     } @else {
-                      <ng-template matTabContent>
-                        <app-benefit-granted />
-                      </ng-template>
+                    <ng-template matTabContent>
+                      <app-benefit-granted />
+                    </ng-template>
                     }
                   </mat-tab>
                 </mat-tab-group>
@@ -183,29 +189,44 @@
                 <mat-card class="option-card">
                   <mat-icon class="option-icon">people</mat-icon>
                   <h3>Current Beneficiaries</h3>
-                  <p>View and manage the list of current beneficiaries and their benefits.</p>
-                  <button mat-raised-button color="primary" routerLink="/benefit/current-beneficiaries">
+                  <p>
+                    View and manage the list of current beneficiaries and their
+                    benefits.
+                  </p>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    routerLink="/benefit/current-beneficiaries"
+                  >
                     Proceed
                   </button>
                 </mat-card>
 
                 <mat-card class="option-card">
-                  <button mat-icon-button 
-                          class="badge-button-top-right"
-                          (click)="navigateToPendingRequests($event)"
-                          [matBadge]="pendingRequestsCount"
-                          [matBadgeHidden]="pendingRequestsCount === 0"
-                          matBadgeColor="warn"
-                          matBadgePosition="above after"
-                          matTooltip="View Pending Requests">
+                  <button
+                    mat-icon-button
+                    class="badge-button-top-right"
+                    (click)="navigateToPendingRequests($event)"
+                    [matBadge]="pendingRequestsCount"
+                    [matBadgeHidden]="pendingRequestsCount === 0"
+                    matBadgeColor="warn"
+                    matBadgePosition="above after"
+                    matTooltip="View Pending Requests"
+                  >
                     <mat-icon>notifications</mat-icon>
                   </button>
                   <div class="card-header-with-badge">
                     <mat-icon class="option-icon">add_circle</mat-icon>
                   </div>
                   <h3>New Beneficiary</h3>
-                  <p>Submit a new request to add a beneficiary to the scheme.</p>
-                  <button mat-raised-button color="primary" routerLink="/benefit/new-contributory-request">
+                  <p>
+                    Submit a new request to add a beneficiary to the scheme.
+                  </p>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    routerLink="/benefit/new-contributory-request"
+                  >
                     Proceed
                   </button>
                 </mat-card>
@@ -214,15 +235,12 @@
                   <mat-icon class="option-icon">list_alt</mat-icon>
                   <h3>Payment Request Status</h3>
                   <p>Track the status of payment requests for beneficiaries.</p>
-                  <button mat-raised-button color="primary">
-                    Proceed
-                  </button>
+                  <button mat-raised-button color="primary">Proceed</button>
                 </mat-card>
               </div>
             </mat-card-content>
           </mat-card>
         </div>
-
       </div>
     </mat-drawer-content>
   </mat-drawer-container>

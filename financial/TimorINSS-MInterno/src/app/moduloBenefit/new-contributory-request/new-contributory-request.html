@@ -233,6 +233,7 @@
             [contributionMonths]="contributionMonths"
             [currentAge]="citizenInfo ? (citizenInfo.dateOfBirth | date:'yyyy') : 0"
             [sector]="citizenInfo?.employmentSector || 'private'"
+            [referenceRemuneration]="getReferenceRemuneration()"
             (disabilityInfoChanged)="onDisabilityInfoChanged($event)">
           </app-disability-pension-info>
         </div>
@@ -257,6 +258,8 @@
           <app-retirement-options
             [eligibilityResult]="eligibilityResult"
             [contributionMonths]="contributionMonths"
+            [referenceRemuneration]="getReferenceRemuneration()"
+            [saiiAmount]="100"
             [availableRetirementOptions]="availableRetirementOptions"
             [hazardousIndustries]="hazardousIndustries"
             (retirementOptionSelected)="onRetirementOptionSelected($event)"

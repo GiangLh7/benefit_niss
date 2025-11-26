@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Dependent } from '../../models/survivor-benefit.model';
@@ -9,7 +9,7 @@ import { Dependent } from '../../models/survivor-benefit.model';
   templateUrl: './bank-account.component.html',
   styleUrls: ['./bank-account.component.css']
 })
-export class BankAccountComponent implements OnInit, OnDestroy {
+export class BankAccountComponent implements OnInit, OnDestroy, OnChanges {
   @Input() benefitType: string = '';
   @Input() dependents: Dependent[] = [];
   @Input() relationshipLabels: { [key: string]: string } = {};
@@ -23,10 +23,42 @@ export class BankAccountComponent implements OnInit, OnDestroy {
   // Multiple bank accounts for dependents (for survivor's pension)
   dependentBankAccountForms = new FormArray<FormGroup>([]);
 
+  // Available banks
+  readonly availableBanks = [
+    'BNCTL',
+    'Mandiri',
+    'ANZ',
+    'BNU',
+    'BRI'
+  ];
+
   private subscriptions: Subscription[] = [];
 
   ngOnInit(): void {
     this.initializeForms();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Re-initialize forms if dependents change
+    if (changes['dependents'] && !changes['dependents'].firstChange) {
+      // Clear existing subscriptions
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+      this.subscriptions = [];
+      // Clear existing forms
+      this.dependentBankAccountForms.clear();
+      // Re-initialize
+      this.initializeForms();
+    }
+    // Re-initialize if benefitType changes
+    if (changes['benefitType'] && !changes['benefitType'].firstChange) {
+      this.subscriptions.forEach(sub => sub.unsubscribe());
+      this.subscriptions = [];
+      this.dependentBankAccountForms.clear();
+      if (this.bankAccountForm) {
+        this.bankAccountForm.reset();
+      }
+      this.initializeForms();
+    }
   }
 
   ngOnDestroy(): void {
@@ -49,6 +81,8 @@ export class BankAccountComponent implements OnInit, OnDestroy {
         });
         this.subscriptions.push(sub);
       });
+      // Emit initial validation state
+      this.emitChanges();
     } else {
       // Single bank account form
       this.bankAccountForm = this.createBankAccountForm();
@@ -58,6 +92,8 @@ export class BankAccountComponent implements OnInit, OnDestroy {
         this.emitChanges();
       });
       this.subscriptions.push(sub);
+      // Emit initial validation state
+      this.emitChanges();
     }
   }
 

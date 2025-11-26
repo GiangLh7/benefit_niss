@@ -44,7 +44,7 @@
       <p class="rejection-message">
         This citizen does <strong>NOT meet</strong> the minimum 
         {{ data.reason === 'age' ? 'age' : 'contribution' }} 
-        requirement for Old-Age Pension.
+        requirement for {{ getBenefitTypeName() }}.
       </p>
     </div>
 

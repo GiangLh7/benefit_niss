@@ -147,6 +147,13 @@
   margin: 12px 0;
 }
 
+.calc-explanation {
+  font-size: 12px;
+  color: #757575;
+  margin-left: 8px;
+  font-style: italic;
+}
+
 .pension-note {
   padding: 12px;
   background-color: #e3f2fd;
@@ -155,10 +162,40 @@
   font-size: 13px;
   line-height: 1.5;
   color: #1565c0;
+  margin-top: 12px;
 }
 
 .pension-note strong {
   font-weight: 600;
+}
+
+.saii-explanation {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background-color: #fff3e0;
+  border-left: 4px solid #ff9800;
+  border-radius: 4px;
+  margin-top: 16px;
+}
+
+.saii-explanation mat-icon {
+  color: #ff9800;
+  flex-shrink: 0;
+}
+
+.saii-explanation strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #e65100;
+  font-size: 14px;
+}
+
+.saii-explanation p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #616161;
 }
 
 /* Early Retirement Conditions Table */
@@ -378,6 +415,36 @@
   margin: 8px 0;
   line-height: 1.6;
   color: #424242;
+}
+
+/* Selected Option Info (when only 1 option) */
+.selected-option-info {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background-color: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  border-radius: 4px;
+  margin-top: 24px;
+}
+
+.selected-option-info mat-icon {
+  color: #4caf50;
+  flex-shrink: 0;
+}
+
+.selected-option-info strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #2e7d32;
+  font-size: 14px;
+}
+
+.selected-option-info .option-description {
+  margin: 4px 0 0 0;
+  font-size: 13px;
+  color: #616161;
+  line-height: 1.5;
 }
 
 /* Responsive */

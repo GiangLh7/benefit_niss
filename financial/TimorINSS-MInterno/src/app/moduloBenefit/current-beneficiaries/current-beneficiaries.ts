@@ -26,7 +26,7 @@ interface BeneficiaryRow {
   standalone: false,
   selector: 'app-current-beneficiaries',
   templateUrl: './current-beneficiaries.html',
-  styleUrls: ['./current-beneficiaries.css']
+  styleUrls: ['./current-beneficiaries.css'],
 })
 export class CurrentBeneficiariesComponent implements OnInit {
   displayedColumns: string[] = [
@@ -47,7 +47,6 @@ export class CurrentBeneficiariesComponent implements OnInit {
     'bankAccount',
     'iban',
     'amount',
-    'phase'
   ];
 
   nonContributoryBeneficiaries: BeneficiaryRow[] = [];
@@ -76,7 +75,7 @@ export class CurrentBeneficiariesComponent implements OnInit {
         bankAccount: '323-654321',
         iban: 'TL3800...',
         amount: 300,
-        phase: 'I'
+        phase: 'I',
       },
       {
         position: 2,
@@ -96,7 +95,7 @@ export class CurrentBeneficiariesComponent implements OnInit {
         bankAccount: '865-654321',
         iban: 'TL3800...',
         amount: 200,
-        phase: 'II'
+        phase: 'II',
       },
       {
         position: 3,
@@ -116,8 +115,8 @@ export class CurrentBeneficiariesComponent implements OnInit {
         bankAccount: '987-654321',
         iban: 'TL3800...',
         amount: 250,
-        phase: 'III'
-      }
+        phase: 'III',
+      },
     ];
 
     this.contributoryBeneficiaries = [
@@ -139,7 +138,7 @@ export class CurrentBeneficiariesComponent implements OnInit {
         bankAccount: '201-554433',
         iban: 'TL1100...',
         amount: 450,
-        phase: 'Active'
+        phase: 'Active',
       },
       {
         position: 2,
@@ -159,7 +158,7 @@ export class CurrentBeneficiariesComponent implements OnInit {
         bankAccount: '445-778899',
         iban: 'TL2200...',
         amount: 380,
-        phase: 'Active'
+        phase: 'Active',
       },
       {
         position: 3,
@@ -179,8 +178,8 @@ export class CurrentBeneficiariesComponent implements OnInit {
         bankAccount: '112-233445',
         iban: 'TL3300...',
         amount: 420,
-        phase: 'Pending Review'
-      }
+        phase: 'Pending Review',
+      },
     ];
   }
 

@@ -40,6 +40,7 @@ import {
 } from '../interfaces/benefit-request.interface';
 
 import { BenefitService } from '../services/benefit.service';
+import { BenefitEligibilityEngineService } from '../services/benefit-eligibility-engine.service';
 import {
   EligibilityRejectionDialogComponent,
   RejectionData,
@@ -53,6 +54,7 @@ import { HAZARDOUS_INDUSTRIES } from '../constants/hazardous-industries.constant
 import {
   DEFAULT_HEALTH_STATUS,
   EmploymentSector,
+  SAII_BASE_AMOUNT,
 } from '../constants/eligibility.constants';
 import {
   getMockCitizenByNISS,
@@ -105,9 +107,10 @@ export class NewContributoryRequestComponent implements OnInit {
   readonly contributoryBenefitTypes: BenefitType[] = CONTRIBUTORY_BENEFIT_TYPES;
   readonly nonContributoryBenefitTypes: BenefitType[] =
     NON_CONTRIBUTORY_BENEFIT_TYPES;
-  
+
   // Non-Contributory Benefit Selection
-  nonContributoryBenefitSelection: NonContributoryBenefitSelection | null = null;
+  nonContributoryBenefitSelection: NonContributoryBenefitSelection | null =
+    null;
 
   // Survivor Benefit Type Selection
   survivorBenefitSelection: SurvivorBenefitSelection | null = null;
@@ -167,7 +170,6 @@ export class NewContributoryRequestComponent implements OnInit {
   showNonContributory: boolean = true;
   funeralAllowanceAmount: number = 0;
   dependents: Dependent[] = [];
-  // dependentFormGroup - moved to SurvivorPensionInfoComponent
   readonly DependentRelationship = DependentRelationship;
   readonly relationshipLabels = RELATIONSHIP_LABELS;
   readonly survivorConfig = SURVIVOR_BENEFIT_CONFIG;
@@ -198,12 +200,11 @@ export class NewContributoryRequestComponent implements OnInit {
   constructor(
     private router: Router,
     private benefitService: BenefitService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private eligibilityEngine: BenefitEligibilityEngineService
   ) {}
 
   ngOnInit(): void {
-    console.log('New Contributory Request Component initialized');
-    // Add initial document row
     this.addDocumentRow();
   }
 
@@ -277,9 +278,6 @@ export class NewContributoryRequestComponent implements OnInit {
     this.searchError = null;
     this.citizenInfo = null;
     this.citizenFound = false;
-
-    // TODO: Replace with actual API call
-    // this.benefitService.searchCitizenByNISS(niss).subscribe(...)
 
     // Mock API call
     setTimeout(() => {
@@ -373,7 +371,7 @@ export class NewContributoryRequestComponent implements OnInit {
 
   /**
    * Check Old-Age Pension Eligibility before allowing selection
-   * Includes both normal retirement and early retirement validation
+   * Uses BenefitEligibilityEngineService for centralized logic
    */
   private checkOldAgePensionEligibility(): boolean {
     if (!this.citizenInfo) {
@@ -381,91 +379,33 @@ export class NewContributoryRequestComponent implements OnInit {
       return false;
     }
 
-    const currentYear = new Date().getFullYear();
-    const requiredMonths = calculateMinimumContributionMonths(currentYear);
-    const requiredAge = getMinimumRetirementAge(
-      this.citizenInfo.employmentSector
-    );
-    const age = calculateAge(this.citizenInfo.dateOfBirth);
-    const sector = this.citizenInfo.employmentSector;
+    const input = {
+      dateOfBirth: this.citizenInfo.dateOfBirth,
+      contributionMonths: this.contributionMonths,
+      employmentSector:
+        this.citizenInfo.employmentSector || EmploymentSector.PRIVATE,
+      currentYear: new Date().getFullYear(),
+      referenceRemuneration: this.getReferenceRemuneration(),
+    };
 
-    const requiredYears = Math.floor(requiredMonths / 12);
-    const remainingMonths = requiredMonths % 12;
-    let contributionText = `${requiredYears} years`;
-    if (remainingMonths > 0) {
-      contributionText += ` ${remainingMonths} months`;
-    }
+    const result = this.eligibilityEngine.checkOldAgePensionEligibility(input);
 
-    const sectorLabel =
-      sector === EmploymentSector.PUBLIC ? 'Public Sector' : 'Private Sector';
+    if (!result.eligible) {
+      const rejectionData = this.eligibilityEngine.getRejectionData(
+        'old-age',
+        input,
+        this.citizenInfo.name,
+        this.citizenInfo.niss
+      );
 
-    // Check contribution requirement
-    if (this.contributionMonths < requiredMonths) {
-      const actualYears = Math.floor(this.contributionMonths / 12);
-      const actualMonths = this.contributionMonths % 12;
-
-      this.showRejectionDialog({
-        reason: 'contribution',
-        citizenName: this.citizenInfo.name,
-        citizenNiss: this.citizenInfo.niss,
-        sector: sectorLabel,
-        currentValue: `${actualYears} years ${actualMonths} months`,
-        requiredValue: `${contributionText} (for year ${currentYear})`,
-        suggestions: [
-          `Continue contributing until reaching ${requiredMonths} months`,
-          age.years >= 55 &&
-          age.years < 60 &&
-          sector === EmploymentSector.PRIVATE
-            ? 'You may be eligible for early retirement (age 55-59, private sector)'
-            : 'Consider early retirement options when eligible',
-          'Apply for non-contributory benefits (if eligible)',
-        ],
-      });
+      if (rejectionData) {
+        this.showRejectionDialog(rejectionData);
+      }
       this.schemeTypeFormControl.setValue('');
       return false;
     }
 
-    // Check if eligible for normal retirement (age >= required age)
-    if (age.years >= requiredAge) {
-      return true; // Eligible for normal retirement
-    }
-
-    // Check if eligible for early retirement (private sector only, age 55-59)
-    if (
-      sector === EmploymentSector.PRIVATE &&
-      age.years >= 55 &&
-      age.years < 60
-    ) {
-      // Already checked contribution above (>= requiredMonths)
-      // Private sector, age 55-59, sufficient contribution
-      return true; // Eligible for early retirement
-    }
-
-    // Not eligible - age too low and not in early retirement range
-    const ageErrorMessage =
-      sector === EmploymentSector.PRIVATE
-        ? `${requiredAge} years (or 55-59 for early retirement)`
-        : `${requiredAge} years`;
-
-    this.showRejectionDialog({
-      reason: 'age',
-      citizenName: this.citizenInfo.name,
-      citizenNiss: this.citizenInfo.niss,
-      sector: sectorLabel,
-      currentValue: `${age.years} years`,
-      requiredValue: ageErrorMessage,
-      suggestions: [
-        `Apply when reaching ${requiredAge} years old`,
-        sector === EmploymentSector.PRIVATE && age.years < 55
-          ? 'Early retirement available from age 55 (private sector only)'
-          : sector === EmploymentSector.PUBLIC
-          ? 'Public sector employees cannot retire early'
-          : 'Continue working to increase future pension amount',
-        'Continue working to increase future pension amount',
-      ],
-    });
-    this.schemeTypeFormControl.setValue('');
-    return false;
+    return true;
   }
 
   /**
@@ -477,7 +417,7 @@ export class NewContributoryRequestComponent implements OnInit {
   private showRejectionDialog(data: RejectionData): void {
     // Set rejection flag to prevent proceeding to next steps
     this.hasRejection = true;
-    
+
     const dialogRef = this.dialog.open(EligibilityRejectionDialogComponent, {
       width: '600px',
       maxWidth: '90vw',
@@ -506,6 +446,7 @@ export class NewContributoryRequestComponent implements OnInit {
 
   /**
    * Check Disability Pension Basic Eligibility (contribution only)
+   * Uses BenefitEligibilityEngineService for centralized logic
    * Detailed disability level check will be done in the component
    */
   private checkDisabilityPensionBasicEligibility(): boolean {
@@ -514,31 +455,29 @@ export class NewContributoryRequestComponent implements OnInit {
       return false;
     }
 
-    const MINIMUM_CONTRIBUTION_MONTHS = 60; // For 2025
-    const currentYear = new Date().getFullYear();
+    const input = {
+      dateOfBirth: this.citizenInfo.dateOfBirth,
+      contributionMonths: this.contributionMonths,
+      employmentSector:
+        this.citizenInfo.employmentSector || EmploymentSector.PRIVATE,
+      currentYear: new Date().getFullYear(),
+      referenceRemuneration: this.getReferenceRemuneration(),
+    };
 
-    // Check contribution requirement
-    if (this.contributionMonths < MINIMUM_CONTRIBUTION_MONTHS) {
-      const actualYears = Math.floor(this.contributionMonths / 12);
-      const actualMonths = this.contributionMonths % 12;
-      const requiredYears = Math.floor(MINIMUM_CONTRIBUTION_MONTHS / 12);
+    const result =
+      this.eligibilityEngine.checkDisabilityPensionEligibility(input);
 
-      this.showRejectionDialog({
-        reason: 'contribution',
-        citizenName: this.citizenInfo.name,
-        citizenNiss: this.citizenInfo.niss,
-        sector:
-          this.citizenInfo.employmentSector === EmploymentSector.PUBLIC
-            ? 'Public Sector'
-            : 'Private Sector',
-        currentValue: `${actualYears} years ${actualMonths} months (${this.contributionMonths} months)`,
-        requiredValue: `${requiredYears} years 0 months (${MINIMUM_CONTRIBUTION_MONTHS} months for ${currentYear})`,
-        suggestions: [
-          `Continue contributing until reaching ${MINIMUM_CONTRIBUTION_MONTHS} months`,
-          'Apply for non-contributory benefits (if eligible)',
-          'Note: Disability pension does not have age requirement',
-        ],
-      });
+    if (!result.eligible) {
+      const rejectionData = this.eligibilityEngine.getRejectionData(
+        'disability',
+        input,
+        this.citizenInfo.name,
+        this.citizenInfo.niss
+      );
+
+      if (rejectionData) {
+        this.showRejectionDialog(rejectionData);
+      }
       this.schemeTypeFormControl.setValue('');
       return false;
     }
@@ -617,6 +556,31 @@ export class NewContributoryRequestComponent implements OnInit {
    */
   onBankAccountChanged(data: any): void {
     this.bankAccountData = data;
+
+    // For survivor pension: sync dependent bank accounts to parent's Map
+    if (
+      this.selectedBenefitType === 'survivor-pension' &&
+      data.type === 'multiple' &&
+      data.accounts
+    ) {
+      data.accounts.forEach((account: any) => {
+        if (account.dependentId) {
+          let form = this.dependentBankAccountForms.get(account.dependentId);
+          if (!form) {
+            form = this.createDependentBankAccountForm(account.dependentId);
+          }
+          // Update form values
+          form?.patchValue(
+            {
+              bankName: account.bankName || '',
+              accountNumber: account.accountNumber || '',
+              accountHolderName: account.accountHolderName || '',
+            },
+            { emitEvent: false }
+          );
+        }
+      });
+    }
   }
 
   /**
@@ -629,9 +593,11 @@ export class NewContributoryRequestComponent implements OnInit {
   /**
    * Handle non-contributory benefit selection
    */
-  onNonContributoryBenefitSelected(selection: NonContributoryBenefitSelection): void {
+  onNonContributoryBenefitSelected(
+    selection: NonContributoryBenefitSelection
+  ): void {
     this.nonContributoryBenefitSelection = selection;
-    
+
     // Update required documents based on benefit type
     if (selection.isEligible) {
       this.requiredDocuments = selection.benefitType.requiredDocuments;
@@ -640,27 +606,40 @@ export class NewContributoryRequestComponent implements OnInit {
 
   /**
    * Get reference remuneration (R) - average of 12 highest contribution months
+   *
+   * Definition: R = Average of 12 highest monthly salaries from contribution history
+   *
+   * In production, this should:
+   * 1. Fetch salary history from backend API
+   * 2. Select the 12 highest monthly salaries
+   * 3. Calculate average: R = (Sum of 12 highest) / 12
+   *
+   * Currently using mock data for testing. All test cases now have referenceRemuneration
+   * defined in mock-data.constants.ts. Fallback to $115 only if mock data is missing.
    */
   getReferenceRemuneration(): number {
-    // Try to get from mock data first
     if (this.citizenInfo) {
       const mockData = getMockCitizenByNISS(this.citizenInfo.niss);
       if (mockData?.referenceRemuneration) {
         return mockData.referenceRemuneration;
       }
     }
-    
-    // Default fallback value (can be calculated from contribution history in production)
-    return 115.00; // USD - average of 12 highest months
+
+    return 115.0;
   }
 
   /**
    * Calculate deceased's estimated pension: P = R * (N / 360)
+   * Uses BenefitEligibilityEngineService for calculation
    */
   calculateDeceasedEstimatedPension(): number {
     const R = this.getReferenceRemuneration();
-    const N = this.contributionMonths;
-    return (R * N) / 360;
+    const result = this.eligibilityEngine.calculateOldAgePension(
+      R,
+      this.contributionMonths,
+      false // Not early retirement for deceased
+    );
+    return result.calculatedPension;
   }
 
   /**
@@ -668,14 +647,7 @@ export class NewContributoryRequestComponent implements OnInit {
    */
   onSurvivorBenefitTypeSelected(selection: SurvivorBenefitSelection): void {
     this.survivorBenefitSelection = selection;
-    
-    // Note: Funeral allowance (3 * R) is separate from benefit type selection
-    // It's always calculated as 3 * reference remuneration regardless of benefit type chosen
-    // The benefit type selection determines what the dependents will receive:
-    // - Monthly pension: percentage of deceased's pension
-    // - One-time subsidy: 3 * R (one-time payment)
-    // - Funeral reimbursement: actual expenses up to 3 * R (only if no eligible dependents)
-    
+
     // Update funeral allowance (always 3 * R for eligible cases)
     this.funeralAllowanceAmount = selection.referenceRemuneration * 3;
   }
@@ -686,7 +658,7 @@ export class NewContributoryRequestComponent implements OnInit {
   private resetAllStepsData(): void {
     // Reset rejection flag
     this.hasRejection = false;
-    
+
     // Step 2: Scheme Selection
     this.selectedSchemeType = null;
     this.selectedBenefitType = '';
@@ -778,9 +750,6 @@ export class NewContributoryRequestComponent implements OnInit {
     if (!this.citizenInfo) {
       return;
     }
-
-    // TODO: Replace with actual API call
-    // this.benefitService.checkEligibility(this.citizenInfo.niss).subscribe(...)
 
     // Mock eligibility check
     setTimeout(() => {
@@ -1072,20 +1041,6 @@ export class NewContributoryRequestComponent implements OnInit {
   }
 
   /**
-   * Add Dependent to Survivor's Pension
-   * NOTE: This logic is now handled by SurvivorPensionInfoComponent
-   * Kept for backward compatibility if needed
-   */
-  // addDependent() - moved to SurvivorPensionInfoComponent
-
-  /**
-   * Remove Dependent from Survivor's Pension
-   * NOTE: This logic is now handled by SurvivorPensionInfoComponent
-   * Kept for backward compatibility if needed
-   */
-  // removeDependent() - moved to SurvivorPensionInfoComponent
-
-  /**
    * Get total dependent percentage
    */
   getTotalDependentPercentage(): number {
@@ -1098,13 +1053,14 @@ export class NewContributoryRequestComponent implements OnInit {
   /**
    * Create bank account form for dependent
    */
-  private createDependentBankAccountForm(dependentId: string): void {
+  private createDependentBankAccountForm(dependentId: string) {
     const formGroup = new FormGroup({
       bankName: new FormControl('', [Validators.required]),
       accountNumber: new FormControl('', [Validators.required]),
       accountHolderName: new FormControl('', [Validators.required]),
     });
     this.dependentBankAccountForms.set(dependentId, formGroup);
+    return formGroup;
   }
 
   /**
@@ -1168,7 +1124,7 @@ export class NewContributoryRequestComponent implements OnInit {
     if (this.hasRejection) {
       return false;
     }
-    
+
     // Use stepper's selectedIndex if available, otherwise fall back to currentStep
     const currentIndex = this.stepper?.selectedIndex ?? this.currentStep;
 
@@ -1191,19 +1147,24 @@ export class NewContributoryRequestComponent implements OnInit {
           );
         }
         return true;
-      
+
       case 2: // Survivor Benefit Type Selection OR Non-Contributory Benefit Selection OR Contributory Eligibility/Options
         // For survivor's pension: validate benefit type selection
-        if (this.selectedBenefitType === 'survivor-pension' && this.dependents.length > 0) {
+        if (
+          this.selectedBenefitType === 'survivor-pension' &&
+          this.dependents.length > 0
+        ) {
           return this.survivorBenefitSelection !== null;
         }
-        
+
         // For non-contributory: validate benefit selection
         if (this.selectedSchemeType === 'non-contributory') {
-          return this.nonContributoryBenefitSelection !== null && 
-                 this.nonContributoryBenefitSelection.isEligible;
+          return (
+            this.nonContributoryBenefitSelection !== null &&
+            this.nonContributoryBenefitSelection.isEligible
+          );
         }
-        
+
         // For contributory benefits (non-survivor):
         // For disability pension, step 2 is disability info
         if (this.selectedBenefitType === 'disability-pension') {
@@ -1218,22 +1179,15 @@ export class NewContributoryRequestComponent implements OnInit {
         }
         return false;
 
-      case 3: // Bank Account for survivor, or Documents for others
-        // For survivor's pension, step 3 is bank account (eligibility step was hidden)
-        if (this.selectedBenefitType === 'survivor-pension') {
-          return this.allDependentBankAccountsValid();
-        }
-        // For other benefits, step 3 is documents
+      case 3: // Documents step
+        // For all benefits, step 3 is documents
         // Allow user to upload any documents they want (at least one document)
         return this.hasAtLeastOneDocument();
 
-      case 4: // Bank Account for non-survivor
-        // This step only exists for non-survivor benefits
-        if (this.selectedBenefitType === 'survivor-pension') {
-          // This case should ideally not be reached if step 3 handles survivor bank accounts
-          return this.allDependentBankAccountsValid(); // Fallback for safety
-        }
-        return this.bankAccountForm.valid;
+      case 4: // Bank Account (final step with submit button)
+        // Use bankValidation from child component (works for both survivor and non-survivor)
+        // bankValidation is set by onBankValidationChanged() from bank-account component
+        return this.bankValidation === true;
 
       default:
         return false;
@@ -1314,39 +1268,70 @@ export class NewContributoryRequestComponent implements OnInit {
     if (this.selectedBenefitType === 'survivor-pension') {
       request.funeralAllowance = this.funeralAllowanceAmount;
       request.dependents = this.dependents;
-      
+
       // Add survivor benefit type selection
       if (this.survivorBenefitSelection) {
         request.survivorBenefitType = this.survivorBenefitSelection.benefitType;
-        request.referenceRemuneration = this.survivorBenefitSelection.referenceRemuneration;
-        request.survivorMonthlyPensionAmount = this.survivorBenefitSelection.monthlyPensionAmount;
-        request.survivorOneTimeSubsidyAmount = this.survivorBenefitSelection.oneTimeSubsidyAmount;
-        request.survivorFuneralReimbursementAmount = this.survivorBenefitSelection.funeralReimbursementAmount;
+        request.referenceRemuneration =
+          this.survivorBenefitSelection.referenceRemuneration;
+        request.survivorMonthlyPensionAmount =
+          this.survivorBenefitSelection.monthlyPensionAmount;
+        request.survivorOneTimeSubsidyAmount =
+          this.survivorBenefitSelection.oneTimeSubsidyAmount;
+        request.survivorFuneralReimbursementAmount =
+          this.survivorBenefitSelection.funeralReimbursementAmount;
       }
 
       // Collect bank accounts for each dependent
-      request.dependentBankAccounts = this.dependents.map((dep) => {
-        const form = this.dependentBankAccountForms.get(dep.id!);
-        return {
-          dependentId: dep.id!,
-          percentage: dep.adjustedPercentage || dep.percentage,
-          bankName: form?.get('bankName')?.value || '',
-          accountNumber: form?.get('accountNumber')?.value || '',
-          accountHolderName: form?.get('accountHolderName')?.value || '',
-        };
-      });
+      // Use bankAccountData from child component if available
+      if (
+        this.bankAccountData &&
+        this.bankAccountData.type === 'multiple' &&
+        this.bankAccountData.accounts
+      ) {
+        request.dependentBankAccounts = this.bankAccountData.accounts.map(
+          (account: any) => ({
+            dependentId: account.dependentId,
+            percentage:
+              this.dependents.find((d) => d.id === account.dependentId)
+                ?.adjustedPercentage ||
+              this.dependents.find((d) => d.id === account.dependentId)
+                ?.percentage ||
+              0,
+            bankName: account.bankName || '',
+            accountNumber: account.accountNumber || '',
+            accountHolderName: account.accountHolderName || '',
+          })
+        );
+      } else {
+        // Fallback: use parent's Map (should be synced by onBankAccountChanged)
+        request.dependentBankAccounts = this.dependents.map((dep) => {
+          const form = this.dependentBankAccountForms.get(dep.id!);
+          return {
+            dependentId: dep.id!,
+            percentage: dep.adjustedPercentage || dep.percentage,
+            bankName: form?.get('bankName')?.value || '',
+            accountNumber: form?.get('accountNumber')?.value || '',
+            accountHolderName: form?.get('accountHolderName')?.value || '',
+          };
+        });
+      }
     }
 
     // Non-contributory specific data
     if (this.selectedSchemeType === 'non-contributory') {
       // Add non-contributory benefit details
       if (this.nonContributoryBenefitSelection) {
-        request.nonContributoryBenefitType = this.nonContributoryBenefitSelection.benefitType.id;
-        request.nonContributoryBenefitLabel = this.nonContributoryBenefitSelection.benefitType.label;
-        request.nonContributoryBenefitAmount = this.nonContributoryBenefitSelection.benefitType.amount;
-        request.nonContributoryBenefitFrequency = this.nonContributoryBenefitSelection.benefitType.frequency;
+        request.nonContributoryBenefitType =
+          this.nonContributoryBenefitSelection.benefitType.id;
+        request.nonContributoryBenefitLabel =
+          this.nonContributoryBenefitSelection.benefitType.label;
+        request.nonContributoryBenefitAmount =
+          this.nonContributoryBenefitSelection.benefitType.amount;
+        request.nonContributoryBenefitFrequency =
+          this.nonContributoryBenefitSelection.benefitType.frequency;
       }
-      
+
       // Single bank account for non-contributory (non-survivor)
       if (this.selectedBenefitType !== 'survivor-pension') {
         request.bankAccount = {

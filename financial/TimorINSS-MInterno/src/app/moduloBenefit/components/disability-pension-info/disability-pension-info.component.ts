@@ -19,6 +19,7 @@ export class DisabilityPensionInfoComponent implements OnInit, OnChanges {
   @Input() contributionMonths: number = 0;
   @Input() currentAge: number = 0;
   @Input() sector: 'private' | 'public' = 'private';
+  @Input() referenceRemuneration!: number; // R - Average of 12 highest contribution months (required)
   @Output() disabilityInfoChanged = new EventEmitter<DisabilityInfo>();
 
   disabilityLevelControl = new FormControl('', [
@@ -31,7 +32,6 @@ export class DisabilityPensionInfoComponent implements OnInit, OnChanges {
   disabilityType: 'relative' | 'absolute' | null = null;
   isEligible: boolean = false;
   estimatedPension: number = 0;
-  referenceRemuneration: number = 115; // Mock value - base salary USD
   ineligibilityReason: string = '';
 
   // Minimum requirements
@@ -48,7 +48,7 @@ export class DisabilityPensionInfoComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['contributionMonths'] || changes['currentAge'] || changes['sector']) {
+    if (changes['contributionMonths'] || changes['currentAge'] || changes['sector'] || changes['referenceRemuneration']) {
       if (this.disabilityLevel > 0) {
         this.calculateDisabilityInfo();
       }

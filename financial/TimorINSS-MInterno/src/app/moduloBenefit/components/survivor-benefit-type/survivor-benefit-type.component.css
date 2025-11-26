@@ -5,80 +5,38 @@
 .section-title {
   font-size: 24px;
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: 24px;
   color: #212121;
 }
 
-.section-description {
-  font-size: 14px;
-  color: #616161;
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-
-/* Reference Remuneration Card */
-.reference-remuneration-card {
-  background-color: #e3f2fd;
-  border-left: 4px solid #2196f3;
-  margin-bottom: 24px;
-}
-
+/* Reference Remuneration Info */
 .reference-info {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.reference-info > mat-icon {
-  font-size: 40px;
-  width: 40px;
-  height: 40px;
-  color: #2196f3;
-}
-
-.reference-info strong {
-  display: block;
-  color: #1565c0;
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.reference-info .amount {
-  font-size: 28px;
-  font-weight: 700;
-  color: #1976d2;
-}
-
-.reference-info .note {
-  margin: 8px 0 0 0;
-  font-size: 12px;
-  color: #616161;
-  font-style: italic;
-}
-
-/* Eligibility Status */
-.eligibility-status {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
   background-color: #f5f5f5;
-  border-left: 4px solid #bdbdbd;
   border-radius: 4px;
   margin-bottom: 24px;
 }
 
-.eligibility-status mat-icon.eligible {
-  color: #4caf50;
+.reference-info mat-icon {
+  color: #2196f3;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
 }
 
-.eligibility-status mat-icon.ineligible {
-  color: #ff9800;
-}
-
-.eligibility-status span {
+.reference-info .label {
+  color: #616161;
   font-size: 14px;
-  color: #424242;
+  margin-right: 8px;
+}
+
+.reference-info .amount {
+  font-size: 20px;
+  font-weight: 600;
+  color: #212121;
 }
 
 /* Benefit Type Selection */
@@ -89,39 +47,44 @@
 .benefit-type-radio-group {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .benefit-option-card {
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   border: 2px solid #e0e0e0;
 }
 
 .benefit-option-card.available {
-  border-color: #4caf50;
+  border-color: #e0e0e0;
 }
 
 .benefit-option-card.available:hover {
-  border-color: #2e7d32;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-color: #2196f3;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+}
+
+.benefit-option-card.available.selected {
+  border-color: #2196f3;
+  background-color: #e3f2fd;
 }
 
 .benefit-option-card.unavailable {
-  border-color: #bdbdbd;
+  border-color: #e0e0e0;
   background-color: #fafafa;
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
 .benefit-option-card mat-card-header {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .option-icon {
-  font-size: 40px;
-  width: 40px;
-  height: 40px;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
   color: white;
   border-radius: 50%;
   display: flex;
@@ -149,59 +112,58 @@
 
 .benefit-option-card mat-card-subtitle {
   color: #616161;
-  font-size: 14px;
+  font-size: 13px;
+  margin-top: 4px;
 }
 
-.option-details {
+.option-summary {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 8px;
 }
 
-.detail-item {
+.summary-item {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 8px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-}
-
-.detail-item mat-icon {
-  color: #616161;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  margin-top: 2px;
-  flex-shrink: 0;
-}
-
-.detail-item span {
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
   font-size: 14px;
-  color: #424242;
-  line-height: 1.5;
 }
 
-.detail-item.highlight {
+.summary-item .label {
+  color: #616161;
+  min-width: 100px;
+  font-weight: 500;
+}
+
+.summary-item span:not(.label) {
+  color: #212121;
+}
+
+.summary-item.highlight {
+  padding: 10px;
   background-color: #e8f5e9;
-  border-left: 3px solid #4caf50;
+  border-radius: 4px;
+  margin: 4px 0;
 }
 
-.detail-item.highlight mat-icon {
+.summary-item.highlight .value {
+  font-size: 18px;
+  font-weight: 600;
   color: #2e7d32;
 }
 
-.detail-item.highlight strong {
-  color: #2e7d32;
-  font-size: 16px;
+.summary-item .note {
+  font-size: 12px;
+  color: #757575;
+  font-style: italic;
 }
 
 .unavailable-message {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 12px;
+  padding: 10px;
   background-color: #fff3e0;
   border-left: 3px solid #ff9800;
   border-radius: 4px;
@@ -210,9 +172,9 @@
 
 .unavailable-message mat-icon {
   color: #ff9800;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .unavailable-message span {
@@ -220,149 +182,104 @@
   color: #e65100;
 }
 
-/* Notes Card */
-.notes-card {
-  background-color: #f5f5f5;
-  border-left: 4px solid #2196f3;
-}
-
-.notes-card h4 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 12px 0;
-  color: #1565c0;
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.notes-card h4 mat-icon {
-  color: #2196f3;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-.notes-card ul {
-  margin: 0;
-  padding-left: 20px;
-}
-
-.notes-card li {
-  margin: 8px 0;
-  font-size: 14px;
-  color: #424242;
-  line-height: 1.6;
-}
-
-.notes-card li strong {
-  color: #1565c0;
-}
-
-/* Calculation Details Card */
-.calculation-details-card {
+/* Calculation Details */
+.calculation-details {
   margin-top: 24px;
-  background-color: #e8f5e9;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
   border-left: 4px solid #4caf50;
 }
 
-.calculation-icon {
-  background-color: #4caf50;
-  color: white;
-}
-
-.calculation-details-card mat-card-title {
-  color: #2e7d32;
-  font-weight: 600;
-}
-
-.calculation-steps {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.calc-step {
-  padding: 16px;
-  background-color: white;
-  border-radius: 4px;
-  border-left: 3px solid #4caf50;
-}
-
-.calc-step.highlight {
-  background-color: #c8e6c9;
-  border-left-width: 4px;
-}
-
-.calc-step strong {
-  display: block;
-  color: #2e7d32;
-  font-size: 15px;
-  margin-bottom: 12px;
-}
-
-.calc-formula {
-  font-family: 'Courier New', monospace;
+.calculation-details h4 {
+  margin: 0 0 16px 0;
   font-size: 16px;
   font-weight: 600;
-  color: #1565c0;
-  margin: 8px 0;
-  padding: 8px;
-  background-color: #e3f2fd;
-  border-radius: 4px;
+  color: #212121;
 }
 
-.calc-values {
+.calc-info {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 12px;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
   font-size: 14px;
-  color: #424242;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-.calc-values .result {
-  font-weight: 600;
-  color: #2e7d32;
+.calc-row:last-child {
+  border-bottom: none;
+}
+
+.calc-row.highlight {
+  padding-top: 12px;
+  margin-top: 8px;
+  border-top: 2px solid #4caf50;
   font-size: 16px;
 }
 
-.dependents-distribution {
+.calc-row span:first-child {
+  color: #616161;
+}
+
+.calc-row span:last-child {
+  color: #212121;
+  font-weight: 500;
+}
+
+.calc-row.highlight span:last-child {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.distribution-info {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.distribution-info p {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #212121;
+}
+
+.dependent-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 12px;
+  gap: 8px;
 }
 
 .dependent-item {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 10px;
   padding: 10px;
-  background-color: #f5f5f5;
+  background-color: white;
   border-radius: 4px;
+  font-size: 14px;
 }
 
-.dependent-item mat-icon {
-  color: #4caf50;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-}
-
-.dependent-item span:first-of-type {
+.dependent-item span:first-child {
   flex: 1;
-  font-weight: 500;
+  color: #212121;
 }
 
-.dependent-item .percentage {
+.dependent-item span:nth-child(2) {
   color: #1565c0;
   font-weight: 600;
   min-width: 50px;
-  text-align: right;
+  text-align: center;
 }
 
-.dependent-item .amount {
+.dependent-item span:last-child {
   color: #2e7d32;
   font-weight: 600;
   min-width: 100px;
@@ -376,16 +293,17 @@
     align-items: flex-start;
   }
 
-  .benefit-option-card {
-    margin-bottom: 16px;
+  .summary-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 
-  .calc-values {
-    font-size: 13px;
+  .summary-item .label {
+    min-width: auto;
   }
 
   .dependent-item {
     flex-wrap: wrap;
   }
 }
-

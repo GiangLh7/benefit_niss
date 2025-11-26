@@ -1,8 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { EligibilityResult } from '../../interfaces/citizen.interface';
 import { RetirementOption, RetirementOptionType } from '../../models/benefit.model';
 import { HAZARDOUS_INDUSTRIES } from '../../constants/hazardous-industries.constants';
+import { BenefitEligibilityEngineService } from '../../services/benefit-eligibility-engine.service';
+import { SAII_BASE_AMOUNT } from '../../constants/eligibility.constants';
 
 export interface HazardousIndustry {
   id: string;
@@ -16,14 +18,19 @@ export interface HazardousIndustry {
   templateUrl: './retirement-options.component.html',
   styleUrls: ['./retirement-options.component.css']
 })
-export class RetirementOptionsComponent implements OnInit {
-  // Expose Math for template
-  Math = Math;
-
+export class RetirementOptionsComponent implements OnInit, OnChanges {
   @Input() eligibilityResult: EligibilityResult | null = null;
   @Input() contributionMonths: number = 0;
+  @Input() referenceRemuneration!: number; // R - Average of 12 highest contribution months (required)
+  @Input() saiiAmount: number = SAII_BASE_AMOUNT; // SAII - Subsídio de Apoio a Idosos e Inválidos (Elderly/Disabled Support Subsidy)
   @Input() availableRetirementOptions: RetirementOption[] = [];
   @Input() hazardousIndustries: HazardousIndustry[] = [];
+
+  pensionCalculation: {
+    calculatedPension: number;
+    minimumGuaranteed: number;
+    finalPension: number;
+  } | null = null;
 
   @Output() retirementOptionSelected = new EventEmitter<{
     optionType: RetirementOptionType;
@@ -37,11 +44,37 @@ export class RetirementOptionsComponent implements OnInit {
   selectedRetirementOption: RetirementOptionType | null = null;
   selectedHazardousIndustry: string = '';
 
+  constructor(private eligibilityEngine: BenefitEligibilityEngineService) {}
+
   ngOnInit(): void {
-    // Listen to form control changes
     this.retirementOptionFormControl.valueChanges.subscribe(() => {
       this.emitValidation();
     });
+    this.calculatePension();
+  }
+
+  ngOnChanges(): void {
+    this.calculatePension();
+  }
+
+  /**
+   * Calculate pension using BenefitEligibilityEngineService
+   */
+  private calculatePension(): void {
+    if (this.eligibilityResult?.eligible && this.contributionMonths > 0) {
+      const result = this.eligibilityEngine.calculateOldAgePension(
+        this.referenceRemuneration,
+        this.contributionMonths,
+        this.eligibilityResult.isEarlyRetirement || false,
+        this.saiiAmount
+      );
+      
+      this.pensionCalculation = {
+        calculatedPension: result.calculatedPension,
+        minimumGuaranteed: result.minimumGuaranteedPension || 0,
+        finalPension: result.finalPension,
+      };
+    }
   }
 
   /**

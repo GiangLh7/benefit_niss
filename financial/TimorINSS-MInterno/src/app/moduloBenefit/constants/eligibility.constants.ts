@@ -51,6 +51,12 @@ export const MINIMUM_RETIREMENT_AGE_PUBLIC = 65;
 export const MINIMUM_RETIREMENT_AGE = MINIMUM_RETIREMENT_AGE_PRIVATE;
 
 /**
+ * SAII (Subsídio de Apoio a Idosos e Inválidos)
+ * Elderly and Disabled Support Subsidy - Base amount in USD
+ */
+export const SAII_BASE_AMOUNT = 100.0;
+
+/**
  * Minimum labor capacity reduction percentage for early retirement
  */
 export const MINIMUM_LABOR_CAPACITY_REDUCTION = 61;

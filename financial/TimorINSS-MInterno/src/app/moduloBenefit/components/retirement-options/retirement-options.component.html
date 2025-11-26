@@ -10,7 +10,10 @@
   <!-- Eligibility Result -->
   <div *ngIf="eligibilityResult" class="eligibility-result">
     <!-- Early Retirement Info Banner -->
-    <div *ngIf="eligibilityResult.isEarlyRetirement" class="early-retirement-info">
+    <div
+      *ngIf="eligibilityResult.isEarlyRetirement"
+      class="early-retirement-info"
+    >
       <strong>Early Retirement</strong>
     </div>
 
@@ -31,86 +34,104 @@
     </div>
 
     <!-- Eligibility Message -->
-    <div class="eligibility-message" 
-         [class.eligible]="eligibilityResult.eligible"
-         [class.not-eligible]="!eligibilityResult.eligible">
+    <div
+      class="eligibility-message"
+      [class.eligible]="eligibilityResult.eligible"
+      [class.not-eligible]="!eligibilityResult.eligible"
+    >
       <span>{{ eligibilityResult.message }}</span>
     </div>
 
     <!-- Pension Calculation (for eligible retirement) -->
-    <div *ngIf="eligibilityResult.eligible" class="pension-calculation">
-      <h4>Pension Benefit Calculation</h4>
-      
+    <div *ngIf="eligibilityResult.eligible && pensionCalculation" class="pension-calculation">
+      <h4>Monthly Pension Calculation</h4>
+
       <div class="calculation-details">
         <div class="calc-row">
-          <span class="calc-label">Formula:</span>
-          <span class="calc-value">P = R × (N / 360)</span>
-        </div>
-        <div class="calc-row">
           <span class="calc-label">Reference Remuneration (R):</span>
-          <span class="calc-value">$115.00</span>
+          <span class="calc-value">${{ referenceRemuneration.toFixed(2) }}</span>
         </div>
         <div class="calc-row">
           <span class="calc-label">Contribution Months (N):</span>
           <span class="calc-value">{{ contributionMonths }} months</span>
         </div>
         <div class="calc-row">
-          <span class="calc-label">Calculated Pension (P):</span>
-          <span class="calc-value">${{ (115 * contributionMonths / 360).toFixed(2) }}</span>
+          <span class="calc-label">Calculated Pension:</span>
+          <span class="calc-value">${{ pensionCalculation.calculatedPension.toFixed(2) }}</span>
+        </div>
+
+        <div class="calc-divider" *ngIf="eligibilityResult.isEarlyRetirement"></div>
+
+        <div *ngIf="eligibilityResult.isEarlyRetirement" class="calc-row">
+          <span class="calc-label">Minimum Guaranteed Pension:</span>
+          <span class="calc-value">${{ pensionCalculation.minimumGuaranteed.toFixed(2) }}</span>
+          <span class="calc-explanation">
+            (1.5 × SAII = 1.5 × ${{ saiiAmount.toFixed(2) }})
+          </span>
         </div>
         
-        <div class="calc-divider"></div>
-        
-        <div class="calc-row">
-          <span class="calc-label">Minimum Guarantee (1.5 × SAII):</span>
-          <span class="calc-value">$150.00</span>
-        </div>
-        <div class="calc-row highlight">
+        <div class="calc-row highlight" *ngIf="eligibilityResult.isEarlyRetirement">
           <span class="calc-label"><strong>Your Monthly Pension:</strong></span>
-          <span class="calc-value"><strong>${{ Math.max(115 * contributionMonths / 360, 150).toFixed(2) }}</strong></span>
+          <span class="calc-value"><strong>${{ pensionCalculation.finalPension.toFixed(2) }}</strong></span>
+        </div>
+        
+        <div class="calc-row highlight" *ngIf="!eligibilityResult.isEarlyRetirement">
+          <span class="calc-label"><strong>Your Monthly Pension:</strong></span>
+          <span class="calc-value"><strong>${{ pensionCalculation.finalPension.toFixed(2) }}</strong></span>
         </div>
       </div>
 
-      <div class="pension-note">
-        <strong>Note:</strong> You will receive the higher amount between the calculated pension and the minimum guarantee ($150.00).
+      <div class="pension-note" *ngIf="eligibilityResult.isEarlyRetirement">
+        <strong>Note:</strong> Early retirees receive the higher amount between the calculated pension and the minimum guaranteed pension (1.5 × SAII).
+      </div>
+
+      <div class="saii-explanation" *ngIf="eligibilityResult.isEarlyRetirement">
+        <mat-icon>info</mat-icon>
+        <div>
+          <strong>What is SAII?</strong>
+          <p>SAII (Subsídio de Apoio a Idosos e Inválidos) is the Elderly and Disabled Support Subsidy, a base social assistance amount of ${{ saiiAmount.toFixed(2) }}/month. Early retirees are guaranteed a minimum pension of 1.5 times this amount (${{ pensionCalculation.minimumGuaranteed.toFixed(2) }}/month).</p>
+        </div>
       </div>
 
       <!-- Early Retirement Conditions Table -->
-      <div *ngIf="eligibilityResult.isEarlyRetirement" class="early-retirement-conditions">
-        <h4>Early Retirement Conditions by Age</h4>
+      <div
+        *ngIf="eligibilityResult.isEarlyRetirement"
+        class="early-retirement-conditions"
+      >
+        <h4>Early Retirement Requirements by Age</h4>
         <table class="conditions-table">
           <thead>
             <tr>
               <th>Age</th>
-              <th>Minimum Contribution Required</th>
-              <th>Minimum Pension Guarantee</th>
+              <th>Minimum Contribution</th>
+              <th>Minimum Pension</th>
             </tr>
           </thead>
           <tbody>
             <tr [class.current-age]="eligibilityResult.ageInYears === 55">
               <td>55 years</td>
               <td>60 months (5 years)</td>
-              <td>$150.00 (1.5 × SAII)</td>
+              <td>${{ (saiiAmount * 1.5).toFixed(2) }}</td>
             </tr>
             <tr [class.current-age]="eligibilityResult.ageInYears === 56">
               <td>56 years</td>
               <td>48 months (4 years)</td>
-              <td>$150.00 (1.5 × SAII)</td>
+              <td>${{ (saiiAmount * 1.5).toFixed(2) }}</td>
             </tr>
             <tr [class.current-age]="eligibilityResult.ageInYears === 57">
               <td>57 years</td>
               <td>36 months (3 years)</td>
-              <td>$150.00 (1.5 × SAII)</td>
+              <td>${{ (saiiAmount * 1.5).toFixed(2) }}</td>
             </tr>
             <tr [class.current-age]="eligibilityResult.ageInYears === 58">
               <td>58 years</td>
               <td>24 months (2 years)</td>
-              <td>$150.00 (1.5 × SAII)</td>
+              <td>${{ (saiiAmount * 1.5).toFixed(2) }}</td>
             </tr>
             <tr [class.current-age]="eligibilityResult.ageInYears === 59">
               <td>59 years</td>
               <td>12 months (1 year)</td>
-              <td>$150.00 (1.5 × SAII)</td>
+              <td>${{ (saiiAmount * 1.5).toFixed(2) }}</td>
             </tr>
           </tbody>
         </table>
@@ -118,29 +139,44 @@
     </div>
 
     <!-- Retirement Options Selection -->
-    <div class="retirement-options-section" *ngIf="availableRetirementOptions.length > 0">
+    <!-- Only show selection UI if there are multiple options -->
+    <div
+      class="retirement-options-section"
+      *ngIf="availableRetirementOptions.length > 1"
+    >
       <h3 class="options-title">
         <mat-icon>playlist_add_check</mat-icon>
         Select Retirement Option:
       </h3>
 
-      <mat-radio-group [formControl]="retirementOptionFormControl" class="retirement-options">
-        <mat-card 
-          *ngFor="let option of availableRetirementOptions" 
+      <mat-radio-group
+        [formControl]="retirementOptionFormControl"
+        class="retirement-options"
+      >
+        <mat-card
+          *ngFor="let option of availableRetirementOptions"
           class="retirement-option-card"
           [class.selected]="selectedRetirementOption === option.type"
-          (click)="selectRetirementOption(option.type)">
+          (click)="selectRetirementOption(option.type)"
+        >
           <mat-card-header>
             <div class="option-icon">
               <mat-icon *ngIf="option.type === 'NORMAL'">verified</mat-icon>
-              <mat-icon *ngIf="option.type === 'HAZARDOUS_INDUSTRY'">engineering</mat-icon>
-              <mat-icon *ngIf="option.type === 'LABOR_CAPACITY_REDUCTION'">health_and_safety</mat-icon>
+              <mat-icon *ngIf="option.type === 'HAZARDOUS_INDUSTRY'"
+                >engineering</mat-icon
+              >
+              <mat-icon *ngIf="option.type === 'LABOR_CAPACITY_REDUCTION'"
+                >health_and_safety</mat-icon
+              >
             </div>
             <mat-card-title>{{ option.label }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <p class="option-description">{{ option.description }}</p>
-            <div class="option-documents" *ngIf="option.requiredDocuments.length > 0">
+            <div
+              class="option-documents"
+              *ngIf="option.requiredDocuments.length > 0"
+            >
               <p class="documents-label">
                 <mat-icon>assignment</mat-icon>
                 Required Documents:
@@ -151,9 +187,10 @@
             </div>
           </mat-card-content>
           <mat-card-actions>
-            <mat-radio-button 
+            <mat-radio-button
               [value]="option.type"
-              (change)="selectRetirementOption(option.type)">
+              (change)="selectRetirementOption(option.type)"
+            >
               Select this option
             </mat-radio-button>
           </mat-card-actions>
@@ -161,18 +198,25 @@
       </mat-radio-group>
 
       <!-- Hazardous Industry Selection (if applicable) -->
-      <div class="hazardous-industry-selection" 
-           *ngIf="selectedRetirementOption === 'HAZARDOUS_INDUSTRY'">
+      <div
+        class="hazardous-industry-selection"
+        *ngIf="selectedRetirementOption === 'HAZARDOUS_INDUSTRY'"
+      >
         <h4 class="selection-title">
           <mat-icon>warning</mat-icon>
           Select Hazardous Industry:
         </h4>
         <mat-form-field appearance="outline" class="industry-select">
           <mat-label>Hazardous Industry</mat-label>
-          <mat-select [(value)]="selectedHazardousIndustry" 
-                      (selectionChange)="onHazardousIndustryChange()"
-                      required>
-            <mat-option *ngFor="let industry of hazardousIndustries" [value]="industry.id">
+          <mat-select
+            [(value)]="selectedHazardousIndustry"
+            (selectionChange)="onHazardousIndustryChange()"
+            required
+          >
+            <mat-option
+              *ngFor="let industry of hazardousIndustries"
+              [value]="industry.id"
+            >
               {{ industry.name }}
               <span class="industry-description" *ngIf="industry.description">
                 - {{ industry.description }}
@@ -184,20 +228,42 @@
       </div>
 
       <!-- Labor Capacity Reduction Info (if applicable) -->
-      <div class="labor-capacity-info" 
-           *ngIf="selectedRetirementOption === 'LABOR_CAPACITY_REDUCTION'">
+      <div
+        class="labor-capacity-info"
+        *ngIf="selectedRetirementOption === 'LABOR_CAPACITY_REDUCTION'"
+      >
         <mat-card class="info-card">
           <mat-card-content>
             <div class="info-header">
               <mat-icon>info</mat-icon>
               <h4>Note on Labor Capacity Reduction</h4>
             </div>
-            <p>The employee must have a labor capacity reduction of <strong>61% or more</strong> as certified by the competent health authority.</p>
-            <p>Please prepare the corresponding supporting documents to upload in the next step.</p>
+            <p>
+              The employee must have a labor capacity reduction of
+              <strong>61% or more</strong> as certified by the competent health
+              authority.
+            </p>
+            <p>
+              Please prepare the corresponding supporting documents to upload in
+              the next step.
+            </p>
           </mat-card-content>
         </mat-card>
       </div>
     </div>
+
+    <!-- Show selected option info when only 1 option (auto-selected) -->
+    <div
+      class="retirement-options-section"
+      *ngIf="availableRetirementOptions.length === 1 && selectedRetirementOption"
+    >
+      <div class="selected-option-info">
+        <mat-icon>check_circle</mat-icon>
+        <div>
+          <strong>Retirement Type:</strong> {{ availableRetirementOptions[0].label }}
+          <p class="option-description">{{ availableRetirementOptions[0].description }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-
