@@ -126,8 +126,8 @@ substitutions:
 
 options:
   machineType: "E2_HIGHCPU_8"
-  timeout: "1800s"
   logging: CLOUD_LOGGING_ONLY
+  substitutionOption: "ALLOW_LOOSE"
 
 images:
   - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
