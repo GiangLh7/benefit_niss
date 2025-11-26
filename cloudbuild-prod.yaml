@@ -1,0 +1,144 @@
+# ==============================================================================
+# Google Cloud Build Configuration - Production
+# Includes deployment to Cloud Run
+# ==============================================================================
+
+steps:
+  # Build Benefit Project
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build-benefit"
+    args:
+      - "build"
+      - "-t"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
+      - "-t"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
+      - "-t"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:prod-${SHORT_SHA}"
+      - "-f"
+      - "./benefit/Dockerfile"
+      - "./benefit"
+    waitFor: ["-"]
+
+  # Build Financial Project
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build-financial"
+    args:
+      - "build"
+      - "-t"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
+      - "-t"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
+      - "-t"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:prod-${SHORT_SHA}"
+      - "-f"
+      - "./financial/TimorINSS-MInterno/Dockerfile"
+      - "./financial/TimorINSS-MInterno"
+    waitFor: ["-"]
+
+  # Push Benefit Image
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push-benefit"
+    args:
+      - "push"
+      - "--all-tags"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}"
+    waitFor: ["build-benefit"]
+
+  # Push Financial Image
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push-financial"
+    args:
+      - "push"
+      - "--all-tags"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}"
+    waitFor: ["build-financial"]
+
+  # Deploy Benefit to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "deploy-benefit"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "${_BENEFIT_SERVICE_NAME}"
+      - "--image"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
+      - "--region"
+      - "${_REGION}"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+      - "--port"
+      - "8080"
+      - "--memory"
+      - "1Gi"
+      - "--cpu"
+      - "2"
+      - "--min-instances"
+      - "1"
+      - "--max-instances"
+      - "20"
+      - "--timeout"
+      - "300"
+      - "--concurrency"
+      - "80"
+    waitFor: ["push-benefit"]
+
+  # Deploy Financial to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "deploy-financial"
+    entrypoint: gcloud
+    args:
+      - "run"
+      - "deploy"
+      - "${_FINANCIAL_SERVICE_NAME}"
+      - "--image"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
+      - "--region"
+      - "${_REGION}"
+      - "--platform"
+      - "managed"
+      - "--allow-unauthenticated"
+      - "--port"
+      - "8080"
+      - "--memory"
+      - "1Gi"
+      - "--cpu"
+      - "2"
+      - "--min-instances"
+      - "1"
+      - "--max-instances"
+      - "20"
+      - "--timeout"
+      - "300"
+      - "--concurrency"
+      - "80"
+    waitFor: ["push-financial"]
+
+substitutions:
+  _REGISTRY: "gcr.io"
+  _BENEFIT_IMAGE_NAME: "benefit"
+  _FINANCIAL_IMAGE_NAME: "timor-inss-minterno"
+  _BENEFIT_SERVICE_NAME: "benefit-app"
+  _FINANCIAL_SERVICE_NAME: "financial-app"
+  _REGION: "asia-southeast1"
+
+options:
+  machineType: "E2_HIGHCPU_8"
+  timeout: "1800s"
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
+  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:latest"
+  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:prod-${SHORT_SHA}"
+  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
+  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:latest"
+  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:prod-${SHORT_SHA}"
+
+tags:
+  - "prod"
+  - "benefit"
+  - "financial"
+  - "production"

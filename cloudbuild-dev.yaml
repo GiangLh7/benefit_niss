@@ -1,0 +1,64 @@
+# ==============================================================================
+# Google Cloud Build Configuration - Development/Staging
+# Simplified version for development builds
+# ==============================================================================
+
+steps:
+  # Build Benefit Project
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build-benefit"
+    args:
+      - "build"
+      - "-t"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
+      - "-f"
+      - "./benefit/Dockerfile"
+      - "./benefit"
+    waitFor: ["-"]
+
+  # Build Financial Project
+  - name: "gcr.io/cloud-builders/docker"
+    id: "build-financial"
+    args:
+      - "build"
+      - "-t"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
+      - "-f"
+      - "./financial/TimorINSS-MInterno/Dockerfile"
+      - "./financial/TimorINSS-MInterno"
+    waitFor: ["-"]
+
+  # Push Benefit Image
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push-benefit"
+    args:
+      - "push"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
+    waitFor: ["build-benefit"]
+
+  # Push Financial Image
+  - name: "gcr.io/cloud-builders/docker"
+    id: "push-financial"
+    args:
+      - "push"
+      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
+    waitFor: ["build-financial"]
+
+substitutions:
+  _REGISTRY: "gcr.io"
+  _BENEFIT_IMAGE_NAME: "benefit"
+  _FINANCIAL_IMAGE_NAME: "timor-inss-minterno"
+
+options:
+  machineType: "E2_HIGHCPU_8"
+  timeout: "1800s"
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:dev-${SHORT_SHA}"
+  - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:dev-${SHORT_SHA}"
+
+tags:
+  - "dev"
+  - "benefit"
+  - "financial"
