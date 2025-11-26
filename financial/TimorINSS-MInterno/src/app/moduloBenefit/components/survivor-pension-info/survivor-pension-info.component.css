@@ -1,0 +1,257 @@
+.survivor-pension-container {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Funeral Allowance Card */
+.funeral-allowance-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.funeral-icon {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.funeral-allowance-card mat-card-title,
+.funeral-allowance-card mat-card-subtitle {
+  color: white;
+}
+
+.allowance-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.allowance-amount .amount {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.allowance-amount .description {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Add Dependent Card */
+.add-dependent-card {
+  border: 2px solid #e0e0e0;
+}
+
+.dependent-icon {
+  background-color: #5e35b1;
+  color: white;
+}
+
+.dependent-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.add-button {
+  grid-column: 1 / -1;
+  max-width: 200px;
+}
+
+/* Dependents List Card */
+.dependents-list-card {
+  border: 2px solid #5e35b1;
+}
+
+.list-icon {
+  background-color: #5e35b1;
+  color: white;
+}
+
+.exceeded {
+  color: #f44336;
+  font-weight: 600;
+}
+
+.warning-text {
+  color: #ff9800;
+  font-size: 12px;
+  font-style: italic;
+  margin-left: 8px;
+}
+
+.dependents-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.dependent-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.dependent-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #5e35b1;
+}
+
+.dependent-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dependent-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.relationship-icon {
+  color: #5e35b1;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.dependent-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dependent-details strong {
+  font-size: 16px;
+  color: #333;
+}
+
+.relationship-label {
+  font-size: 13px;
+  color: #666;
+  background-color: #e8eaf6;
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.dependent-meta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #666;
+}
+
+.meta-item mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.dependent-percentage {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.percentage-bar {
+  width: 200px;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.percentage-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+}
+
+.percentage-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5e35b1;
+}
+
+.adjusted-note {
+  font-size: 11px;
+  font-weight: 400;
+  color: #999;
+  font-style: italic;
+}
+
+.remove-button {
+  flex-shrink: 0;
+}
+
+/* No Dependents Card */
+.no-dependents-card {
+  border: 2px dashed #e0e0e0;
+  background-color: #fafafa;
+}
+
+.no-dependents-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  color: #999;
+}
+
+.no-dependents-message mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+  color: #ccc;
+}
+
+.no-dependents-message p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dependent-form {
+    grid-template-columns: 1fr;
+  }
+
+  .dependent-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .remove-button {
+    align-self: flex-end;
+  }
+
+  .percentage-bar {
+    width: 100%;
+  }
+}

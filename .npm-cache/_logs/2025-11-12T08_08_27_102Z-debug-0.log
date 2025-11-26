@@ -1,0 +1,27 @@
+0 verbose cli /Users/legiang/.nvm/versions/node/v23.7.0/bin/node /Users/legiang/.nvm/versions/node/v23.7.0/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@11.2.0
+2 info using node@v23.7.0
+3 silly config load:file:/Users/legiang/.nvm/versions/node/v23.7.0/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/legiang/working/benefit_niss/.npmrc
+5 silly config load:file:/Users/legiang/.npmrc
+6 silly config load:file:/Users/legiang/.nvm/versions/node/v23.7.0/etc/npmrc
+7 verbose title npm exec @angular/cli@20 new benefit --routing --style=scss --skip-git --strict --package-manager npm --no-interactive
+8 verbose argv "exec" "--yes" "--" "@angular/cli@20" "new" "benefit" "--routing" "--style=scss" "--skip-git" "--strict" "--package-manager" "npm" "--no-interactive"
+9 verbose logfile logs-max:10 dir:/Users/legiang/working/benefit_niss/.npm-cache/_logs/2025-11-12T08_08_27_102Z-
+10 verbose logfile /Users/legiang/working/benefit_niss/.npm-cache/_logs/2025-11-12T08_08_27_102Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 http fetch GET 200 https://registry.npmjs.org/@angular%2fcli 277ms (cache miss)
+14 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+15 http fetch GET 200 https://registry.npmjs.org/npm 324ms
+16 verbose cwd /Users/legiang/working/benefit_niss
+17 verbose os Darwin 24.5.0
+18 verbose node v23.7.0
+19 verbose npm  v11.2.0
+20 notice
+20 notice New minor version of npm available! 11.2.0 -> 11.6.2
+20 notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.2
+20 notice To update run: npm install -g npm@11.6.2
+20 notice  { force: true, [Symbol(proc-log.meta)]: true }
+21 verbose exit 1
+22 verbose code 1

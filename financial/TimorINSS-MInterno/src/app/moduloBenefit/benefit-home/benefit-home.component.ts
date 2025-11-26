@@ -22,6 +22,9 @@ export class BenefitHomeComponent implements OnInit, OnDestroy {
   selectedMenu: string = 'citizen-record';
   benefitManagementExpanded: boolean = false;
   
+  // Pending requests count
+  pendingRequestsCount: number = 0;
+  
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -32,12 +35,19 @@ export class BenefitHomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log('Benefit Home Component initialized');
     
+    // Load pending requests count
+    this.loadPendingRequestsCount();
+    
     // Listen to route changes to update selected menu
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       takeUntil(this.destroy$)
     ).subscribe((event: any) => {
       this.updateSelectedMenuFromUrl(event.url);
+      // Reload pending count when navigating back
+      if (event.url.includes('contribution-scheme')) {
+        this.loadPendingRequestsCount();
+      }
     });
     
     // Set initial menu based on current URL
@@ -58,6 +68,19 @@ export class BenefitHomeComponent implements OnInit, OnDestroy {
         this.clearSearchData();
       }
     });
+  }
+
+  loadPendingRequestsCount(): void {
+    // TODO: Replace with actual API call to count 'submitted' status only
+    // this.benefitService.getPendingRequestsCount().subscribe(count => {
+    //   this.pendingRequestsCount = count;
+    // });
+
+    // Mock data - simulate API call
+    // Only count requests with 'submitted' status (Level 2 needs to review)
+    setTimeout(() => {
+      this.pendingRequestsCount = 1; // Mock count - only submitted requests
+    }, 300);
   }
 
   ngOnDestroy(): void {
@@ -166,5 +189,11 @@ export class BenefitHomeComponent implements OnInit, OnDestroy {
 
   toggleBenefitManagement(): void {
     this.benefitManagementExpanded = !this.benefitManagementExpanded;
+  }
+
+  navigateToPendingRequests(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+    this.router.navigate(['/benefit/pending-requests']);
   }
 }

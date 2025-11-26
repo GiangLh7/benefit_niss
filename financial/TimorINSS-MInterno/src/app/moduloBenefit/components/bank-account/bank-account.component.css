@@ -1,0 +1,153 @@
+/* Bank Account Container */
+.bank-account-container {
+  width: 100%;
+}
+
+.step-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #212121;
+}
+
+.step-description {
+  font-size: 14px;
+  color: #616161;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Form Section */
+.form-section {
+  margin-top: 24px;
+}
+
+.section-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #1976d2;
+  display: block;
+  margin: 0 auto 24px;
+}
+
+.bank-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.bank-form mat-form-field {
+  width: 100%;
+}
+
+/* Info Note */
+.info-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  border-radius: 4px;
+  margin-top: 24px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-note mat-icon {
+  color: #1976d2;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.info-note p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1565c0;
+}
+
+/* Multiple Bank Accounts for Dependents */
+.dependents-bank-accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dependent-bank-account-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease;
+}
+
+.dependent-bank-account-card:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.dependent-bank-account-card mat-card-header {
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dependent-bank-account-card mat-icon[mat-card-avatar] {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  color: #1976d2;
+  background-color: #e3f2fd;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dependent-bank-account-card mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #212121;
+}
+
+.dependent-bank-account-card mat-card-subtitle {
+  font-size: 14px;
+  color: #616161;
+  margin-top: 4px;
+}
+
+.dependent-bank-account-card mat-card-content {
+  padding: 24px;
+}
+
+.dependent-bank-account-card .bank-form {
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bank-form {
+    max-width: 100%;
+  }
+
+  .info-note {
+    max-width: 100%;
+  }
+
+  .dependent-bank-account-card mat-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .dependent-bank-account-card mat-card-content {
+    padding: 16px;
+  }
+}
+

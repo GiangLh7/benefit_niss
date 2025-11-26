@@ -1,0 +1,270 @@
+<div class="survivor-benefit-type-container">
+  <h2 class="section-title">Select Survivor Benefit Type</h2>
+  <p class="section-description">
+    Please select the type of survivor benefit. You can only choose one option.
+  </p>
+
+  <!-- Reference Remuneration Info -->
+  <mat-card class="reference-remuneration-card">
+    <mat-card-content>
+      <div class="reference-info">
+        <mat-icon>account_balance_wallet</mat-icon>
+        <div>
+          <strong>Reference Remuneration (R):</strong>
+          <span class="amount">${{ referenceRemuneration | number:'1.2-2' }}</span>
+          <p class="note">Average of 12 highest contribution months</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Eligibility Status -->
+  <div class="eligibility-status" *ngIf="dependents.length > 0 || contributionMonths > 0">
+    <mat-icon [class.eligible]="checkEligibility().canReceiveMonthlyPension || checkEligibility().canReceiveOneTimeSubsidy"
+              [class.ineligible]="!checkEligibility().canReceiveMonthlyPension && !checkEligibility().canReceiveOneTimeSubsidy">
+      {{ (checkEligibility().canReceiveMonthlyPension || checkEligibility().canReceiveOneTimeSubsidy) ? 'check_circle' : 'info' }}
+    </mat-icon>
+    <span>{{ getEligibilityMessage() }}</span>
+  </div>
+
+  <!-- Benefit Type Selection -->
+  <div class="benefit-type-selection">
+    <mat-radio-group [formControl]="benefitTypeControl" class="benefit-type-radio-group">
+      
+      <!-- Option 1: Monthly Pension -->
+      <mat-card class="benefit-option-card"
+                [class.available]="isBenefitTypeAvailable('monthly-pension')"
+                [class.unavailable]="!isBenefitTypeAvailable('monthly-pension')"
+                (click)="isBenefitTypeAvailable('monthly-pension') && selectBenefitType('monthly-pension')">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="option-icon monthly">account_balance</mat-icon>
+          <mat-card-title>Monthly Pension (Pensão de Sobrevivência)</mat-card-title>
+          <mat-card-subtitle>Monthly payment to replace part of deceased's income</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="option-details">
+            <div class="detail-item">
+              <mat-icon>schedule</mat-icon>
+              <span>Payment: Monthly</span>
+            </div>
+            <div class="detail-item highlight" *ngIf="selectedBenefitType === 'monthly-pension'">
+              <mat-icon>account_balance_wallet</mat-icon>
+              <span>
+                <strong>Monthly Amount: ${{ getMonthlyPensionAmount() | number:'1.2-2' }}</strong>
+                <br>
+                <small>({{ calculateMonthlyPensionPercentage() }}% of deceased's pension: ${{ calculateDeceasedPension() | number:'1.2-2' }})</small>
+              </span>
+            </div>
+            <div class="detail-item" *ngIf="selectedBenefitType !== 'monthly-pension'">
+              <mat-icon>percent</mat-icon>
+              <span>Amount: Percentage of deceased's pension (65% or 100% based on dependents)</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>check_circle</mat-icon>
+              <span>Requirement: {{ MINIMUM_CONTRIBUTION_MONTHS_2025 }} months contribution (for 2025)</span>
+            </div>
+            <div class="detail-item" *ngIf="selectedBenefitType === 'monthly-pension'">
+              <mat-icon>info</mat-icon>
+              <span>
+                <strong>Calculation:</strong> P = R × (N / 360) = ${{ referenceRemuneration }} × ({{ contributionMonths }} / 360) = ${{ calculateDeceasedPension() | number:'1.2-2' }}/month
+              </span>
+            </div>
+          </div>
+          <div class="unavailable-message" *ngIf="!isBenefitTypeAvailable('monthly-pension')">
+            <mat-icon>warning</mat-icon>
+            <span *ngIf="contributionMonths < MINIMUM_CONTRIBUTION_MONTHS_2025">
+              Insufficient contribution period ({{ contributionMonths }}/{{ MINIMUM_CONTRIBUTION_MONTHS_2025 }} months)
+            </span>
+            <span *ngIf="dependents.length === 0">
+              No eligible dependents
+            </span>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-radio-button 
+            [value]="'monthly-pension'"
+            [disabled]="!isBenefitTypeAvailable('monthly-pension')"
+            (change)="selectBenefitType('monthly-pension')">
+            Select Monthly Pension
+          </mat-radio-button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Option 2: One-Time Subsidy -->
+      <mat-card class="benefit-option-card"
+                [class.available]="isBenefitTypeAvailable('one-time-subsidy')"
+                [class.unavailable]="!isBenefitTypeAvailable('one-time-subsidy')"
+                (click)="isBenefitTypeAvailable('one-time-subsidy') && selectBenefitType('one-time-subsidy')">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="option-icon onetime">attach_money</mat-icon>
+          <mat-card-title>One-Time Subsidy (Subsídio por Morte)</mat-card-title>
+          <mat-card-subtitle>One-time payment to help family cover expenses</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="option-details">
+            <div class="detail-item">
+              <mat-icon>schedule</mat-icon>
+              <span>Payment: One-time</span>
+            </div>
+            <div class="detail-item highlight">
+              <mat-icon>account_balance_wallet</mat-icon>
+              <span>Amount: <strong>${{ (referenceRemuneration * ONE_TIME_SUBSIDY_MULTIPLIER) | number:'1.2-2' }}</strong> (3 × R)</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>check_circle</mat-icon>
+              <span>Requirement: No minimum contribution period required</span>
+            </div>
+            <div class="detail-item" *ngIf="selectedBenefitType === 'one-time-subsidy'">
+              <mat-icon>people</mat-icon>
+              <span>
+                <strong>Distribution:</strong>
+                <span *ngIf="hasSpouseAndChildren()">
+                  50% to spouse (${{ (referenceRemuneration * ONE_TIME_SUBSIDY_MULTIPLIER * 0.5) | number:'1.2-2' }}),
+                  50% to children (${{ (referenceRemuneration * ONE_TIME_SUBSIDY_MULTIPLIER * 0.5) | number:'1.2-2' }})
+                </span>
+                <span *ngIf="!hasSpouseAndChildren()">
+                  Full amount to eligible dependents (${{ (referenceRemuneration * ONE_TIME_SUBSIDY_MULTIPLIER) | number:'1.2-2' }})
+                </span>
+              </span>
+            </div>
+            <div class="detail-item" *ngIf="selectedBenefitType !== 'one-time-subsidy'">
+              <mat-icon>people</mat-icon>
+              <span>Distribution: 50% to spouse, 50% to children (if both exist)</span>
+            </div>
+          </div>
+          <div class="unavailable-message" *ngIf="!isBenefitTypeAvailable('one-time-subsidy')">
+            <mat-icon>warning</mat-icon>
+            <span>No eligible dependents</span>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-radio-button 
+            [value]="'one-time-subsidy'"
+            [disabled]="!isBenefitTypeAvailable('one-time-subsidy')"
+            (change)="selectBenefitType('one-time-subsidy')">
+            Select One-Time Subsidy
+          </mat-radio-button>
+        </mat-card-actions>
+      </mat-card>
+
+      <!-- Option 3: Funeral Reimbursement -->
+      <mat-card class="benefit-option-card"
+                [class.available]="isBenefitTypeAvailable('funeral-reimbursement')"
+                [class.unavailable]="!isBenefitTypeAvailable('funeral-reimbursement')"
+                (click)="isBenefitTypeAvailable('funeral-reimbursement') && selectBenefitType('funeral-reimbursement')">
+        <mat-card-header>
+          <mat-icon mat-card-avatar class="option-icon funeral">local_hospital</mat-icon>
+          <mat-card-title>Funeral Reimbursement (Reembolso Despeza Funeral)</mat-card-title>
+          <mat-card-subtitle>Reimbursement for actual funeral expenses</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="option-details">
+            <div class="detail-item">
+              <mat-icon>schedule</mat-icon>
+              <span>Payment: One-time reimbursement</span>
+            </div>
+            <div class="detail-item highlight">
+              <mat-icon>account_balance_wallet</mat-icon>
+              <span>Amount: Actual expenses (max <strong>${{ (referenceRemuneration * FUNERAL_REIMBURSEMENT_MAX_MULTIPLIER) | number:'1.2-2' }}</strong> = 3 × R)</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>info</mat-icon>
+              <span>Requirement: Only available when NO eligible dependents exist</span>
+            </div>
+            <div class="detail-item">
+              <mat-icon>person</mat-icon>
+              <span>Recipient: Anyone who paid for funeral expenses</span>
+            </div>
+          </div>
+          <div class="unavailable-message" *ngIf="!isBenefitTypeAvailable('funeral-reimbursement')">
+            <mat-icon>warning</mat-icon>
+            <span>Eligible dependents exist. Please choose monthly pension or one-time subsidy instead.</span>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <mat-radio-button 
+            [value]="'funeral-reimbursement'"
+            [disabled]="!isBenefitTypeAvailable('funeral-reimbursement')"
+            (change)="selectBenefitType('funeral-reimbursement')">
+            Select Funeral Reimbursement
+          </mat-radio-button>
+        </mat-card-actions>
+      </mat-card>
+
+    </mat-radio-group>
+  </div>
+
+  <!-- Monthly Pension Calculation Details (when selected) -->
+  <mat-card *ngIf="selectedBenefitType === 'monthly-pension' && isBenefitTypeAvailable('monthly-pension')" 
+            class="calculation-details-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="calculation-icon">calculate</mat-icon>
+      <mat-card-title>Monthly Pension Calculation Details</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="calculation-steps">
+        <div class="calc-step">
+          <strong>Step 1: Calculate Deceased's Pension</strong>
+          <div class="calc-formula">
+            P = R × (N / 360)
+          </div>
+          <div class="calc-values">
+            <span>P = ${{ referenceRemuneration | number:'1.2-2' }} × ({{ contributionMonths }} / 360)</span>
+            <span class="result">= ${{ calculateDeceasedPension() | number:'1.2-2' }}/month</span>
+          </div>
+        </div>
+
+        <div class="calc-step">
+          <strong>Step 2: Determine Percentage Based on Dependents</strong>
+          <div class="calc-values">
+            <span *ngIf="calculateMonthlyPensionPercentage() === 100">
+              Percentage: <strong>100%</strong> (Has children under 24 or spouse + children)
+            </span>
+            <span *ngIf="calculateMonthlyPensionPercentage() === 65">
+              Percentage: <strong>65%</strong> (Spouse only, no children under 24)
+            </span>
+          </div>
+        </div>
+
+        <div class="calc-step highlight">
+          <strong>Step 3: Calculate Monthly Pension Amount</strong>
+          <div class="calc-formula">
+            Monthly Pension = Deceased's Pension × Percentage
+          </div>
+          <div class="calc-values">
+            <span>Monthly Pension = ${{ calculateDeceasedPension() | number:'1.2-2' }} × {{ calculateMonthlyPensionPercentage() }}%</span>
+            <span class="result">= <strong>${{ getMonthlyPensionAmount() | number:'1.2-2' }}/month</strong></span>
+          </div>
+        </div>
+
+        <div class="calc-step">
+          <strong>Distribution Among Dependents:</strong>
+          <div class="dependents-distribution">
+            <div *ngFor="let dep of dependents" class="dependent-item">
+              <mat-icon>person</mat-icon>
+              <span>{{ dep.fullName }} ({{ dep.relationship }})</span>
+              <span class="percentage">{{ dep.adjustedPercentage || dep.percentage }}%</span>
+              <span class="amount">${{ (getMonthlyPensionAmount() * (dep.adjustedPercentage || dep.percentage) / 100) | number:'1.2-2' }}/month</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Important Notes -->
+  <mat-card class="notes-card">
+    <mat-card-content>
+      <h4><mat-icon>info</mat-icon> Important Notes:</h4>
+      <ul>
+        <li>You can only choose <strong>ONE</strong> of the three options above.</li>
+        <li>Monthly Pension requires minimum contribution period (60 months for 2025).</li>
+        <li>One-Time Subsidy has no contribution requirement but needs eligible dependents.</li>
+        <li>Funeral Reimbursement is only available when there are no eligible dependents.</li>
+        <li>Reference Remuneration (R) is calculated as the average of 12 highest contribution months.</li>
+        <li>Monthly Pension percentage: 65% for spouse only, 100% when children are involved.</li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</div>
+

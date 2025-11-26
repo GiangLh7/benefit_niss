@@ -1,0 +1,74 @@
+<div class="rejection-dialog">
+  <div class="dialog-header">
+    <mat-icon class="error-icon">cancel</mat-icon>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+  </div>
+
+  <mat-dialog-content>
+    <div class="citizen-info">
+      <div class="info-row">
+        <mat-icon>person</mat-icon>
+        <span><strong>Citizen:</strong> {{ data.citizenName }}</span>
+      </div>
+      <div class="info-row">
+        <mat-icon>badge</mat-icon>
+        <span><strong>NISS:</strong> {{ data.citizenNiss }}</span>
+      </div>
+      <div class="info-row" *ngIf="data.sector">
+        <mat-icon>business</mat-icon>
+        <span><strong>Sector:</strong> {{ data.sector }}</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="comparison-section">
+      <div class="comparison-card current">
+        <div class="card-header">
+          <mat-icon>info</mat-icon>
+          <span>Current</span>
+        </div>
+        <div class="card-value">{{ data.currentValue }}</div>
+      </div>
+
+      <mat-icon class="arrow-icon">arrow_forward</mat-icon>
+
+      <div class="comparison-card required">
+        <div class="card-header">
+          <mat-icon>verified</mat-icon>
+          <span>Required</span>
+        </div>
+        <div class="card-value">{{ data.requiredValue }}</div>
+      </div>
+    </div>
+
+    <div class="message-section">
+      <mat-icon class="warning-icon">warning</mat-icon>
+      <p class="message-text">{{ data.message }}</p>
+    </div>
+
+    <div class="suggestions-section" *ngIf="data.suggestions && data.suggestions.length > 0">
+      <h3>
+        <mat-icon>lightbulb</mat-icon>
+        Alternative Options
+      </h3>
+      <ul class="suggestions-list">
+        <li *ngFor="let suggestion of data.suggestions">
+          <mat-icon>chevron_right</mat-icon>
+          <span>{{ suggestion }}</span>
+        </li>
+      </ul>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button (click)="onClose()" class="close-button">
+      Close
+    </button>
+    <button mat-raised-button color="primary" (click)="onBackToStart()" class="back-button">
+      <mat-icon>refresh</mat-icon>
+      Back to Start
+    </button>
+  </mat-dialog-actions>
+</div>
+

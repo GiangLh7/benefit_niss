@@ -289,11 +289,53 @@
   text-align: center;
   transition: transform 0.2s, box-shadow 0.2s;
   cursor: pointer;
+  position: relative;
+  overflow: visible;
 }
 
 .option-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-header-with-badge {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.badge-button-top-right {
+  position: absolute !important;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+}
+
+.badge-button-top-right ::ng-deep .mat-mdc-button-touch-target {
+  width: 40px;
+  height: 40px;
+}
+
+.badge-button-top-right mat-icon {
+  color: #666;
+  font-size: 24px;
+}
+
+.badge-button-top-right:hover mat-icon {
+  color: #1976d2;
+}
+
+/* Badge positioning */
+.badge-button-top-right ::ng-deep .mat-badge-content {
+  background-color: #f44336;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 50%;
 }
 
 .option-icon {
@@ -320,7 +362,7 @@
 }
 
 .option-card button {
-  width: 100%;
+  /* width: 100%; */
   height: 44px;
 }
 

@@ -1,0 +1,48 @@
+<div class="login-page">
+  <section class="login-card">
+    <header class="login-header">
+      <div class="logo-mark" aria-hidden="true"></div>
+      <div>
+        <h1>Reserved Area</h1>
+        <p>Access your INSS benefit information</p>
+      </div>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field" [class.invalid]="form.controls.username.invalid && form.controls.username.touched">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          placeholder="Enter your username"
+        />
+        <small *ngIf="form.controls.username.invalid && form.controls.username.touched">
+          Username is required.
+        </small>
+      </div>
+
+      <div class="field" [class.invalid]="form.controls.password.invalid && form.controls.password.touched">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+        />
+        <small *ngIf="form.controls.password.invalid && form.controls.password.touched">
+          Password is required.
+        </small>
+      </div>
+
+      <button type="submit" [disabled]="submitting()">Login</button>
+    </form>
+
+    <p class="error" *ngIf="error()">{{ error() }}</p>
+    <p class="helper">
+      Tip: Any non-empty username and password will sign you in for demo purposes.
+    </p>
+  </section>
+</div>

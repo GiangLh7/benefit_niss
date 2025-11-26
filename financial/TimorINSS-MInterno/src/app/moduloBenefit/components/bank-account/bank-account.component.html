@@ -1,0 +1,166 @@
+<div class="bank-account-container">
+  <!-- Single Bank Account (for non-survivor benefits) -->
+  <div *ngIf="benefitType !== 'survivor-pension'">
+    <h2 class="step-title">Bank Account Information</h2>
+    <p class="step-description">
+      Please provide your bank account details for benefit payments
+    </p>
+
+    <div class="form-section">
+      <mat-icon class="section-icon">account_balance</mat-icon>
+      <form [formGroup]="bankAccountForm" class="bank-form">
+        <mat-form-field appearance="outline">
+          <mat-label>Bank Name</mat-label>
+          <input
+            matInput
+            formControlName="bankName"
+            placeholder="Enter bank name"
+          />
+          <mat-icon matPrefix>account_balance</mat-icon>
+          <mat-error
+            *ngIf="bankAccountForm.get('bankName')?.hasError('required')"
+          >
+            Bank name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Account Number</mat-label>
+          <input
+            matInput
+            formControlName="accountNumber"
+            placeholder="Enter account number"
+          />
+          <mat-icon matPrefix>credit_card</mat-icon>
+          <mat-error
+            *ngIf="bankAccountForm.get('accountNumber')?.hasError('required')"
+          >
+            Account number is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Account Holder Name</mat-label>
+          <input
+            matInput
+            formControlName="accountHolderName"
+            placeholder="Enter account holder name"
+          />
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error
+            *ngIf="
+              bankAccountForm.get('accountHolderName')?.hasError('required')
+            "
+          >
+            Account holder name is required
+          </mat-error>
+        </mat-form-field>
+      </form>
+
+      <div class="info-note">
+        <mat-icon>info</mat-icon>
+        <p>
+          Please ensure that the account holder name matches the beneficiary's
+          name. All benefit payments will be made to this account.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multiple Bank Accounts (for survivor's pension - one per dependent) -->
+  <div *ngIf="benefitType === 'survivor-pension'">
+    <h2 class="step-title">Bank Account Information for Dependents</h2>
+    <p class="step-description">
+      Please provide bank account details for each dependent to receive their
+      benefit payments
+    </p>
+
+    <div class="dependents-bank-accounts">
+      <mat-card
+        *ngFor="let dep of dependents; let i = index"
+        class="dependent-bank-account-card"
+      >
+        <mat-card-header>
+          <mat-icon mat-card-avatar>account_balance_wallet</mat-icon>
+          <mat-card-title>{{ dep.fullName }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ relationshipLabels[dep.relationship] }} •
+            {{ dep.adjustedPercentage || dep.percentage }}% of benefit
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <form
+            [formGroup]="getDependentBankAccountForm(dep.id!)"
+            class="bank-form"
+          >
+            <mat-form-field appearance="outline">
+              <mat-label>Bank Name</mat-label>
+              <input
+                matInput
+                formControlName="bankName"
+                placeholder="Enter bank name"
+              />
+              <mat-icon matPrefix>account_balance</mat-icon>
+              <mat-error
+                *ngIf="
+                  getDependentBankAccountForm(dep.id!)
+                    ?.get('bankName')
+                    ?.hasError('required')
+                "
+              >
+                Bank name is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Account Number</mat-label>
+              <input
+                matInput
+                formControlName="accountNumber"
+                placeholder="Enter account number"
+              />
+              <mat-icon matPrefix>credit_card</mat-icon>
+              <mat-error
+                *ngIf="
+                  getDependentBankAccountForm(dep.id!)
+                    .get('accountNumber')
+                    ?.hasError('required')
+                "
+              >
+                Account number is required
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Account Holder Name</mat-label>
+              <input
+                matInput
+                formControlName="accountHolderName"
+                placeholder="Enter account holder name"
+              />
+              <mat-icon matPrefix>person</mat-icon>
+              <mat-error
+                *ngIf="
+                  getDependentBankAccountForm(dep.id!)
+                    .get('accountHolderName')
+                    ?.hasError('required')
+                "
+              >
+                Account holder name is required
+              </mat-error>
+            </mat-form-field>
+          </form>
+        </mat-card-content>
+      </mat-card>
+
+      <div class="info-note">
+        <mat-icon>info</mat-icon>
+        <p>
+          Each dependent will receive their allocated percentage of the
+          survivor's pension directly to their bank account.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

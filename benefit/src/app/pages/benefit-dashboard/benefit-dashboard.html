@@ -1,0 +1,127 @@
+<div class="dashboard">
+  <header class="dashboard-header">
+    <div class="header-left">
+      <div class="brand">
+        <div class="logo-mark" aria-hidden="true"></div>
+        <div class="brand-copy">
+          <span class="brand-name">INSS Portal - Social Security</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-right">
+      <button type="button" class="power-button" aria-label="Sign out" (click)="logout()">
+        ⏻
+      </button>
+      <button type="button" class="lang-selector">
+        EN
+        <span class="chevron" aria-hidden="true"></span>
+      </button>
+      <div class="user-chip">
+        <div class="avatar" aria-hidden="true">{{ userName | slice:0:1 | uppercase }}</div>
+        <div class="user-meta">
+          <span class="user-label">User: {{ userName }}</span>
+          <small>NISS: {{ nissNumber }}</small>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+    <section class="card claim-tracking">
+      <div class="card-header">
+        <h2>Claim Trackings</h2>
+        <div class="claim-controls">
+          <label class="sr-only" for="claimSelector">Claim</label>
+          <select
+            id="claimSelector"
+            class="claim-selector"
+            [value]="selectedClaimId()"
+            (change)="onSelectClaim($any($event.target).value)"
+          >
+            <option *ngFor="let claim of claims" [value]="claim.id">
+              {{ claim.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <ol class="steps">
+        <li
+          class="step"
+          *ngFor="let step of currentSteps(); let isLast = last"
+          [ngClass]="step.status"
+        >
+          <div class="indicator">
+            <span class="circle">{{ step.id }}</span>
+            <span class="connector" *ngIf="!isLast"></span>
+          </div>
+          <div class="details">
+            <h3>{{ step.label }}</h3>
+            <div class="meta">
+              <span class="status">
+                <span class="bullet"></span>
+                {{
+                  step.status === 'completed'
+                    ? 'Completed'
+                    : step.status === 'active'
+                    ? 'In Progress'
+                    : step.status === 'pending'
+                    ? 'Pending'
+                    : 'Not Started'
+                }}
+              </span>
+              <span class="date">{{ step.date || '—' }}</span>
+            </div>
+            <p>{{ step.note }}</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="summary-grid">
+      <article class="card summary-card" *ngFor="let item of contributionSummary">
+        <div class="summary-icon" aria-hidden="true">{{ item.icon }}</div>
+        <div class="summary-content">
+          <h3>{{ item.title }}</h3>
+          <p class="value">{{ item.value }}</p>
+          <button type="button" class="link-like" (click)="viewContributionHistory()">
+            {{ item.linkLabel }} →
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section class="card benefit-history">
+      <div class="card-header">
+        <h2>Benefit Paid History</h2>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Benefit Type</th>
+              <th>Status</th>
+              <th>Amount (USD)</th>
+              <th>Payment date</th>
+              <th>Reference ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of benefitHistory">
+              <td>{{ row.type }}</td>
+              <td>
+                <span class="status-pill" [ngClass]="row.status.toLowerCase()">
+                  {{ row.status }}
+                </span>
+              </td>
+              <td>{{ row.amount }}</td>
+              <td>{{ row.date }}</td>
+              <td>{{ row.reference }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>

@@ -66,3 +66,50 @@ export interface BenefitFilter {
   searchTerm?: string;
 }
 
+/**
+ * Contribution History Period Model
+ */
+export interface ContributionPeriod {
+  startYear: number;
+  endYear: number;
+  company: string;
+  years: number;
+  months: number;
+}
+
+/**
+ * Health Status Model
+ */
+export interface HealthStatus {
+  status: string;
+  laborCapacityReduction?: number;
+}
+
+/**
+ * Retirement Option Type
+ */
+export enum RetirementOptionType {
+  NORMAL = 'NORMAL',
+  HAZARDOUS_INDUSTRY = 'HAZARDOUS_INDUSTRY',
+  LABOR_CAPACITY_REDUCTION = 'LABOR_CAPACITY_REDUCTION'
+}
+
+/**
+ * Retirement Option Model
+ */
+export interface RetirementOption {
+  type: RetirementOptionType;
+  label: string;
+  description: string;
+  requiredDocuments: string[];
+}
+
+/**
+ * Hazardous Industry Model
+ */
+export interface HazardousIndustry {
+  id: string;
+  name: string;
+  description?: string;
+}
+

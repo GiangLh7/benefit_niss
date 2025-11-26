@@ -1,0 +1,134 @@
+.beneficiaries-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.beneficiaries-toolbar {
+  min-height: 64px;
+  padding: 0 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+  margin-right: 16px;
+}
+
+.toolbar-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.beneficiaries-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.beneficiaries-card {
+  width: 100%;
+  max-width: 1400px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.beneficiaries-card mat-card-header mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+mat-tab-group {
+  margin-top: 16px;
+}
+
+.tab-body {
+  padding: 20px 0;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.table-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+.table-header p {
+  margin: 4px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.beneficiaries-table {
+  width: 100%;
+  min-width: 1000px;
+}
+
+.beneficiaries-table th {
+  background-color: #f2f4f8;
+  font-weight: 600;
+  color: #333;
+}
+
+.beneficiaries-table th,
+.beneficiaries-table td {
+  padding: 12px 16px;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.beneficiaries-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.beneficiaries-table tr:hover {
+  background-color: #eef5ff;
+}
+
+@media (max-width: 768px) {
+  .beneficiaries-content {
+    padding: 16px;
+  }
+
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .table-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .table-actions button {
+    width: 100%;
+  }
+}

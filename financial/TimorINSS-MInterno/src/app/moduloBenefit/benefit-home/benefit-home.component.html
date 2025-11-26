@@ -60,33 +60,13 @@
           <span matListItemTitle>Citizen Record</span>
         </a>
 
-        <!-- Benefit Management (with submenu) -->
-        <mat-expansion-panel class="nav-expansion-panel" [expanded]="benefitManagementExpanded">
-          <mat-expansion-panel-header (click)="toggleBenefitManagement()">
-            <mat-panel-title class="nav-panel-title">
-              <mat-icon>card_giftcard</mat-icon>
-              <span>Benefit Management</span>
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          
-          <mat-nav-list class="submenu">
-            <a mat-list-item 
-               routerLink="/benefit/non-contribution"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{exact: false}">
-              <mat-icon matListItemIcon>description</mat-icon>
-              <span matListItemTitle>Non-Contribution</span>
-            </a>
-            
-            <a mat-list-item 
-               routerLink="/benefit/contribution-scheme"
-               routerLinkActive="active"
-               [routerLinkActiveOptions]="{exact: false}">
-              <mat-icon matListItemIcon>account_balance</mat-icon>
-              <span matListItemTitle>Contribution Scheme</span>
-            </a>
-          </mat-nav-list>
-        </mat-expansion-panel>
+        <a mat-list-item 
+           routerLink="/benefit/contribution-scheme"
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: false}">
+          <mat-icon matListItemIcon>card_giftcard</mat-icon>
+          <span matListItemTitle>Benefit Management</span>
+        </a>
       </mat-nav-list>
     </mat-drawer>
 
@@ -189,39 +169,6 @@
           </div>
         </div>
 
-        <!-- Non-Contribution Scheme -->
-        <div *ngIf="isMenuActive('non-contribution')">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>
-                <mat-icon>description</mat-icon>
-                Non-Contributory Scheme Management
-              </mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="benefit-options-grid">
-                <mat-card class="option-card">
-                  <mat-icon class="option-icon">list_alt</mat-icon>
-                  <h3>Payment List Request</h3>
-                  <p>Generate and manage payment requests for Social Old-Age/Disability Pensions.</p>
-                  <button mat-raised-button color="primary">
-                    Proceed
-                  </button>
-                </mat-card>
-
-                <mat-card class="option-card">
-                  <mat-icon class="option-icon">check_circle</mat-icon>
-                  <h3>Payment Request Status</h3>
-                  <p>Monitor the status of payment requests for Non-Contributory Pensions.</p>
-                  <button mat-raised-button color="primary" style="background-color: #4caf50;">
-                    Proceed
-                  </button>
-                </mat-card>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-
         <!-- Contribution Scheme -->
         <div *ngIf="isMenuActive('contribution-scheme')">
           <mat-card>
@@ -237,16 +184,28 @@
                   <mat-icon class="option-icon">people</mat-icon>
                   <h3>Current Beneficiaries</h3>
                   <p>View and manage the list of current beneficiaries and their benefits.</p>
-                  <button mat-raised-button color="primary">
+                  <button mat-raised-button color="primary" routerLink="/benefit/current-beneficiaries">
                     Proceed
                   </button>
                 </mat-card>
 
                 <mat-card class="option-card">
-                  <mat-icon class="option-icon">add_circle</mat-icon>
-                  <h3>New Request</h3>
+                  <button mat-icon-button 
+                          class="badge-button-top-right"
+                          (click)="navigateToPendingRequests($event)"
+                          [matBadge]="pendingRequestsCount"
+                          [matBadgeHidden]="pendingRequestsCount === 0"
+                          matBadgeColor="warn"
+                          matBadgePosition="above after"
+                          matTooltip="View Pending Requests">
+                    <mat-icon>notifications</mat-icon>
+                  </button>
+                  <div class="card-header-with-badge">
+                    <mat-icon class="option-icon">add_circle</mat-icon>
+                  </div>
+                  <h3>New Beneficiary</h3>
                   <p>Submit a new request to add a beneficiary to the scheme.</p>
-                  <button mat-raised-button color="primary">
+                  <button mat-raised-button color="primary" routerLink="/benefit/new-contributory-request">
                     Proceed
                   </button>
                 </mat-card>

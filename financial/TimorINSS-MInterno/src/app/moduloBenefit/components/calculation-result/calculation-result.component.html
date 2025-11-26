@@ -1,0 +1,88 @@
+<div class="calculation-result-container" *ngIf="calculation">
+  <!-- Header Card -->
+  <mat-card class="calculation-header">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="calc-icon">calculate</mat-icon>
+      <mat-card-title>Calculation Result</mat-card-title>
+      <mat-card-subtitle>{{ getBenefitTypeLabel(calculation.benefitType) }}</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <!-- Main Result -->
+      <div class="main-result">
+        <div class="result-label">Monthly Benefit Amount</div>
+        <div class="result-amount">{{ formatCurrency(calculation.benefitAmount) }}</div>
+        <div class="result-period">/month</div>
+      </div>
+
+      <!-- Quick Info -->
+      <div class="quick-info">
+        <div class="info-item">
+          <span class="info-label">Reference Remuneration (R):</span>
+          <span class="info-value">{{ formatCurrency(calculation.referenceRemuneration) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Calculation Date:</span>
+          <span class="info-value">{{ calculation.calculationDate | date: 'medium' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Calculation ID:</span>
+          <span class="info-value">{{ calculation.calculationId }}</span>
+        </div>
+      </div>
+
+      <!-- Formula Display -->
+      <div class="formula-display" *ngIf="showFormula">
+        <mat-icon>functions</mat-icon>
+        <span class="formula-text">{{ calculation.formula }}</span>
+      </div>
+
+      <!-- Toggle Breakdown Button -->
+      <button mat-button color="primary" (click)="toggleBreakdown()" class="toggle-breakdown">
+        <mat-icon>{{ isExpanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+        {{ isExpanded ? 'Hide' : 'Show' }} Calculation Breakdown
+      </button>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Breakdown Details (Collapsible) -->
+  <mat-card class="calculation-breakdown" *ngIf="isExpanded && showBreakdown">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>timeline</mat-icon>
+      <mat-card-title>Step-by-Step Breakdown</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="breakdown-steps">
+        <div class="breakdown-step" *ngFor="let step of getBreakdownSteps(); let i = index">
+          <div class="step-number">{{ i + 1 }}</div>
+          <div class="step-content">
+            <div class="step-label">{{ step.label }}</div>
+            <div class="step-formula" *ngIf="step.formula">
+              <code>{{ step.formula }}</code>
+            </div>
+            <div class="step-value">{{ formatCurrency(step.value) }}</div>
+            <div class="step-description">{{ step.description }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final Result -->
+      <div class="final-result-box">
+        <div class="final-label">Final Monthly Pension</div>
+        <div class="final-amount">{{ formatCurrency(calculation.breakdown.finalResult) }}</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Notes -->
+  <mat-card class="calculation-notes" *ngIf="calculation.notes">
+    <mat-card-content>
+      <div class="notes-content">
+        <mat-icon>info</mat-icon>
+        <span>{{ calculation.notes }}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

@@ -1,0 +1,417 @@
+<div class="pending-requests-container">
+  <mat-toolbar color="primary" class="requests-toolbar">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="toolbar-title">Review and Approve Requests</span>
+    <span class="toolbar-spacer"></span>
+    <span class="user-level-badge">Level {{ currentUserLevel }} Admin</span>
+  </mat-toolbar>
+
+  <div class="requests-content">
+    <mat-card class="requests-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>pending_actions</mat-icon>
+          Benefit Requests Management
+        </mat-card-title>
+        <div class="header-actions">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Filter by Status</mat-label>
+            <mat-select [(value)]="selectedStatusFilter" (selectionChange)="onStatusFilterChange()">
+              <mat-option *ngFor="let option of statusOptions" [value]="option.value">
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Bulk Actions Toolbar -->
+        <div class="actions-toolbar" *ngIf="filteredRequests.length > 0">
+          <div class="selection-info">
+            <span *ngIf="selectedRequests.size > 0" class="selected-count">
+              {{ selectedRequests.size }} request(s) selected
+            </span>
+            <span *ngIf="selectedRequests.size === 0" class="total-count">
+              {{ filteredRequests.length }} request(s) found
+            </span>
+          </div>
+          <div class="action-buttons">
+            <button *ngIf="currentUserLevel === 2" 
+                    mat-raised-button 
+                    color="accent" 
+                    (click)="sendSelectedForApproval()"
+                    [disabled]="selectedRequests.size === 0 || isProcessing">
+              <mat-icon>send</mat-icon>
+              Send for Approval ({{ selectedRequests.size }})
+            </button>
+            <button *ngIf="currentUserLevel === 3" 
+                    mat-raised-button 
+                    color="primary" 
+                    (click)="approveSelected()"
+                    [disabled]="selectedRequests.size === 0 || isProcessing">
+              <mat-icon>check_circle</mat-icon>
+              Approve Selected ({{ selectedRequests.size }})
+            </button>
+            <button *ngIf="currentUserLevel >= 2" 
+                    mat-raised-button 
+                    color="warn" 
+                    (click)="rejectSelected()"
+                    [disabled]="selectedRequests.size === 0 || isProcessing">
+              <mat-icon>cancel</mat-icon>
+              Reject Selected ({{ selectedRequests.size }})
+            </button>
+          </div>
+        </div>
+
+        <!-- No Requests Message -->
+        <div *ngIf="filteredRequests.length === 0" class="no-requests">
+          <mat-icon>inbox</mat-icon>
+          <h2>No Requests Found</h2>
+          <p>There are no requests matching the selected filter.</p>
+        </div>
+
+        <!-- Requests Table -->
+        <div *ngIf="filteredRequests.length > 0" class="table-wrapper">
+          <table mat-table [dataSource]="filteredRequests" multiTemplateDataRows class="mat-elevation-z2 requests-table">
+            
+            <!-- Expand Column -->
+            <ng-container matColumnDef="expand">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button (click)="toggleRow(element); $event.stopPropagation()">
+                  <mat-icon>{{ element.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox
+                  (change)="$event ? masterToggle() : null"
+                  [checked]="isAllSelected()"
+                  [indeterminate]="isSomeSelected()"
+                  [disabled]="currentUserLevel === 1">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? toggleSelection(row.id) : null"
+                  [checked]="isSelected(row.id)"
+                  [disabled]="!hasAnyActionPermission(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <!-- NISS Column -->
+            <ng-container matColumnDef="niss">
+              <th mat-header-cell *matHeaderCellDef>NISS</th>
+              <td mat-cell *matCellDef="let element">
+                <strong>{{ element.niss }}</strong>
+              </td>
+            </ng-container>
+
+            <!-- Full Name Column -->
+            <ng-container matColumnDef="fullName">
+              <th mat-header-cell *matHeaderCellDef>Full Name</th>
+              <td mat-cell *matCellDef="let element">{{ element.fullName }}</td>
+            </ng-container>
+
+            <!-- Date of Birth Column -->
+            <ng-container matColumnDef="dateOfBirth">
+              <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+              <td mat-cell *matCellDef="let element">{{ element.dateOfBirth }}</td>
+            </ng-container>
+
+            <!-- Scheme Type Column -->
+            <ng-container matColumnDef="schemeType">
+              <th mat-header-cell *matHeaderCellDef>Scheme Type</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-chip [class.chip-contributory]="element.schemeType === 'Contributory'"
+                          [class.chip-non-contributory]="element.schemeType === 'Non-Contributory'">
+                  {{ element.schemeType }}
+                </mat-chip>
+              </td>
+            </ng-container>
+
+            <!-- Benefit Type Column -->
+            <ng-container matColumnDef="benefitType">
+              <th mat-header-cell *matHeaderCellDef>Benefit Type</th>
+              <td mat-cell *matCellDef="let element">{{ element.benefitType }}</td>
+            </ng-container>
+
+            <!-- Submitted Date Column -->
+            <ng-container matColumnDef="submittedDate">
+              <th mat-header-cell *matHeaderCellDef>Submitted Date</th>
+              <td mat-cell *matCellDef="let element">{{ element.submittedDate }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">
+                <mat-chip [ngClass]="getStatusClass(element.status)">
+                  {{ getStatusLabel(element.status) }}
+                </mat-chip>
+                <div *ngIf="element.comment" class="status-comment">
+                  <mat-icon matTooltip="{{ element.comment }}">info</mat-icon>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="action-buttons-cell">
+                  <!-- Level 2: Send for Approval -->
+                  <button *ngIf="canSendForApproval(element)" 
+                          mat-icon-button 
+                          color="accent" 
+                          (click)="sendForApproval(element.id)"
+                          [disabled]="isProcessing"
+                          matTooltip="Send for Approval">
+                    <mat-icon>send</mat-icon>
+                  </button>
+
+                  <!-- Level 3: Approve -->
+                  <button *ngIf="canApprove(element)" 
+                          mat-icon-button 
+                          color="primary" 
+                          (click)="approveRequest(element.id)"
+                          [disabled]="isProcessing"
+                          matTooltip="Approve">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+
+                  <!-- Level 2 & 3: Reject -->
+                  <button *ngIf="canReject(element)" 
+                          mat-icon-button 
+                          color="warn" 
+                          (click)="rejectRequest(element.id)"
+                          [disabled]="isProcessing"
+                          matTooltip="Reject">
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+
+                  <!-- View Details (All Levels) -->
+                  <button mat-icon-button 
+                          (click)="viewRequestDetails(element)"
+                          matTooltip="View Details">
+                    <mat-icon>visibility</mat-icon>
+                  </button>
+
+                  <!-- No Actions Available -->
+                  <span *ngIf="!hasAnyActionPermission(element)" class="no-action-text">
+                    No actions available
+                  </span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Expanded Detail Row -->
+            <ng-container matColumnDef="expandedDetail">
+              <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                <div class="request-detail-container" [@detailExpand]="element.expanded ? 'expanded' : 'collapsed'">
+                  <div *ngIf="element.expanded && element.details" class="request-detail-content">
+                    <!-- Citizen Information -->
+                    <mat-card class="detail-section">
+                      <mat-card-header>
+                        <mat-icon mat-card-avatar>person</mat-icon>
+                        <mat-card-title>Citizen Information</mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="info-grid">
+                          <div class="info-item">
+                            <span class="info-label">NISS:</span>
+                            <span class="info-value">{{ element.details.citizenNISS }}</span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Full Name:</span>
+                            <span class="info-value">{{ element.details.citizenName }}</span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Date of Birth:</span>
+                            <span class="info-value">{{ element.details.citizenDateOfBirth }}</span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Current Age:</span>
+                            <span class="info-value">{{ element.details.currentAge }}</span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Contribution Period:</span>
+                            <span class="info-value">{{ element.details.contributionMonths }} months</span>
+                          </div>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+
+                    <!-- Benefit Information -->
+                    <mat-card class="detail-section">
+                      <mat-card-header>
+                        <mat-icon mat-card-avatar>assignment</mat-icon>
+                        <mat-card-title>Benefit Information</mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="info-grid">
+                          <div class="info-item">
+                            <span class="info-label">Scheme Type:</span>
+                            <span class="info-value">{{ element.details.schemeType }}</span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Benefit Type:</span>
+                            <span class="info-value">{{ element.details.benefitType }}</span>
+                          </div>
+
+                          <!-- Retirement Option (if old-age-pension) -->
+                          <div class="info-item" *ngIf="element.details.retirementOption">
+                            <span class="info-label">Retirement Option:</span>
+                            <span class="info-value">{{ getRetirementOptionLabel(element.details.retirementOption) }}</span>
+                          </div>
+                          <div class="info-item" *ngIf="element.details.selectedHazardousIndustry">
+                            <span class="info-label">Hazardous Industry:</span>
+                            <span class="info-value">{{ element.details.selectedHazardousIndustry }}</span>
+                          </div>
+
+                          <!-- Disability Option (if disability-pension) -->
+                          <div class="info-item" *ngIf="element.details.disabilityPaymentType">
+                            <span class="info-label">Payment Type:</span>
+                            <span class="info-value">{{ getDisabilityPaymentLabel(element.details.disabilityPaymentType) }}</span>
+                          </div>
+
+                          <!-- Survivor Pension (if survivor-pension) -->
+                          <div class="info-item full-width" *ngIf="element.details.funeralAllowance">
+                            <span class="info-label">Funeral Allowance:</span>
+                            <span class="info-value funeral-amount">${{ element.details.funeralAllowance }}</span>
+                          </div>
+                        </div>
+
+                        <!-- Eligibility Message -->
+                        <div class="eligibility-message" *ngIf="element.details.eligibilityMessage">
+                          <mat-icon>info</mat-icon>
+                          <span>{{ element.details.eligibilityMessage }}</span>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+
+                    <!-- Dependents (for survivor-pension) -->
+                    <mat-card class="detail-section" *ngIf="element.details.dependents && element.details.dependents.length > 0">
+                      <mat-card-header>
+                        <mat-icon mat-card-avatar>family_restroom</mat-icon>
+                        <mat-card-title>Dependents ({{ element.details.dependents.length }})</mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="dependents-list">
+                          <div *ngFor="let dep of element.details.dependents" class="dependent-card">
+                            <div class="dependent-header">
+                              <mat-icon>person</mat-icon>
+                              <span class="dependent-name">{{ dep.fullName }}</span>
+                              <span class="dependent-percentage">{{ dep.adjustedPercentage || dep.percentage }}%</span>
+                            </div>
+                            <div class="dependent-details">
+                              <span><strong>Relationship:</strong> {{ getDependentRelationshipLabel(dep.relationship) }}</span>
+                              <span><strong>Date of Birth:</strong> {{ dep.dateOfBirth }}</span>
+                              <span><strong>ID Number:</strong> {{ dep.identificationNumber }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+
+                    <!-- Bank Account(s) -->
+                    <mat-card class="detail-section">
+                      <mat-card-header>
+                        <mat-icon mat-card-avatar>account_balance</mat-icon>
+                        <mat-card-title>Bank Account Information</mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <!-- Single Bank Account (for non-survivor benefits) -->
+                        <div *ngIf="element.details.bankAccount" class="info-grid">
+                          <div class="info-item">
+                            <span class="info-label">Bank Name:</span>
+                            <span class="info-value">{{ element.details.bankAccount.bankName }}</span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Account Number:</span>
+                            <span class="info-value">{{ element.details.bankAccount.accountNumber }}</span>
+                          </div>
+                          <div class="info-item">
+                            <span class="info-label">Account Holder:</span>
+                            <span class="info-value">{{ element.details.bankAccount.accountHolderName }}</span>
+                          </div>
+                        </div>
+
+                        <!-- Multiple Bank Accounts (for survivor-pension) -->
+                        <div *ngIf="element.details.dependentBankAccounts && element.details.dependentBankAccounts.length > 0" class="bank-accounts-list">
+                          <div *ngFor="let account of element.details.dependentBankAccounts" class="bank-account-card">
+                            <div class="bank-account-header">
+                              <mat-icon>account_balance_wallet</mat-icon>
+                              <span class="account-percentage">{{ account.percentage }}%</span>
+                            </div>
+                            <div class="bank-account-details">
+                              <span><strong>Bank:</strong> {{ account.bankName }}</span>
+                              <span><strong>Account Number:</strong> {{ account.accountNumber }}</span>
+                              <span><strong>Account Holder:</strong> {{ account.accountHolderName }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+
+                    <!-- Documents -->
+                    <mat-card class="detail-section">
+                      <mat-card-header>
+                        <mat-icon mat-card-avatar>description</mat-icon>
+                        <mat-card-title>Submitted Documents ({{ element.details.documents.length }})</mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                        <div class="documents-list">
+                          <div *ngFor="let doc of element.details.documents" class="document-item">
+                            <mat-icon class="document-icon">insert_drive_file</mat-icon>
+                            <div class="document-info">
+                              <span class="document-name">{{ doc.fileName }}</span>
+                              <span class="document-meta">{{ doc.type }} • {{ formatFileSize(doc.fileSize) }}</span>
+                            </div>
+                            <button mat-icon-button (click)="downloadDocument(doc)" matTooltip="Download">
+                              <mat-icon>download</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                      </mat-card-content>
+                    </mat-card>
+                  </div>
+
+                  <!-- Loading State -->
+                  <div *ngIf="element.expanded && !element.details" class="loading-details">
+                    <mat-spinner diameter="40"></mat-spinner>
+                    <p>Loading request details...</p>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" 
+                [class.row-expired]="row.status === 'expired'"
+                [class.row-approved]="row.status === 'approved'"
+                [class.row-rejected]="row.status === 'rejected'"
+                [class.row-expanded]="row.expanded"
+                class="request-row">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+          </table>
+        </div>
+
+        <!-- Processing Overlay -->
+        <div *ngIf="isProcessing" class="processing-overlay">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Processing...</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="dialog-container">
+  <!-- Header -->
+  <div class="dialog-header">
+    <mat-icon class="dialog-icon">{{ getIcon() }}</mat-icon>
+    <h2 mat-dialog-title>{{ getTitle() }}</h2>
+  </div>
+
+  <!-- Content -->
+  <mat-dialog-content class="dialog-content">
+    <!-- Citizen Info -->
+    <div class="info-section">
+      <div class="info-row">
+        <span class="label">Citizen:</span>
+        <span class="value">{{ data.citizenName }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">NISS:</span>
+        <span class="value">{{ data.citizenNiss }}</span>
+      </div>
+      <div class="info-row" *ngIf="data.sector">
+        <span class="label">Sector:</span>
+        <span class="value">{{ data.sector }}</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Comparison -->
+    <div class="comparison-section">
+      <div class="comparison-row current">
+        <span class="comparison-label">Current:</span>
+        <span class="comparison-value">{{ data.currentValue }}</span>
+      </div>
+      <div class="comparison-row required">
+        <span class="comparison-label">Required:</span>
+        <span class="comparison-value">{{ data.requiredValue }}</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- Message -->
+    <div class="message-section">
+      <p class="rejection-message">
+        This citizen does <strong>NOT meet</strong> the minimum 
+        {{ data.reason === 'age' ? 'age' : 'contribution' }} 
+        requirement for Old-Age Pension.
+      </p>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="suggestions-section" *ngIf="data.suggestions.length > 0">
+      <h4>Options:</h4>
+      <ul>
+        <li *ngFor="let suggestion of data.suggestions">{{ suggestion }}</li>
+      </ul>
+    </div>
+  </mat-dialog-content>
+
+  <!-- Actions -->
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button (click)="onClose()">
+      Close
+    </button>
+    <button mat-raised-button color="primary" (click)="onBackToSearch()">
+      <mat-icon>search</mat-icon>
+      Search Another Citizen
+    </button>
+  </mat-dialog-actions>
+</div>
+

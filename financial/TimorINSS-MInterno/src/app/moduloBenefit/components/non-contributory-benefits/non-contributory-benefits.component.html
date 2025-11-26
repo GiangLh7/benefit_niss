@@ -1,0 +1,137 @@
+<div class="non-contributory-container">
+  <h2 class="section-title">Non-Contributory Benefits Selection</h2>
+  <p class="section-description">
+    Select the type of social assistance benefit. Each benefit type has specific eligibility criteria and assistance amounts.
+  </p>
+
+  <!-- Benefit Type Selection -->
+  <div class="benefit-selection">
+    <mat-form-field appearance="outline" class="benefit-select">
+      <mat-label>Select Benefit Type</mat-label>
+      <mat-select [formControl]="benefitTypeControl" placeholder="Choose benefit type">
+        <mat-option *ngFor="let benefit of availableBenefits" [value]="benefit.id">
+          <div class="benefit-option">
+            <span class="benefit-name">{{ benefit.label }}</span>
+            <span class="benefit-amount">{{ getBenefitAmount(benefit) }}</span>
+          </div>
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>volunteer_activism</mat-icon>
+      <mat-error *ngIf="benefitTypeControl.hasError('required')">
+        Please select a benefit type
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!-- Selected Benefit Details -->
+  <mat-card *ngIf="selectedBenefit" class="benefit-details-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="benefit-icon">{{ isEligible ? 'check_circle' : 'info' }}</mat-icon>
+      <mat-card-title>{{ selectedBenefit.label }}</mat-card-title>
+      <mat-card-subtitle>{{ selectedBenefit.description }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Ineligibility Message -->
+      <div *ngIf="!isEligible" class="ineligibility-alert">
+        <mat-icon>warning</mat-icon>
+        <div>
+          <strong>Not Eligible</strong>
+          <p>{{ ineligibilityReason }}</p>
+        </div>
+      </div>
+
+      <!-- Eligibility Details -->
+      <div *ngIf="isEligible">
+        <!-- Benefit Amount -->
+        <div class="benefit-amount-section">
+          <div class="amount-display">
+            <span class="amount-label">Benefit Amount:</span>
+            <span class="amount-value">{{ getBenefitAmount(selectedBenefit) }}</span>
+          </div>
+          <div class="frequency-badge" [ngClass]="getFrequencyClass(selectedBenefit.frequency)">
+            <mat-icon>schedule</mat-icon>
+            {{ getFrequencyLabel(selectedBenefit.frequency) }}
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Eligibility Criteria -->
+        <div class="criteria-section">
+          <h4><mat-icon>check_circle_outline</mat-icon> Eligibility Criteria:</h4>
+          <ul class="criteria-list">
+            <li *ngFor="let criterion of selectedBenefit.eligibilityCriteria">
+              <mat-icon>check</mat-icon>
+              <span>{{ criterion }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <!-- Required Documents -->
+        <div class="documents-section">
+          <h4><mat-icon>description</mat-icon> Required Documents:</h4>
+          <ul class="documents-list">
+            <li *ngFor="let doc of selectedBenefit.requiredDocuments">
+              <mat-icon>article</mat-icon>
+              <span>{{ doc }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Important Notes -->
+        <div class="notes-section">
+          <mat-icon>info</mat-icon>
+          <div class="notes-content">
+            <strong>Important Notes:</strong>
+            <p *ngIf="selectedBenefit.frequency === 'monthly'">
+              This benefit will be paid monthly to the beneficiary's bank account.
+            </p>
+            <p *ngIf="selectedBenefit.frequency === 'one-time'">
+              This is a one-time payment to support specific circumstances.
+            </p>
+            <p *ngIf="selectedBenefit.frequency === 'flexible'">
+              The amount and frequency will be determined based on individual case assessment.
+            </p>
+            <p *ngIf="selectedBenefit.ageRequirement">
+              <strong>Age Requirement:</strong>
+              <span *ngIf="selectedBenefit.ageRequirement.min && !selectedBenefit.ageRequirement.max">
+                Minimum {{ selectedBenefit.ageRequirement.min }} years old
+              </span>
+              <span *ngIf="!selectedBenefit.ageRequirement.min && selectedBenefit.ageRequirement.max">
+                Maximum {{ selectedBenefit.ageRequirement.max }} years old
+              </span>
+              <span *ngIf="selectedBenefit.ageRequirement.min && selectedBenefit.ageRequirement.max">
+                Between {{ selectedBenefit.ageRequirement.min }} and {{ selectedBenefit.ageRequirement.max }} years old
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Information Card (no selection yet) -->
+  <mat-card *ngIf="!selectedBenefit" class="info-card">
+    <mat-card-content>
+      <div class="info-message">
+        <mat-icon>info</mat-icon>
+        <div>
+          <h3>About Non-Contributory Benefits</h3>
+          <p>
+            Non-contributory benefits (SAII - Subsídio de Apoio a Idosos e Inválidos) are social assistance 
+            programs for citizens who do not have social security contribution history. These benefits provide 
+            financial support to elderly, disabled persons, children, and those in emergency situations.
+          </p>
+          <p>
+            Please select a benefit type above to view detailed information about eligibility criteria, 
+            benefit amounts, and required documents.
+          </p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

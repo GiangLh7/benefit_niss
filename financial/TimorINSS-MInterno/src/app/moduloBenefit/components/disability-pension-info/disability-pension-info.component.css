@@ -1,0 +1,344 @@
+.disability-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* Input Card - Simplified */
+.input-card {
+  background-color: #e3f2fd;
+  border-left: 4px solid #2196f3;
+}
+
+.input-card mat-card-header {
+  color: #1565c0;
+}
+
+.input-card mat-card-title {
+  color: #1565c0;
+  font-weight: 600;
+}
+
+.input-card mat-card-subtitle {
+  color: #424242;
+}
+
+.input-icon {
+  background-color: #2196f3;
+  color: white;
+}
+
+.disability-input {
+  width: 100%;
+  margin-top: 15px;
+}
+
+.disability-input ::ng-deep .mat-form-field-wrapper {
+  background-color: white;
+  border-radius: 4px;
+  padding: 0 10px;
+}
+
+.info-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 12px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #90caf9;
+  color: #424242;
+}
+
+.info-note mat-icon {
+  color: #2196f3;
+  margin-top: 2px;
+}
+
+.info-note p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Ineligibility Card */
+.ineligibility-card {
+  background-color: #ffebee;
+  border-left: 4px solid #f44336;
+}
+
+.ineligibility-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.error-icon {
+  color: #f44336;
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+}
+
+.ineligibility-message h3 {
+  margin: 0 0 8px 0;
+  color: #c62828;
+  font-size: 18px;
+}
+
+.ineligibility-message p {
+  margin: 0;
+  color: #d32f2f;
+  font-size: 14px;
+}
+
+/* Eligibility Card - Simplified */
+.eligibility-card {
+  background-color: #e8f5e9;
+  border-left: 4px solid #4caf50;
+}
+
+.eligibility-card mat-card-header {
+  color: #2e7d32;
+}
+
+.eligibility-card mat-card-title {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.eligibility-card mat-card-subtitle {
+  color: #424242;
+}
+
+.success-icon {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Disability Type Info */
+.type-info {
+  margin-bottom: 20px;
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  background-color: white;
+}
+
+.type-badge.absolute {
+  background-color: #ffebee;
+  border-left: 3px solid #f44336;
+  color: #c62828;
+}
+
+.type-badge.relative {
+  background-color: #fff3e0;
+  border-left: 3px solid #ff9800;
+  color: #e65100;
+}
+
+.type-badge mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.type-description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #424242;
+}
+
+mat-divider {
+  margin: 20px 0;
+  border-top-color: #e0e0e0;
+}
+
+/* Calculation Section */
+.calculation-section h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.calculation-formula {
+  background-color: white;
+  padding: 15px;
+  border-radius: 4px;
+  border: 1px solid #c8e6c9;
+}
+
+.formula-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.formula-label {
+  font-weight: 500;
+  color: #616161;
+}
+
+.formula-text {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  font-weight: 600;
+  color: #212121;
+}
+
+.formula-value {
+  font-weight: 600;
+  font-size: 15px;
+  color: #212121;
+}
+
+.formula-value.highlight {
+  color: #2e7d32;
+  font-size: 18px;
+}
+
+/* Notes Section */
+.notes-section {
+  margin-top: 20px;
+}
+
+.notes-section h4 {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.note-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+  padding: 12px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #c8e6c9;
+}
+
+.note-icon {
+  margin-top: 2px;
+  flex-shrink: 0;
+  color: #4caf50;
+}
+
+.note-item strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+  color: #2e7d32;
+}
+
+.note-item p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #424242;
+}
+
+/* Pension Summary */
+.pension-summary {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 4px;
+  border: 2px solid #4caf50;
+  text-align: center;
+}
+
+.summary-amount {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #616161;
+}
+
+.summary-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.summary-note {
+  margin: 15px 0 0 0;
+  font-size: 12px;
+  color: #616161;
+  font-style: italic;
+}
+
+/* Requirements Card */
+.requirements-card {
+  background-color: #f5f5f5;
+  border-left: 4px solid #bdbdbd;
+}
+
+.requirement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  border-left: 3px solid #bdbdbd;
+  transition: all 0.3s ease;
+}
+
+.requirement-item.met {
+  border-left-color: #4caf50;
+}
+
+.requirement-item.met mat-icon {
+  color: #4caf50;
+}
+
+.requirement-item mat-icon {
+  color: #bdbdbd;
+}
+
+.requirement-item span {
+  font-size: 14px;
+  color: #424242;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .disability-info-container {
+    padding: 10px 0;
+  }
+
+  .formula-line {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .summary-value {
+    font-size: 24px;
+  }
+}

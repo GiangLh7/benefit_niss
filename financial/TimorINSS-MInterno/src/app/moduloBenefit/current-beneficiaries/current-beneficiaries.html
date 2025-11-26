@@ -1,0 +1,248 @@
+<div class="beneficiaries-container">
+  <mat-toolbar color="primary" class="beneficiaries-toolbar">
+    <button mat-icon-button (click)="goBack()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="toolbar-title">Current Beneficiaries</span>
+    <span class="toolbar-spacer"></span>
+  </mat-toolbar>
+
+  <div class="beneficiaries-content">
+    <mat-card class="beneficiaries-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>people</mat-icon>
+          Beneficiary Lists
+        </mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-tab-group>
+          <mat-tab label="Non-Contributory">
+            <div class="tab-body">
+              <div class="table-header">
+                <div>
+                  <h2>Payment Request List</h2>
+                  <p>List of beneficiaries enrolled in non-contributory schemes.</p>
+                </div>
+                <div class="table-actions">
+                  <button mat-stroked-button color="primary" (click)="goBack()">
+                    Back to Verification
+                  </button>
+                  <button mat-flat-button color="primary" (click)="generatePaymentList()">
+                    Generate Payment List
+                  </button>
+                </div>
+              </div>
+
+              <div class="table-wrapper">
+                <table mat-table [dataSource]="nonContributoryBeneficiaries" class="mat-elevation-z8 beneficiaries-table">
+                  <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef>#</th>
+                    <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>Type of Pension</th>
+                    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="niss">
+                    <th mat-header-cell *matHeaderCellDef>NISS</th>
+                    <td mat-cell *matCellDef="let element">{{ element.niss }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="electoralId">
+                    <th mat-header-cell *matHeaderCellDef>Electoral ID</th>
+                    <td mat-cell *matCellDef="let element">{{ element.electoralId }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="noBi">
+                    <th mat-header-cell *matHeaderCellDef>No BI</th>
+                    <td mat-cell *matCellDef="let element">{{ element.noBi }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="fullName">
+                    <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.fullName }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="municipality">
+                    <th mat-header-cell *matHeaderCellDef>Municipality</th>
+                    <td mat-cell *matCellDef="let element">{{ element.municipality }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="post">
+                    <th mat-header-cell *matHeaderCellDef>Post</th>
+                    <td mat-cell *matCellDef="let element">{{ element.post }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="suco">
+                    <th mat-header-cell *matHeaderCellDef>Suco</th>
+                    <td mat-cell *matCellDef="let element">{{ element.suco }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="subVillage">
+                    <th mat-header-cell *matHeaderCellDef>Sub-village</th>
+                    <td mat-cell *matCellDef="let element">{{ element.subVillage }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="dob">
+                    <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+                    <td mat-cell *matCellDef="let element">{{ element.dob }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="age">
+                    <th mat-header-cell *matHeaderCellDef>Age</th>
+                    <td mat-cell *matCellDef="let element">{{ element.age }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="sex">
+                    <th mat-header-cell *matHeaderCellDef>Sex</th>
+                    <td mat-cell *matCellDef="let element">{{ element.sex }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="bankName">
+                    <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.bankName }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="bankAccount">
+                    <th mat-header-cell *matHeaderCellDef>Bank Account</th>
+                    <td mat-cell *matCellDef="let element">{{ element.bankAccount }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="iban">
+                    <th mat-header-cell *matHeaderCellDef>IBAN</th>
+                    <td mat-cell *matCellDef="let element">{{ element.iban }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>Amt ($)</th>
+                    <td mat-cell *matCellDef="let element">{{ element.amount | number:'1.0-0' }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="phase">
+                    <th mat-header-cell *matHeaderCellDef>Phase</th>
+                    <td mat-cell *matCellDef="let element">{{ element.phase }}</td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Contributory">
+            <div class="tab-body">
+              <div class="table-header">
+                <div>
+                  <h2>Contributory Beneficiaries</h2>
+                  <p>Active beneficiaries enrolled in contributory pension schemes.</p>
+                </div>
+              </div>
+
+              <div class="table-wrapper">
+                <table mat-table [dataSource]="contributoryBeneficiaries" class="mat-elevation-z8 beneficiaries-table">
+                  <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef>#</th>
+                    <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>Type of Benefit</th>
+                    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="niss">
+                    <th mat-header-cell *matHeaderCellDef>NISS</th>
+                    <td mat-cell *matCellDef="let element">{{ element.niss }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="electoralId">
+                    <th mat-header-cell *matHeaderCellDef>Electoral ID</th>
+                    <td mat-cell *matCellDef="let element">{{ element.electoralId }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="noBi">
+                    <th mat-header-cell *matHeaderCellDef>No BI</th>
+                    <td mat-cell *matCellDef="let element">{{ element.noBi }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="fullName">
+                    <th mat-header-cell *matHeaderCellDef>Full Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.fullName }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="municipality">
+                    <th mat-header-cell *matHeaderCellDef>Municipality</th>
+                    <td mat-cell *matCellDef="let element">{{ element.municipality }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="post">
+                    <th mat-header-cell *matHeaderCellDef>Post</th>
+                    <td mat-cell *matCellDef="let element">{{ element.post }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="suco">
+                    <th mat-header-cell *matHeaderCellDef>Suco</th>
+                    <td mat-cell *matCellDef="let element">{{ element.suco }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="subVillage">
+                    <th mat-header-cell *matHeaderCellDef>Sub-village</th>
+                    <td mat-cell *matCellDef="let element">{{ element.subVillage }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="dob">
+                    <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+                    <td mat-cell *matCellDef="let element">{{ element.dob }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="age">
+                    <th mat-header-cell *matHeaderCellDef>Age</th>
+                    <td mat-cell *matCellDef="let element">{{ element.age }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="sex">
+                    <th mat-header-cell *matHeaderCellDef>Sex</th>
+                    <td mat-cell *matCellDef="let element">{{ element.sex }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="bankName">
+                    <th mat-header-cell *matHeaderCellDef>Bank Name</th>
+                    <td mat-cell *matCellDef="let element">{{ element.bankName }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="bankAccount">
+                    <th mat-header-cell *matHeaderCellDef>Bank Account</th>
+                    <td mat-cell *matCellDef="let element">{{ element.bankAccount }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="iban">
+                    <th mat-header-cell *matHeaderCellDef>IBAN</th>
+                    <td mat-cell *matCellDef="let element">{{ element.iban }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>Amt ($)</th>
+                    <td mat-cell *matCellDef="let element">{{ element.amount | number:'1.0-0' }}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="phase">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let element">{{ element.phase }}</td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="disability-info-container">
+  <!-- Input Section -->
+  <mat-card class="input-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="input-icon">medical_services</mat-icon>
+      <mat-card-title>Disability Assessment</mat-card-title>
+      <mat-card-subtitle>Enter the disability level certified by Medical Verification Board</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field appearance="outline" class="disability-input">
+        <mat-label>Disability Level (%)</mat-label>
+        <input matInput 
+               type="number" 
+               [formControl]="disabilityLevelControl"
+               min="0"
+               max="100"
+               step="0.01"
+               placeholder="e.g., 75.50">
+        <mat-icon matPrefix>percent</mat-icon>
+        <mat-hint>Minimum required: {{ MINIMUM_DISABILITY_LEVEL }}%</mat-hint>
+        <mat-error *ngIf="disabilityLevelControl.hasError('required')">
+          Disability level is required
+        </mat-error>
+        <mat-error *ngIf="disabilityLevelControl.hasError('min')">
+          Must be at least 0%
+        </mat-error>
+        <mat-error *ngIf="disabilityLevelControl.hasError('max')">
+          Cannot exceed 100%
+        </mat-error>
+      </mat-form-field>
+
+      <div class="info-note" *ngIf="disabilityLevel === 0">
+        <mat-icon>info</mat-icon>
+        <p>Please enter the disability level as certified by the Medical Verification Board (Serviço de Verificação de Incapacidades)</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Ineligibility Message -->
+  <mat-card class="ineligibility-card" *ngIf="disabilityLevel > 0 && !isEligible">
+    <mat-card-content>
+      <div class="ineligibility-message">
+        <mat-icon class="error-icon">cancel</mat-icon>
+        <div>
+          <h3>Not Eligible for Disability Pension</h3>
+          <p>{{ ineligibilityReason }}</p>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Eligibility Summary -->
+  <mat-card class="eligibility-card" *ngIf="isEligible">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="success-icon">check_circle</mat-icon>
+      <mat-card-title>Eligible for Disability Pension</mat-card-title>
+      <mat-card-subtitle>{{ getDisabilityTypeLabel() }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Disability Type Info -->
+      <div class="type-info">
+        <div class="type-badge" [class.absolute]="disabilityType === 'absolute'" [class.relative]="disabilityType === 'relative'">
+          <mat-icon>{{ disabilityType === 'absolute' ? 'block' : 'work_outline' }}</mat-icon>
+          <span>{{ disabilityLevel }}%</span>
+        </div>
+        <p class="type-description">{{ getDisabilityTypeDescription() }}</p>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Calculation Details -->
+      <div class="calculation-section">
+        <h4>Pension Calculation</h4>
+        <div class="calculation-formula">
+          <div class="formula-line">
+            <span class="formula-label">Formula:</span>
+            <span class="formula-text">P = R × (N / 360)</span>
+          </div>
+          <div class="formula-line">
+            <span class="formula-label">P (Pension):</span>
+            <span class="formula-value highlight">{{ formatCurrency(estimatedPension) }}/month</span>
+          </div>
+          <div class="formula-line">
+            <span class="formula-label">R (Reference):</span>
+            <span class="formula-value">{{ formatCurrency(referenceRemuneration) }}</span>
+          </div>
+          <div class="formula-line">
+            <span class="formula-label">N (Months):</span>
+            <span class="formula-value">{{ contributionMonths }} months</span>
+          </div>
+        </div>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <!-- Important Notes -->
+      <div class="notes-section">
+        <h4>Important Information</h4>
+        <div class="note-item">
+          <mat-icon class="note-icon">{{ canWork() ? 'check' : 'close' }}</mat-icon>
+          <div>
+            <strong>Work Permission:</strong>
+            <p *ngIf="canWork()">
+              You MAY work with limited income. Total income (pension + salary) must not exceed 200% of reference remuneration ({{ formatCurrency(referenceRemuneration * 2) }}).
+            </p>
+            <p *ngIf="!canWork()">
+              You CANNOT work while receiving Absolute Disability Pension. If you work, the pension will stop and you must refund received amounts.
+            </p>
+          </div>
+        </div>
+
+        <div class="note-item">
+          <mat-icon class="note-icon">autorenew</mat-icon>
+          <div>
+            <strong>Auto-Conversion at Age 60:</strong>
+            <p *ngIf="getYearsUntilConversion() > 0">
+              Your Disability Pension will automatically convert to Old-Age Pension in {{ getYearsUntilConversion() }} years (when you reach age 60).
+            </p>
+            <p *ngIf="getYearsUntilConversion() === 0">
+              You are at or past the conversion age. This pension will be processed as Old-Age Pension.
+            </p>
+          </div>
+        </div>
+
+        <div class="note-item">
+          <mat-icon class="note-icon">verified</mat-icon>
+          <div>
+            <strong>Medical Certification Required:</strong>
+            <p>You must provide certification from the Medical Verification Board (Serviço de Verificação de Incapacidades) confirming the disability level and permanence.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estimated Pension Summary -->
+      <div class="pension-summary">
+        <div class="summary-amount">
+          <span class="summary-label">Estimated Monthly Pension:</span>
+          <span class="summary-value">{{ formatCurrency(estimatedPension) }}</span>
+        </div>
+        <p class="summary-note">*Based on reference remuneration of {{ formatCurrency(referenceRemuneration) }}. Actual amount may vary based on contribution history analysis.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Requirements Card -->
+  <mat-card class="requirements-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>rule</mat-icon>
+      <mat-card-title>Disability Pension Requirements</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="requirement-list">
+        <div class="requirement-item" [class.met]="disabilityLevel >= MINIMUM_DISABILITY_LEVEL">
+          <mat-icon>{{ disabilityLevel >= MINIMUM_DISABILITY_LEVEL ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          <span>Disability Level ≥ {{ MINIMUM_DISABILITY_LEVEL }}% ({{ disabilityLevel }}%)</span>
+        </div>
+        <div class="requirement-item" [class.met]="contributionMonths >= MINIMUM_CONTRIBUTION_MONTHS">
+          <mat-icon>{{ contributionMonths >= MINIMUM_CONTRIBUTION_MONTHS ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+          <span>Contribution ≥ {{ MINIMUM_CONTRIBUTION_MONTHS }} months ({{ contributionMonths }} months)</span>
+        </div>
+        <div class="requirement-item">
+          <mat-icon>radio_button_unchecked</mat-icon>
+          <span>Medical Certification (to be verified)</span>
+        </div>
+        <div class="requirement-item">
+          <mat-icon>radio_button_unchecked</mat-icon>
+          <span>Permanent Condition (cannot recover within 3 years)</span>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

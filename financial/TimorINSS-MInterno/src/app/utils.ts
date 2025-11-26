@@ -495,8 +495,8 @@ export function populateChartColors(chartColors: any[], chartOptionsArray: Chart
 {
   chartColors[0].backgroundColor = [];
   chartOptionsArray.forEach(chartOptions => {
-    if(chartOptions.plugins)
-      (chartOptions.plugins as any).labels.fontColor = [];
+    // if(chartOptions.plugins && chartOptions.plugins?.labels)
+    //   (chartOptions.plugins as any).labels.fontColor = [];
   });
   for(let i = 0; i < numberColors; i++)
   {
@@ -505,7 +505,7 @@ export function populateChartColors(chartColors: any[], chartOptionsArray: Chart
     let colorString = 'rgba(' + color.values.rgb + ',' + color.values.alpha + ')';
     chartColors[0].backgroundColor.push(colorString);
     chartOptionsArray.forEach(chartOptions => {
-      (chartOptions.plugins as any)?.labels.fontColor.push(getContrast(color.values.rgb));
+      // (chartOptions.plugins as any)?.labels.fontColor.push(getContrast(color.values.rgb));
     });
   }
 }

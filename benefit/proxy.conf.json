@@ -1,0 +1,9 @@
+{
+  "/api": {
+    "target": "http://fin.timorniss.online:5000",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
+

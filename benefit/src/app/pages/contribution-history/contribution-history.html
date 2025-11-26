@@ -1,0 +1,86 @@
+<div class="contribution-page">
+  <header class="page-header">
+    <div>
+      <h1>Contribution History</h1>
+      <p class="subtitle">
+        Review all reported contributions and monthly declarations for this citizen.
+      </p>
+    </div>
+    <button type="button" class="back-button" (click)="viewDashboard()">Back to Dashboard</button>
+  </header>
+
+  <section class="card tab-header">
+    <button
+      type="button"
+      class="tab"
+      [ngClass]="{ active: selectedTab() === 'social' }"
+      (click)="onSelectTab('social')"
+    >
+      Social Contribution History
+    </button>
+    <button
+      type="button"
+      class="tab"
+      [ngClass]="{ active: selectedTab() === 'monthly' }"
+      (click)="onSelectTab('monthly')"
+    >
+      Contributor by Month
+    </button>
+  </section>
+
+  <section class="card content">
+    <div *ngIf="loading()" class="state state--loading">Loading contribution history…</div>
+    <div *ngIf="!loading() && error()" class="state state--error">{{ error() }}</div>
+
+    <ng-container *ngIf="!loading() && !error() && data() as history">
+      <div *ngIf="selectedTab() === 'social'" class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>From Date</th>
+              <th>To Date</th>
+              <th>Employer</th>
+              <th>Insurance Premium</th>
+              <th>Regime</th>
+              <th>Contribution Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let record of history.socialHistory">
+              <td>{{ record.fromDate }}</td>
+              <td>{{ record.toDate }}</td>
+              <td>{{ record.employer }}</td>
+              <td>{{ record.premium }}</td>
+              <td>{{ record.regime }}</td>
+              <td>{{ record.contributionType }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div *ngIf="selectedTab() === 'monthly'" class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Working Days</th>
+              <th>Declared Remuneration (USD)</th>
+              <th>Regime</th>
+              <th>Adherence Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of history.monthlyBreakdown">
+              <td>{{ row.month }}</td>
+              <td>{{ row.workingDays }}</td>
+              <td>{{ row.declaredRemuneration }}</td>
+              <td>{{ row.regime }}</td>
+              <td>{{ row.adherenceType }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+  </section>
+</div>
+

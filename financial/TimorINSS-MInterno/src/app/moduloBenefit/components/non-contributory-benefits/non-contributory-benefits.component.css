@@ -1,0 +1,318 @@
+.non-contributory-container {
+  padding: 20px 0;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #212121;
+}
+
+.section-description {
+  font-size: 14px;
+  color: #616161;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* Benefit Selection */
+.benefit-selection {
+  margin-bottom: 24px;
+}
+
+.benefit-select {
+  width: 100%;
+}
+
+.benefit-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.benefit-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.benefit-amount {
+  color: #2e7d32;
+  font-weight: 600;
+  font-size: 14px;
+  margin-left: 16px;
+}
+
+/* Benefit Details Card */
+.benefit-details-card {
+  background-color: #f5f5f5;
+  border-left: 4px solid #4caf50;
+}
+
+.benefit-details-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.benefit-icon {
+  background-color: #4caf50;
+  color: white;
+}
+
+.benefit-details-card mat-card-title {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.benefit-details-card mat-card-subtitle {
+  color: #424242;
+}
+
+/* Ineligibility Alert */
+.ineligibility-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: #fff3e0;
+  border-left: 4px solid #ff9800;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.ineligibility-alert mat-icon {
+  color: #ff9800;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.ineligibility-alert strong {
+  display: block;
+  color: #e65100;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.ineligibility-alert p {
+  margin: 0;
+  color: #424242;
+  font-size: 14px;
+}
+
+/* Benefit Amount Section */
+.benefit-amount-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: white;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 2px solid #4caf50;
+}
+
+.amount-display {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.amount-label {
+  font-size: 14px;
+  color: #616161;
+}
+
+.amount-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.frequency-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.frequency-badge mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+.frequency-monthly {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.frequency-onetime {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.frequency-flexible {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+mat-divider {
+  margin: 20px 0;
+}
+
+/* Criteria Section */
+.criteria-section h4,
+.documents-section h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #2e7d32;
+  margin: 0 0 12px 0;
+}
+
+.criteria-section h4 mat-icon,
+.documents-section h4 mat-icon {
+  color: #4caf50;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.criteria-list,
+.documents-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.criteria-list li,
+.documents-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  border-left: 3px solid #4caf50;
+}
+
+.criteria-list li mat-icon,
+.documents-list li mat-icon {
+  color: #4caf50;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.criteria-list li span,
+.documents-list li span {
+  font-size: 14px;
+  color: #424242;
+  line-height: 1.5;
+}
+
+/* Notes Section */
+.notes-section {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: #e3f2fd;
+  border-left: 4px solid #2196f3;
+  border-radius: 4px;
+  display: flex;
+  gap: 12px;
+}
+
+.notes-section > mat-icon {
+  color: #2196f3;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.notes-content {
+  flex: 1;
+}
+
+.notes-content strong {
+  display: block;
+  color: #1565c0;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.notes-content p {
+  margin: 6px 0;
+  font-size: 13px;
+  color: #424242;
+  line-height: 1.5;
+}
+
+/* Info Card (no selection) */
+.info-card {
+  background-color: #f5f5f5;
+  border-left: 4px solid #2196f3;
+}
+
+.info-message {
+  display: flex;
+  gap: 16px;
+}
+
+.info-message > mat-icon {
+  color: #2196f3;
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.info-message h3 {
+  margin: 0 0 12px 0;
+  color: #1565c0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.info-message p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #424242;
+  line-height: 1.6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .benefit-amount-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .amount-value {
+    font-size: 24px;
+  }
+
+  .info-message {
+    flex-direction: column;
+  }
+
+  .info-message > mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+}
+

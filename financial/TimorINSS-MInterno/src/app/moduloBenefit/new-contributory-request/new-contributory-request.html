@@ -1,0 +1,332 @@
+<div class="new-request-container">
+  <mat-toolbar color="primary" class="request-toolbar">
+    <button mat-icon-button (click)="cancel()" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="toolbar-title">New Contributory Request</span>
+    <span class="toolbar-spacer"></span>
+  </mat-toolbar>
+
+  <div class="request-content">
+    <mat-stepper [linear]="true" #stepper (selectionChange)="onStepChange($event)">
+      
+      <!-- Step 1: Citizen Search -->
+      <mat-step [stepControl]="nissFormControl" [completed]="citizenFound">
+        <ng-template matStepLabel>Citizen Information</ng-template>
+        
+        <div class="step-content">
+          <h2 class="step-title">Search Citizen by NISS</h2>
+          <p class="step-description">Enter the NISS number to search for citizen information</p>
+
+          <div class="search-section">
+            <mat-form-field appearance="outline" class="niss-input">
+              <mat-label>NISS Number</mat-label>
+              <input matInput 
+                     [formControl]="nissFormControl"
+                     placeholder="TL123456789"
+                     (keyup.enter)="searchCitizen()"
+                     maxlength="20">
+              <mat-icon matPrefix>badge</mat-icon>
+              <button mat-icon-button 
+                      matSuffix 
+                      *ngIf="nissFormControl.value && !isSearching"
+                      (click)="nissFormControl.setValue(''); citizenInfo = null; citizenFound = false; searchError = null;"
+                      type="button">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-spinner matSuffix diameter="20" *ngIf="isSearching"></mat-spinner>
+              <mat-error *ngIf="nissFormControl.hasError('required')">
+                NISS number is required
+              </mat-error>
+            </mat-form-field>
+
+            <button mat-raised-button 
+                    color="primary" 
+                    class="search-button"
+                    (click)="searchCitizen()"
+                    [disabled]="!nissFormControl.value || isSearching">
+              <mat-icon>search</mat-icon>
+              Search
+            </button>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="searchError" class="error-message">
+            <mat-icon>error</mat-icon>
+            <span>{{ searchError }}</span>
+          </div>
+
+          <!-- Citizen Info Card -->
+          <mat-card *ngIf="citizenInfo && citizenFound" class="citizen-card">
+            <mat-card-header>
+              <div class="citizen-avatar">
+                <mat-icon>person</mat-icon>
+              </div>
+              <mat-card-title>{{ citizenInfo.name }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="citizen-details">
+                <div class="detail-item">
+                  <mat-icon>badge</mat-icon>
+                  <span><strong>NISS:</strong> {{ citizenInfo.niss }}</span>
+                </div>
+                <div class="detail-item">
+                  <mat-icon>cake</mat-icon>
+                  <span><strong>Date of Birth:</strong> {{ citizenInfo.dateOfBirth }}</span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Contribution History Component (loads automatically when citizen is found) -->
+          <app-contribution-history
+            *ngIf="citizenFound && citizenInfo"
+            [citizenNiss]="citizenInfo.niss"
+            [dateOfBirth]="citizenInfo.dateOfBirth"
+            (contributionDataLoaded)="onContributionDataLoaded($event)">
+          </app-contribution-history>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button (click)="cancel()">Cancel</button>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="nextStep()"
+                  [disabled]="!citizenFound">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 2: Choose Scheme Type -->
+      <mat-step [stepControl]="schemeTypeFormControl">
+        <ng-template matStepLabel>Choose Scheme Type</ng-template>
+        
+        <div class="step-content">
+          <h2 class="step-title">Choosing Type of Benefit</h2>
+          <p class="step-description">Select the type of contributory scheme</p>
+
+          <div class="scheme-selection">
+            <mat-card class="scheme-card" 
+                      [class.selected]="selectedSchemeType === 'contributory'">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>account_balance</mat-icon>
+                  Contributory Regime
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-radio-group [formControl]="schemeTypeFormControl">
+                  <mat-radio-button *ngFor="let benefit of contributoryBenefitTypes" 
+                                    [value]="benefit.value" 
+                                    class="scheme-option"
+                                    (change)="selectSchemeType('contributory', benefit.value)">
+                    {{ benefit.label }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </mat-card-content>
+            </mat-card>
+
+            <mat-card class="scheme-card" 
+                      [class.selected]="selectedSchemeType === 'non-contributory'"
+                      *ngIf="showNonContributory">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>description</mat-icon>
+                  Non-Contributory Regime
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <mat-radio-group [formControl]="schemeTypeFormControl">
+                  <mat-radio-button *ngFor="let benefit of nonContributoryBenefitTypes" 
+                                    [value]="benefit.value" 
+                                    class="scheme-option"
+                                    (change)="selectSchemeType('non-contributory', benefit.value)">
+                    {{ benefit.label }}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <!-- Survivor's Pension Component -->
+          <app-survivor-pension-info
+            *ngIf="showSurvivorForm"
+            [funeralAllowanceAmount]="funeralAllowanceAmount"
+            [contributionMonths]="contributionMonths"
+            (dependentsChanged)="onDependentsChanged($event)">
+          </app-survivor-pension-info>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button (click)="previousStep()">Back</button>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="nextStep()"
+                  [disabled]="!canProceedToNextStep()">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 3: Non-Contributory Benefit Selection -->
+      <!-- Only show for non-contributory regime -->
+      <mat-step *ngIf="selectedSchemeType === 'non-contributory'">
+        <ng-template matStepLabel>Select Benefit Type</ng-template>
+        
+        <div class="step-content">
+          <app-non-contributory-benefits
+            [citizenAge]="currentAge ? parseInt(currentAge) : 0"
+            [citizenName]="citizenInfo?.name || ''"
+            (benefitSelected)="onNonContributoryBenefitSelected($event)">
+          </app-non-contributory-benefits>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button (click)="previousStep()">Back</button>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="nextStep()"
+                  [disabled]="!canProceedToNextStep()">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 3: Survivor Benefit Type Selection -->
+      <!-- Only show for survivor pension after dependents are added -->
+      <mat-step *ngIf="selectedSchemeType === 'contributory' && selectedBenefitType === 'survivor-pension' && dependents.length > 0">
+        <ng-template matStepLabel>Select Benefit Type</ng-template>
+        
+        <div class="step-content">
+          <app-survivor-benefit-type
+            [dependents]="dependents"
+            [referenceRemuneration]="getReferenceRemuneration()"
+            [contributionMonths]="contributionMonths"
+            [deceasedAge]="citizenInfo ? calculateAge(citizenInfo.dateOfBirth).years : 0"
+            [deceasedEstimatedPension]="calculateDeceasedEstimatedPension()"
+            (benefitTypeSelected)="onSurvivorBenefitTypeSelected($event)">
+          </app-survivor-benefit-type>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button (click)="previousStep()">Back</button>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="nextStep()"
+                  [disabled]="!canProceedToNextStep()">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 3A: Disability Pension Information -->
+      <!-- Only show for disability pension -->
+      <mat-step *ngIf="selectedSchemeType === 'contributory' && selectedBenefitType === 'disability-pension'">
+        <ng-template matStepLabel>Disability Assessment</ng-template>
+        
+        <div class="step-content">
+          <h2 class="step-title">Disability Pension Information</h2>
+          <p class="step-description">Enter disability level and review eligibility</p>
+
+          <app-disability-pension-info
+            [contributionMonths]="contributionMonths"
+            [currentAge]="citizenInfo ? (citizenInfo.dateOfBirth | date:'yyyy') : 0"
+            [sector]="citizenInfo?.employmentSector || 'private'"
+            (disabilityInfoChanged)="onDisabilityInfoChanged($event)">
+          </app-disability-pension-info>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button (click)="previousStep()">Back</button>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="nextStep()"
+                  [disabled]="!disabilityInfo || !disabilityInfo.isEligible">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 3B: Retirement Options (Old-Age Pension only) -->
+      <!-- Skip for survivor's pension and disability pension -->
+      <mat-step *ngIf="selectedSchemeType === 'contributory' && selectedBenefitType === 'old-age-pension'">
+        <ng-template matStepLabel>Retirement Options</ng-template>
+        
+        <div class="step-content">
+          <app-retirement-options
+            [eligibilityResult]="eligibilityResult"
+            [contributionMonths]="contributionMonths"
+            [availableRetirementOptions]="availableRetirementOptions"
+            [hazardousIndustries]="hazardousIndustries"
+            (retirementOptionSelected)="onRetirementOptionSelected($event)"
+            (validationChanged)="onRetirementValidationChanged($event)">
+          </app-retirement-options>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button (click)="previousStep()">Back</button>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="nextStep()"
+                  [disabled]="!canProceedToNextStep()">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 4: Document Upload -->
+      <mat-step>
+        <ng-template matStepLabel>Upload Documents</ng-template>
+        
+        <div class="step-content">
+          <app-document-upload
+            [benefitLabel]="getSelectedBenefitLabel()"
+            [availableDocumentTypes]="availableDocumentTypes"
+            [initialDocumentRows]="documentRows"
+            (documentsChanged)="onDocumentsChanged($event)"
+            (validationChanged)="onDocumentValidationChanged($event)">
+          </app-document-upload>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button (click)="previousStep()">Back</button>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="nextStep()"
+                  [disabled]="!canProceedToNextStep()">
+            Next
+          </button>
+        </div>
+      </mat-step>
+
+      <!-- Step 5: Bank Account Information -->
+      <mat-step>
+        <ng-template matStepLabel>Bank Account</ng-template>
+        
+        <div class="step-content">
+          <app-bank-account
+            [benefitType]="selectedBenefitType"
+            [dependents]="dependents"
+            [relationshipLabels]="relationshipLabels"
+            (bankAccountChanged)="onBankAccountChanged($event)"
+            (validationChanged)="onBankValidationChanged($event)">
+          </app-bank-account>
+        </div>
+
+        <div class="step-actions">
+          <button mat-button (click)="previousStep()">Back</button>
+          <button mat-raised-button 
+                  color="primary" 
+                  (click)="submitRequest()"
+                  [disabled]="!canProceedToNextStep() || isSubmitting">
+            <mat-spinner diameter="20" *ngIf="isSubmitting"></mat-spinner>
+            <span *ngIf="!isSubmitting">Submit Request</span>
+            <span *ngIf="isSubmitting">Submitting...</span>
+          </button>
+        </div>
+      </mat-step>
+
+    </mat-stepper>
+  </div>
+</div>

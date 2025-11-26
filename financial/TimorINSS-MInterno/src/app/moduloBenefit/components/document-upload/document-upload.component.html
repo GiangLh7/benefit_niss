@@ -1,0 +1,79 @@
+<div class="document-upload-container">
+  <h2 class="step-title">Upload Documents</h2>
+  <p class="step-description">
+    Please upload any supporting documents for your <strong>{{ benefitLabel }}</strong> application. You can add multiple documents.
+  </p>
+
+  <div class="documents-dynamic-section">
+    <!-- Document Rows -->
+    <div *ngFor="let row of documentRows; let i = index" class="document-row">
+      <div class="row-number">{{ i + 1 }}</div>
+      
+      <div class="document-type-select">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Document Type</mat-label>
+          <mat-select [(value)]="row.documentType" 
+                      (selectionChange)="onDocumentTypeSelected(row.id, $event.value)">
+            <mat-option *ngFor="let docType of availableDocumentTypes" [value]="docType.value">
+              {{ docType.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="document-file-upload">
+        <input type="file" 
+               [id]="'file-' + row.id"
+               hidden 
+               (change)="onDocumentFileSelected($event, row.id)" 
+               accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+        
+        <button *ngIf="!row.file"
+                mat-raised-button 
+                color="primary"
+                [disabled]="!row.documentType"
+                (click)="triggerFileInput(row.id)">
+          <mat-icon>upload_file</mat-icon>
+          Choose File
+        </button>
+
+        <div *ngIf="row.file" class="uploaded-file-info">
+          <mat-icon class="file-icon">insert_drive_file</mat-icon>
+          <span class="file-name" [matTooltip]="row.file.name">{{ row.file.name }}</span>
+          <mat-icon class="success-icon">check_circle</mat-icon>
+        </div>
+      </div>
+
+      <div class="document-actions">
+        <button mat-icon-button 
+                color="warn"
+                (click)="removeDocumentRow(row.id)"
+                [disabled]="documentRows.length === 1"
+                matTooltip="Remove this row">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Add Document Button -->
+    <div class="add-document-section">
+      <button mat-stroked-button 
+              color="primary"
+              (click)="addDocumentRow()">
+        <mat-icon>add</mat-icon>
+        Add Another Document
+      </button>
+    </div>
+
+    <!-- Upload Summary -->
+    <div class="upload-summary" *ngIf="documentRows.length > 0">
+      <mat-icon [class.has-documents]="hasAtLeastOneDocument()">
+        {{ hasAtLeastOneDocument() ? 'check_circle' : 'info' }}
+      </mat-icon>
+      <span>
+        {{ getUploadedDocumentCount() }} document(s) ready for submission
+      </span>
+    </div>
+  </div>
+</div>
+

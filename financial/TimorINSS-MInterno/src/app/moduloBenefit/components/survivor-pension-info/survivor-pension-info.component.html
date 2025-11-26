@@ -1,0 +1,150 @@
+<div class="survivor-pension-container">
+  <!-- Funeral Allowance Display -->
+  <mat-card class="funeral-allowance-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="funeral-icon">monetization_on</mat-icon>
+      <mat-card-title>Funeral Allowance</mat-card-title>
+      <mat-card-subtitle>One-time payment for funeral expenses</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="allowance-amount">
+        <span class="amount">${{ funeralAllowanceAmount }}</span>
+        <span class="description">(3 × Base Salary)</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Add Dependent Form -->
+  <mat-card class="add-dependent-card">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="dependent-icon">group_add</mat-icon>
+      <mat-card-title>Add Dependent / Beneficiary</mat-card-title>
+      <mat-card-subtitle>Add family members eligible for survivor's pension</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="dependentFormGroup" class="dependent-form">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Relationship</mat-label>
+          <mat-select formControlName="relationship">
+            <mat-option *ngFor="let rel of [DependentRelationship.SPOUSE, DependentRelationship.CHILD, DependentRelationship.PARENT]" 
+                        [value]="rel">
+              {{ relationshipLabels[rel] }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="dependentFormGroup.get('relationship')?.hasError('required')">
+            Relationship is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="fullName" placeholder="Enter full name">
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="dependentFormGroup.get('fullName')?.hasError('required')">
+            Full name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Date of Birth</mat-label>
+          <input matInput type="date" formControlName="dateOfBirth">
+          <mat-icon matPrefix>cake</mat-icon>
+          <mat-error *ngIf="dependentFormGroup.get('dateOfBirth')?.hasError('required')">
+            Date of birth is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Identification Number (NISS/ID)</mat-label>
+          <input matInput formControlName="identificationNumber" placeholder="Enter NISS or ID">
+          <mat-icon matPrefix>badge</mat-icon>
+          <mat-error *ngIf="dependentFormGroup.get('identificationNumber')?.hasError('required')">
+            Identification number is required
+          </mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button 
+                color="primary" 
+                type="button"
+                (click)="addDependent()"
+                [disabled]="!dependentFormGroup.valid"
+                class="add-button">
+          <mat-icon>add</mat-icon>
+          Add Dependent
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Dependents List -->
+  <mat-card class="dependents-list-card" *ngIf="dependents.length > 0">
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="list-icon">list</mat-icon>
+      <mat-card-title>Registered Dependents</mat-card-title>
+      <mat-card-subtitle>
+        Total Allocation: 
+        <span [class.exceeded]="isTotalPercentageExceeded()">
+          {{ getTotalDependentPercentage() }}%
+        </span>
+        <span *ngIf="isTotalPercentageExceeded()" class="warning-text">
+          (Exceeded 100% - will be adjusted automatically)
+        </span>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="dependents-list">
+        <div *ngFor="let dependent of dependents" class="dependent-item">
+          <div class="dependent-info">
+            <div class="dependent-header">
+              <mat-icon class="relationship-icon">
+                {{ dependent.relationship === DependentRelationship.SPOUSE ? 'favorite' : 
+                   dependent.relationship === DependentRelationship.CHILD ? 'child_care' : 'elderly' }}
+              </mat-icon>
+              <div class="dependent-details">
+                <strong>{{ dependent.fullName }}</strong>
+                <span class="relationship-label">{{ relationshipLabels[dependent.relationship] }}</span>
+              </div>
+            </div>
+            <div class="dependent-meta">
+              <span class="meta-item">
+                <mat-icon>cake</mat-icon>
+                {{ dependent.dateOfBirth }}
+              </span>
+              <span class="meta-item">
+                <mat-icon>badge</mat-icon>
+                {{ dependent.identificationNumber }}
+              </span>
+            </div>
+            <div class="dependent-percentage">
+              <div class="percentage-bar">
+                <div class="percentage-fill" [style.width.%]="dependent.adjustedPercentage || dependent.percentage"></div>
+              </div>
+              <span class="percentage-text">
+                {{ dependent.adjustedPercentage || dependent.percentage }}%
+                <span *ngIf="dependent.adjustedPercentage !== dependent.percentage" class="adjusted-note">
+                  (adjusted from {{ dependent.percentage }}%)
+                </span>
+              </span>
+            </div>
+          </div>
+          <button mat-icon-button 
+                  color="warn"
+                  (click)="removeDependent(dependent.id!)"
+                  class="remove-button">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- No Dependents Message -->
+  <mat-card class="no-dependents-card" *ngIf="dependents.length === 0">
+    <mat-card-content>
+      <div class="no-dependents-message">
+        <mat-icon>info</mat-icon>
+        <p>No dependents added yet. Please add at least one dependent to continue.</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

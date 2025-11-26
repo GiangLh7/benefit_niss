@@ -1,0 +1,43 @@
+{
+  "socialHistory": [
+    {
+      "fromDate": "01/01/2022",
+      "toDate": "31/12/2022",
+      "employer": "Dili Construction Co.",
+      "premium": "1,800 USD",
+      "regime": "General",
+      "contributionType": "Mandatory"
+    },
+    {
+      "fromDate": "01/01/2021",
+      "toDate": "31/12/2021",
+      "employer": "Timor Logistics",
+      "premium": "1,500 USD",
+      "regime": "General",
+      "contributionType": "Mandatory"
+    },
+    {
+      "fromDate": "01/01/2020",
+      "toDate": "31/12/2020",
+      "employer": "Pacific Retail",
+      "premium": "1,200 USD",
+      "regime": "Voluntary",
+      "contributionType": "Facultative"
+    }
+  ],
+  "monthlyBreakdown": [
+    { "month": "January", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "February", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "March", "workingDays": 30, "declaredRemuneration": "1,950 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "April", "workingDays": 0, "declaredRemuneration": "0 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "May", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "June", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "July", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "August", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "September", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "October", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "November", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "December", "workingDays": 0, "declaredRemuneration": "0 USD", "regime": "General", "adherenceType": "Mandatory" }
+  ]
+}
+
