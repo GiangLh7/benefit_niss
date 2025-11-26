@@ -60,63 +60,55 @@ steps:
 
   # ============================================================================
   # Step 5: Deploy Benefit to Cloud Run (Optional)
+  # Only runs if _DEPLOY_BENEFIT is set to "true"
   # ============================================================================
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     id: "deploy-benefit"
-    entrypoint: gcloud
+    entrypoint: "bash"
     args:
-      - "run"
-      - "deploy"
-      - "${_BENEFIT_SERVICE_NAME}"
-      - "--image"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA}"
-      - "--region"
-      - "${_REGION}"
-      - "--platform"
-      - "managed"
-      - "--allow-unauthenticated"
-      - "--port"
-      - "8080"
-      - "--memory"
-      - "512Mi"
-      - "--cpu"
-      - "1"
-      - "--min-instances"
-      - "0"
-      - "--max-instances"
-      - "10"
+      - "-c"
+      - |
+        if [ "${_DEPLOY_BENEFIT}" = "true" ]; then
+          gcloud run deploy ${_BENEFIT_SERVICE_NAME} \
+            --image ${_REGISTRY}/${_PROJECT_ID}/${_BENEFIT_IMAGE_NAME}:${SHORT_SHA} \
+            --region ${_REGION} \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8080 \
+            --memory 512Mi \
+            --cpu 1 \
+            --min-instances 0 \
+            --max-instances 10
+        else
+          echo "Skipping Benefit deployment (_DEPLOY_BENEFIT=${_DEPLOY_BENEFIT})"
+        fi
     waitFor: ["push-benefit"]
-    when: ${_DEPLOY_BENEFIT}
 
   # ============================================================================
   # Step 6: Deploy Financial to Cloud Run (Optional)
+  # Only runs if _DEPLOY_FINANCIAL is set to "true"
   # ============================================================================
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     id: "deploy-financial"
-    entrypoint: gcloud
+    entrypoint: "bash"
     args:
-      - "run"
-      - "deploy"
-      - "${_FINANCIAL_SERVICE_NAME}"
-      - "--image"
-      - "${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA}"
-      - "--region"
-      - "${_REGION}"
-      - "--platform"
-      - "managed"
-      - "--allow-unauthenticated"
-      - "--port"
-      - "8080"
-      - "--memory"
-      - "512Mi"
-      - "--cpu"
-      - "1"
-      - "--min-instances"
-      - "0"
-      - "--max-instances"
-      - "10"
+      - "-c"
+      - |
+        if [ "${_DEPLOY_FINANCIAL}" = "true" ]; then
+          gcloud run deploy ${_FINANCIAL_SERVICE_NAME} \
+            --image ${_REGISTRY}/${_PROJECT_ID}/${_FINANCIAL_IMAGE_NAME}:${SHORT_SHA} \
+            --region ${_REGION} \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8080 \
+            --memory 512Mi \
+            --cpu 1 \
+            --min-instances 0 \
+            --max-instances 10
+        else
+          echo "Skipping Financial deployment (_DEPLOY_FINANCIAL=${_DEPLOY_FINANCIAL})"
+        fi
     waitFor: ["push-financial"]
-    when: ${_DEPLOY_FINANCIAL}
 
 # ============================================================================
 # Substitutions (Default values)
