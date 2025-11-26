@@ -129,8 +129,8 @@ substitutions:
   _REGION: "asia-southeast1" # Change to your preferred region
 
   # Deployment flags (set to 'true' to enable deployment)
-  _DEPLOY_BENEFIT: "false"
-  _DEPLOY_FINANCIAL: "false"
+  _DEPLOY_BENEFIT: "true"
+  _DEPLOY_FINANCIAL: "true"
 
 # ============================================================================
 # Build Options
