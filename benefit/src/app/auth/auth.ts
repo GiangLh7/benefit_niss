@@ -16,7 +16,7 @@ export class Auth {
   readonly isAuthenticated = this.authenticated.asReadonly();
 
   login(username: string, password: string): Observable<boolean> {
-    const url = 'http://fin.timorniss.online:5000/api/login/InternalAuthenticate';
+    const url = '/api/login/InternalAuthenticate';
     const body = { Username: username, Password: password };
 
     return this.http.post(url, body).pipe(
