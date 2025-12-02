@@ -33,7 +33,6 @@ export class CurrentBeneficiariesComponent implements OnInit {
     'position',
     'type',
     'niss',
-    'electoralId',
     'noBi',
     'fullName',
     'municipality',

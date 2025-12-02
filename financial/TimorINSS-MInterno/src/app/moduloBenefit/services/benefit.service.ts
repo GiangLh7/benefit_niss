@@ -3,10 +3,14 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { Benefit, BenefitRequest, BenefitFilter } from '../models/benefit.model';
-import { 
-  CompleteBenefitRequest, 
-  BenefitRequestDetails 
+import {
+  Benefit,
+  BenefitRequest,
+  BenefitFilter,
+} from '../models/benefit.model';
+import {
+  CompleteBenefitRequest,
+  BenefitRequestDetails,
 } from '../interfaces/benefit-request.interface';
 import {
   ReferenceRemunerationResult,
@@ -19,17 +23,17 @@ import {
   CalculationRequest,
   OldAgePensionCalculationRequest,
   SurvivorPensionCalculationRequest,
-  ParentalBenefitCalculationRequest
+  ParentalBenefitCalculationRequest,
 } from '../models/calculation.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BenefitService {
   private apiUrl = `${environment.apiUrl}/benefits`;
   private requestsUrl = `${environment.apiUrl}/benefit-requests`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Get all benefits
@@ -50,7 +54,7 @@ export class BenefitService {
    */
   getBenefitsFiltered(filter: BenefitFilter): Observable<Benefit[]> {
     let params = new HttpParams();
-    
+
     if (filter.type) {
       params = params.set('type', filter.type);
     }
@@ -77,7 +81,9 @@ export class BenefitService {
    * Get benefits by beneficiary ID
    */
   getBenefitsByBeneficiaryId(beneficiaryId: number): Observable<Benefit[]> {
-    return this.http.get<Benefit[]>(`${this.apiUrl}/beneficiary/${beneficiaryId}`);
+    return this.http.get<Benefit[]>(
+      `${this.apiUrl}/beneficiary/${beneficiaryId}`
+    );
   }
 
   /**
@@ -90,7 +96,10 @@ export class BenefitService {
   /**
    * Update existing benefit
    */
-  updateBenefit(id: number, benefit: Partial<BenefitRequest>): Observable<Benefit> {
+  updateBenefit(
+    id: number,
+    benefit: Partial<BenefitRequest>
+  ): Observable<Benefit> {
     return this.http.put<Benefit>(`${this.apiUrl}/${id}`, benefit);
   }
 
@@ -132,18 +141,26 @@ export class BenefitService {
   /**
    * Submit complete benefit request
    */
-  submitBenefitRequest(request: CompleteBenefitRequest): Observable<{ success: boolean; requestId: string }> {
-    return this.http.post<{ success: boolean; requestId: string }>(
-      `${this.requestsUrl}/submit`, 
-      request
-    );
+  submitBenefitRequest(
+    request: CompleteBenefitRequest
+  ): Observable<{ success: boolean; requestId: string }> {
+    // return this.http.post<{ success: boolean; requestId: string }>(
+    //   `${this.requestsUrl}/submit`,
+    //   request
+    // );
+    return of({
+      success: true,
+      requestId: `TEST_${Date.now()}`,
+    });
   }
 
   /**
    * Get all pending benefit requests
    */
   getPendingRequests(): Observable<BenefitRequestDetails[]> {
-    return this.http.get<BenefitRequestDetails[]>(`${this.requestsUrl}/pending`);
+    return this.http.get<BenefitRequestDetails[]>(
+      `${this.requestsUrl}/pending`
+    );
   }
 
   /**
@@ -152,7 +169,7 @@ export class BenefitService {
   getRequestDetails(requestId: string): Observable<BenefitRequestDetails> {
     // TODO: Replace with actual API call
     // return this.http.get<BenefitRequestDetails>(`${this.requestsUrl}/${requestId}`);
-    
+
     // Mock data for demonstration
     return of(this.getMockRequestDetails(requestId)).pipe(delay(800));
   }
@@ -172,18 +189,24 @@ export class BenefitService {
         benefitType: 'old-age-pension',
         retirementOption: 'NORMAL' as any,
         documents: [
-          { type: 'Giấy xác nhận đóng BHXH', fileName: 'confirmation.pdf', fileSize: 1024000, fileType: 'application/pdf', uploadedAt: new Date('2025-01-15') }
+          {
+            type: 'Giấy xác nhận đóng BHXH',
+            fileName: 'confirmation.pdf',
+            fileSize: 1024000,
+            fileType: 'application/pdf',
+            uploadedAt: new Date('2025-01-15'),
+          },
         ],
         bankAccount: {
           bankName: 'Banco Nacional Ultramarino',
           accountNumber: '1234567890',
-          accountHolderName: 'Maria Fernanda dos Santos'
+          accountHolderName: 'Maria Fernanda dos Santos',
         },
         contributionMonths: 308,
         currentAge: '58 năm 5 tháng',
         eligibilityMessage: 'Đủ điều kiện hưởng lương hưu',
         submittedDate: new Date('2025-01-15'),
-        requestStatus: 'submitted'
+        requestStatus: 'submitted',
       },
       '2': {
         id: '2',
@@ -194,19 +217,31 @@ export class BenefitService {
         benefitType: 'disability-pension',
         disabilityPaymentType: 'MONTHLY' as any,
         documents: [
-          { type: 'Biên bản giám định mức suy giảm KNLĐ', fileName: 'disability_assessment.pdf', fileSize: 2048000, fileType: 'application/pdf', uploadedAt: new Date('2025-01-18') },
-          { type: 'Giấy ra viện', fileName: 'hospital_discharge.pdf', fileSize: 1536000, fileType: 'application/pdf', uploadedAt: new Date('2025-01-18') }
+          {
+            type: 'Biên bản giám định mức suy giảm KNLĐ',
+            fileName: 'disability_assessment.pdf',
+            fileSize: 2048000,
+            fileType: 'application/pdf',
+            uploadedAt: new Date('2025-01-18'),
+          },
+          {
+            type: 'Giấy ra viện',
+            fileName: 'hospital_discharge.pdf',
+            fileSize: 1536000,
+            fileType: 'application/pdf',
+            uploadedAt: new Date('2025-01-18'),
+          },
         ],
         bankAccount: {
           bankName: 'Banco Mandiri',
           accountNumber: '9876543210',
-          accountHolderName: 'João Carlos Silva'
+          accountHolderName: 'João Carlos Silva',
         },
         contributionMonths: 200,
         currentAge: '64 năm 8 tháng',
         eligibilityMessage: 'Đủ điều kiện nhận trợ cấp khuyết tật',
         submittedDate: new Date('2025-01-18'),
-        requestStatus: 'pending_approval'
+        requestStatus: 'pending_approval',
       },
       '4': {
         id: '4',
@@ -224,7 +259,7 @@ export class BenefitService {
             dateOfBirth: '1967-05-10',
             identificationNumber: 'TL444555666',
             percentage: 60,
-            adjustedPercentage: 60
+            adjustedPercentage: 60,
           },
           {
             id: '2',
@@ -233,8 +268,8 @@ export class BenefitService {
             dateOfBirth: '1995-08-15',
             identificationNumber: 'TL777888999',
             percentage: 20,
-            adjustedPercentage: 20
-          }
+            adjustedPercentage: 20,
+          },
         ],
         dependentBankAccounts: [
           {
@@ -242,25 +277,31 @@ export class BenefitService {
             percentage: 60,
             bankName: 'Banco Nacional Ultramarino',
             accountNumber: '1111222233',
-            accountHolderName: 'Ana Maria Alves'
+            accountHolderName: 'Ana Maria Alves',
           },
           {
             dependentId: '2',
             percentage: 20,
             bankName: 'Banco Mandiri',
             accountNumber: '4444555566',
-            accountHolderName: 'Pedro Alves Junior'
-          }
+            accountHolderName: 'Pedro Alves Junior',
+          },
         ],
         documents: [
-          { type: 'Giấy chứng tử', fileName: 'death_certificate.pdf', fileSize: 512000, fileType: 'application/pdf', uploadedAt: new Date('2025-01-22') }
+          {
+            type: 'Giấy chứng tử',
+            fileName: 'death_certificate.pdf',
+            fileSize: 512000,
+            fileType: 'application/pdf',
+            uploadedAt: new Date('2025-01-22'),
+          },
         ],
         contributionMonths: 120,
         currentAge: '59 năm 10 tháng',
         eligibilityMessage: 'Đủ điều kiện nhận trợ cấp tử tuất',
         submittedDate: new Date('2025-01-22'),
-        requestStatus: 'rejected'
-      }
+        requestStatus: 'rejected',
+      },
     };
 
     return mockDetails[requestId] || mockDetails['1'];
@@ -269,7 +310,10 @@ export class BenefitService {
   /**
    * Send request for approval (Level 2 action)
    */
-  sendForApproval(requestId: string, comment?: string): Observable<{ success: boolean }> {
+  sendForApproval(
+    requestId: string,
+    comment?: string
+  ): Observable<{ success: boolean }> {
     return this.http.post<{ success: boolean }>(
       `${this.requestsUrl}/${requestId}/send-for-approval`,
       { comment }
@@ -279,7 +323,10 @@ export class BenefitService {
   /**
    * Approve request (Level 3 action)
    */
-  approveRequest(requestId: string, comment: string): Observable<{ success: boolean }> {
+  approveRequest(
+    requestId: string,
+    comment: string
+  ): Observable<{ success: boolean }> {
     return this.http.post<{ success: boolean }>(
       `${this.requestsUrl}/${requestId}/approve`,
       { comment }
@@ -289,7 +336,10 @@ export class BenefitService {
   /**
    * Reject request
    */
-  rejectRequest(requestId: string, reason: string): Observable<{ success: boolean }> {
+  rejectRequest(
+    requestId: string,
+    reason: string
+  ): Observable<{ success: boolean }> {
     return this.http.post<{ success: boolean }>(
       `${this.requestsUrl}/${requestId}/reject`,
       { reason }
@@ -299,7 +349,10 @@ export class BenefitService {
   /**
    * Bulk send for approval
    */
-  sendMultipleForApproval(requestIds: string[], comment?: string): Observable<{ success: boolean; count: number }> {
+  sendMultipleForApproval(
+    requestIds: string[],
+    comment?: string
+  ): Observable<{ success: boolean; count: number }> {
     return this.http.post<{ success: boolean; count: number }>(
       `${this.requestsUrl}/bulk/send-for-approval`,
       { requestIds, comment }
@@ -309,7 +362,10 @@ export class BenefitService {
   /**
    * Bulk approve
    */
-  approveMultiple(requestIds: string[], comment: string): Observable<{ success: boolean; count: number }> {
+  approveMultiple(
+    requestIds: string[],
+    comment: string
+  ): Observable<{ success: boolean; count: number }> {
     return this.http.post<{ success: boolean; count: number }>(
       `${this.requestsUrl}/bulk/approve`,
       { requestIds, comment }
@@ -319,7 +375,10 @@ export class BenefitService {
   /**
    * Bulk reject
    */
-  rejectMultiple(requestIds: string[], reason: string): Observable<{ success: boolean; count: number }> {
+  rejectMultiple(
+    requestIds: string[],
+    reason: string
+  ): Observable<{ success: boolean; count: number }> {
     return this.http.post<{ success: boolean; count: number }>(
       `${this.requestsUrl}/bulk/reject`,
       { requestIds, reason }
@@ -334,10 +393,12 @@ export class BenefitService {
    * Calculate Reference Remuneration (R)
    * R = Average of best 120 months in last 10 years
    */
-  calculateReferenceRemuneration(niss: string): Observable<ReferenceRemunerationResult> {
+  calculateReferenceRemuneration(
+    niss: string
+  ): Observable<ReferenceRemunerationResult> {
     // TODO: Replace with actual API call
     // return this.http.get<ReferenceRemunerationResult>(`${this.apiUrl}/calculate-r/${niss}`);
-    
+
     // Mock implementation
     return of(this.getMockReferenceRemuneration(niss)).pipe(delay(1000));
   }
@@ -346,10 +407,12 @@ export class BenefitService {
    * Calculate Old-Age Pension
    * Formula: P = (R / N) × Total Months, where N = 360
    */
-  calculateOldAgePension(request: OldAgePensionCalculationRequest): Observable<OldAgePensionCalculation> {
+  calculateOldAgePension(
+    request: OldAgePensionCalculationRequest
+  ): Observable<OldAgePensionCalculation> {
     // TODO: Replace with actual API call
     // return this.http.post<OldAgePensionCalculation>(`${this.apiUrl}/calculate/old-age`, request);
-    
+
     // Mock implementation
     return of(this.getMockOldAgePensionCalculation(request)).pipe(delay(1200));
   }
@@ -359,12 +422,16 @@ export class BenefitService {
    * Formula: P = (R / N) × Total Months, where N = 360
    * Plus: Funeral Allowance = 3 × R
    */
-  calculateSurvivorPension(request: SurvivorPensionCalculationRequest): Observable<SurvivorPensionCalculation> {
+  calculateSurvivorPension(
+    request: SurvivorPensionCalculationRequest
+  ): Observable<SurvivorPensionCalculation> {
     // TODO: Replace with actual API call
     // return this.http.post<SurvivorPensionCalculation>(`${this.apiUrl}/calculate/survivor`, request);
-    
+
     // Mock implementation
-    return of(this.getMockSurvivorPensionCalculation(request)).pipe(delay(1200));
+    return of(this.getMockSurvivorPensionCalculation(request)).pipe(
+      delay(1200)
+    );
   }
 
   /**
@@ -372,25 +439,34 @@ export class BenefitService {
    * Formula: P = (R / N) × Total Months for monthly, or one-time calculation
    */
   calculateInvalidityPension(
-    request: CalculationRequest & { paymentType: 'ONE_TIME' | 'MONTHLY'; laborCapacityReduction: number }
+    request: CalculationRequest & {
+      paymentType: 'ONE_TIME' | 'MONTHLY';
+      laborCapacityReduction: number;
+    }
   ): Observable<InvalidityPensionCalculation> {
     // TODO: Replace with actual API call
     // return this.http.post<InvalidityPensionCalculation>(`${this.apiUrl}/calculate/invalidity`, request);
-    
+
     // Mock implementation
-    return of(this.getMockInvalidityPensionCalculation(request)).pipe(delay(1200));
+    return of(this.getMockInvalidityPensionCalculation(request)).pipe(
+      delay(1200)
+    );
   }
 
   /**
    * Calculate Parental Benefit
    * Formula: S = R / 180
    */
-  calculateParentalBenefit(request: ParentalBenefitCalculationRequest): Observable<ParentalBenefitCalculation> {
+  calculateParentalBenefit(
+    request: ParentalBenefitCalculationRequest
+  ): Observable<ParentalBenefitCalculation> {
     // TODO: Replace with actual API call
     // return this.http.post<ParentalBenefitCalculation>(`${this.apiUrl}/calculate/parental`, request);
-    
+
     // Mock implementation
-    return of(this.getMockParentalBenefitCalculation(request)).pipe(delay(1200));
+    return of(this.getMockParentalBenefitCalculation(request)).pipe(
+      delay(1200)
+    );
   }
 
   /**
@@ -398,11 +474,14 @@ export class BenefitService {
    * Formula: S = 3 × R (Article 18, DL 19/2017)
    */
   calculateDeathBenefit(
-    request: CalculationRequest & { deceasedNISS: string; recipientType: 'FAMILY' | 'FUNERAL_PAYER' }
+    request: CalculationRequest & {
+      deceasedNISS: string;
+      recipientType: 'FAMILY' | 'FUNERAL_PAYER';
+    }
   ): Observable<DeathBenefitCalculation> {
     // TODO: Replace with actual API call
     // return this.http.post<DeathBenefitCalculation>(`${this.apiUrl}/calculate/death`, request);
-    
+
     // Mock implementation
     return of(this.getMockDeathBenefitCalculation(request)).pipe(delay(1000));
   }
@@ -411,14 +490,16 @@ export class BenefitService {
   // MOCK DATA FOR CALCULATIONS
   // ========================================
 
-  private getMockReferenceRemuneration(niss: string): ReferenceRemunerationResult {
+  private getMockReferenceRemuneration(
+    niss: string
+  ): ReferenceRemunerationResult {
     // Different R values based on NISS for variety
     const mockRValues: { [key: string]: number } = {
-      'TL123456789': 500,   // High earner
-      'TL987654321': 350,   // Medium earner
-      'TL111222333': 450,   // Medium-high earner
-      'TL444444444': 280,   // Lower earner
-      'TL111111111': 420    // Medium-high earner
+      TL123456789: 500, // High earner
+      TL987654321: 350, // Medium earner
+      TL111222333: 450, // Medium-high earner
+      TL444444444: 280, // Lower earner
+      TL111111111: 420, // Medium-high earner
     };
 
     const R = mockRValues[niss] || 400; // Default to $400
@@ -429,7 +510,7 @@ export class BenefitService {
       best120Months: this.generateMockSalaryHistory(R),
       calculationDate: new Date(),
       periodCovered: '2014-2024 (Last 10 years)',
-      totalMonthsAnalyzed: 120
+      totalMonthsAnalyzed: 120,
     };
   }
 
@@ -441,17 +522,19 @@ export class BenefitService {
         monthYear: new Date(2024, 11 - i, 1),
         salary: Math.round(baseAmount + variance),
         employer: i < 40 ? 'Current Employer Ltd.' : 'Previous Employer Inc.',
-        contributionBase: Math.round(baseAmount + variance)
+        contributionBase: Math.round(baseAmount + variance),
       });
     }
     return history;
   }
 
-  private getMockOldAgePensionCalculation(request: OldAgePensionCalculationRequest): OldAgePensionCalculation {
+  private getMockOldAgePensionCalculation(
+    request: OldAgePensionCalculationRequest
+  ): OldAgePensionCalculation {
     const R = this.getMockReferenceRemuneration(request.niss).referenceAmount;
     const N = 360; // 30 years
     const totalMonths = 308; // Mock value, should come from contribution history
-    
+
     const P = (R / N) * totalMonths;
 
     return {
@@ -465,40 +548,44 @@ export class BenefitService {
         step1: {
           label: 'Reference Remuneration (R)',
           value: R,
-          description: 'Average of best 120 months in last 10 years'
+          description: 'Average of best 120 months in last 10 years',
         },
         step2: {
           label: 'Career Months (N)',
           value: N,
-          description: 'Standard contributory career period (30 years)'
+          description: 'Standard contributory career period (30 years)',
         },
         step3: {
           label: 'Total Contribution Months',
           value: totalMonths,
-          description: 'Actual months contributed'
+          description: 'Actual months contributed',
         },
         step4: {
           label: 'Calculation',
           formula: `(${R} / ${N}) × ${totalMonths}`,
           value: P,
-          description: 'Monthly pension amount'
+          description: 'Monthly pension amount',
         },
-        finalResult: Math.round(P * 100) / 100
+        finalResult: Math.round(P * 100) / 100,
       },
       calculationDate: new Date(),
       N: N,
       totalContributionMonths: totalMonths,
       monthlyPension: Math.round(P * 100) / 100,
       sector: request.sector || 'private',
-      retirementAge: 60
+      retirementAge: 60,
     };
   }
 
-  private getMockSurvivorPensionCalculation(request: SurvivorPensionCalculationRequest): SurvivorPensionCalculation {
-    const R = this.getMockReferenceRemuneration(request.deceasedNISS).referenceAmount;
+  private getMockSurvivorPensionCalculation(
+    request: SurvivorPensionCalculationRequest
+  ): SurvivorPensionCalculation {
+    const R = this.getMockReferenceRemuneration(
+      request.deceasedNISS
+    ).referenceAmount;
     const N = 360;
     const totalMonths = 120; // Mock value
-    
+
     const P = (R / N) * totalMonths;
     const funeralAllowance = 3 * R;
 
@@ -509,7 +596,7 @@ export class BenefitService {
       relationship: dep.relationship,
       percentage: dep.percentage,
       adjustedPercentage: dep.percentage,
-      monthlyAmount: Math.round((P * dep.percentage / 100) * 100) / 100
+      monthlyAmount: Math.round(((P * dep.percentage) / 100) * 100) / 100,
     }));
 
     return {
@@ -523,42 +610,45 @@ export class BenefitService {
         step1: {
           label: 'Reference Remuneration (R)',
           value: R,
-          description: 'Average of deceased worker\'s best 120 months'
+          description: "Average of deceased worker's best 120 months",
         },
         step2: {
           label: 'Career Months (N)',
           value: N,
-          description: 'Standard contributory career period'
+          description: 'Standard contributory career period',
         },
         step3: {
           label: 'Total Contribution Months',
           value: totalMonths,
-          description: 'Deceased worker\'s contribution period'
+          description: "Deceased worker's contribution period",
         },
         step4: {
           label: 'Total Monthly Pension',
           formula: `(${R} / ${N}) × ${totalMonths}`,
           value: P,
-          description: 'To be distributed among dependents'
+          description: 'To be distributed among dependents',
         },
-        finalResult: Math.round(P * 100) / 100
+        finalResult: Math.round(P * 100) / 100,
       },
       calculationDate: new Date(),
       N: N,
       totalContributionMonths: totalMonths,
       totalPension: Math.round(P * 100) / 100,
       dependentDistributions: distributions,
-      funeralAllowance: funeralAllowance
+      funeralAllowance: funeralAllowance,
     };
   }
 
   private getMockInvalidityPensionCalculation(
-    request: CalculationRequest & { paymentType: 'ONE_TIME' | 'MONTHLY'; laborCapacityReduction: number }
+    request: CalculationRequest & {
+      paymentType: 'ONE_TIME' | 'MONTHLY';
+      laborCapacityReduction: number;
+    }
   ): InvalidityPensionCalculation {
     const R = this.getMockReferenceRemuneration(request.niss).referenceAmount;
     const N = 360;
     const totalMonths = 200; // Mock value
-    
+
     const P = (R / N) * totalMonths;
 
     const result: InvalidityPensionCalculation = {
@@ -567,30 +657,42 @@ export class BenefitService {
       benefitType: 'disability-pension',
       benefitAmount: Math.round(P * 100) / 100,
       referenceRemuneration: R,
-      formula: request.paymentType === 'MONTHLY' ? 'P = (R / N) × Total Months' : 'Lump sum calculation',
+      formula:
+        request.paymentType === 'MONTHLY'
+          ? 'P = (R / N) × Total Months'
+          : 'Lump sum calculation',
       breakdown: {
         step1: {
           label: 'Reference Remuneration (R)',
           value: R,
-          description: 'Average of best 120 months'
+          description: 'Average of best 120 months',
         },
         step2: {
-          label: request.paymentType === 'MONTHLY' ? 'Career Months (N)' : 'Reduction Percentage',
-          value: request.paymentType === 'MONTHLY' ? N : request.laborCapacityReduction,
-          description: request.paymentType === 'MONTHLY' ? 'Standard period' : 'Labor capacity reduction'
+          label:
+            request.paymentType === 'MONTHLY'
+              ? 'Career Months (N)'
+              : 'Reduction Percentage',
+          value:
+            request.paymentType === 'MONTHLY'
+              ? N
+              : request.laborCapacityReduction,
+          description:
+            request.paymentType === 'MONTHLY'
+              ? 'Standard period'
+              : 'Labor capacity reduction',
         },
         step3: {
           label: 'Total Contribution Months',
           value: totalMonths,
-          description: 'Actual months contributed'
+          description: 'Actual months contributed',
         },
-        finalResult: Math.round(P * 100) / 100
+        finalResult: Math.round(P * 100) / 100,
       },
       calculationDate: new Date(),
       N: N,
       totalContributionMonths: totalMonths,
       paymentType: request.paymentType,
-      laborCapacityReduction: request.laborCapacityReduction
+      laborCapacityReduction: request.laborCapacityReduction,
     };
 
     if (request.paymentType === 'MONTHLY') {
@@ -604,20 +706,23 @@ export class BenefitService {
     return result;
   }
 
-  private getMockParentalBenefitCalculation(request: ParentalBenefitCalculationRequest): ParentalBenefitCalculation {
+  private getMockParentalBenefitCalculation(
+    request: ParentalBenefitCalculationRequest
+  ): ParentalBenefitCalculation {
     const R = this.getMockReferenceRemuneration(request.niss).referenceAmount;
     const dailyBenefit = R / 180;
-    
+
     // Duration varies by type
     const durations: { [key: string]: number } = {
-      'MATERNITY': 90,
-      'PATERNITY': 7,
-      'CLINICAL_RISK': 60,
-      'PREGNANCY_INTERRUPTION': 30,
-      'ADOPTION': 90
+      MATERNITY: 90,
+      PATERNITY: 7,
+      CLINICAL_RISK: 60,
+      PREGNANCY_INTERRUPTION: 30,
+      ADOPTION: 90,
     };
-    
-    const durationDays = request.durationDays || durations[request.parentalType] || 90;
+
+    const durationDays =
+      request.durationDays || durations[request.parentalType] || 90;
     const totalAmount = dailyBenefit * durationDays;
 
     return {
@@ -631,20 +736,20 @@ export class BenefitService {
         step1: {
           label: 'Reference Remuneration (R)',
           value: R,
-          description: 'Average of best 120 months'
+          description: 'Average of best 120 months',
         },
         step2: {
           label: 'Daily Benefit',
           formula: `${R} / 180`,
           value: Math.round(dailyBenefit * 100) / 100,
-          description: 'Daily benefit amount'
+          description: 'Daily benefit amount',
         },
         step3: {
           label: 'Duration',
           value: durationDays,
-          description: `${durationDays} days of benefit`
+          description: `${durationDays} days of benefit`,
         },
-        finalResult: Math.round(totalAmount * 100) / 100
+        finalResult: Math.round(totalAmount * 100) / 100,
       },
       calculationDate: new Date(),
       parentalType: request.parentalType,
@@ -652,14 +757,19 @@ export class BenefitService {
       durationDays: durationDays,
       totalAmount: Math.round(totalAmount * 100) / 100,
       startDate: request.birthDate || request.expectedDueDate || new Date(),
-      endDate: new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000)
+      endDate: new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000),
     };
   }
 
   private getMockDeathBenefitCalculation(
-    request: CalculationRequest & { deceasedNISS: string; recipientType: 'FAMILY' | 'FUNERAL_PAYER' }
+    request: CalculationRequest & {
+      deceasedNISS: string;
+      recipientType: 'FAMILY' | 'FUNERAL_PAYER';
+    }
   ): DeathBenefitCalculation {
-    const R = this.getMockReferenceRemuneration(request.deceasedNISS).referenceAmount;
+    const R = this.getMockReferenceRemuneration(
+      request.deceasedNISS
+    ).referenceAmount;
     const oneTimeAmount = 3 * R; // Article 18, DL 19/2017
 
     return {
@@ -673,28 +783,28 @@ export class BenefitService {
         step1: {
           label: 'Reference Remuneration (R)',
           value: R,
-          description: 'Average of deceased\'s best 120 months (Article 18, DL 19/2017)'
+          description:
+            "Average of deceased's best 120 months (Article 18, DL 19/2017)",
         },
         step2: {
           label: 'Multiplier',
           value: 3,
-          description: 'Three times the reference remuneration'
+          description: 'Three times the reference remuneration',
         },
         step3: {
           label: 'One-Time Death Benefit',
           formula: `3 × ${R}`,
           value: oneTimeAmount,
-          description: 'Total benefit amount'
+          description: 'Total benefit amount',
         },
-        finalResult: oneTimeAmount
+        finalResult: oneTimeAmount,
       },
       calculationDate: new Date(),
       oneTimeAmount: oneTimeAmount,
       recipientType: request.recipientType,
       recipientName: 'Beneficiary Name',
       deceasedNISS: request.deceasedNISS,
-      deceasedName: 'Deceased Worker Name'
+      deceasedName: 'Deceased Worker Name',
     };
   }
 }
-

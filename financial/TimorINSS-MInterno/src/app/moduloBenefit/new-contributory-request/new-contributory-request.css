@@ -97,7 +97,6 @@
 .citizen-card mat-card-header {
   display: flex;
   align-items: center;
-  gap: 16px;
 }
 
 .citizen-avatar {

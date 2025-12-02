@@ -84,10 +84,10 @@ import {
   calculateMinimumContributionMonths,
 } from '../utils/eligibility.utils';
 import { getBenefitAmount } from '../constants/non-contributory-benefits.constants';
-import { 
-  calculateOldPensionAmount, 
+import {
+  calculateOldPensionAmount,
   calculateDisabilityAmount,
-  NON_CONTRIBUTORY_BENEFITS_CONFIG
+  NON_CONTRIBUTORY_BENEFITS_CONFIG,
 } from '../constants/non-contributory-benefits.config';
 
 @Component({
@@ -109,29 +109,29 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
   // Step 2: Citizen Search (NISS for contributory, ID number for non-contributory)
   nissFormControl = new FormControl('', [Validators.required]);
   idNumberFormControl = new FormControl('', [Validators.required]);
-  
+
   // Non-contributory form fields
   nonContributoryForm = new FormGroup({
     idNumber: new FormControl('', [Validators.required]),
     name: new FormControl('', [Validators.required]),
     dateOfBirth: new FormControl('', [Validators.required]),
-    gender: new FormControl('', [Validators.required])
+    gender: new FormControl('', [Validators.required]),
   });
-  
+
   citizenInfo: CitizenInfo | null = null;
   isSearching = false;
   searchError: string | null = null;
   citizenFound = false;
-  
+
   // Calculated age and benefit amount for non-contributory
   calculatedAge: number = 0;
   calculatedBenefitAmount: number = 0;
   ageValidationError: string | null = null;
-  
+
   // Debounce subject for ID number check
   private idNumberCheckSubject = new Subject<string>();
   private subscriptions: any[] = [];
-  
+
   /**
    * Get formatted benefit amount for display
    */
@@ -141,7 +141,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     }
     return '0.00';
   }
-  
+
   /**
    * Get base amount for breakdown display
    */
@@ -153,31 +153,39 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     }
     return '0.00';
   }
-  
+
   /**
    * Get age 70-79 additional amount
    */
   getAge70to79Additional(): string {
     if (this.selectedBenefitType === 'elderly-assistance') {
-      return NON_CONTRIBUTORY_BENEFITS_CONFIG.oldPension.age70to79Additional.toFixed(2);
+      return NON_CONTRIBUTORY_BENEFITS_CONFIG.oldPension.age70to79Additional.toFixed(
+        2
+      );
     } else if (this.selectedBenefitType === 'severe-disability') {
-      return NON_CONTRIBUTORY_BENEFITS_CONFIG.disability.age70to79Additional.toFixed(2);
+      return NON_CONTRIBUTORY_BENEFITS_CONFIG.disability.age70to79Additional.toFixed(
+        2
+      );
     }
     return '0.00';
   }
-  
+
   /**
    * Get age 80+ additional amount
    */
   getAge80PlusAdditional(): string {
     if (this.selectedBenefitType === 'elderly-assistance') {
-      return NON_CONTRIBUTORY_BENEFITS_CONFIG.oldPension.age80PlusAdditional.toFixed(2);
+      return NON_CONTRIBUTORY_BENEFITS_CONFIG.oldPension.age80PlusAdditional.toFixed(
+        2
+      );
     } else if (this.selectedBenefitType === 'severe-disability') {
-      return NON_CONTRIBUTORY_BENEFITS_CONFIG.disability.age80PlusAdditional.toFixed(2);
+      return NON_CONTRIBUTORY_BENEFITS_CONFIG.disability.age80PlusAdditional.toFixed(
+        2
+      );
     }
     return '0.00';
   }
-  
+
   /**
    * Get benefit amount for a specific benefit type and age
    * Used to display amount next to each option
@@ -189,7 +197,9 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       return calculateDisabilityAmount(age).toFixed(2);
     }
     // For other benefit types, return base amount from the benefit definition
-    const benefit = this.nonContributoryBenefitTypes.find(b => b.id === benefitId);
+    const benefit = this.nonContributoryBenefitTypes.find(
+      (b) => b.id === benefitId
+    );
     return benefit ? benefit.amount.toFixed(2) : '0.00';
   }
 
@@ -300,32 +310,33 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.addDocumentRow();
-    
+
     // Setup debounced ID number check for non-contributory
-    const idCheckSubscription = this.idNumberCheckSubject.pipe(
-      debounceTime(500),
-      distinctUntilChanged()
-    ).subscribe(idNumber => {
-      if (idNumber && idNumber.trim().length > 0) {
-        this.checkIdNumberRegistration(idNumber.trim());
-      }
-    });
+    const idCheckSubscription = this.idNumberCheckSubject
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe((idNumber) => {
+        if (idNumber && idNumber.trim().length > 0) {
+          this.checkIdNumberRegistration(idNumber.trim());
+        }
+      });
     this.subscriptions.push(idCheckSubscription);
-    
+
     // Watch for date of birth changes to calculate age and benefit amount
-    const dobSubscription = this.nonContributoryForm.get('dateOfBirth')?.valueChanges.subscribe(dateOfBirth => {
-      if (dateOfBirth) {
-        this.calculateAgeAndBenefitAmount();
-      }
-    });
+    const dobSubscription = this.nonContributoryForm
+      .get('dateOfBirth')
+      ?.valueChanges.subscribe((dateOfBirth) => {
+        if (dateOfBirth) {
+          this.calculateAgeAndBenefitAmount();
+        }
+      });
     if (dobSubscription) {
       this.subscriptions.push(dobSubscription);
     }
   }
-  
+
   ngOnDestroy(): void {
     // Clean up subscriptions
-    this.subscriptions.forEach(sub => sub.unsubscribe());
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
     this.idNumberCheckSubject.complete();
   }
 
@@ -385,14 +396,14 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     // Mark as touched and update validity to enable Next button
     this.benefitTypeFormControl.markAsTouched();
     this.benefitTypeFormControl.updateValueAndValidity();
-    
+
     // Reset citizen search when changing benefit type
     this.nissFormControl.reset();
     this.idNumberFormControl.reset();
     this.citizenInfo = null;
     this.citizenFound = false;
     this.searchError = null;
-    
+
     // Reset all subsequent steps
     this.resetAllStepsData();
   }
@@ -433,7 +444,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.handleMockCitizenSearch(niss);
       this.isSearching = false;
-      
+
       // Only reset subsequent steps data after successful search
       // Don't reset stepper position - stay on current step
       if (this.citizenFound) {
@@ -510,21 +521,21 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
   private checkIdNumberRegistration(idNumber: string): void {
     // Mock: Check if ID is already registered
     // In production, this would call API to check registration status
-    const registeredIds = ['ID001', 'ID002', 'ID999']; // Mock registered IDs
-    
+    const registeredIds = ['TL789012', 'TL545678', 'TL123456'];
+
     if (registeredIds.includes(idNumber.toUpperCase())) {
       this.searchError = 'This ID number is already registered for benefits.';
       this.citizenFound = false;
       this.citizenInfo = null;
       return;
     }
-    
+
     // ID is not registered, clear error
     if (this.searchError && this.searchError.includes('already registered')) {
       this.searchError = null;
     }
   }
-  
+
   /**
    * Calculate age and benefit amount from date of birth
    */
@@ -535,32 +546,37 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       this.calculatedBenefitAmount = 0;
       return;
     }
-    
+
     // Convert Date object to string format if needed
     let dateStr: string;
-    if (dateOfBirth && typeof dateOfBirth === 'object' && 'toISOString' in dateOfBirth) {
+    if (
+      dateOfBirth &&
+      typeof dateOfBirth === 'object' &&
+      'toISOString' in dateOfBirth
+    ) {
       // It's a Date object
       dateStr = (dateOfBirth as Date).toISOString().split('T')[0];
     } else {
       // It's already a string
       dateStr = String(dateOfBirth);
     }
-    
+
     const age = calculateAge(dateStr);
     this.calculatedAge = age.years;
-    
+
     // Validate age: must be at least 18 years old
     if (age.years < 18) {
-      this.ageValidationError = 'Age must be at least 18 years old to be eligible for non-contributory benefits.';
+      this.ageValidationError =
+        'Age must be at least 18 years old to be eligible for non-contributory benefits.';
       this.calculatedBenefitAmount = 0;
       this.selectedBenefitType = '';
       this.schemeTypeFormControl.setValue('');
       return;
     }
-    
+
     // Clear age validation error if age is valid
     this.ageValidationError = null;
-    
+
     // Automatically determine benefit type based on age
     // Age >= 60: Elderly Assistance (Old Pension)
     // Age >= 18: Severe Disability (if not elderly)
@@ -575,62 +591,69 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       // Update form control
       this.schemeTypeFormControl.setValue('severe-disability');
     }
-    
+
     // Update required documents based on selected benefit type
     const selectedBenefit = this.nonContributoryBenefitTypes.find(
-      bt => bt.id === this.selectedBenefitType
+      (bt) => bt.id === this.selectedBenefitType
     );
     if (selectedBenefit) {
       this.requiredDocuments = selectedBenefit.requiredDocuments;
     }
-    
+
     // Update currentAge for display
     this.currentAge = `${age.years} years ${age.months} months`;
   }
-  
+
   /**
    * Handle ID number input change (with debounce)
    */
   onIdNumberChange(idNumber: string): void {
     this.idNumberCheckSubject.next(idNumber);
   }
-  
+
   /**
    * Validate non-contributory form and create citizen info
    */
   validateNonContributoryForm(): void {
     if (this.nonContributoryForm.valid) {
       const formValue = this.nonContributoryForm.value;
-      
+
       // Check ID registration
       const idNumber = formValue.idNumber || '';
       if (idNumber) {
         this.checkIdNumberRegistration(idNumber);
       }
-      
+
       // If ID is valid, create citizen info
-      if (!this.searchError || !this.searchError.includes('already registered')) {
+      if (
+        !this.searchError ||
+        !this.searchError.includes('already registered')
+      ) {
         // Convert Date object to string format if needed
         let dateOfBirthStr: string;
         const dobValue = formValue.dateOfBirth;
-        if (dobValue && typeof dobValue === 'object' && 'toISOString' in dobValue) {
+        if (
+          dobValue &&
+          typeof dobValue === 'object' &&
+          'toISOString' in dobValue
+        ) {
           // It's a Date object
           dateOfBirthStr = (dobValue as Date).toISOString().split('T')[0];
         } else {
           // It's already a string
           dateOfBirthStr = String(dobValue || '');
         }
-        
+
         this.citizenInfo = {
           niss: '', // No NISS for non-contributory
           name: formValue.name || '',
           dateOfBirth: dateOfBirthStr,
           employmentSector: EmploymentSector.PRIVATE,
         };
-        
+
         // Calculate age
         this.calculateAgeAndBenefitAmount();
-        
+
         this.citizenFound = true;
         this.searchError = null;
       }
@@ -638,7 +661,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       this.nonContributoryForm.markAllAsTouched();
     }
   }
-  
+
   /**
    * Handle Step 2 Next button click
    */
@@ -691,10 +714,14 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
 
     // Set required documents based on benefit type
     if (type === 'contributory') {
-      const selectedBenefit = this.contributoryBenefitTypes.find((bt) => bt.value === benefitType);
+      const selectedBenefit = this.contributoryBenefitTypes.find(
+        (bt) => bt.value === benefitType
+      );
       this.requiredDocuments = selectedBenefit?.requiredDocuments || [];
     } else if (type === 'non-contributory') {
-      const selectedBenefit = this.nonContributoryBenefitTypes.find((bt) => bt.id === benefitType);
+      const selectedBenefit = this.nonContributoryBenefitTypes.find(
+        (bt) => bt.id === benefitType
+      );
       this.requiredDocuments = selectedBenefit?.requiredDocuments || [];
     }
     this.uploadedDocuments.clear();
@@ -703,7 +730,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     if (benefitType === 'survivor-pension') {
       this.handleSurvivorPensionSelection();
     }
-    
+
     // For non-contributory: Recalculate benefit amount when benefit type is selected
     if (type === 'non-contributory' && this.calculatedAge > 0) {
       this.calculateAgeAndBenefitAmount();
@@ -1061,7 +1088,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
 
     // Step 1: Benefit Type Selection
     // Note: selectedSchemeType is not reset here as it's set in Step 1
-    
+
     // Step 3: Specific Benefit Type Selection
     this.selectedBenefitType = '';
     this.schemeTypeFormControl.reset();
@@ -1108,7 +1135,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     this.calculatedAge = 0;
     this.calculatedBenefitAmount = 0;
     this.ageValidationError = null;
-    
+
     // Step 5: Bank Account
     this.bankAccountForm.reset();
     this.bankAccountData = null;
@@ -1151,7 +1178,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     if (contributoryBenefit) {
       return contributoryBenefit.label;
     }
-    
+
     // Check non-contributory benefits (use 'id' property)
     const nonContributoryBenefit = this.nonContributoryBenefitTypes.find(
       (bt) => bt.id === this.selectedBenefitType
@@ -1159,7 +1186,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     if (nonContributoryBenefit) {
       return nonContributoryBenefit.label;
     }
-    
+
     return '';
   }
 
@@ -1556,7 +1583,12 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
         if (this.selectedSchemeType === 'contributory') {
           return this.citizenFound && !!this.citizenInfo;
         } else if (this.selectedSchemeType === 'non-contributory') {
-          return this.nonContributoryForm.valid && this.citizenFound && !!this.citizenInfo && !this.searchError;
+          return (
+            this.nonContributoryForm.valid &&
+            this.citizenFound &&
+            !!this.citizenInfo &&
+            !this.searchError
+          );
         }
         return false;
 
@@ -1754,9 +1786,9 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       if (this.selectedBenefitType && this.calculatedBenefitAmount > 0) {
         // Get benefit type info
         const benefitType = this.nonContributoryBenefitTypes.find(
-          bt => bt.id === this.selectedBenefitType
+          (bt) => bt.id === this.selectedBenefitType
         );
-        
+
         if (benefitType) {
           request.nonContributoryBenefitType = benefitType.id;
           request.nonContributoryBenefitLabel = benefitType.label;
