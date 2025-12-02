@@ -3,11 +3,17 @@
  * SAII (Subsídio de Apoio a Idosos e Inválidos) and other social assistance
  */
 
+import {
+  NON_CONTRIBUTORY_BENEFITS_CONFIG,
+  calculateOldPensionAmount,
+  calculateDisabilityAmount,
+} from './non-contributory-benefits.config';
+
 export interface NonContributoryBenefitType {
   id: string;
   label: string;
   description: string;
-  amount: number;
+  amount: number; // Base amount (will be calculated dynamically for old-pension and disability)
   frequency: 'monthly' | 'one-time' | 'flexible';
   eligibilityCriteria: string[];
   requiredDocuments: string[];
@@ -15,6 +21,8 @@ export interface NonContributoryBenefitType {
     min?: number;
     max?: number;
   };
+  /** If true, amount is calculated dynamically based on age */
+  isDynamicAmount?: boolean;
 }
 
 /**
@@ -25,7 +33,7 @@ export const NON_CONTRIBUTORY_BENEFIT_TYPES: NonContributoryBenefitType[] = [
     id: 'elderly-assistance',
     label: 'Elderly Assistance (Pessoa Idosa)',
     description: 'Citizens aged 60+ with no or low income',
-    amount: 30,
+    amount: NON_CONTRIBUTORY_BENEFITS_CONFIG.oldPension.baseAmount, // Base amount, calculated dynamically
     frequency: 'monthly',
     eligibilityCriteria: [
       'Age 60 or above',
@@ -39,14 +47,15 @@ export const NON_CONTRIBUTORY_BENEFIT_TYPES: NonContributoryBenefitType[] = [
       'Proof of Residence'
     ],
     ageRequirement: {
-      min: 60
-    }
+      min: NON_CONTRIBUTORY_BENEFITS_CONFIG.oldPension.ageThreshold
+    },
+    isDynamicAmount: true // Amount calculated based on age
   },
   {
     id: 'severe-disability',
     label: 'Severe Disability (Pessoa com Deficiência Grave)',
     description: 'Persons aged 18+ with severe disability, unable to work',
-    amount: 30,
+    amount: NON_CONTRIBUTORY_BENEFITS_CONFIG.disability.baseAmount, // Base amount, calculated dynamically
     frequency: 'monthly',
     eligibilityCriteria: [
       'Age 18 or above',
@@ -61,8 +70,9 @@ export const NON_CONTRIBUTORY_BENEFIT_TYPES: NonContributoryBenefitType[] = [
       'Proof of Residence'
     ],
     ageRequirement: {
-      min: 18
-    }
+      min: NON_CONTRIBUTORY_BENEFITS_CONFIG.disability.minAge
+    },
+    isDynamicAmount: true // Amount calculated based on age
   },
   {
     id: 'special-disability',
@@ -197,24 +207,53 @@ export function getNonContributoryBenefit(id: string): NonContributoryBenefitTyp
 
 /**
  * Get benefit amount display
+ * @param benefit - The benefit type
+ * @param age - Optional age for dynamic amount calculation
  */
-export function getBenefitAmountDisplay(benefit: NonContributoryBenefitType): string {
+export function getBenefitAmountDisplay(benefit: NonContributoryBenefitType, age?: number): string {
   if (benefit.amount === 0) {
     return 'As per case assessment';
   }
   
-  const amount = `$${benefit.amount.toFixed(2)}`;
+  let amount = benefit.amount;
+  
+  // Calculate dynamic amount for old-pension and disability based on age
+  if (benefit.isDynamicAmount && age !== undefined) {
+    if (benefit.id === 'elderly-assistance') {
+      amount = calculateOldPensionAmount(age);
+    } else if (benefit.id === 'severe-disability') {
+      amount = calculateDisabilityAmount(age);
+    }
+  }
+  
+  const amountStr = `$${amount.toFixed(2)}`;
   
   switch (benefit.frequency) {
     case 'monthly':
-      return `${amount}/month`;
+      return `${amountStr}/month`;
     case 'one-time':
-      return `${amount} (one-time)`;
+      return `${amountStr} (one-time)`;
     case 'flexible':
       return 'Flexible amount';
     default:
-      return amount;
+      return amountStr;
   }
+}
+
+/**
+ * Get benefit amount (calculated dynamically if needed)
+ * @param benefit - The benefit type
+ * @param age - Optional age for dynamic amount calculation
+ */
+export function getBenefitAmount(benefit: NonContributoryBenefitType, age?: number): number {
+  if (benefit.isDynamicAmount && age !== undefined) {
+    if (benefit.id === 'elderly-assistance') {
+      return calculateOldPensionAmount(age);
+    } else if (benefit.id === 'severe-disability') {
+      return calculateDisabilityAmount(age);
+    }
+  }
+  return benefit.amount;
 }
 
 /**

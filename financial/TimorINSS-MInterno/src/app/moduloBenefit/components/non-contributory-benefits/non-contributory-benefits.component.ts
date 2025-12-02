@@ -4,6 +4,7 @@ import {
   NON_CONTRIBUTORY_BENEFIT_TYPES,
   NonContributoryBenefitType,
   getBenefitAmountDisplay,
+  getBenefitAmount,
   checkAgeEligibility
 } from '../../constants/non-contributory-benefits.constants';
 
@@ -88,10 +89,17 @@ export class NonContributoryBenefitsComponent implements OnInit {
   }
 
   /**
-   * Get benefit amount display
+   * Get benefit amount display (with dynamic calculation based on age)
    */
   getBenefitAmount(benefit: NonContributoryBenefitType): string {
-    return getBenefitAmountDisplay(benefit);
+    return getBenefitAmountDisplay(benefit, this.citizenAge);
+  }
+
+  /**
+   * Get benefit amount value (for calculations)
+   */
+  getBenefitAmountValue(benefit: NonContributoryBenefitType): number {
+    return getBenefitAmount(benefit, this.citizenAge);
   }
 
   /**

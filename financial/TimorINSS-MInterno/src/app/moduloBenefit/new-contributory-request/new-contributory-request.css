@@ -177,6 +177,25 @@
   margin-bottom: 12px;
 }
 
+.benefit-option-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 4px 0;
+}
+
+.benefit-label {
+  flex: 1;
+}
+
+.benefit-amount {
+  color: #1976d2;
+  font-weight: 600;
+  font-size: 14px;
+  margin-left: 16px;
+}
+
 /* Step Actions */
 .step-actions {
   display: flex;
@@ -188,6 +207,62 @@
 
 .step-actions button {
   min-width: 120px;
+}
+
+/* Non-Contributory Form */
+.non-contributory-form {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+  align-items: start;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.form-field ::ng-deep .mat-mdc-form-field {
+  width: 100%;
+}
+
+.form-field ::ng-deep .mat-mdc-text-field-wrapper {
+  width: 100%;
+}
+
+/* Calculated Info */
+.calculated-info {
+  margin-top: 24px;
+}
+
+.calculated-info .info-card {
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calculated-info .info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  font-size: 16px;
+}
+
+.calculated-info .info-item mat-icon {
+  color: #1976d2;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.calculated-info .info-item strong {
+  color: #333;
+  margin-right: 4px;
 }
 
 /* Responsive */
@@ -208,6 +283,11 @@
     grid-template-columns: 1fr;
   }
 
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
   .step-actions {
     flex-direction: column-reverse;
     gap: 12px;
@@ -216,4 +296,110 @@
   .step-actions button {
     width: 100%;
   }
+}
+
+/* Benefit Amount Display */
+.benefit-amount-display {
+  margin-top: 32px;
+}
+
+.benefit-amount-card {
+  background-color: #f5f5f5;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-amount-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.benefit-amount-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #1976d2;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.benefit-amount-card mat-card-title mat-icon {
+  color: #1976d2;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.benefit-amount-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.amount-row:last-child {
+  border-bottom: none;
+}
+
+.amount-row.highlight {
+  background-color: #e3f2fd;
+  padding: 16px;
+  border-radius: 8px;
+  border: 2px solid #1976d2;
+  margin-top: 8px;
+}
+
+.amount-row .label {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+.amount-row .value {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.amount-row .value.amount {
+  font-size: 24px;
+  color: #1976d2;
+  font-weight: 700;
+}
+
+.amount-breakdown {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.breakdown-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.breakdown-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.breakdown-list li {
+  padding: 8px 0;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.breakdown-list li:last-child {
+  border-bottom: none;
 }
