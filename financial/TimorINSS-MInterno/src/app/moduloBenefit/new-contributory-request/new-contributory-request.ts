@@ -5,6 +5,7 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { generateContributionPDF, ContributionPDFData } from '../utils/pdf.utils';
 
 import {
   ContributionPeriod,
@@ -1811,9 +1812,27 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     this.benefitService.submitBenefitRequest(request).subscribe({
       next: (response) => {
         this.isSubmitting = false;
-        alert(
-          `Request submitted successfully! Request ID: ${response.requestId}`
-        );
+        // Generate and download PDF only for contributory requests with contribution history
+        if (
+          this.selectedSchemeType === 'contributory' &&
+          this.contributionHistory.length > 0
+        ) {
+          try {
+            this.generateContributionPDF();
+            alert(
+              `Request submitted successfully! Request ID: ${response.requestId}\n\nPDF file with contribution history has been downloaded.`
+            );
+          } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert(
+              `Request submitted successfully! Request ID: ${response.requestId}\n\nNote: PDF generation failed.`
+            );
+          }
+        } else {
+          alert(
+            `Request submitted successfully! Request ID: ${response.requestId}`
+          );
+        }
         this.router.navigate(['/benefit/pending-requests']);
       },
       error: (error) => {
@@ -1822,6 +1841,49 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
         alert('Error submitting request. Please try again.');
       },
     });
+  }
+
+  /**
+   * Generate PDF document listing contribution months
+   * Uses utility function from pdf.utils.ts
+   * Limited to 3-5 years of data
+   */
+  generateContributionPDF(): void {
+    if (!this.citizenInfo || this.contributionHistory.length === 0) {
+      console.warn(
+        'Cannot generate PDF: Missing citizen info or contribution history'
+      );
+      return;
+    }
+
+    // Calculate pension value based on benefit type
+    let pensionValue = 0;
+    if (
+      this.selectedBenefitType === 'old-age-pension' ||
+      this.selectedBenefitType === 'survivor-pension'
+    ) {
+      pensionValue = this.calculateDeceasedEstimatedPension();
+    } else if (
+      this.selectedBenefitType === 'disability-pension' &&
+      this.disabilityInfo
+    ) {
+      pensionValue = this.disabilityInfo.estimatedPension;
+    }
+
+    // Prepare PDF data
+    const pdfData: ContributionPDFData = {
+      citizenInfo: this.citizenInfo,
+      contributionHistory: this.contributionHistory,
+      contributionMonths: this.contributionMonths,
+      referenceRemuneration: this.getReferenceRemuneration(),
+      benefitTypeLabel: this.getSelectedBenefitLabel(),
+      gender: this.nonContributoryForm.get('gender')?.value || undefined,
+      employmentSector: this.citizenInfo.employmentSector,
+      pensionValue: pensionValue,
+    };
+
+    // Generate PDF using utility function
+    generateContributionPDF(pdfData);
   }
 
   /**
