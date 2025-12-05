@@ -64,7 +64,7 @@ export const MINIMUM_LABOR_CAPACITY_REDUCTION = 61;
 /**
  * Default health status
  */
-export const DEFAULT_HEALTH_STATUS = 'Bình thường';
+export const DEFAULT_HEALTH_STATUS = 'Normal';
 
 /**
  * Employment Sector Types
