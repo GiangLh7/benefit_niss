@@ -1,0 +1,37 @@
+<div class="dialog-container">
+  <!-- Header -->
+  <div class="dialog-header">
+    <mat-icon class="dialog-icon success-icon">check_circle</mat-icon>
+    <h2 mat-dialog-title>Request Submitted Successfully</h2>
+  </div>
+
+  <!-- Content -->
+  <mat-dialog-content class="dialog-content">
+    <div class="success-message">
+      <p class="request-id">
+        <strong>Request ID:</strong> {{ data.requestId }}
+      </p>
+      <p *ngIf="data.hasContributionHistory" class="info-message">
+        Your request has been submitted successfully. You can download the
+        contribution history file below.
+      </p>
+      <p *ngIf="!data.hasContributionHistory" class="info-message">
+        Your request has been submitted successfully.
+      </p>
+    </div>
+  </mat-dialog-content>
+
+  <!-- Actions -->
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button (click)="onClose()">Close</button>
+    <button
+      *ngIf="data.hasContributionHistory"
+      mat-raised-button
+      color="primary"
+      (click)="onDownloadClick()"
+    >
+      <mat-icon>download</mat-icon>
+      Download File Contribution History
+    </button>
+  </mat-dialog-actions>
+</div>

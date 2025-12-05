@@ -57,6 +57,7 @@ import { DocumentUploadComponent } from './components/document-upload/document-u
 import { BankAccountComponent } from './components/bank-account/bank-account.component';
 import { NonContributoryBenefitsComponent } from './components/non-contributory-benefits/non-contributory-benefits.component';
 import { SurvivorBenefitTypeComponent } from './components/survivor-benefit-type/survivor-benefit-type.component';
+import { SubmissionSuccessDialogComponent } from './components/submission-success-dialog/submission-success-dialog.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +80,7 @@ import { SurvivorBenefitTypeComponent } from './components/survivor-benefit-type
     BankAccountComponent,
     NonContributoryBenefitsComponent,
     SurvivorBenefitTypeComponent,
+    SubmissionSuccessDialogComponent,
     // Add more components here as you create them
   ],
   imports: [

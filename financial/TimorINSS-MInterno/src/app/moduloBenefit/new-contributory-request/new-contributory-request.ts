@@ -49,6 +49,10 @@ import {
   RejectionData,
 } from '../components/eligibility-rejection-dialog/eligibility-rejection-dialog.component';
 import {
+  SubmissionSuccessDialogComponent,
+  SubmissionSuccessData,
+} from '../components/submission-success-dialog/submission-success-dialog.component';
+import {
   BenefitType,
   CONTRIBUTORY_BENEFIT_TYPES,
 } from '../constants/benefit-types.constants';
@@ -1812,28 +1816,33 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     this.benefitService.submitBenefitRequest(request).subscribe({
       next: (response) => {
         this.isSubmitting = false;
-        // Generate and download PDF only for contributory requests with contribution history
-        if (
+        // Check if this is a contributory request with contribution history
+        const hasContributionHistory = 
           this.selectedSchemeType === 'contributory' &&
-          this.contributionHistory.length > 0
-        ) {
-          try {
-            this.generateContributionPDF();
-            alert(
-              `Request submitted successfully! Request ID: ${response.requestId}\n\nPDF file with contribution history has been downloaded.`
-            );
-          } catch (error) {
-            console.error('Error generating PDF:', error);
-            alert(
-              `Request submitted successfully! Request ID: ${response.requestId}\n\nNote: PDF generation failed.`
-            );
+          this.contributionHistory.length > 0;
+
+        // Open success modal
+        const dialogData: SubmissionSuccessData = {
+          requestId: response.requestId,
+          hasContributionHistory: hasContributionHistory,
+          onDownloadClick: () => {
+            try {
+              this.generateContributionPDF();
+            } catch (error) {
+              console.error('Error generating PDF:', error);
+              alert('Error generating PDF. Please try again.');
+            }
           }
-        } else {
-          alert(
-            `Request submitted successfully! Request ID: ${response.requestId}`
-          );
-        }
-        this.router.navigate(['/benefit/pending-requests']);
+        };
+
+        const dialogRef = this.dialog.open(SubmissionSuccessDialogComponent, {
+          width: '500px',
+          data: dialogData
+        });
+
+        dialogRef.afterClosed().subscribe(() => {
+          this.router.navigate(['/benefit/pending-requests']);
+        });
       },
       error: (error) => {
         this.isSubmitting = false;
