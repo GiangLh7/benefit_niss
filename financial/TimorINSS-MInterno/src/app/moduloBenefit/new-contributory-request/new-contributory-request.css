@@ -188,6 +188,13 @@
   flex: 1;
 }
 
+.benefit-note {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+  margin-left: 8px;
+}
+
 .benefit-amount {
   color: #1976d2;
   font-weight: 600;
@@ -295,11 +302,6 @@
   .step-actions button {
     width: 100%;
   }
-}
-
-/* Benefit Amount Display */
-.benefit-amount-display {
-  margin-top: 32px;
 }
 
 .benefit-amount-card {

@@ -195,16 +195,20 @@ export class BenefitEligibilityEngineService {
    * Disability level validation is done in the UI component
    */
   checkDisabilityPensionEligibility(input: EligibilityInput): DisabilityPensionEligibilityResult {
-    const MINIMUM_CONTRIBUTION_MONTHS = 60; // For 2025
     const currentYear = input.currentYear || new Date().getFullYear();
 
-    // Calculate minimum contribution based on year
-    // 2017: 12 months, 2018-2024: +6 months each year, 2025+: 60 months
-    let requiredMonths = MINIMUM_CONTRIBUTION_MONTHS;
+    // Calculate minimum contribution based on year for disability pension
+    // 2017: 12 months, 2018-2024: +6 months each year, 2025: 66 months, 2026+: +6 months each year
+    let requiredMonths = 60; // Default for 2025+
     if (currentYear === 2017) {
       requiredMonths = 12;
     } else if (currentYear >= 2018 && currentYear < 2025) {
       requiredMonths = 12 + (currentYear - 2017) * 6;
+    } else if (currentYear === 2025) {
+      requiredMonths = 66; // 2025: 66 months
+    } else if (currentYear > 2025) {
+      // 2026+: Continue increasing by 6 months per year from 2025 base
+      requiredMonths = 66 + (currentYear - 2025) * 6;
     }
 
     // Check contribution requirement

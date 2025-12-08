@@ -582,27 +582,24 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     // Clear age validation error if age is valid
     this.ageValidationError = null;
 
-    // Automatically determine benefit type based on age
-    // Age >= 60: Elderly Assistance (Old Pension)
-    // Age >= 18: Severe Disability (if not elderly)
-    if (age.years >= 60) {
-      this.selectedBenefitType = 'elderly-assistance';
-      this.calculatedBenefitAmount = calculateOldPensionAmount(age.years);
-      // Update form control
-      this.schemeTypeFormControl.setValue('elderly-assistance');
-    } else if (age.years >= 18) {
-      this.selectedBenefitType = 'severe-disability';
-      this.calculatedBenefitAmount = calculateDisabilityAmount(age.years);
-      // Update form control
-      this.schemeTypeFormControl.setValue('severe-disability');
+    // Don't automatically select benefit type - let user choose in step 3
+    // Only calculate amount if benefit type is already selected
+    if (this.selectedBenefitType) {
+      if (this.selectedBenefitType === 'elderly-assistance') {
+        this.calculatedBenefitAmount = calculateOldPensionAmount(age.years);
+      } else if (this.selectedBenefitType === 'severe-disability') {
+        this.calculatedBenefitAmount = calculateDisabilityAmount(age.years);
+      }
     }
 
-    // Update required documents based on selected benefit type
-    const selectedBenefit = this.nonContributoryBenefitTypes.find(
-      (bt) => bt.id === this.selectedBenefitType
-    );
-    if (selectedBenefit) {
-      this.requiredDocuments = selectedBenefit.requiredDocuments;
+    // Update required documents based on selected benefit type (if selected)
+    if (this.selectedBenefitType) {
+      const selectedBenefit = this.nonContributoryBenefitTypes.find(
+        (bt) => bt.id === this.selectedBenefitType
+      );
+      if (selectedBenefit) {
+        this.requiredDocuments = selectedBenefit.requiredDocuments;
+      }
     }
 
     // Update currentAge for display
@@ -699,6 +696,23 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     if (type === 'contributory' && benefitType === 'disability-pension') {
       if (!this.checkDisabilityPensionBasicEligibility()) {
         return; // Don't proceed with selection
+      }
+    }
+
+    // For non-contributory, calculate benefit amount when type is selected
+    if (type === 'non-contributory' && this.calculatedAge > 0) {
+      if (benefitType === 'elderly-assistance') {
+        this.calculatedBenefitAmount = calculateOldPensionAmount(this.calculatedAge);
+      } else if (benefitType === 'severe-disability') {
+        this.calculatedBenefitAmount = calculateDisabilityAmount(this.calculatedAge);
+      }
+      
+      // Update required documents
+      const selectedBenefit = this.nonContributoryBenefitTypes.find(
+        (bt) => bt.id === benefitType
+      );
+      if (selectedBenefit) {
+        this.requiredDocuments = selectedBenefit.requiredDocuments;
       }
     }
 
@@ -1600,6 +1614,15 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       case 2: // Step 3: Specific Benefit Type Selection
         if (!this.schemeTypeFormControl.valid) {
           return false;
+        }
+        // For non-contributory: must have selected benefit type and calculated amount
+        if (this.selectedSchemeType === 'non-contributory') {
+          return (
+            !!this.selectedBenefitType &&
+            (this.selectedBenefitType === 'elderly-assistance' || this.selectedBenefitType === 'severe-disability') &&
+            this.calculatedBenefitAmount > 0 &&
+            !this.ageValidationError
+          );
         }
         // For survivor's pension, need at least one dependent
         if (this.selectedBenefitType === 'survivor-pension') {

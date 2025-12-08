@@ -142,8 +142,8 @@ export function generateContributionPDF(data: ContributionPDFData): void {
     return;
   }
 
-  // Determine years to include (3-5 years, default 5)
-  const yearsToInclude = Math.min(5, Math.max(3, Math.ceil(data.contributionMonths / 12)));
+  // Determine years to include - increase to show more years (up to 10 years)
+  const yearsToInclude = Math.min(10, Math.max(5, Math.ceil(data.contributionMonths / 12)));
   
   const pdf = new jsPDF({
     orientation: 'landscape',
@@ -258,24 +258,21 @@ export function generateContributionPDF(data: ContributionPDFData): void {
     'Dec',
   ];
 
-  // Create table with months in columns
-  // In landscape mode, we can fit more months per row (about 20-24 months per row)
-  const monthsPerRow = 24;
-  const monthChunks: any[][] = [];
+  // Divide months into chunks - each chunk will be a separate sub-table
+  const monthsPerChunk = 24; // Approximately 2 years per sub-table
+  const monthChunks: Array<Array<{ monthYear: Date; remuneration: number; company: string }>> = [];
 
-  for (let i = 0; i < allMonths.length; i += monthsPerRow) {
-    monthChunks.push(allMonths.slice(i, i + monthsPerRow));
+  for (let i = 0; i < allMonths.length; i += monthsPerChunk) {
+    monthChunks.push(allMonths.slice(i, i + monthsPerChunk));
   }
 
-  // Process each chunk
+  // Create a sub-table for each chunk
   monthChunks.forEach((chunk, chunkIndex) => {
-    if (chunkIndex > 0) {
-      pdf.addPage();
-      yPosition = 20;
-    }
-
-    // Create headers: NISS, Nome beneficiário falecido, then months
+    // All sub-tables have NISS and Nome columns for alignment
+    // But from 2nd table onwards, these columns are empty and have no border
+    const isFirstTable = chunkIndex === 0;
     const headers: string[] = ['NISS', 'Nome beneficiário falecido'];
+    
     chunk.forEach((month) => {
       const monthIndex = month.monthYear.getMonth();
       const yearShort = month.monthYear.getFullYear().toString().slice(-2);
@@ -283,22 +280,24 @@ export function generateContributionPDF(data: ContributionPDFData): void {
       headers.push(monthLabel);
     });
 
-    // Create table data
+    // Create table data for this chunk - single row
     const tableData: any[] = [];
-
-    // Empty row for NISS and Name
-    const emptyRow: any[] = ['', ''];
-    chunk.forEach(() => emptyRow.push(''));
-    tableData.push(emptyRow);
-
-    // Remuneração declaradas row
-    const remunerationRow: any[] = ['Remuneração declaradas', ''];
+    const remunerationRow: any[] = [];
+    
+    // Always include first two columns for alignment
+    if (isFirstTable) {
+      remunerationRow.push('Remuneração declaradas', '');
+    } else {
+      // Empty cells for alignment, no border will be shown
+      remunerationRow.push('', '');
+    }
+    
     chunk.forEach((month) => {
       remunerationRow.push(month.remuneration.toFixed(2));
     });
     tableData.push(remunerationRow);
 
-    // Use autoTable for better table formatting
+    // Create sub-table for this chunk
     (pdf as any).autoTable({
       startY: yPosition,
       head: [headers],
@@ -313,22 +312,68 @@ export function generateContributionPDF(data: ContributionPDFData): void {
       bodyStyles: {
         fontSize: 7,
         textColor: [0, 0, 0],
+        cellPadding: 1.5,
+        overflow: 'linebreak',
+        halign: 'right', // Right align numbers
+        minCellHeight: 5,
       },
       styles: {
         cellPadding: 1.5,
         overflow: 'linebreak',
         fontSize: 7,
+        lineWidth: 0.1,
       },
       columnStyles: {
-        0: { cellWidth: 20 },
-        1: { cellWidth: 35 },
+        // All tables have same column structure for alignment
+        0: { 
+          cellWidth: 20, 
+          halign: 'left',
+          ...(isFirstTable ? {} : { lineColor: [255, 255, 255], fillColor: [255, 255, 255] }) // Hide border for subsequent tables
+        },
+        1: { 
+          cellWidth: 35, 
+          halign: 'left',
+          ...(isFirstTable ? {} : { lineColor: [255, 255, 255], fillColor: [255, 255, 255] }) // Hide border for subsequent tables
+        },
+        // Set width for month columns in this chunk
+        ...Object.fromEntries(
+          Array.from({ length: chunk.length }, (_, i) => [
+            i + 2,
+            { cellWidth: 12, halign: 'right' }, // Fixed small width for month columns
+          ])
+        ),
       },
       margin: { left: 15, right: 15 },
+      didParseCell: (data: any) => {
+        // Hide borders for first two columns in subsequent tables
+        if (!isFirstTable && (data.column.index === 0 || data.column.index === 1)) {
+          data.cell.styles.lineColor = [255, 255, 255]; // White border (invisible)
+          data.cell.styles.fillColor = [255, 255, 255]; // White background
+          data.cell.styles.textColor = [255, 255, 255]; // White text (invisible)
+        }
+        
+        // Format numbers to 2 decimals and ensure they fit on one line
+        // Month columns start at index 2 for all tables
+        if (data.column.index > 1 && typeof data.cell.text === 'string' && data.cell.text !== '') {
+          const numValue = parseFloat(data.cell.text);
+          if (!isNaN(numValue)) {
+            // Format to 2 decimals
+            data.cell.text = numValue.toFixed(2);
+            // Set styles to prevent wrapping
+            data.cell.styles.overflow = 'linebreak';
+          }
+        }
+      },
+      showHead: 'firstPage', // Show header only on first sub-table
+      tableWidth: 'wrap',
+      horizontalPageBreak: false,
+      pageBreak: 'avoid',
+      rowPageBreak: 'avoid',
     });
 
-    // Get final Y position after table
+    // Get final Y position after this sub-table and add small spacing
     const finalY = (pdf as any).lastAutoTable.finalY || yPosition + 30;
-    yPosition = finalY;
+    yPosition = finalY + 3; // Small spacing between sub-tables
   });
 
   // Summary Section at bottom of last page

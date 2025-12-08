@@ -177,13 +177,13 @@ describe('BenefitEligibilityEngineService', () => {
 
       expect(result.eligible).toBe(true);
       expect(result.currentContributionMonths).toBe(99);
-      expect(result.requiredContributionMonths).toBe(60);
+      expect(result.requiredContributionMonths).toBe(66); // 2025: 66 months
     });
 
-    it('should be eligible (TLD555555555): 55 years, 60 months (exactly minimum)', () => {
+    it('should be eligible (TLD555555555): 55 years, 66 months (exactly minimum)', () => {
       const input: EligibilityInput = {
         dateOfBirth: '1970-02-20', // 55 years old
-        contributionMonths: 60, // Exactly minimum for 2025
+        contributionMonths: 66, // Exactly minimum for 2025
         employmentSector: EmploymentSector.PRIVATE,
         currentYear,
       };
@@ -191,13 +191,14 @@ describe('BenefitEligibilityEngineService', () => {
       const result = service.checkDisabilityPensionEligibility(input);
 
       expect(result.eligible).toBe(true);
-      expect(result.currentContributionMonths).toBe(60);
+      expect(result.currentContributionMonths).toBe(66);
+      expect(result.requiredContributionMonths).toBe(66);
     });
 
-    it('should reject (TLD333333333): 42 years, 56 months < 60 required', () => {
+    it('should reject (TLD333333333): 42 years, 56 months < 66 required', () => {
       const input: EligibilityInput = {
         dateOfBirth: '1983-03-10', // 42 years old
-        contributionMonths: 56, // 4 years 8 months < 60
+        contributionMonths: 56, // 4 years 8 months < 66
         employmentSector: EmploymentSector.PRIVATE,
         currentYear,
       };
@@ -207,7 +208,131 @@ describe('BenefitEligibilityEngineService', () => {
       expect(result.eligible).toBe(false);
       expect(result.rejectionReason).toBe('contribution');
       expect(result.currentContributionMonths).toBe(56);
-      expect(result.requiredContributionMonths).toBe(60);
+      expect(result.requiredContributionMonths).toBe(66); // 2025: 66 months
+    });
+  });
+
+  describe('Survivor Pension Eligibility', () => {
+    const currentYear = 2025;
+
+    describe('ELIGIBLE Cases', () => {
+      it('should be eligible (TLS111111111): 50 years, 120 months', () => {
+        const input: EligibilityInput = {
+          dateOfBirth: '1975-03-15', // 50 years old
+          contributionMonths: 120, // 10 years
+          employmentSector: EmploymentSector.PRIVATE,
+          currentYear,
+        };
+
+        const result = service.checkSurvivorPensionEligibility(input);
+
+        expect(result.eligible).toBe(true);
+        expect(result.currentContributionMonths).toBe(120);
+        expect(result.requiredContributionMonths).toBe(60); // 2025: 60 months
+        expect(result.message).toContain('Eligible for Survivor Pension');
+      });
+
+      it('should be eligible (TLS555555555): 45 years, 60 months (exactly minimum)', () => {
+        const input: EligibilityInput = {
+          dateOfBirth: '1980-06-20', // 45 years old
+          contributionMonths: 60, // Exactly minimum for 2025
+          employmentSector: EmploymentSector.PRIVATE,
+          currentYear,
+        };
+
+        const result = service.checkSurvivorPensionEligibility(input);
+
+        expect(result.eligible).toBe(true);
+        expect(result.currentContributionMonths).toBe(60);
+        expect(result.requiredContributionMonths).toBe(60);
+        expect(result.message).toContain('Eligible for Survivor Pension');
+      });
+
+      it('should be eligible (TLS999999999): 35 years, 180 months, Public', () => {
+        const input: EligibilityInput = {
+          dateOfBirth: '1990-01-10', // 35 years old
+          contributionMonths: 180, // 15 years
+          employmentSector: EmploymentSector.PUBLIC,
+          currentYear,
+        };
+
+        const result = service.checkSurvivorPensionEligibility(input);
+
+        expect(result.eligible).toBe(true);
+        expect(result.currentContributionMonths).toBe(180);
+        expect(result.requiredContributionMonths).toBe(60);
+      });
+    });
+
+    describe('REJECTED Cases - Insufficient Contribution', () => {
+      it('should reject (TLS333333333): 40 years, 48 months < 60 months required', () => {
+        const input: EligibilityInput = {
+          dateOfBirth: '1985-05-12', // 40 years old
+          contributionMonths: 48, // 4 years < 60 required
+          employmentSector: EmploymentSector.PRIVATE,
+          currentYear,
+        };
+
+        const result = service.checkSurvivorPensionEligibility(input);
+
+        expect(result.eligible).toBe(false);
+        expect(result.rejectionReason).toBe('contribution');
+        expect(result.currentContributionMonths).toBe(48);
+        expect(result.requiredContributionMonths).toBe(60); // 2025: 60 months
+        expect(result.message).toContain('does NOT meet the minimum contribution requirement');
+        expect(result.suggestions).toContain('Continue contributing until reaching 60 months');
+        expect(result.suggestions).toContain('Apply for non-contributory benefits (if eligible)');
+      });
+
+      it('should reject (TLS444444444): 55 years, 54 months < 60 months required', () => {
+        const input: EligibilityInput = {
+          dateOfBirth: '1970-08-25', // 55 years old
+          contributionMonths: 54, // 4 years 6 months < 60 required
+          employmentSector: EmploymentSector.PRIVATE,
+          currentYear,
+        };
+
+        const result = service.checkSurvivorPensionEligibility(input);
+
+        expect(result.eligible).toBe(false);
+        expect(result.rejectionReason).toBe('contribution');
+        expect(result.currentContributionMonths).toBe(54);
+        expect(result.requiredContributionMonths).toBe(60);
+        expect(result.message).toContain('does NOT meet the minimum contribution requirement');
+      });
+
+      it('should reject (TLS666666666): 30 years, 36 months < 60 months required, Public', () => {
+        const input: EligibilityInput = {
+          dateOfBirth: '1995-02-14', // 30 years old
+          contributionMonths: 36, // 3 years < 60 required
+          employmentSector: EmploymentSector.PUBLIC,
+          currentYear,
+        };
+
+        const result = service.checkSurvivorPensionEligibility(input);
+
+        expect(result.eligible).toBe(false);
+        expect(result.rejectionReason).toBe('contribution');
+        expect(result.currentContributionMonths).toBe(36);
+        expect(result.requiredContributionMonths).toBe(60);
+      });
+
+      it('should reject (TLS777777777): 25 years, 12 months < 60 months required', () => {
+        const input: EligibilityInput = {
+          dateOfBirth: '2000-11-30', // 25 years old
+          contributionMonths: 12, // 1 year < 60 required
+          employmentSector: EmploymentSector.PRIVATE,
+          currentYear,
+        };
+
+        const result = service.checkSurvivorPensionEligibility(input);
+
+        expect(result.eligible).toBe(false);
+        expect(result.rejectionReason).toBe('contribution');
+        expect(result.currentContributionMonths).toBe(12);
+        expect(result.requiredContributionMonths).toBe(60);
+        expect(result.message).toContain('does NOT meet the minimum contribution requirement');
+      });
     });
   });
 

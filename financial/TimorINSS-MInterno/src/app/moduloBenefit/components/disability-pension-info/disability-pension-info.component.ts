@@ -36,7 +36,28 @@ export class DisabilityPensionInfoComponent implements OnInit, OnChanges {
 
   // Minimum requirements
   readonly MINIMUM_DISABILITY_LEVEL = 66.67;
-  readonly MINIMUM_CONTRIBUTION_MONTHS = 60; // For 2025
+  
+  /**
+   * Get minimum contribution months for disability pension based on current year
+   */
+  getMinimumContributionMonths(): number {
+    const currentYear = new Date().getFullYear();
+    // 2017: 12 months, 2018-2024: +6 months each year, 2025: 66 months, 2026+: +6 months each year
+    if (currentYear === 2017) {
+      return 12;
+    } else if (currentYear >= 2018 && currentYear < 2025) {
+      return 12 + (currentYear - 2017) * 6;
+    } else if (currentYear === 2025) {
+      return 66; // 2025: 66 months
+    } else if (currentYear > 2025) {
+      return 66 + (currentYear - 2025) * 6;
+    }
+    return 66; // Default for 2025+
+  }
+  
+  get MINIMUM_CONTRIBUTION_MONTHS(): number {
+    return this.getMinimumContributionMonths();
+  }
 
   ngOnInit(): void {
     this.disabilityLevelControl.valueChanges.subscribe(value => {

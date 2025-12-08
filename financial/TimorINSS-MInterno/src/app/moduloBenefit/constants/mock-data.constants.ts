@@ -251,13 +251,13 @@ export const MOCK_CITIZENS: Record<string, MockCitizenData> = {
 
   // ===== DISABILITY PENSION TEST CASES =====
   // Note: Disability level (66.67% - 100%) is now user input, so test cases focus on:
-  // - Contribution period (minimum 60 months for 2025)
+  // - Contribution period (minimum 66 months for 2025)
   // - Age (any age allowed, but auto-converts at 60)
   // - Sector (private/public)
   // - Reference remuneration for pension calculation
 
   // Case 10: ELIGIBLE - Sufficient Contribution, Middle Age, Private Sector
-  // 45 years old, 8 years 3 months (99 months) - Well above minimum (60 months for 2025)
+  // 45 years old, 8 years 3 months (99 months) - Well above minimum (66 months for 2025)
   // User can input any disability level ≥ 66.67%
   TLD111111111: {
     niss: 'TLD111111111',
@@ -305,7 +305,7 @@ export const MOCK_CITIZENS: Record<string, MockCitizenData> = {
   },
 
   // Case 12: REJECTED - Insufficient Contribution Period
-  // 42 years old, 4 years 8 months (56 months) - Below minimum (60 months for 2025)
+  // 42 years old, 4 years 8 months (56 months) - Below minimum (66 months for 2025)
   // Even with high disability level, cannot apply due to insufficient contribution
   TLD333333333: {
     niss: 'TLD333333333',
@@ -323,13 +323,13 @@ export const MOCK_CITIZENS: Record<string, MockCitizenData> = {
     totalYears: 4,
     totalMonths: 8,
     description:
-      'Disability rejected - insufficient contribution (56 < 60 months for 2025). Must continue contributing.',
+      'Disability rejected - insufficient contribution (56 < 66 months for 2025). Must continue contributing.',
     employmentSector: EmploymentSector.PRIVATE,
     referenceRemuneration: 160.0, // Average of 12 highest months
   },
 
   // Case 13: BORDERLINE - Exactly Minimum Contribution
-  // 55 years old, 5 years 0 months (60 months) - EXACTLY minimum for 2025
+  // 55 years old, 5 years 6 months (66 months) - EXACTLY minimum for 2025
   // Edge case: exactly meets requirement
   TLD555555555: {
     niss: 'TLD555555555',
@@ -341,13 +341,13 @@ export const MOCK_CITIZENS: Record<string, MockCitizenData> = {
         endYear: 2025,
         company: 'Timor Port Authority',
         years: 5,
-        months: 0,
+        months: 6,
       },
     ],
     totalYears: 5,
-    totalMonths: 0,
+    totalMonths: 6,
     description:
-      'Disability eligible (borderline) - exactly 60 months contribution (minimum for 2025), age 55.',
+      'Disability eligible (borderline) - exactly 66 months contribution (minimum for 2025), age 55.',
     employmentSector: EmploymentSector.PRIVATE,
     referenceRemuneration: 175.0,
   },
@@ -395,9 +395,60 @@ export const MOCK_CITIZENS: Record<string, MockCitizenData> = {
     totalYears: 3,
     totalMonths: 6,
     description:
-      'Disability rejected - very low contribution (42 < 60 months). Needs 18 more months for 2025.',
+      'Disability rejected - very low contribution (42 < 66 months). Needs 24 more months for 2025.',
     employmentSector: EmploymentSector.PRIVATE,
     referenceRemuneration: 150.0, // Average of 12 highest months
+  },
+
+  // ===== SURVIVOR PENSION TEST CASES =====
+  // Note: Survivor pension requires minimum 60 months contribution for 2025
+  // Age is not a requirement for survivor pension (deceased person's contribution matters)
+
+  // Case 16: ELIGIBLE - Sufficient Contribution for Survivor Pension
+  // 50 years old (deceased), 10 years (120 months) - Well above minimum (60 months for 2025)
+  TLS111111111: {
+    niss: 'TLS111111111',
+    name: 'Fernando da Costa',
+    dateOfBirth: '1975-03-15',
+    contributionHistory: [
+      {
+        startYear: 2015,
+        endYear: 2025,
+        company: 'Timor Gap',
+        years: 10,
+        months: 0,
+      },
+    ],
+    totalYears: 10,
+    totalMonths: 0,
+    description:
+      'Survivor pension eligible - sufficient contribution (120 months), age 50, private sector. Dependents can apply.',
+    employmentSector: EmploymentSector.PRIVATE,
+    referenceRemuneration: 200.0, // Average of 12 highest months
+  },
+
+  // Case 23: REJECTED - Contribution Below 12 Months
+  // 28 years old (deceased), 6 months - Below 12 months minimum
+  // Very minimal contribution, cannot apply for any survivor benefits
+  TLS888888888: {
+    niss: 'TLS888888888',
+    name: 'João Pereira',
+    dateOfBirth: '1997-07-15',
+    contributionHistory: [
+      {
+        startYear: 2024,
+        endYear: 2025,
+        company: 'Restaurante Sabores',
+        years: 0,
+        months: 6,
+      },
+    ],
+    totalYears: 0,
+    totalMonths: 6,
+    description:
+      'Survivor pension rejected - contribution below 12 months (6 < 12 months minimum). Cannot apply for survivor pension. Dependents may only be eligible for funeral reimbursement if no eligible dependents.',
+    employmentSector: EmploymentSector.PRIVATE,
+    referenceRemuneration: 140.0,
   },
 
 };

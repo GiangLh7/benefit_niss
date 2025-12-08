@@ -394,6 +394,49 @@
               </mat-card-content>
             </mat-card>
 
+            <!-- Non-Contributory Benefit Type Selection -->
+            <mat-card
+              class="scheme-card"
+              *ngIf="selectedSchemeType === 'non-contributory' && calculatedAge > 0 && !ageValidationError"
+            >
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon>volunteer_activism</mat-icon>
+                  Non-Contributory Benefits
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                <h2 class="step-title">Choose Specific Benefit Type</h2>
+                <p class="step-description">
+                  Select the type of non-contributory benefit
+                </p>
+                <mat-radio-group [formControl]="schemeTypeFormControl">
+                  <mat-radio-button
+                    value="elderly-assistance"
+                    class="scheme-option"
+                    [disabled]="calculatedAge < 60"
+                    (change)="selectSchemeType('non-contributory', 'elderly-assistance')"
+                  >
+                    <div class="benefit-option-content">
+                      <span class="benefit-label">Old Age Social Pension</span>
+                      <span class="benefit-note" *ngIf="calculatedAge < 60">(Requires age 60+)</span>
+                    </div>
+                  </mat-radio-button>
+                  <mat-radio-button
+                    value="severe-disability"
+                    class="scheme-option"
+                    [disabled]="calculatedAge < 18"
+                    (change)="selectSchemeType('non-contributory', 'severe-disability')"
+                  >
+                    <div class="benefit-option-content">
+                      <span class="benefit-label">Severe Disability Assistance</span>
+                      <span class="benefit-note" *ngIf="calculatedAge < 18">(Requires age 18+)</span>
+                    </div>
+                  </mat-radio-button>
+                </mat-radio-group>
+              </mat-card-content>
+            </mat-card>
+
             <!-- Age Validation Error -->
             <div
               *ngIf="selectedSchemeType === 'non-contributory' && ageValidationError"
@@ -405,7 +448,7 @@
 
             <!-- Non-Contributory Benefit Amount Display -->
             <div
-              *ngIf="selectedSchemeType === 'non-contributory' && calculatedAge > 0 && !ageValidationError"
+              *ngIf="selectedSchemeType === 'non-contributory' && calculatedAge > 0 && !ageValidationError && schemeTypeFormControl.value"
               class="benefit-amount-display"
             >
               <mat-card class="benefit-amount-card">
