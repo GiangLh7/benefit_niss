@@ -549,6 +549,15 @@ mat-chip.status-expired {
   border-bottom: 1px solid #e0e0e0 !important;
 }
 
+.detail-row-hidden {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
 @media (max-width: 480px) {
   .user-level-badge {
     font-size: 11px;

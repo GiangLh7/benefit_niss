@@ -554,4 +554,11 @@ export class PendingRequestsComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/benefit/contribution-scheme']);
   }
+
+  /**
+   * Predicate function to determine if expanded detail row should be shown
+   */
+  isExpanded = (index: number, row: PendingRequest): boolean => {
+    return row.expanded === true;
+  };
 }

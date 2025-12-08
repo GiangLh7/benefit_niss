@@ -190,7 +190,7 @@ export class BenefitService {
         retirementOption: 'NORMAL' as any,
         documents: [
           {
-            type: 'Giấy xác nhận đóng BHXH',
+            type: 'Social Security Contribution Confirmation',
             fileName: 'confirmation.pdf',
             fileSize: 1024000,
             fileType: 'application/pdf',
@@ -203,8 +203,8 @@ export class BenefitService {
           accountHolderName: 'Maria Fernanda dos Santos',
         },
         contributionMonths: 308,
-        currentAge: '58 năm 5 tháng',
-        eligibilityMessage: 'Đủ điều kiện hưởng lương hưu',
+        currentAge: '58 years 5 months',
+        eligibilityMessage: 'Eligible for old-age pension',
         submittedDate: new Date('2025-01-15'),
         requestStatus: 'submitted',
       },
@@ -218,14 +218,14 @@ export class BenefitService {
         disabilityPaymentType: 'MONTHLY' as any,
         documents: [
           {
-            type: 'Biên bản giám định mức suy giảm KNLĐ',
+            type: 'Labor Capacity Reduction Assessment Report',
             fileName: 'disability_assessment.pdf',
             fileSize: 2048000,
             fileType: 'application/pdf',
             uploadedAt: new Date('2025-01-18'),
           },
           {
-            type: 'Giấy ra viện',
+            type: 'Hospital Discharge Certificate',
             fileName: 'hospital_discharge.pdf',
             fileSize: 1536000,
             fileType: 'application/pdf',
@@ -238,8 +238,8 @@ export class BenefitService {
           accountHolderName: 'João Carlos Silva',
         },
         contributionMonths: 200,
-        currentAge: '64 năm 8 tháng',
-        eligibilityMessage: 'Đủ điều kiện nhận trợ cấp khuyết tật',
+        currentAge: '64 years 8 months',
+        eligibilityMessage: 'Eligible for disability pension',
         submittedDate: new Date('2025-01-18'),
         requestStatus: 'pending_approval',
       },
@@ -289,7 +289,7 @@ export class BenefitService {
         ],
         documents: [
           {
-            type: 'Giấy chứng tử',
+            type: 'Death Certificate',
             fileName: 'death_certificate.pdf',
             fileSize: 512000,
             fileType: 'application/pdf',
@@ -297,8 +297,8 @@ export class BenefitService {
           },
         ],
         contributionMonths: 120,
-        currentAge: '59 năm 10 tháng',
-        eligibilityMessage: 'Đủ điều kiện nhận trợ cấp tử tuất',
+        currentAge: '59 years 10 months',
+        eligibilityMessage: 'Eligible for survivor pension',
         submittedDate: new Date('2025-01-22'),
         requestStatus: 'rejected',
       },
