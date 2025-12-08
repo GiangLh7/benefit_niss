@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   ContributionHistoryResponse,
@@ -22,6 +22,18 @@ export class ContributionHistory implements OnInit {
   readonly error = signal<string | null>(null);
   readonly data = signal<ContributionHistoryResponse | null>(null);
 
+  readonly filteredSocialHistory = computed(() => {
+    const history = this.data();
+    if (!history?.socialHistory) return [];
+    return history.socialHistory.filter(record => record != null);
+  });
+
+  readonly filteredMonthlyBreakdown = computed(() => {
+    const history = this.data();
+    if (!history?.monthlyBreakdown) return [];
+    return history.monthlyBreakdown.filter(row => row != null && row.month);
+  });
+
   ngOnInit(): void {
     this.fetchContributionHistory();
   }
@@ -32,6 +44,10 @@ export class ContributionHistory implements OnInit {
 
   viewDashboard(): void {
     void this.router.navigate(['/benefit']);
+  }
+
+  trackByIndex(index: number): number {
+    return index;
   }
 
   private fetchContributionHistory(): void {

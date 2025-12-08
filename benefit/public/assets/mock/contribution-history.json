@@ -26,18 +26,18 @@
     }
   ],
   "monthlyBreakdown": [
-    { "month": "January", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "February", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "March", "workingDays": 30, "declaredRemuneration": "1,950 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "April", "workingDays": 0, "declaredRemuneration": "0 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "May", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "June", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "July", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "August", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "September", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "October", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "November", "workingDays": 0, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "December", "workingDays": 0, "declaredRemuneration": "0 USD", "regime": "General", "adherenceType": "Mandatory" }
+    { "month": "Jan 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Feb 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Mar 2025", "workingDays": 30, "declaredRemuneration": "1,950 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Apr 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "May 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Jun 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Jul 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Aug 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Sep 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Oct 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Nov 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Dec 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" }
   ]
 }
 
