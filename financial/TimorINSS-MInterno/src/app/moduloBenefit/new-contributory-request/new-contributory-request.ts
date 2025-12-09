@@ -1475,9 +1475,47 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     if (
       this.contributionMonths < this.survivorConfig.minimumContributionMonths
     ) {
-      alert(
-        `At least ${this.survivorConfig.minimumContributionMonths} months of social security contributions are required to be eligible for survivor's pension.`
-      );
+      // Prepare rejection data for dialog
+      const actualYears = Math.floor(this.contributionMonths / 12);
+      const actualMonths = this.contributionMonths % 12;
+      const requiredYears = Math.floor(this.survivorConfig.minimumContributionMonths / 12);
+      const requiredMonths = this.survivorConfig.minimumContributionMonths % 12;
+
+      let currentValue = '';
+      if (actualYears > 0 && actualMonths > 0) {
+        currentValue = `${actualYears} years ${actualMonths} months (${this.contributionMonths} months)`;
+      } else if (actualYears > 0) {
+        currentValue = `${actualYears} years (${this.contributionMonths} months)`;
+      } else {
+        currentValue = `${actualMonths} months`;
+      }
+
+      let requiredValue = '';
+      if (requiredYears > 0 && requiredMonths > 0) {
+        requiredValue = `${requiredYears} years ${requiredMonths} months (${this.survivorConfig.minimumContributionMonths} months)`;
+      } else if (requiredYears > 0) {
+        requiredValue = `${requiredYears} years (${this.survivorConfig.minimumContributionMonths} months)`;
+      } else {
+        requiredValue = `${requiredMonths} months`;
+      }
+
+      const rejectionData: RejectionData = {
+        reason: 'contribution',
+        benefitType: 'survivor',
+        citizenName: this.citizenInfo?.name || 'Unknown',
+        citizenNiss: this.citizenInfo?.niss || '',
+        sector: this.citizenInfo?.employmentSector === EmploymentSector.PUBLIC 
+          ? 'Public Sector' 
+          : 'Private Sector',
+        currentValue: currentValue,
+        requiredValue: requiredValue,
+        suggestions: [
+          `Continue contributing until reaching ${this.survivorConfig.minimumContributionMonths} months`,
+          'Apply for non-contributory benefits (if eligible)',
+        ],
+      };
+
+      this.showSurvivorRejectionDialog(rejectionData);
       this.selectedBenefitType = '';
       this.schemeTypeFormControl.setValue('');
       return;
@@ -1488,6 +1526,22 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     const referenceRemuneration = this.getReferenceRemuneration();
     this.funeralAllowanceAmount = 3 * referenceRemuneration;
     this.showSurvivorForm = true;
+  }
+
+  /**
+   * Show rejection dialog for survivor pension
+   */
+  private showSurvivorRejectionDialog(data: RejectionData): void {
+    const dialogRef = this.dialog.open(EligibilityRejectionDialogComponent, {
+      width: '600px',
+      maxWidth: '90vw',
+      data: data,
+      disableClose: false,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      // Dialog closed, user can try selecting a different benefit type
+    });
   }
 
   /**

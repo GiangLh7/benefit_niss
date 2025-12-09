@@ -1,9 +1,9 @@
 /**
  * Benefit Eligibility Engine Service
- * 
+ *
  * Centralized service for determining eligibility and calculating benefits
  * for all benefit types (Old-Age, Disability, Survivor, etc.)
- * 
+ *
  * This service ensures:
  * - Consistent eligibility rules across the application
  * - Easy testing of business logic
@@ -83,15 +83,16 @@ export interface PensionCalculationResult {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BenefitEligibilityEngineService {
-
   /**
    * Check Old-Age Pension Eligibility
    * Includes both normal retirement and early retirement validation
    */
-  checkOldAgePensionEligibility(input: EligibilityInput): OldAgePensionEligibilityResult {
+  checkOldAgePensionEligibility(
+    input: EligibilityInput
+  ): OldAgePensionEligibilityResult {
     const currentYear = input.currentYear || new Date().getFullYear();
     const requiredMonths = calculateMinimumContributionMonths(currentYear);
     const requiredAge = getMinimumRetirementAge(input.employmentSector);
@@ -105,7 +106,8 @@ export class BenefitEligibilityEngineService {
       contributionText += ` ${remainingMonths} months`;
     }
 
-    const sectorLabel = sector === EmploymentSector.PUBLIC ? 'Public Sector' : 'Private Sector';
+    const sectorLabel =
+      sector === EmploymentSector.PUBLIC ? 'Public Sector' : 'Private Sector';
 
     // Check contribution requirement
     if (input.contributionMonths < requiredMonths) {
@@ -123,7 +125,9 @@ export class BenefitEligibilityEngineService {
         message: `This citizen does NOT meet the minimum contribution requirement for Old-Age Pension.`,
         suggestions: [
           `Continue contributing until reaching ${requiredMonths} months`,
-          age.years >= 55 && age.years < 60 && sector === EmploymentSector.PRIVATE
+          age.years >= 55 &&
+          age.years < 60 &&
+          sector === EmploymentSector.PRIVATE
             ? 'You may be eligible for early retirement (age 55-59, private sector)'
             : 'Consider early retirement options when eligible',
           'Apply for non-contributory benefits (if eligible)',
@@ -194,7 +198,9 @@ export class BenefitEligibilityEngineService {
    * Check Disability Pension Eligibility (contribution only)
    * Disability level validation is done in the UI component
    */
-  checkDisabilityPensionEligibility(input: EligibilityInput): DisabilityPensionEligibilityResult {
+  checkDisabilityPensionEligibility(
+    input: EligibilityInput
+  ): DisabilityPensionEligibilityResult {
     const currentYear = input.currentYear || new Date().getFullYear();
 
     // Calculate minimum contribution based on year for disability pension
@@ -205,10 +211,10 @@ export class BenefitEligibilityEngineService {
     } else if (currentYear >= 2018 && currentYear < 2025) {
       requiredMonths = 12 + (currentYear - 2017) * 6;
     } else if (currentYear === 2025) {
-      requiredMonths = 66; // 2025: 66 months
+      requiredMonths = 78; // 2025: 78 months
     } else if (currentYear > 2025) {
       // 2026+: Continue increasing by 6 months per year from 2025 base
-      requiredMonths = 66 + (currentYear - 2025) * 6;
+      requiredMonths = 78 + (currentYear - 2025) * 6;
     }
 
     // Check contribution requirement
@@ -243,7 +249,9 @@ export class BenefitEligibilityEngineService {
   /**
    * Check Survivor Pension Eligibility (contribution only)
    */
-  checkSurvivorPensionEligibility(input: EligibilityInput): SurvivorPensionEligibilityResult {
+  checkSurvivorPensionEligibility(
+    input: EligibilityInput
+  ): SurvivorPensionEligibilityResult {
     const MINIMUM_CONTRIBUTION_MONTHS = 60; // For 2025
     const currentYear = input.currentYear || new Date().getFullYear();
 
@@ -287,7 +295,7 @@ export class BenefitEligibilityEngineService {
   /**
    * Calculate Old-Age Pension
    * Formula: P = R × (N / 360)
-   * 
+   *
    * For early retirement: Minimum guaranteed = 1.5 × SAII
    * Final pension = Max(calculated, minimum guaranteed)
    */
@@ -298,7 +306,8 @@ export class BenefitEligibilityEngineService {
     saiiAmount: number = 100 // SAII - Subsídio de Apoio a Idosos e Inválidos (default $100)
   ): PensionCalculationResult {
     // Calculate pension: P = R × (N / 360)
-    const calculatedPension = (referenceRemuneration * contributionMonths) / 360;
+    const calculatedPension =
+      (referenceRemuneration * contributionMonths) / 360;
 
     let minimumGuaranteedPension: number | undefined;
     let finalPension = calculatedPension;
@@ -315,7 +324,17 @@ export class BenefitEligibilityEngineService {
       contributionMonths,
       minimumGuaranteedPension,
       finalPension,
-      formula: `P = R × (N / 360) = $${referenceRemuneration.toFixed(2)} × (${contributionMonths} / 360) = $${calculatedPension.toFixed(2)}/month${isEarlyRetirement && minimumGuaranteedPension && finalPension > calculatedPension ? ` (guaranteed minimum: $${minimumGuaranteedPension.toFixed(2)})` : ''}`,
+      formula: `P = R × (N / 360) = $${referenceRemuneration.toFixed(
+        2
+      )} × (${contributionMonths} / 360) = $${calculatedPension.toFixed(
+        2
+      )}/month${
+        isEarlyRetirement &&
+        minimumGuaranteedPension &&
+        finalPension > calculatedPension
+          ? ` (guaranteed minimum: $${minimumGuaranteedPension.toFixed(2)})`
+          : ''
+      }`,
     };
   }
 
@@ -330,14 +349,19 @@ export class BenefitEligibilityEngineService {
     disabilityLevel: number // 66.67% - 100%
   ): PensionCalculationResult {
     // Calculate pension: P = R × (N / 360)
-    const calculatedPension = (referenceRemuneration * contributionMonths) / 360;
+    const calculatedPension =
+      (referenceRemuneration * contributionMonths) / 360;
 
     return {
       calculatedPension,
       referenceRemuneration,
       contributionMonths,
       finalPension: calculatedPension,
-      formula: `P = R × (N / 360) = $${referenceRemuneration.toFixed(2)} × (${contributionMonths} / 360) = $${calculatedPension.toFixed(2)}/month`,
+      formula: `P = R × (N / 360) = $${referenceRemuneration.toFixed(
+        2
+      )} × (${contributionMonths} / 360) = $${calculatedPension.toFixed(
+        2
+      )}/month`,
     };
   }
 
@@ -363,7 +387,11 @@ export class BenefitEligibilityEngineService {
       referenceRemuneration,
       contributionMonths,
       finalPension: calculatedPension,
-      formula: `Monthly Pension = (R × (N / 360)) × ${percentage}% = ($${referenceRemuneration.toFixed(2)} × (${contributionMonths} / 360)) × ${percentage}% = $${calculatedPension.toFixed(2)}/month`,
+      formula: `Monthly Pension = (R × (N / 360)) × ${percentage}% = ($${referenceRemuneration.toFixed(
+        2
+      )} × (${contributionMonths} / 360)) × ${percentage}% = $${calculatedPension.toFixed(
+        2
+      )}/month`,
     };
   }
 
@@ -404,9 +432,7 @@ export class BenefitEligibilityEngineService {
   /**
    * Check if eligible for early retirement
    */
-  isEligibleForEarlyRetirement(
-    input: EligibilityInput
-  ): boolean {
+  isEligibleForEarlyRetirement(input: EligibilityInput): boolean {
     const age = calculateAge(input.dateOfBirth);
     const requiredMonths = this.getMinimumContributionMonths(input.currentYear);
 
@@ -436,7 +462,11 @@ export class BenefitEligibilityEngineService {
     requiredValue: string;
     suggestions: string[];
   } | null {
-    let result: OldAgePensionEligibilityResult | DisabilityPensionEligibilityResult | SurvivorPensionEligibilityResult | null = null;
+    let result:
+      | OldAgePensionEligibilityResult
+      | DisabilityPensionEligibilityResult
+      | SurvivorPensionEligibilityResult
+      | null = null;
 
     if (benefitType === 'old-age') {
       result = this.checkOldAgePensionEligibility(input);
@@ -458,9 +488,13 @@ export class BenefitEligibilityEngineService {
     if (benefitType === 'old-age') {
       const oldAgeResult = result as OldAgePensionEligibilityResult;
       if (oldAgeResult.rejectionReason === 'contribution') {
-        const actualYears = Math.floor(oldAgeResult.currentContributionMonths / 12);
+        const actualYears = Math.floor(
+          oldAgeResult.currentContributionMonths / 12
+        );
         const actualMonths = oldAgeResult.currentContributionMonths % 12;
-        const requiredYears = Math.floor(oldAgeResult.requiredContributionMonths / 12);
+        const requiredYears = Math.floor(
+          oldAgeResult.requiredContributionMonths / 12
+        );
         const requiredMonths = oldAgeResult.requiredContributionMonths % 12;
         let requiredText = `${requiredYears} years`;
         if (requiredMonths > 0) {
@@ -474,7 +508,9 @@ export class BenefitEligibilityEngineService {
           citizenNiss,
           sector: sectorLabel,
           currentValue: `${actualYears} years ${actualMonths} months (${oldAgeResult.currentContributionMonths} months)`,
-          requiredValue: `${requiredText} (for year ${input.currentYear || new Date().getFullYear()})`,
+          requiredValue: `${requiredText} (for year ${
+            input.currentYear || new Date().getFullYear()
+          })`,
           suggestions: oldAgeResult.suggestions,
         };
       } else if (oldAgeResult.rejectionReason === 'age') {
@@ -496,11 +532,17 @@ export class BenefitEligibilityEngineService {
       }
     } else {
       // Disability or Survivor
-      const otherResult = result as DisabilityPensionEligibilityResult | SurvivorPensionEligibilityResult;
+      const otherResult = result as
+        | DisabilityPensionEligibilityResult
+        | SurvivorPensionEligibilityResult;
       if (otherResult.rejectionReason === 'contribution') {
-        const actualYears = Math.floor(otherResult.currentContributionMonths / 12);
+        const actualYears = Math.floor(
+          otherResult.currentContributionMonths / 12
+        );
         const actualMonths = otherResult.currentContributionMonths % 12;
-        const requiredYears = Math.floor(otherResult.requiredContributionMonths / 12);
+        const requiredYears = Math.floor(
+          otherResult.requiredContributionMonths / 12
+        );
 
         return {
           reason: 'contribution',
@@ -509,7 +551,9 @@ export class BenefitEligibilityEngineService {
           citizenNiss,
           sector: sectorLabel,
           currentValue: `${actualYears} years ${actualMonths} months (${otherResult.currentContributionMonths} months)`,
-          requiredValue: `${requiredYears} years 0 months (${otherResult.requiredContributionMonths} months for ${input.currentYear || new Date().getFullYear()})`,
+          requiredValue: `${requiredYears} years 0 months (${
+            otherResult.requiredContributionMonths
+          } months for ${input.currentYear || new Date().getFullYear()})`,
           suggestions: otherResult.suggestions,
         };
       }
@@ -518,4 +562,3 @@ export class BenefitEligibilityEngineService {
     return null;
   }
 }
-
