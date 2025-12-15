@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benefit Management System - Module Diagram</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        .diagram-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .mermaid {
+            text-align: center;
+        }
+        .description {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .feature-list {
+            background: #fff;
+            padding: 20px;
+            border-left: 4px solid #27ae60;
+            margin: 20px 0;
+        }
+        .feature-list ul {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        .feature-list li {
+            margin: 8px 0;
+        }
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .language-selector select {
+            padding: 8px 12px;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            background: white;
+        }
+        .language-selector select:hover {
+            background: #f0f8ff;
+        }
+        [data-lang="vi"] {
+            display: none;
+        }
+        body.lang-vi [data-lang="en"] {
+            display: none !important;
+        }
+        body.lang-vi [data-lang="vi"] {
+            display: block !important;
+        }
+        .diagram-container[data-lang="vi"] {
+            display: none;
+        }
+        body.lang-vi .diagram-container[data-lang="vi"] {
+            display: block;
+        }
+        body.lang-vi .diagram-container[data-lang="en"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="vi">Tiếng Việt</option>
+        </select>
+    </div>
+    <div class="container">
+        <h1 data-lang="en">📊 Benefit Management System - Module Diagram</h1>
+        <h1 data-lang="vi">📊 Sơ Đồ Hệ Thống Quản Lý Trợ Cấp - Module Benefit</h1>
+        
+        <div class="description">
+            <h3 data-lang="en">📋 System Overview</h3>
+            <h3 data-lang="vi">📋 Tổng Quan Hệ Thống</h3>
+            <p data-lang="en">The Benefit Management System allows administrators to manage the entire benefit process for citizens, including:</p>
+            <p data-lang="vi">Hệ thống quản lý trợ cấp cho phép nhân viên quản trị thực hiện các chức năng:</p>
+            <ul>
+                <li data-lang="en"><strong>Search citizen information</strong> by NISS number or name</li>
+                <li data-lang="vi"><strong>Tìm kiếm thông tin công dân</strong> theo số NISS hoặc tên</li>
+                <li data-lang="en"><strong>View contribution history</strong> by company and by year</li>
+                <li data-lang="vi"><strong>Xem lịch sử đóng bảo hiểm</strong> theo công ty và theo năm</li>
+                <li data-lang="en"><strong>Manage list of current beneficiaries</strong> (contributory and non-contributory)</li>
+                <li data-lang="vi"><strong>Quản lý danh sách người nhận trợ cấp</strong> (có đóng góp và không đóng góp)</li>
+                <li data-lang="en"><strong>Create new benefit requests</strong> for citizens</li>
+                <li data-lang="vi"><strong>Tạo yêu cầu trợ cấp mới</strong> cho công dân</li>
+                <li data-lang="en"><strong>Approve or reject</strong> benefit requests through a 3-level approval process</li>
+                <li data-lang="vi"><strong>Phê duyệt hoặc từ chối</strong> các yêu cầu trợ cấp theo quy trình 3 cấp</li>
+            </ul>
+        </div>
+
+        <h2 data-lang="en">1. Main Business Process Flow</h2>
+        <h2 data-lang="vi">1. Sơ Đồ Quy Trình Nghiệp Vụ Tổng Quan</h2>
+        <div class="diagram-container" data-lang="en">
+            <div class="mermaid" id="diagram-main-en">
+flowchart TD
+    Start([System Login]) --> Home[Benefit Home Screen]
+    
+    Home --> Search[Search by NISS or Name]
+    Search --> |Found| CitizenInfo[Citizen Information]
+    Search --> |Not Found| Error[Error Citizen Not Found]
+    
+    CitizenInfo --> PersonalData[Personal Data Tab]
+    CitizenInfo --> ContribCareer[Contributory Career Tab]
+    CitizenInfo --> ContribSituation[Contributory Situation Tab]
+    
+    PersonalData --> |View| PersonalDetails[Name, DOB, Address, NISS, Marital Status, Dependents]
+    
+    ContribCareer --> |View| CareerHistory[Career History by Company]
+    ContribCareer --> |View| CareerByYear[Career History by Year]
+    ContribCareer --> |View| CareerSummary[Total Months, Total Contributions, Career Years]
+    
+    ContribSituation --> |View| ContribSummary[Total Years, Amount Contributed, Status, Eligibility]
+    
+    Home --> ContribHistory[Contribution History]
+    ContribHistory --> SocialHistory[Social History Tab]
+    ContribHistory --> MonthlyBreakdown[Monthly Breakdown Tab]
+    SocialHistory --> |Filter| ByCompany[View by Company]
+    SocialHistory --> |Filter| ByYear[View by Year]
+    
+    Home --> Beneficiaries[Current Beneficiaries]
+    Beneficiaries --> ContribBeneficiaries[Contributory Beneficiaries List]
+    Beneficiaries --> NonContribBeneficiaries[Non-Contributory Beneficiaries List]
+    
+    ContribBeneficiaries --> BenefDetails1[View NISS Name Type Amount Bank Info Status]
+    NonContribBeneficiaries --> BenefDetails2[View NISS Name Type Amount Bank Info Phase]
+    
+    Home --> NewRequest[Create New Benefit Request]
+    NewRequest --> RequestType{Select Request Type}
+    
+    RequestType --> |Contributory| ContribRequest[Contributory Request Form]
+    RequestType --> |Non-Contributory| NonContribRequest[Non-Contributory Request Form]
+    
+    ContribRequest --> Step1[Step 1: Enter NISS]
+    Step1 --> Step2[Step 2: Validate Eligibility]
+    Step2 --> |Eligible| Step3[Step 3: Select Benefit Type]
+    Step2 --> |Not Eligible| RejectDialog[Show Rejection Reason]
+    Step3 --> Step4[Step 4: View Confirm Benefit Scheme]
+    Step4 --> Step5[Step 5: Bank Account Info]
+    Step5 --> Step6[Step 6: Review and Submit]
+    Step6 --> Submit[Submit Request]
+    
+    NonContribRequest --> NStep1[Step 1: Enter ID Number]
+    NStep1 --> NStep2[Step 2: Select Benefit Type]
+    NStep2 --> NStep3[Step 3: Validate Eligibility]
+    NStep3 --> |Eligible| NStep4[Step 4: Fill Form and Submit]
+    NStep3 --> |Not Eligible| RejectDialog
+    
+    Submit --> PendingRequests[Pending Requests Queue]
+    NStep4 --> PendingRequests
+    
+    PendingRequests --> FilterStatus[Filter by Status]
+    FilterStatus --> StatusSubmitted[Submitted Status]
+    FilterStatus --> StatusPending[Pending Approval Status]
+    FilterStatus --> StatusApproved[Approved Status]
+    FilterStatus --> StatusRejected[Rejected Status]
+    FilterStatus --> StatusExpired[Expired Status]
+    
+    PendingRequests --> ViewDetails[View Request Details]
+    ViewDetails --> RequestInfo[Full Request Information]
+    RequestInfo --> Documents[View Uploaded Documents]
+    RequestInfo --> Calculation[View Benefit Calculation]
+    RequestInfo --> BankInfo[View Bank Account Info]
+    
+    PendingRequests --> ApprovalWorkflow{Approval Workflow}
+    
+    ApprovalWorkflow --> Level2[Level 2 Admin Actions]
+    ApprovalWorkflow --> Level3[Level 3 Admin Actions]
+    
+    Level2 --> |Submitted Requests| SendForApproval[Send for Approval]
+    Level2 --> |Submitted Requests| RejectL2[Reject Request]
+    
+    Level3 --> |Pending Approval| Approve[Approve Request]
+    Level3 --> |Pending Approval| RejectL3[Reject Request]
+    
+    SendForApproval --> StatusChange1[Status Submitted to Pending Approval]
+    RejectL2 --> StatusChange2[Status Submitted to Rejected]
+    Approve --> StatusChange3[Status Pending Approval to Approved]
+    RejectL3 --> StatusChange4[Status Pending Approval to Rejected]
+    
+    StatusChange3 --> AddToBeneficiaries[Add to Current Beneficiaries List]
+    StatusChange1 --> PendingRequests
+    StatusChange2 --> PendingRequests
+    StatusChange4 --> PendingRequests
+    
+    AddToBeneficiaries --> Beneficiaries
+            </div>
+        </div>
+        <div class="diagram-container" data-lang="vi">
+            <div class="mermaid">
+flowchart TD
+    Start([Đăng Nhập Hệ Thống]) --> Home[Màn Hình Trang Chủ Benefit]
+    
+    Home --> |Chức năng 1| Search[Tìm Kiếm Công Dân]
+    Home --> |Chức năng 2| ContribHistory[Xem Lịch Sử Đóng Bảo Hiểm]
+    Home --> |Chức năng 3| Beneficiaries[Xem Danh Sách Người Nhận Trợ Cấp]
+    Home --> |Chức năng 4| NewRequest[Tạo Yêu Cầu Trợ Cấp Mới]
+    Home --> |Chức năng 5| PendingRequests[Quản Lý Yêu Cầu Chờ Phê Duyệt]
+    
+    Search --> |Nhập NISS/Tên| SearchProcess[Thực Hiện Tìm Kiếm]
+    SearchProcess --> |Tìm Thấy| CitizenInfo[Màn Hình Thông Tin Công Dân]
+    SearchProcess --> |Không Tìm Thấy| Error[Hiển Thị Thông Báo Lỗi]
+    
+    CitizenInfo --> Tab1[Tab 1: Thông Tin Cá Nhân]
+    CitizenInfo --> Tab2[Tab 2: Lịch Sử Nghề Nghiệp]
+    CitizenInfo --> Tab3[Tab 3: Tình Trạng Đóng Bảo Hiểm]
+    
+    Tab1 --> Info1[Tên, Ngày Sinh, Địa Chỉ<br/>NISS, Tình Trạng Hôn Nhân, Người Phụ Thuộc]
+    Tab2 --> Info2[Lịch Sử Theo Công Ty<br/>Lịch Sử Theo Năm<br/>Tổng Số Tháng, Tổng Số Tiền Đóng]
+    Tab3 --> Info3[Tổng Số Năm Đóng<br/>Tổng Số Tiền Đóng<br/>Trạng Thái Hiện Tại, Đủ Điều Kiện]
+    
+    ContribHistory --> View1[Xem Theo Lịch Sử Xã Hội]
+    ContribHistory --> View2[Xem Theo Chi Tiết Tháng]
+    View1 --> Filter1[Lọc Theo Công Ty]
+    View1 --> Filter2[Lọc Theo Năm]
+    View1 --> Filter3[Lọc Theo Khoảng Thời Gian]
+    
+    Beneficiaries --> Type1[Danh Sách Trợ Cấp Có Đóng Góp]
+    Beneficiaries --> Type2[Danh Sách Trợ Cấp Không Đóng Góp]
+    Type1 --> List1[NISS, Tên, Loại Trợ Cấp<br/>Số Tiền, Thông Tin Ngân Hàng, Trạng Thái]
+    Type2 --> List2[NISS, Tên, Loại Trợ Cấp<br/>Số Tiền, Thông Tin Ngân Hàng, Giai Đoạn]
+    
+    NewRequest --> RequestType{Chọn Loại Yêu Cầu}
+    RequestType --> |Có Đóng Góp| ContribForm[Form Yêu Cầu Có Đóng Góp]
+    RequestType --> |Không Đóng Góp| NonContribForm[Form Yêu Cầu Không Đóng Góp]
+    
+    ContribForm --> Step1[Bước 1: Nhập NISS]
+    Step1 --> Step2[Bước 2: Kiểm Tra Đủ Điều Kiện]
+    Step2 --> |Đủ Điều Kiện| Step3[Bước 3: Chọn Loại Trợ Cấp]
+    Step2 --> |Không Đủ Điều Kiện| RejectMsg[Hiển Thị Lý Do Từ Chối]
+    Step3 --> Step4[Bước 4: Xem Xác Nhận Chế Độ Trợ Cấp]
+    Step4 --> Step5[Bước 5: Thông Tin Tài Khoản Ngân Hàng]
+    Step5 --> Step6[Bước 6: Xem Lại và Gửi Yêu Cầu]
+    Step6 --> Submit[Gửi Yêu Cầu]
+    
+    NonContribForm --> NStep1[Bước 1: Nhập Số CMND]
+    NStep1 --> NStep2[Bước 2: Chọn Loại Trợ Cấp]
+    NStep2 --> NStep3[Bước 3: Kiểm Tra Đủ Điều Kiện]
+    NStep3 --> |Đủ Điều Kiện| NStep4[Bước 4: Điền Form và Gửi]
+    NStep3 --> |Không Đủ Điều Kiện| RejectMsg
+    
+    Submit --> PendingRequests
+    NStep4 --> PendingRequests
+    
+    PendingRequests --> FilterStatus[Lọc Theo Trạng Thái]
+    FilterStatus --> Status1[Đã Gửi]
+    FilterStatus --> Status2[Chờ Phê Duyệt]
+    FilterStatus --> Status3[Đã Phê Duyệt]
+    FilterStatus --> Status4[Đã Từ Chối]
+    FilterStatus --> Status5[Đã Hết Hạn]
+    
+    PendingRequests --> ViewDetails[Xem Chi Tiết Yêu Cầu]
+    ViewDetails --> Details1[Thông Tin Đầy Đủ]
+    ViewDetails --> Details2[Tài Liệu Đã Upload]
+    ViewDetails --> Details3[Kết Quả Tính Toán]
+    ViewDetails --> Details4[Thông Tin Ngân Hàng]
+    
+    PendingRequests --> Approval{Quy Trình Phê Duyệt}
+    
+    Approval --> |Yêu Cầu Đã Gửi| Level2[Admin Cấp 2 Xử Lý]
+    Approval --> |Yêu Cầu Chờ Phê Duyệt| Level3[Admin Cấp 3 Xử Lý]
+    
+    Level2 --> Action1[Gửi Lên Phê Duyệt]
+    Level2 --> Action2[Từ Chối Yêu Cầu]
+    
+    Level3 --> Action3[Phê Duyệt Yêu Cầu]
+    Level3 --> Action4[Từ Chối Yêu Cầu]
+    
+    Action1 --> Change1[Trạng Thái Đã Gửi to Chờ Phê Duyệt]
+    Action2 --> Change2[Trạng Thái Đã Gửi to Đã Từ Chối]
+    Action3 --> Change3[Trạng Thái Chờ Phê Duyệt to Đã Phê Duyệt]
+    Action4 --> Change4[Trạng Thái Chờ Phê Duyệt to Đã Từ Chối]
+    
+    Change3 --> AddToList[Thêm Vào Danh Sách Người Nhận Trợ Cấp]
+    Change1 --> PendingRequests
+    Change2 --> PendingRequests
+    Change4 --> PendingRequests
+    
+    AddToList --> Beneficiaries
+            </div>
+        </div>
+
+        <h2 data-lang="en">2. Approval Workflow Diagram</h2>
+        <h2 data-lang="vi">2. Sơ Đồ Quy Trình Phê Duyệt Yêu Cầu</h2>
+        <div class="diagram-container" data-lang="en">
+            <div class="mermaid">
+flowchart TD
+    Start([Start]) --> Submitted[Submitted<br/>Request Submitted]
+    
+    Submitted --> |Level 2 Admin: Send for Approval| PendingApproval[Pending Approval<br/>Waiting for Level 3]
+    Submitted --> |Level 2 Admin: Reject| Rejected[Rejected<br/>Request Closed]
+    Submitted --> |Level 2 Admin: Review| Submitted
+    
+    PendingApproval --> |Level 3 Admin: Approve| Approved[Approved<br/>Added to List]
+    PendingApproval --> |Level 3 Admin: Reject| Rejected
+    PendingApproval --> |Level 3 Admin: Review| PendingApproval
+    
+    Approved --> End1([End<br/>Citizen Receives Benefit])
+    Rejected --> End2([End<br/>Request Closed])
+    
+    style Submitted fill:#fff4e6
+    style PendingApproval fill:#e3f2fd
+    style Approved fill:#c8e6c9
+    style Rejected fill:#ffcdd2
+    style Start fill:#e1f5ff
+    style End1 fill:#c8e6c9
+    style End2 fill:#ffcdd2
+            </div>
+        </div>
+        <div class="diagram-container" data-lang="vi">
+            <div class="mermaid">
+flowchart TD
+    Start([Bắt Đầu]) --> Submitted[Đã Gửi<br/>Yêu Cầu Được Gửi]
+    
+    Submitted --> |Admin Cấp 2: Gửi Lên| PendingApproval[Chờ Phê Duyệt<br/>Đang Chờ Admin Cấp 3]
+    Submitted --> |Admin Cấp 2: Từ Chối| Rejected[Đã Từ Chối<br/>Yêu Cầu Đóng]
+    Submitted --> |Admin Cấp 2: Xem Xét| Submitted
+    
+    PendingApproval --> |Admin Cấp 3: Phê Duyệt| Approved[Đã Phê Duyệt<br/>Thêm Vào Danh Sách]
+    PendingApproval --> |Admin Cấp 3: Từ Chối| Rejected
+    PendingApproval --> |Admin Cấp 3: Xem Xét| PendingApproval
+    
+    Approved --> End1([Kết Thúc<br/>Công Dân Nhận Trợ Cấp])
+    Rejected --> End2([Kết Thúc<br/>Yêu Cầu Đóng])
+    
+    style Submitted fill:#fff4e6
+    style PendingApproval fill:#e3f2fd
+    style Approved fill:#c8e6c9
+    style Rejected fill:#ffcdd2
+    style Start fill:#e1f5ff
+    style End1 fill:#c8e6c9
+    style End2 fill:#ffcdd2
+            </div>
+        </div>
+        
+        <div class="description">
+            <h4 data-lang="en">Process Explanation:</h4>
+            <h4 data-lang="vi">Giải thích quy trình:</h4>
+            <ul>
+                <li data-lang="en"><strong>Submitted:</strong> Level 2 Admin can send for approval, reject, or review (not yet decided)</li>
+                <li data-lang="vi"><strong>Đã Gửi (Submitted):</strong> Admin Cấp 2 có thể gửi lên phê duyệt, từ chối, hoặc xem xét (chưa quyết định)</li>
+                <li data-lang="en"><strong>Pending Approval:</strong> Level 3 Admin can approve (final decision), reject, or review</li>
+                <li data-lang="vi"><strong>Chờ Phê Duyệt (Pending Approval):</strong> Admin Cấp 3 có thể phê duyệt (quyết định cuối), từ chối, hoặc xem xét</li>
+                <li data-lang="en"><strong>Approved:</strong> Request has been approved, citizen is added to the list of beneficiaries</li>
+                <li data-lang="vi"><strong>Đã Phê Duyệt (Approved):</strong> Yêu cầu đã được phê duyệt, công dân được thêm vào danh sách người nhận trợ cấp</li>
+                <li data-lang="en"><strong>Rejected:</strong> Request has been rejected, request closed</li>
+                <li data-lang="vi"><strong>Đã Từ Chối (Rejected):</strong> Yêu cầu đã bị từ chối, yêu cầu đóng</li>
+            </ul>
+        </div>
+
+        <h2 data-lang="en">3. Search and View Citizen Information</h2>
+        <h2 data-lang="vi">3. Sơ Đồ Tìm Kiếm và Xem Thông Tin Công Dân</h2>
+        <div class="diagram-container" data-lang="en">
+            <div class="mermaid">
+flowchart LR
+    A[Admin] --> B[Enter NISS or Name]
+    B --> C{Search}
+    C --> |Found| D[Display Citizen Info]
+    C --> |Not Found| E[Show Error]
+    
+    D --> F[Personal Data Tab]
+    D --> G[Contributory Career Tab]
+    D --> H[Contributory Situation Tab]
+    
+    F --> F1[Name, DOB, Address]
+    F --> F2[NISS, Marital Status]
+    F --> F3[Dependents Info]
+    
+    G --> G1[Career by Company]
+    G --> G2[Career by Year]
+    G --> G3[Total Months/Years]
+    G --> G4[Contribution Amounts]
+    
+    H --> H1[Total Contribution Years]
+    H --> H2[Total Amount Contributed]
+    H --> H3[Current Status]
+    H --> H4[Eligibility Status]
+    
+    style D fill:#c8e6c9
+    style E fill:#ffcdd2
+            </div>
+        </div>
+        <div class="diagram-container" data-lang="vi">
+            <div class="mermaid">
+flowchart LR
+    A[Nhân Viên Admin] --> B[Nhập NISS hoặc Tên]
+    B --> C{Tìm Kiếm}
+    C --> |Tìm Thấy| D[Hiển Thị Thông Tin Công Dân]
+    C --> |Không Tìm Thấy| E[Hiển Thị Lỗi]
+    
+    D --> F[Tab 1: Thông Tin Cá Nhân]
+    D --> G[Tab 2: Lịch Sử Nghề Nghiệp]
+    D --> H[Tab 3: Tình Trạng Đóng Bảo Hiểm]
+    
+    F --> F1[Tên, Ngày Sinh, Địa Chỉ]
+    F --> F2[NISS, Tình Trạng Hôn Nhân]
+    F --> F3[Thông Tin Người Phụ Thuộc]
+    
+    G --> G1[Lịch Sử Theo Công Ty]
+    G --> G2[Lịch Sử Theo Năm]
+    G --> G3[Tổng Số Tháng/Năm]
+    G --> G4[Số Tiền Đóng Bảo Hiểm]
+    
+    H --> H1[Tổng Số Năm Đóng]
+    H --> H2[Tổng Số Tiền Đóng]
+    H --> H3[Trạng Thái Hiện Tại]
+    H --> H4[Tình Trạng Đủ Điều Kiện]
+    
+    style D fill:#c8e6c9
+    style E fill:#ffcdd2
+            </div>
+        </div>
+
+        <h2 data-lang="en">4. View Contribution History</h2>
+        <h2 data-lang="vi">4. Sơ Đồ Xem Lịch Sử Đóng Bảo Hiểm</h2>
+        <div class="diagram-container" data-lang="en">
+            <div class="mermaid">
+flowchart TD
+    A[Contribution History Page] --> B{Select View}
+    
+    B --> C[Social History Tab]
+    B --> D[Monthly Breakdown Tab]
+    
+    C --> E[Filter Options]
+    E --> F[Filter by Company]
+    E --> G[Filter by Year]
+    E --> H[Filter by Period]
+    
+    F --> I[Display: Company Name, Period, Amount]
+    G --> J[Display: Year, Total Months, Total Amount]
+    H --> K[Display: Period Range, Summary]
+    
+    D --> L[Monthly Details]
+    L --> M[Month, Year, Employer, Amount, Status]
+            </div>
+        </div>
+        <div class="diagram-container" data-lang="vi">
+            <div class="mermaid">
+flowchart TD
+    A[Màn Hình Lịch Sử Đóng Bảo Hiểm] --> B{Chọn Cách Xem}
+    
+    B --> C[Tab Lịch Sử Xã Hội]
+    B --> D[Tab Chi Tiết Theo Tháng]
+    
+    C --> E[Tùy Chọn Lọc]
+    E --> F[Lọc Theo Công Ty]
+    E --> G[Lọc Theo Năm]
+    E --> H[Lọc Theo Khoảng Thời Gian]
+    
+    F --> I[Hiển Thị: Tên Công Ty, Kỳ, Số Tiền]
+    G --> J[Hiển Thị: Năm, Tổng Số Tháng, Tổng Số Tiền]
+    H --> K[Hiển Thị: Khoảng Thời Gian, Tóm Tắt]
+    
+    D --> L[Chi Tiết Theo Tháng]
+    L --> M[Tháng, Năm, Người Sử Dụng Lao Động, Số Tiền, Trạng Thái]
+            </div>
+        </div>
+
+        <h2 data-lang="en">5. Current Beneficiaries List</h2>
+        <h2 data-lang="vi">5. Sơ Đồ Danh Sách Người Nhận Trợ Cấp</h2>
+        <div class="diagram-container" data-lang="en">
+            <div class="mermaid">
+flowchart TD
+    A[Current Beneficiaries Page] --> B{Select Type}
+    
+    B --> C[Contributory Beneficiaries]
+    B --> D[Non-Contributory Beneficiaries]
+    
+    C --> C1[Display Table]
+    C1 --> C2[Columns: Position, Type, NISS, Name]
+    C1 --> C3[Columns: Municipality, DOB, Age, Sex]
+    C1 --> C4[Columns: Bank Name, Account, IBAN]
+    C1 --> C5[Columns: Amount, Status]
+    
+    D --> D1[Display Table]
+    D1 --> D2[Columns: Position, Type, NISS, Name]
+    D1 --> D3[Columns: Municipality, DOB, Age, Sex]
+    D1 --> D4[Columns: Bank Name, Account, IBAN]
+    D1 --> D5[Columns: Amount, Phase]
+    
+    C1 --> E[Actions]
+    D1 --> E
+    E --> F[Export to Excel]
+    E --> G[Generate Payment List]
+    E --> H[View Details]
+            </div>
+        </div>
+        <div class="diagram-container" data-lang="vi">
+            <div class="mermaid">
+flowchart TD
+    A[Màn Hình Danh Sách Người Nhận Trợ Cấp] --> B{Chọn Loại Danh Sách}
+    
+    B --> C[Danh Sách Trợ Cấp Có Đóng Góp]
+    B --> D[Danh Sách Trợ Cấp Không Đóng Góp]
+    
+    C --> C1[Hiển Thị Bảng]
+    C1 --> C2[Cột: STT, Loại, NISS, Họ Tên]
+    C1 --> C3[Cột: Địa Phương, Ngày Sinh, Tuổi, Giới Tính]
+    C1 --> C4[Cột: Tên Ngân Hàng, Số Tài Khoản, IBAN]
+    C1 --> C5[Cột: Số Tiền, Trạng Thái]
+    
+    D --> D1[Hiển Thị Bảng]
+    D1 --> D2[Cột: STT, Loại, NISS, Họ Tên]
+    D1 --> D3[Cột: Địa Phương, Ngày Sinh, Tuổi, Giới Tính]
+    D1 --> D4[Cột: Tên Ngân Hàng, Số Tài Khoản, IBAN]
+    D1 --> D5[Cột: Số Tiền, Giai Đoạn]
+    
+    C1 --> E[Thao Tác]
+    D1 --> E
+    E --> F[Xuất Ra Excel]
+    E --> G[Tạo Danh Sách Thanh Toán]
+    E --> H[Xem Chi Tiết]
+            </div>
+        </div>
+
+        <h2 data-lang="en">6. Create New Benefit Request Flow</h2>
+        <h2 data-lang="vi">6. Sơ Đồ Tạo Yêu Cầu Trợ Cấp</h2>
+        <div class="diagram-container" data-lang="en">
+            <div class="mermaid">
+flowchart TD
+    A[New Benefit Request Screen] --> B{Select Request Type}
+    
+    B --> |Contributory| C[Contributory Request]
+    B --> |Non-Contributory| D[Non-Contributory Request]
+    
+    C --> C1[Step 1: Enter NISS]
+    C1 --> C2[Step 2: Validate Eligibility]
+    C2 --> C2A{Check Age<br/>and Contribution Period}
+    C2A --> |Eligible| C3[Step 3: Select Benefit Type]
+    C2A --> |Not Eligible| C2B[Show Rejection Reason]
+    
+    C3 --> C4{Benefit Type?}
+    C4 --> |Old Age Pension| C5A[Old Age Pension Form]
+    C4 --> |Disability Pension| C5B[Disability Pension Form]
+    C4 --> |Survivor Pension| C5C[Survivor Pension Form]
+    C4 --> |Parental Benefit| C5D[Parental Benefit Form]
+    C4 --> |Death Benefit| C5E[Death Benefit Form]
+    
+    C5A --> C6[Step 4: View Confirm Benefit Scheme]
+    C5B --> C6
+    C5C --> C6
+    C5D --> C6
+    C5E --> C6
+    
+    C6 --> C7[Step 5: Bank Account Info]
+    C7 --> C8[Step 6: Review and Submit]
+    C8 --> C9[Submit Request]
+    
+    D --> D1[Step 1: Enter ID Number]
+    D1 --> D2[Step 2: Select Benefit Type]
+    D2 --> D3[Old Age Social Pension]
+    D2 --> D4[Disability Social Pension]
+    D2 --> D5[Other Non-Contributory]
+    
+    D3 --> D6[Step 3: Validate Eligibility]
+    D4 --> D6
+    D5 --> D6
+    
+    D6 --> D7{Check Age<br/>and Conditions}
+    D7 --> |Eligible| D8[Step 4: Fill Form and Submit]
+    D7 --> |Not Eligible| D9[Show Rejection Reason]
+    
+    C9 --> E[Pending Requests Queue]
+    D8 --> E
+    
+    style A fill:#e1f5ff
+    style C fill:#c8e6c9
+    style D fill:#fff9c4
+    style E fill:#fce4ec
+    style C2A fill:#fff4e6
+    style D7 fill:#fff4e6
+    style C2B fill:#ffcdd2
+    style D9 fill:#ffcdd2
+            </div>
+        </div>
+        <div class="diagram-container" data-lang="vi">
+            <div class="mermaid">
+flowchart TD
+    A[Màn Hình Tạo Yêu Cầu Trợ Cấp Mới] --> B{Chọn Loại Yêu Cầu}
+    
+    B --> |Có Đóng Góp| C[Yêu Cầu Trợ Cấp Có Đóng Góp]
+    B --> |Không Đóng Góp| D[Yêu Cầu Trợ Cấp Không Đóng Góp]
+    
+    C --> C1[Bước 1: Nhập NISS]
+    C1 --> C2[Bước 2: Kiểm Tra Đủ Điều Kiện]
+    C2 --> C2A{Kiểm Tra Tuổi<br/>và Thời Gian Đóng Góp}
+    C2A --> |Đủ Điều Kiện| C3[Bước 3: Chọn Loại Trợ Cấp]
+    C2A --> |Không Đủ Điều Kiện| C2B[Hiển Thị Lý Do Từ Chối]
+    
+    C3 --> C4{Loại Trợ Cấp?}
+    C4 --> |Trợ Cấp Tuổi Già| C5A[Form Trợ Cấp Tuổi Già]
+    C4 --> |Trợ Cấp Khuyết Tật| C5B[Form Trợ Cấp Khuyết Tật]
+    C4 --> |Trợ Cấp Người Sống Sót| C5C[Form Trợ Cấp Người Sống Sót]
+    C4 --> |Trợ Cấp Làm Cha Mẹ| C5D[Form Trợ Cấp Làm Cha Mẹ]
+    C4 --> |Trợ Cấp Tử Vong| C5E[Form Trợ Cấp Tử Vong]
+    
+    C5A --> C6[Bước 4: Xem Xác Nhận Chế Độ Trợ Cấp]
+    C5B --> C6
+    C5C --> C6
+    C5D --> C6
+    C5E --> C6
+    
+    C6 --> C7[Bước 5: Thông Tin Tài Khoản Ngân Hàng]
+    C7 --> C8[Bước 6: Xem Lại và Gửi Yêu Cầu]
+    C8 --> C9[Gửi Yêu Cầu]
+    
+    D --> D1[Bước 1: Nhập Số CMND]
+    D1 --> D2[Bước 2: Chọn Loại Trợ Cấp]
+    D2 --> D3[Trợ Cấp Xã Hội Tuổi Già]
+    D2 --> D4[Trợ Cấp Xã Hội Khuyết Tật]
+    D2 --> D5[Trợ Cấp Xã Hội Khác]
+    
+    D3 --> D6[Bước 3: Kiểm Tra Đủ Điều Kiện]
+    D4 --> D6
+    D5 --> D6
+    
+    D6 --> D7{Kiểm Tra Tuổi<br/>và Điều Kiện}
+    D7 --> |Đủ Điều Kiện| D8[Bước 4: Điền Form và Gửi]
+    D7 --> |Không Đủ Điều Kiện| D9[Hiển Thị Lý Do Từ Chối]
+    
+    C9 --> E[Hàng Đợi Yêu Cầu Chờ Phê Duyệt]
+    D8 --> E
+    
+    style A fill:#e1f5ff
+    style C fill:#c8e6c9
+    style D fill:#fff9c4
+    style E fill:#fce4ec
+    style C2A fill:#fff4e6
+    style D7 fill:#fff4e6
+    style C2B fill:#ffcdd2
+    style D9 fill:#ffcdd2
+            </div>
+        </div>
+        <div class="diagram-container" data-lang="vi">
+            <div class="mermaid">
+flowchart TD
+    A[Màn Hình Tạo Yêu Cầu Trợ Cấp Mới] --> B{Chọn Loại Yêu Cầu}
+    
+    B --> |Có Đóng Góp| C[Yêu Cầu Trợ Cấp Có Đóng Góp]
+    B --> |Không Đóng Góp| D[Yêu Cầu Trợ Cấp Không Đóng Góp]
+    
+    C --> C1[Bước 1: Nhập NISS]
+    C1 --> C2[Bước 2: Kiểm Tra Đủ Điều Kiện]
+    C2 --> C2A{Kiểm Tra Tuổi<br/>và Thời Gian Đóng Góp}
+    C2A --> |Đủ Điều Kiện| C3[Bước 3: Chọn Loại Trợ Cấp]
+    C2A --> |Không Đủ Điều Kiện| C2B[Hiển Thị Lý Do Từ Chối]
+    
+    C3 --> C4{Loại Trợ Cấp?}
+    C4 --> |Trợ Cấp Tuổi Già| C5A[Form Trợ Cấp Tuổi Già]
+    C4 --> |Trợ Cấp Khuyết Tật| C5B[Form Trợ Cấp Khuyết Tật]
+    C4 --> |Trợ Cấp Người Sống Sót| C5C[Form Trợ Cấp Người Sống Sót]
+    C4 --> |Trợ Cấp Làm Cha Mẹ| C5D[Form Trợ Cấp Làm Cha Mẹ]
+    C4 --> |Trợ Cấp Tử Vong| C5E[Form Trợ Cấp Tử Vong]
+    
+    C5A --> C6[Bước 4: Xem Xác Nhận Chế Độ Trợ Cấp]
+    C5B --> C6
+    C5C --> C6
+    C5D --> C6
+    C5E --> C6
+    
+    C6 --> C7[Bước 5: Thông Tin Tài Khoản Ngân Hàng]
+    C7 --> C8[Bước 6: Xem Lại và Gửi Yêu Cầu]
+    C8 --> C9[Gửi Yêu Cầu]
+    
+    D --> D1[Bước 1: Nhập Số CMND]
+    D1 --> D2[Bước 2: Chọn Loại Trợ Cấp]
+    D2 --> D3[Trợ Cấp Xã Hội Tuổi Già]
+    D2 --> D4[Trợ Cấp Xã Hội Khuyết Tật]
+    D2 --> D5[Trợ Cấp Xã Hội Khác]
+    
+    D3 --> D6[Bước 3: Kiểm Tra Đủ Điều Kiện]
+    D4 --> D6
+    D5 --> D6
+    
+    D6 --> D7{Kiểm Tra Tuổi<br/>và Điều Kiện}
+    D7 --> |Đủ Điều Kiện| D8[Bước 4: Điền Form và Gửi]
+    D7 --> |Không Đủ Điều Kiện| D9[Hiển Thị Lý Do Từ Chối]
+    
+    C9 --> E[Hàng Đợi Yêu Cầu Chờ Phê Duyệt]
+    D8 --> E
+    
+    style A fill:#e1f5ff
+    style C fill:#c8e6c9
+    style D fill:#fff9c4
+    style E fill:#fce4ec
+    style C2A fill:#fff4e6
+    style D7 fill:#fff4e6
+    style C2B fill:#ffcdd2
+    style D9 fill:#ffcdd2
+            </div>
+        </div>
+
+        <div class="feature-list">
+            <h3 data-lang="en">📌 Detailed Function Descriptions</h3>
+            <h3 data-lang="vi">📌 Chi Tiết Các Chức Năng Nghiệp Vụ</h3>
+            
+            <h4 data-lang="en">1. Search Citizen</h4>
+            <h4 data-lang="vi">1. Tìm Kiếm Công Dân</h4>
+            <p data-lang="en"><strong>Purpose:</strong> Search for citizen information in the system to view history and create benefit requests</p>
+            <p data-lang="vi"><strong>Mục đích:</strong> Tìm kiếm thông tin công dân trong hệ thống để xem lịch sử và tạo yêu cầu trợ cấp</p>
+            <ul>
+                <li data-lang="en"><strong>Process:</strong> Admin enters NISS number or citizen name in search field</li>
+                <li data-lang="vi"><strong>Cách thực hiện:</strong> Nhân viên nhập số NISS hoặc tên công dân vào ô tìm kiếm</li>
+                <li data-lang="en"><strong>Result:</strong> If found, display citizen information with 3 tabs (Personal Data, Contributory Career, Contributory Situation)</li>
+                <li data-lang="vi"><strong>Kết quả:</strong> Nếu tìm thấy, hiển thị thông tin công dân với 3 tab (Thông Tin Cá Nhân, Lịch Sử Nghề Nghiệp, Tình Trạng Đóng Bảo Hiểm)</li>
+                <li data-lang="en"><strong>Error Handling:</strong> If not found, display error message</li>
+                <li data-lang="vi"><strong>Xử lý:</strong> Nếu không tìm thấy, hiển thị thông báo lỗi</li>
+            </ul>
+
+            <h4 data-lang="en">2. View Citizen Information</h4>
+            <h4 data-lang="vi">2. Xem Thông Tin Công Dân</h4>
+            <ul>
+                <li data-lang="en"><strong>Personal Data Tab:</strong> Personal information (name, date of birth, address, NISS, marital status, dependents)</li>
+                <li data-lang="vi"><strong>Tab Thông Tin Cá Nhân:</strong> Thông tin cá nhân (tên, ngày sinh, địa chỉ, NISS, tình trạng hôn nhân, người phụ thuộc)</li>
+                <li data-lang="en"><strong>Contributory Career Tab:</strong> Career history and contributions by company, by year</li>
+                <li data-lang="vi"><strong>Tab Lịch Sử Nghề Nghiệp:</strong> Lịch sử nghề nghiệp và đóng bảo hiểm theo công ty, theo năm</li>
+                <li data-lang="en"><strong>Contributory Situation Tab:</strong> Overview of contribution status (total years, total amount, status, eligibility)</li>
+                <li data-lang="vi"><strong>Tab Tình Trạng Đóng Bảo Hiểm:</strong> Tổng quan tình trạng đóng bảo hiểm (tổng số năm, tổng số tiền, trạng thái, đủ điều kiện)</li>
+            </ul>
+
+            <h4 data-lang="en">3. View Contribution History</h4>
+            <h4 data-lang="vi">3. Xem Lịch Sử Đóng Bảo Hiểm</h4>
+            <ul>
+                <li data-lang="en"><strong>Social History Tab:</strong> Social security contribution history - Filter by company, year, time period</li>
+                <li data-lang="vi"><strong>Tab Lịch Sử Xã Hội:</strong> Lịch sử đóng bảo hiểm xã hội - Lọc theo công ty, năm, khoảng thời gian</li>
+                <li data-lang="en"><strong>Monthly Breakdown Tab:</strong> Monthly details - Month, year, company, amount, status</li>
+                <li data-lang="vi"><strong>Tab Chi Tiết Theo Tháng:</strong> Chi tiết theo tháng - Tháng, năm, công ty, số tiền, trạng thái</li>
+            </ul>
+
+            <h4 data-lang="en">4. Current Beneficiaries List</h4>
+            <h4 data-lang="vi">4. Danh Sách Người Nhận Trợ Cấp</h4>
+            <ul>
+                <li data-lang="en"><strong>Contributory Beneficiaries:</strong> List of contributory benefit recipients</li>
+                <li data-lang="vi"><strong>Danh Sách Trợ Cấp Có Đóng Góp:</strong> Danh sách người nhận trợ cấp đóng góp</li>
+                <li data-lang="en"><strong>Non-Contributory Beneficiaries:</strong> List of non-contributory benefit recipients</li>
+                <li data-lang="vi"><strong>Danh Sách Trợ Cấp Không Đóng Góp:</strong> Danh sách người nhận trợ cấp không đóng góp</li>
+                <li data-lang="en"><strong>Actions:</strong> Export Excel, Generate Payment List, View Details</li>
+                <li data-lang="vi"><strong>Thao Tác:</strong> Xuất Excel, Tạo Danh Sách Thanh Toán, Xem Chi Tiết</li>
+            </ul>
+
+            <h4 data-lang="en">5. Create Benefit Request</h4>
+            <h4 data-lang="vi">5. Tạo Yêu Cầu Trợ Cấp</h4>
+            <ul>
+                <li data-lang="en"><strong>Contributory Request:</strong> Multi-step form (6 steps), contributory benefit types, automatic eligibility check, amount calculation</li>
+                <li data-lang="vi"><strong>Yêu Cầu Có Đóng Góp:</strong> Form nhiều bước (6 bước), các loại trợ cấp đóng góp, kiểm tra đủ điều kiện tự động, tính toán số tiền</li>
+                <li data-lang="en"><strong>Non-Contributory Request:</strong> Simpler form, social benefit types</li>
+                <li data-lang="vi"><strong>Yêu Cầu Không Đóng Góp:</strong> Form đơn giản hơn, các loại trợ cấp xã hội</li>
+            </ul>
+
+            <h4 data-lang="en">6. Approve/Reject Request</h4>
+            <h4 data-lang="vi">6. Phê Duyệt/Từ Chối Yêu Cầu</h4>
+            <ul>
+                <li data-lang="en"><strong>3-Level Approval System:</strong>
+                    <ul>
+                        <li>Level 1: No approval rights</li>
+                        <li>Level 2: Send for approval or reject "Submitted" requests</li>
+                        <li>Level 3: Approve or reject "Pending Approval" requests</li>
+                    </ul>
+                </li>
+                <li data-lang="vi"><strong>Hệ Thống Phê Duyệt 3 Cấp:</strong>
+                    <ul>
+                        <li>Cấp 1: Không có quyền phê duyệt</li>
+                        <li>Cấp 2: Gửi lên phê duyệt hoặc từ chối các yêu cầu "Đã Gửi"</li>
+                        <li>Cấp 3: Phê duyệt hoặc từ chối các yêu cầu "Chờ Phê Duyệt"</li>
+                    </ul>
+                </li>
+                <li data-lang="en"><strong>Request Statuses:</strong> Submitted → Pending Approval → Approved/Rejected</li>
+                <li data-lang="vi"><strong>Trạng Thái Yêu Cầu:</strong> Đã Gửi → Chờ Phê Duyệt → Đã Phê Duyệt/Đã Từ Chối</li>
+                <li data-lang="en"><strong>Features:</strong> View details, view documents, view calculations, approve/reject individually or in bulk</li>
+                <li data-lang="vi"><strong>Tính Năng:</strong> Xem chi tiết, xem tài liệu, xem tính toán, phê duyệt/từ chối đơn lẻ hoặc hàng loạt</li>
+            </ul>
+        </div>
+
+        <div class="feature-list">
+            <h3 data-lang="en">💰 Benefit Types</h3>
+            <h3 data-lang="vi">💰 Các Loại Trợ Cấp</h3>
+            
+            <h4 data-lang="en">Contributory Benefits</h4>
+            <h4 data-lang="vi">Trợ Cấp Có Đóng Góp</h4>
+            <ul>
+                <li data-lang="en">Old Age Pension (PV) - For people who have reached retirement age</li>
+                <li data-lang="vi">Trợ Cấp Tuổi Già (PV) - Dành cho người đã đủ tuổi nghỉ hưu</li>
+                <li data-lang="en">Disability Pension (PI) - For people with disabilities</li>
+                <li data-lang="vi">Trợ Cấp Khuyết Tật (PI) - Dành cho người bị khuyết tật</li>
+                <li data-lang="en">Survivor Pension - For relatives of deceased</li>
+                <li data-lang="vi">Trợ Cấp Người Sống Sót - Dành cho người thân của người đã mất</li>
+                <li data-lang="en">Parental Benefit - For people who give birth or adopt children</li>
+                <li data-lang="vi">Trợ Cấp Làm Cha Mẹ - Dành cho người sinh con hoặc nhận con nuôi</li>
+                <li data-lang="en">Death Benefit - One-time benefit for family when contributor dies</li>
+                <li data-lang="vi">Trợ Cấp Tử Vong - Trợ cấp một lần cho gia đình khi người đóng bảo hiểm qua đời</li>
+            </ul>
+
+            <h4 data-lang="en">Non-Contributory Benefits</h4>
+            <h4 data-lang="vi">Trợ Cấp Không Đóng Góp</h4>
+            <ul>
+                <li data-lang="en">Old Age Social Pension (PSV) - For elderly people without income</li>
+                <li data-lang="vi">Trợ Cấp Xã Hội Tuổi Già (PSV) - Dành cho người cao tuổi không có thu nhập</li>
+                <li data-lang="en">Disability Social Pension - For disabled people without work capacity</li>
+                <li data-lang="vi">Trợ Cấp Xã Hội Khuyết Tật - Dành cho người khuyết tật không có khả năng lao động</li>
+                <li data-lang="en">Other Non-Contributory Benefits - Other social benefits as per regulations</li>
+                <li data-lang="vi">Các Trợ Cấp Xã Hội Khác - Các loại trợ cấp xã hội khác theo quy định</li>
+            </ul>
+        </div>
+
+        <div class="feature-list">
+            <h3 data-lang="en">📐 Calculation Formulas</h3>
+            <h3 data-lang="vi">📐 Công Thức Tính Toán</h3>
+            <ul>
+                <li data-lang="en"><strong>Old Age Pension:</strong> P = (R / N) × Total Months (R: Reference Remuneration, N: 360)</li>
+                <li data-lang="vi"><strong>Trợ Cấp Tuổi Già:</strong> P = (R / N) × Tổng Số Tháng (R: Mức Lương Tham Chiếu, N: 360)</li>
+                <li data-lang="en"><strong>Survivor Pension:</strong> P = (R / N) × Total Months, Funeral Allowance = 3 × R</li>
+                <li data-lang="vi"><strong>Trợ Cấp Người Sống Sót:</strong> P = (R / N) × Tổng Số Tháng, Trợ Cấp Mai Táng = 3 × R</li>
+                <li data-lang="en"><strong>Disability Pension:</strong> Monthly: P = (R / N) × Total Months, One-time: 24 × Monthly</li>
+                <li data-lang="vi"><strong>Trợ Cấp Khuyết Tật:</strong> Hàng tháng: P = (R / N) × Tổng Số Tháng, Một lần: 24 × Số Tiền Hàng Tháng</li>
+                <li data-lang="en"><strong>Parental Benefit:</strong> Daily Benefit = R / 180, Total = Daily Benefit × Duration Days</li>
+                <li data-lang="vi"><strong>Trợ Cấp Làm Cha Mẹ:</strong> Trợ Cấp Ngày = R / 180, Tổng = Trợ Cấp Ngày × Số Ngày</li>
+                <li data-lang="en"><strong>Death Benefit:</strong> S = 3 × R</li>
+                <li data-lang="vi"><strong>Trợ Cấp Tử Vong:</strong> S = 3 × R</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+
+        // Store original diagram content in data attribute
+        function storeOriginalContent() {
+            document.querySelectorAll('.mermaid').forEach(el => {
+                if (!el.dataset.originalContent) {
+                    el.dataset.originalContent = el.textContent.trim();
+                }
+            });
+        }
+
+        // Function to check if element is visible
+        function isElementVisible(el) {
+            if (!el) return false;
+            const style = window.getComputedStyle(el);
+            if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
+                return false;
+            }
+            // Check parent visibility
+            const parent = el.parentElement;
+            if (parent && parent !== document.body) {
+                return isElementVisible(parent);
+            }
+            return true;
+        }
+
+        // Function to render visible diagrams
+        function renderVisibleDiagrams() {
+            // First, restore all diagrams to original state
+            document.querySelectorAll('.mermaid').forEach(el => {
+                const originalContent = el.dataset.originalContent;
+                if (originalContent) {
+                    // Clear any existing SVG
+                    el.innerHTML = originalContent;
+                }
+            });
+            
+            // Then render only visible diagrams after a short delay
+            setTimeout(() => {
+                const allDiagrams = document.querySelectorAll('.mermaid');
+                const visibleDiagrams = Array.from(allDiagrams).filter(el => isElementVisible(el));
+                
+                visibleDiagrams.forEach((el, index) => {
+                    // Only render if not already rendered
+                    if (!el.querySelector('svg')) {
+                        const originalContent = el.dataset.originalContent || el.textContent.trim();
+                        if (originalContent) {
+                            el.textContent = originalContent;
+                            // Add small delay between renders to avoid conflicts
+                            setTimeout(() => {
+                                mermaid.init(undefined, [el]).catch(err => {
+                                    console.error('Error rendering diagram:', err);
+                                });
+                            }, index * 50);
+                        }
+                    }
+                });
+            }, 200);
+        }
+
+        // Language switching functionality
+        function changeLanguage(lang) {
+            document.body.className = 'lang-' + lang;
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // Re-render diagrams after language change
+            setTimeout(() => {
+                renderVisibleDiagrams();
+            }, 100);
+        }
+
+        // Load saved language preference and render diagrams
+        window.addEventListener('DOMContentLoaded', function() {
+            // Store original content first
+            storeOriginalContent();
+            
+            const savedLang = localStorage.getItem('preferredLanguage') || 'en';
+            const select = document.getElementById('languageSelect');
+            if (select) {
+                select.value = savedLang;
+                document.body.className = 'lang-' + savedLang;
+            }
+            
+            // Render diagrams after page load
+            setTimeout(() => {
+                renderVisibleDiagrams();
+            }, 300);
+        });
+    </script>
+</body>
+</html>
