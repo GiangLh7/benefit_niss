@@ -451,7 +451,37 @@
               *ngIf="selectedSchemeType === 'non-contributory' && calculatedAge > 0 && !ageValidationError && schemeTypeFormControl.value"
               class="benefit-amount-display"
             >
-              <mat-card class="benefit-amount-card">
+              <!-- Show ineligibility reason if benefit type not eligible -->
+              <mat-card *ngIf="benefitEligibilityError" class="benefit-ineligibility-card">
+                <mat-card-header>
+                  <mat-card-title>
+                    <mat-icon>info</mat-icon>
+                    Benefit Amount Information
+                  </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                  <div class="benefit-amount-details">
+                    <div class="amount-row">
+                      <span class="label">Benefit Type:</span>
+                      <span class="value">{{ getSelectedBenefitLabel() }}</span>
+                    </div>
+                    <div class="amount-row">
+                      <span class="label">Age:</span>
+                      <span class="value">{{ calculatedAge }} years</span>
+                    </div>
+                    <div class="ineligibility-message">
+                      <mat-icon>warning</mat-icon>
+                      <div class="message-content">
+                        <strong>Not Eligible</strong>
+                        <p>{{ benefitEligibilityError }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+
+              <!-- Show benefit amount if eligible -->
+              <mat-card *ngIf="!benefitEligibilityError" class="benefit-amount-card">
                 <mat-card-header>
                   <mat-card-title>
                     <mat-icon>attach_money</mat-icon>

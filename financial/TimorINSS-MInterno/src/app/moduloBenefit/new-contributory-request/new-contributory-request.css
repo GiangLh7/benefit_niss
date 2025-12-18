@@ -404,3 +404,65 @@
 .breakdown-list li:last-child {
   border-bottom: none;
 }
+
+/* Benefit Ineligibility Card */
+.benefit-ineligibility-card {
+  background-color: #fff3e0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #ff9800;
+}
+
+.benefit-ineligibility-card mat-card-header {
+  margin-bottom: 16px;
+}
+
+.benefit-ineligibility-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #e65100;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.benefit-ineligibility-card mat-card-title mat-icon {
+  color: #ff9800;
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.ineligibility-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: #fff;
+  border-left: 4px solid #ff9800;
+  border-radius: 4px;
+  margin-top: 16px;
+}
+
+.ineligibility-message mat-icon {
+  color: #ff9800;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ineligibility-message .message-content {
+  flex: 1;
+}
+
+.ineligibility-message strong {
+  display: block;
+  color: #e65100;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.ineligibility-message p {
+  margin: 0;
+  color: #424242;
+  font-size: 14px;
+  line-height: 1.5;
+}

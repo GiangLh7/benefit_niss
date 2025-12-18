@@ -132,6 +132,23 @@
   color: #2e7d32;
 }
 
+.calc-row.tax-deduction {
+  color: #d32f2f;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 8px;
+  margin-top: 8px;
+}
+
+.calc-row.tax-deduction .calc-label {
+  color: #d32f2f;
+  font-size: 13px;
+}
+
+.calc-row.tax-deduction .calc-value {
+  color: #d32f2f;
+  font-weight: 600;
+}
+
 .calc-label {
   color: #616161;
 }

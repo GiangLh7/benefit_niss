@@ -5,7 +5,10 @@ import { MatStepper } from '@angular/material/stepper';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { generateContributionPDF, ContributionPDFData } from '../utils/pdf.utils';
+import {
+  generateContributionPDF,
+  ContributionPDFData,
+} from '../utils/pdf.utils';
 
 import {
   ContributionPeriod,
@@ -132,6 +135,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
   calculatedAge: number = 0;
   calculatedBenefitAmount: number = 0;
   ageValidationError: string | null = null;
+  benefitEligibilityError: string | null = null; // Error when benefit type not eligible for current age
 
   // Debounce subject for ID number check
   private idNumberCheckSubject = new Subject<string>();
@@ -549,6 +553,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     if (!dateOfBirth) {
       this.calculatedAge = 0;
       this.calculatedBenefitAmount = 0;
+      this.benefitEligibilityError = null;
       return;
     }
 
@@ -574,6 +579,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       this.ageValidationError =
         'Age must be at least 18 years old to be eligible for non-contributory benefits.';
       this.calculatedBenefitAmount = 0;
+      this.benefitEligibilityError = null;
       this.selectedBenefitType = '';
       this.schemeTypeFormControl.setValue('');
       return;
@@ -585,11 +591,27 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     // Don't automatically select benefit type - let user choose in step 3
     // Only calculate amount if benefit type is already selected
     if (this.selectedBenefitType) {
+      // Check eligibility for the selected benefit type
       if (this.selectedBenefitType === 'elderly-assistance') {
-        this.calculatedBenefitAmount = calculateOldPensionAmount(age.years);
+        if (age.years >= 60) {
+          this.calculatedBenefitAmount = calculateOldPensionAmount(age.years);
+          this.benefitEligibilityError = null;
+        } else {
+          this.calculatedBenefitAmount = 0;
+          this.benefitEligibilityError = `Old Age Social Pension requires age 60 or above. Current age: ${age.years} years.`;
+        }
       } else if (this.selectedBenefitType === 'severe-disability') {
-        this.calculatedBenefitAmount = calculateDisabilityAmount(age.years);
+        if (age.years >= 18) {
+          this.calculatedBenefitAmount = calculateDisabilityAmount(age.years);
+          this.benefitEligibilityError = null;
+        } else {
+          this.calculatedBenefitAmount = 0;
+          this.benefitEligibilityError = `Severe Disability Assistance requires age 18 or above. Current age: ${age.years} years.`;
+        }
       }
+    } else {
+      // Clear eligibility error if no benefit type is selected
+      this.benefitEligibilityError = null;
     }
 
     // Update required documents based on selected benefit type (if selected)
@@ -702,11 +724,15 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     // For non-contributory, calculate benefit amount when type is selected
     if (type === 'non-contributory' && this.calculatedAge > 0) {
       if (benefitType === 'elderly-assistance') {
-        this.calculatedBenefitAmount = calculateOldPensionAmount(this.calculatedAge);
+        this.calculatedBenefitAmount = calculateOldPensionAmount(
+          this.calculatedAge
+        );
       } else if (benefitType === 'severe-disability') {
-        this.calculatedBenefitAmount = calculateDisabilityAmount(this.calculatedAge);
+        this.calculatedBenefitAmount = calculateDisabilityAmount(
+          this.calculatedAge
+        );
       }
-      
+
       // Update required documents
       const selectedBenefit = this.nonContributoryBenefitTypes.find(
         (bt) => bt.id === benefitType
@@ -1023,8 +1049,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     const R = this.getReferenceRemuneration();
     const result = this.eligibilityEngine.calculateOldAgePension(
       R,
-      this.contributionMonths,
-      false // Not early retirement for deceased
+      this.contributionMonths
     );
     return result.calculatedPension;
   }
@@ -1096,6 +1121,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     this.calculatedAge = 0;
     this.calculatedBenefitAmount = 0;
     this.ageValidationError = null;
+    this.benefitEligibilityError = null;
   }
 
   /**
@@ -1154,6 +1180,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     this.calculatedAge = 0;
     this.calculatedBenefitAmount = 0;
     this.ageValidationError = null;
+    this.benefitEligibilityError = null;
 
     // Step 5: Bank Account
     this.bankAccountForm.reset();
@@ -1478,7 +1505,9 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       // Prepare rejection data for dialog
       const actualYears = Math.floor(this.contributionMonths / 12);
       const actualMonths = this.contributionMonths % 12;
-      const requiredYears = Math.floor(this.survivorConfig.minimumContributionMonths / 12);
+      const requiredYears = Math.floor(
+        this.survivorConfig.minimumContributionMonths / 12
+      );
       const requiredMonths = this.survivorConfig.minimumContributionMonths % 12;
 
       let currentValue = '';
@@ -1504,9 +1533,10 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
         benefitType: 'survivor',
         citizenName: this.citizenInfo?.name || 'Unknown',
         citizenNiss: this.citizenInfo?.niss || '',
-        sector: this.citizenInfo?.employmentSector === EmploymentSector.PUBLIC 
-          ? 'Public Sector' 
-          : 'Private Sector',
+        sector:
+          this.citizenInfo?.employmentSector === EmploymentSector.PUBLIC
+            ? 'Public Sector'
+            : 'Private Sector',
         currentValue: currentValue,
         requiredValue: requiredValue,
         suggestions: [
@@ -1673,9 +1703,11 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
         if (this.selectedSchemeType === 'non-contributory') {
           return (
             !!this.selectedBenefitType &&
-            (this.selectedBenefitType === 'elderly-assistance' || this.selectedBenefitType === 'severe-disability') &&
+            (this.selectedBenefitType === 'elderly-assistance' ||
+              this.selectedBenefitType === 'severe-disability') &&
             this.calculatedBenefitAmount > 0 &&
-            !this.ageValidationError
+            !this.ageValidationError &&
+            !this.benefitEligibilityError
           );
         }
         // For survivor's pension, need at least one dependent
@@ -1704,6 +1736,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
           return (
             this.calculatedAge >= 18 &&
             !this.ageValidationError &&
+            !this.benefitEligibilityError &&
             this.calculatedBenefitAmount > 0 &&
             !!this.selectedBenefitType
           );
@@ -1894,7 +1927,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.isSubmitting = false;
         // Check if this is a contributory request with contribution history
-        const hasContributionHistory = 
+        const hasContributionHistory =
           this.selectedSchemeType === 'contributory' &&
           this.contributionHistory.length > 0;
 
@@ -1909,12 +1942,12 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
               console.error('Error generating PDF:', error);
               alert('Error generating PDF. Please try again.');
             }
-          }
+          },
         };
 
         const dialogRef = this.dialog.open(SubmissionSuccessDialogComponent, {
           width: '500px',
-          data: dialogData
+          data: dialogData,
         });
 
         dialogRef.afterClosed().subscribe(() => {

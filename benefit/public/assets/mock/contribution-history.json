@@ -1,43 +1,73 @@
 {
   "socialHistory": [
     {
-      "fromDate": "01/01/2022",
-      "toDate": "31/12/2022",
+      "fromDate": "01/03/2024",
+      "toDate": "Present",
       "employer": "Dili Construction Co.",
       "premium": "1,800 USD",
       "regime": "General",
       "contributionType": "Mandatory"
     },
     {
-      "fromDate": "01/01/2021",
-      "toDate": "31/12/2021",
+      "fromDate": "01/01/2024",
+      "toDate": "Present",
       "employer": "Timor Logistics",
-      "premium": "1,500 USD",
+      "premium": "1,200 USD",
       "regime": "General",
       "contributionType": "Mandatory"
     },
     {
-      "fromDate": "01/01/2020",
-      "toDate": "31/12/2020",
+      "fromDate": "15/06/2025",
+      "toDate": "Present",
       "employer": "Pacific Retail",
-      "premium": "1,200 USD",
+      "premium": "900 USD",
       "regime": "Voluntary",
       "contributionType": "Facultative"
     }
   ],
   "monthlyBreakdown": [
-    { "month": "Jan 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Feb 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Mar 2025", "workingDays": 30, "declaredRemuneration": "1,950 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Apr 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "May 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Jun 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Jul 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Aug 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Sep 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Oct 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Nov 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" },
-    { "month": "Dec 2025", "workingDays": 30, "declaredRemuneration": "1,800 USD", "regime": "General", "adherenceType": "Mandatory" }
+    { "month": "Jan 2025", "employer": "Dili Construction Co.", "workingDays": 22, "declaredRemuneration": "1,200 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Jan 2025", "employer": "Timor Logistics", "workingDays": 15, "declaredRemuneration": "600 USD", "regime": "General", "adherenceType": "Mandatory" },
+    
+    { "month": "Feb 2025", "employer": "Dili Construction Co.", "workingDays": 20, "declaredRemuneration": "1,100 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Feb 2025", "employer": "Timor Logistics", "workingDays": 18, "declaredRemuneration": "700 USD", "regime": "General", "adherenceType": "Mandatory" },
+    
+    { "month": "Mar 2025", "employer": "Dili Construction Co.", "workingDays": 23, "declaredRemuneration": "1,350 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Mar 2025", "employer": "Timor Logistics", "workingDays": 16, "declaredRemuneration": "600 USD", "regime": "General", "adherenceType": "Mandatory" },
+    
+    { "month": "Apr 2025", "employer": "Dili Construction Co.", "workingDays": 21, "declaredRemuneration": "1,200 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Apr 2025", "employer": "Timor Logistics", "workingDays": 17, "declaredRemuneration": "600 USD", "regime": "General", "adherenceType": "Mandatory" },
+    
+    { "month": "May 2025", "employer": "Dili Construction Co.", "workingDays": 22, "declaredRemuneration": "1,250 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "May 2025", "employer": "Timor Logistics", "workingDays": 15, "declaredRemuneration": "550 USD", "regime": "General", "adherenceType": "Mandatory" },
+    
+    { "month": "Jun 2025", "employer": "Dili Construction Co.", "workingDays": 20, "declaredRemuneration": "1,150 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Jun 2025", "employer": "Timor Logistics", "workingDays": 14, "declaredRemuneration": "500 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Jun 2025", "employer": "Pacific Retail", "workingDays": 10, "declaredRemuneration": "450 USD", "regime": "Voluntary", "adherenceType": "Facultative" },
+    
+    { "month": "Jul 2025", "employer": "Dili Construction Co.", "workingDays": 23, "declaredRemuneration": "1,300 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Jul 2025", "employer": "Timor Logistics", "workingDays": 16, "declaredRemuneration": "550 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Jul 2025", "employer": "Pacific Retail", "workingDays": 12, "declaredRemuneration": "500 USD", "regime": "Voluntary", "adherenceType": "Facultative" },
+    
+    { "month": "Aug 2025", "employer": "Dili Construction Co.", "workingDays": 21, "declaredRemuneration": "1,200 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Aug 2025", "employer": "Timor Logistics", "workingDays": 17, "declaredRemuneration": "600 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Aug 2025", "employer": "Pacific Retail", "workingDays": 11, "declaredRemuneration": "480 USD", "regime": "Voluntary", "adherenceType": "Facultative" },
+    
+    { "month": "Sep 2025", "employer": "Dili Construction Co.", "workingDays": 22, "declaredRemuneration": "1,250 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Sep 2025", "employer": "Timor Logistics", "workingDays": 16, "declaredRemuneration": "550 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Sep 2025", "employer": "Pacific Retail", "workingDays": 13, "declaredRemuneration": "520 USD", "regime": "Voluntary", "adherenceType": "Facultative" },
+    
+    { "month": "Oct 2025", "employer": "Dili Construction Co.", "workingDays": 23, "declaredRemuneration": "1,300 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Oct 2025", "employer": "Timor Logistics", "workingDays": 15, "declaredRemuneration": "500 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Oct 2025", "employer": "Pacific Retail", "workingDays": 12, "declaredRemuneration": "500 USD", "regime": "Voluntary", "adherenceType": "Facultative" },
+    
+    { "month": "Nov 2025", "employer": "Dili Construction Co.", "workingDays": 20, "declaredRemuneration": "1,150 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Nov 2025", "employer": "Timor Logistics", "workingDays": 18, "declaredRemuneration": "650 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Nov 2025", "employer": "Pacific Retail", "workingDays": 10, "declaredRemuneration": "450 USD", "regime": "Voluntary", "adherenceType": "Facultative" },
+    
+    { "month": "Dec 2025", "employer": "Dili Construction Co.", "workingDays": 22, "declaredRemuneration": "1,250 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Dec 2025", "employer": "Timor Logistics", "workingDays": 16, "declaredRemuneration": "600 USD", "regime": "General", "adherenceType": "Mandatory" },
+    { "month": "Dec 2025", "employer": "Pacific Retail", "workingDays": 14, "declaredRemuneration": "550 USD", "regime": "Voluntary", "adherenceType": "Facultative" }
   ]
 }
 

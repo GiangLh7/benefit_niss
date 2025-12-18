@@ -69,6 +69,7 @@
             <thead>
               <tr>
                 <th>Month</th>
+                <th>Employer</th>
                 <th>Working Days</th>
                 <th>Declared Remuneration (USD)</th>
                 <th>Regime</th>
@@ -78,6 +79,7 @@
             <tbody>
               <tr *ngFor="let row of filteredMonthlyBreakdown(); trackBy: trackByIndex">
                 <td>{{ row?.month || '—' }}</td>
+                <td>{{ row?.employer || '—' }}</td>
                 <td>{{ row?.workingDays ?? '—' }}</td>
                 <td>{{ row?.declaredRemuneration || '—' }}</td>
                 <td>{{ row?.regime || '—' }}</td>

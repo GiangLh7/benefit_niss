@@ -69,6 +69,11 @@
             (1.5 × SAII = 1.5 × ${{ saiiAmount.toFixed(2) }})
           </span>
         </div>
+
+        <div *ngIf="pensionCalculation.taxAmount > 0" class="calc-row tax-deduction">
+          <span class="calc-label">Tax (10% on amount above $500):</span>
+          <span class="calc-value">-${{ pensionCalculation.taxAmount.toFixed(2) }}</span>
+        </div>
         
         <div class="calc-row highlight" *ngIf="eligibilityResult.isEarlyRetirement">
           <span class="calc-label"><strong>Your Monthly Pension:</strong></span>

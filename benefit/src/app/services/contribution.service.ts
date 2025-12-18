@@ -13,6 +13,7 @@ export interface SocialContributionRecord {
 
 export interface MonthlyContributionRecord {
   month: string;
+  employer: string;
   workingDays: number;
   declaredRemuneration: string;
   regime: string;
