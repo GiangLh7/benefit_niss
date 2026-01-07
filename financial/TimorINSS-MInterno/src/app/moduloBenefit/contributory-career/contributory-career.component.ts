@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { BenefitService } from '../services/benefit.service';
 
 export interface CareerRecord {
   period: string;
@@ -19,9 +20,11 @@ export interface CareerRecord {
   templateUrl: './contributory-career.component.html',
   styleUrls: ['./contributory-career.component.css']
 })
-export class ContributoryCareerComponent implements OnInit {
+export class ContributoryCareerComponent implements OnInit, OnChanges {
+  @Input() niss?: string;
+  
   displayedColumns: string[] = ['period', 'employer', 'salary', 'contributionRate', 'contributionAmount', 'monthsContributed', 'status'];
-  dataSource: MatTableDataSource<CareerRecord>;
+  dataSource: MatTableDataSource<CareerRecord> = new MatTableDataSource<CareerRecord>([]);
   isLoading = false;
   
   totalMonths = 0;
@@ -32,53 +35,16 @@ export class ContributoryCareerComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
-    // Mock data - replace with service call
-    const mockData: CareerRecord[] = [
-      {
-        period: '2024',
-        employer: 'Government Office',
-        salary: 1000,
-        contributionRate: 11,
-        contributionAmount: 110,
-        monthsContributed: 10,
-        status: 'Active'
-      },
-      {
-        period: '2023',
-        employer: 'Government Office',
-        salary: 950,
-        contributionRate: 11,
-        contributionAmount: 104.50,
-        monthsContributed: 12,
-        status: 'Complete'
-      },
-      {
-        period: '2022',
-        employer: 'Private Company',
-        salary: 900,
-        contributionRate: 11,
-        contributionAmount: 99,
-        monthsContributed: 12,
-        status: 'Complete'
-      },
-      {
-        period: '2021',
-        employer: 'Private Company',
-        salary: 850,
-        contributionRate: 11,
-        contributionAmount: 93.50,
-        monthsContributed: 11,
-        status: 'Incomplete'
-      },
-    ];
-
-    this.dataSource = new MatTableDataSource(mockData);
-    this.calculateTotals(mockData);
-  }
+  constructor(private benefitService: BenefitService) {}
 
   ngOnInit(): void {
     this.loadContributoryCareer();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['niss'] && !changes['niss'].firstChange) {
+      this.loadContributoryCareer();
+    }
   }
 
   ngAfterViewInit() {
@@ -87,17 +53,57 @@ export class ContributoryCareerComponent implements OnInit {
   }
 
   loadContributoryCareer(): void {
+    if (!this.niss) {
+      return;
+    }
+
     this.isLoading = true;
-    // TODO: Load from service
-    // this.benefitService.getContributoryCareer().subscribe(...)
-    this.isLoading = false;
+    this.benefitService.getContributoryCareer(this.niss).subscribe({
+      next: (data) => {
+        if (data && data.records) {
+          this.dataSource.data = data.records;
+          this.calculateTotals(data.records);
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
+        } else {
+          this.dataSource.data = [];
+          this.calculateTotals([]);
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading contributory career:', error);
+        this.dataSource.data = [];
+        this.calculateTotals([]);
+        this.isLoading = false;
+      }
+    });
   }
 
   calculateTotals(data: CareerRecord[]): void {
-    this.totalMonths = data.reduce((sum, record) => sum + record.monthsContributed, 0);
-    this.totalContributions = data.reduce((sum, record) => sum + (record.contributionAmount * record.monthsContributed), 0);
+    if (!data || data.length === 0) {
+      this.totalMonths = 0;
+      this.totalContributions = 0;
+      this.careerYears = 0;
+      this.careerStartDate = null;
+      return;
+    }
+
+    this.totalMonths = data.reduce((sum, record) => sum + (record.monthsContributed || 0), 0);
+    this.totalContributions = data.reduce((sum, record) => sum + ((record.contributionAmount || 0) * (record.monthsContributed || 0)), 0);
     this.careerYears = Math.floor(this.totalMonths / 12);
-    this.careerStartDate = new Date(parseInt(data[data.length - 1].period), 0, 1);
+    
+    // Get career start date from the last record (oldest period)
+    const lastRecord = data[data.length - 1];
+    if (lastRecord && lastRecord.period) {
+      this.careerStartDate = new Date(parseInt(lastRecord.period), 0, 1);
+    } else {
+      this.careerStartDate = null;
+    }
   }
 
   applyFilter(event: Event): void {

@@ -1,8 +1,8 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { ContributionPeriod, HealthStatus } from '../../models/benefit.model';
-import { getMockCitizenByNISS } from '../../constants/mock-data.constants';
 import { calculateAge, formatAge } from '../../utils/eligibility.utils';
 import { DEFAULT_HEALTH_STATUS } from '../../constants/eligibility.constants';
+import { BenefitService } from '../../services/benefit.service';
 
 export interface ContributionData {
   contributionHistory: ContributionPeriod[];
@@ -32,6 +32,8 @@ export class ContributionHistoryComponent implements OnInit, OnChanges {
   healthStatus: HealthStatus = { status: DEFAULT_HEALTH_STATUS };
   isLoading: boolean = false;
 
+  constructor(private benefitService: BenefitService) {}
+
   ngOnInit(): void {
     this.loadContributionHistory();
   }
@@ -49,37 +51,42 @@ export class ContributionHistoryComponent implements OnInit, OnChanges {
 
     this.isLoading = true;
 
-    // TODO: Replace with actual API call
-    // this.benefitService.getContributionHistory(this.citizenNiss).subscribe(...)
+    this.benefitService.getContributionHistoryByNiss(this.citizenNiss).subscribe({
+      next: (data) => {
+        if (!data || !data.contributionHistory) {
+          this.contributionHistory = [];
+          this.totalContributionYears = 0;
+          this.totalContributionMonths = 0;
+          this.contributionMonths = 0;
+          this.isLoading = false;
+          this.emitData();
+          return;
+        }
 
-    // Simulate API delay
-    setTimeout(() => {
-      const mockData = getMockCitizenByNISS(this.citizenNiss);
-      
-      if (!mockData) {
+        this.contributionHistory = data.contributionHistory;
+        this.totalContributionYears = data.totalYears || 0;
+        this.totalContributionMonths = data.totalMonths || 0;
+        this.contributionMonths = this.totalContributionYears * 12 + this.totalContributionMonths;
+
+        // Calculate current age
+        if (this.dateOfBirth) {
+          const age = calculateAge(this.dateOfBirth);
+          this.currentAge = formatAge(age.years, age.months);
+        }
+
+        this.isLoading = false;
+        this.emitData();
+      },
+      error: (error) => {
+        console.error('Error loading contribution history:', error);
         this.contributionHistory = [];
         this.totalContributionYears = 0;
         this.totalContributionMonths = 0;
         this.contributionMonths = 0;
         this.isLoading = false;
         this.emitData();
-        return;
-      }
-
-      this.contributionHistory = mockData.contributionHistory;
-      this.totalContributionYears = mockData.totalYears;
-      this.totalContributionMonths = mockData.totalMonths;
-      this.contributionMonths = this.totalContributionYears * 12 + this.totalContributionMonths;
-
-      // Calculate current age
-      if (this.dateOfBirth) {
-        const age = calculateAge(this.dateOfBirth);
-        this.currentAge = formatAge(age.years, age.months);
-      }
-
-      this.isLoading = false;
-      this.emitData();
-    }, 500);
+      },
+    });
   }
 
   private emitData(): void {

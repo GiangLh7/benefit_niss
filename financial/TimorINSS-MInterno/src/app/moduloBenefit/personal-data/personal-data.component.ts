@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { BenefitService } from '../services/benefit.service';
 
 export interface PersonalDataRow {
   label: string;
@@ -11,33 +12,48 @@ export interface PersonalDataRow {
   templateUrl: './personal-data.component.html',
   styleUrls: ['./personal-data.component.css']
 })
-export class PersonalDataComponent implements OnInit {
+export class PersonalDataComponent implements OnInit, OnChanges {
+  @Input() niss?: string; // Optional NISS input to load specific person's data
+  
   displayedColumns: string[] = ['label', 'value'];
   dataSource: PersonalDataRow[] = [];
   isLoading = false;
 
-  constructor() { }
+  constructor(private benefitService: BenefitService) { }
 
   ngOnInit(): void {
     this.loadPersonalData();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['niss'] && !changes['niss'].firstChange) {
+      this.loadPersonalData();
+    }
+  }
+
   loadPersonalData(): void {
     this.isLoading = true;
     
-    // Mock data - replace with service call
-    this.dataSource = [
-      { label: 'Name:', value: 'Maria Fernanda dos Santos' },
-      { label: 'Date of Birth:', value: '15/08/1963' },
-      { label: 'Address:', value: 'Rua de Timor Lorosae, No. 123, Bairro dos Grilos, Dili, Timor-Leste' },
-      { label: 'Social Security ID (NISS):', value: 'TL123456789' },
-      { label: 'Marital Status:', value: 'Married' },
-      { label: 'Dependents:', value: 'José dos Santos (Son, 12y), Ana dos Santos (Daughter, 8y)' }
-    ];
-
-    // TODO: Load from service
-    // this.benefitService.getPersonalData().subscribe(...)
+    const nissToLoad = this.niss || 'TL123456789'; // Default to first person if no NISS provided
     
-    this.isLoading = false;
+    this.benefitService.getPersonalDataByNiss(nissToLoad).subscribe({
+      next: (data) => {
+        this.dataSource = [
+          { label: 'Name:', value: data.name },
+          { label: 'Date of Birth:', value: data.dateOfBirth },
+          { label: 'Address:', value: data.address },
+          { label: 'Social Security ID (NISS):', value: data.niss },
+          { label: 'Marital Status:', value: data.maritalStatus },
+          { label: 'Dependents:', value: data.dependents || 'None' }
+        ];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading personal data:', error);
+        this.isLoading = false;
+        // Fallback to empty data on error
+        this.dataSource = [];
+      },
+    });
   }
 }

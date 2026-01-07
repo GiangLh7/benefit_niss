@@ -3,6 +3,7 @@ import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { filter, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { BenefitService } from '../services/benefit.service';
 
 @Component({
   standalone: false,
@@ -29,7 +30,8 @@ export class BenefitHomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private benefitService: BenefitService
   ) { }
 
   ngOnInit(): void {
@@ -71,16 +73,16 @@ export class BenefitHomeComponent implements OnInit, OnDestroy {
   }
 
   loadPendingRequestsCount(): void {
-    // TODO: Replace with actual API call to count 'submitted' status only
-    // this.benefitService.getPendingRequestsCount().subscribe(count => {
-    //   this.pendingRequestsCount = count;
-    // });
-
-    // Mock data - simulate API call
-    // Only count requests with 'submitted' status (Level 2 needs to review)
-    setTimeout(() => {
-      this.pendingRequestsCount = 1; // Mock count - only submitted requests
-    }, 300);
+    // Get all requests and count only 'submitted' status (Level 2 needs to review)
+    this.benefitService.getPendingRequests().subscribe({
+      next: (requests) => {
+        this.pendingRequestsCount = requests.filter(r => r.status === 'submitted').length;
+      },
+      error: (error) => {
+        console.error('Error loading pending requests count:', error);
+        this.pendingRequestsCount = 0;
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -113,34 +115,30 @@ export class BenefitHomeComponent implements OnInit, OnDestroy {
 
     this.isSearching = true;
     
-    // TODO: Replace with actual service call
-    // this.benefitService.searchCitizen(searchTerm).subscribe(...)
-    
-    // Mock search - simulate API call
-    setTimeout(() => {
-      // Mock citizen data - check if search term matches
-      if (searchTerm.toLowerCase().includes('tl') || 
-          searchTerm.toLowerCase().includes('maria') ||
-          searchTerm.toLowerCase().includes('123456789')) {
-        this.selectedCitizen = {
-          niss: 'TL123456789',
-          name: 'Maria Fernanda dos Santos',
-          dateOfBirth: '15/08/1963',
-          found: true
-        };
-        
-        // Mark all tabs as loaded once a citizen is found
-        for (let i = 0; i < this.loadedTabs.length; i++) {
-          (this.loadedTabs as boolean[])[i] = true;
+    this.benefitService.searchCitizen(searchTerm.trim()).subscribe({
+      next: (citizen) => {
+        if (citizen && citizen.found) {
+          this.selectedCitizen = citizen;
+          
+          // Mark all tabs as loaded once a citizen is found
+          for (let i = 0; i < this.loadedTabs.length; i++) {
+            (this.loadedTabs as boolean[])[i] = true;
+          }
+        } else {
+          this.selectedCitizen = null;
+          alert('Citizen not found!');
         }
-      } else {
+        
+        this.isSearching = false;
+        console.log('Search completed for:', searchTerm);
+      },
+      error: (error) => {
+        console.error('Error searching citizen:', error);
         this.selectedCitizen = null;
-        alert('Citizen not found!');
+        this.isSearching = false;
+        alert('Error searching citizen. Please try again.');
       }
-      
-      this.isSearching = false;
-      console.log('Search completed for:', searchTerm);
-    }, 800);
+    });
   }
 
   onSearchSubmit(): void {

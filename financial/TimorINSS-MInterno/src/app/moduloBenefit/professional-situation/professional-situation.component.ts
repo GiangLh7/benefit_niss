@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { BenefitService } from '../services/benefit.service';
 
 export interface ProfessionalRecord {
   id: number;
@@ -20,44 +21,26 @@ export interface ProfessionalRecord {
   templateUrl: './professional-situation.component.html',
   styleUrls: ['./professional-situation.component.css']
 })
-export class ProfessionalSituationComponent implements OnInit {
+export class ProfessionalSituationComponent implements OnInit, OnChanges {
+  @Input() niss?: string;
+  
   displayedColumns: string[] = ['employer', 'position', 'startDate', 'endDate', 'status', 'contractType', 'actions'];
-  dataSource: MatTableDataSource<ProfessionalRecord>;
+  dataSource: MatTableDataSource<ProfessionalRecord> = new MatTableDataSource<ProfessionalRecord>([]);
   isLoading = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor() {
-    // Mock data - replace with service call
-    const mockData: ProfessionalRecord[] = [
-      {
-        id: 1,
-        employer: 'Government Office',
-        position: 'Administrator',
-        startDate: new Date('2020-01-15'),
-        endDate: undefined,
-        status: 'Active',
-        contractType: 'Permanent',
-        department: 'Finance'
-      },
-      {
-        id: 2,
-        employer: 'Private Company Ltd',
-        position: 'Accountant',
-        startDate: new Date('2018-06-01'),
-        endDate: new Date('2019-12-31'),
-        status: 'Inactive',
-        contractType: 'Contract',
-        department: 'Accounting'
-      }
-    ];
-
-    this.dataSource = new MatTableDataSource(mockData);
-  }
+  constructor(private benefitService: BenefitService) {}
 
   ngOnInit(): void {
     this.loadProfessionalSituation();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['niss'] && !changes['niss'].firstChange) {
+      this.loadProfessionalSituation();
+    }
   }
 
   ngAfterViewInit() {
@@ -66,10 +49,32 @@ export class ProfessionalSituationComponent implements OnInit {
   }
 
   loadProfessionalSituation(): void {
+    if (!this.niss) {
+      return;
+    }
+
     this.isLoading = true;
-    // TODO: Load from service
-    // this.benefitService.getProfessionalSituation().subscribe(...)
-    this.isLoading = false;
+    this.benefitService.getProfessionalSituation(this.niss).subscribe({
+      next: (data) => {
+        if (data && data.records) {
+          this.dataSource.data = data.records;
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
+        } else {
+          this.dataSource.data = [];
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading professional situation:', error);
+        this.dataSource.data = [];
+        this.isLoading = false;
+      }
+    });
   }
 
   applyFilter(event: Event): void {

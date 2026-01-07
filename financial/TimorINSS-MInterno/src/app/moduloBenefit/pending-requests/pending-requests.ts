@@ -71,75 +71,31 @@ export class PendingRequestsComponent implements OnInit {
   }
 
   loadPendingRequests(): void {
-    // TODO: Replace with actual API call
-    // this.benefitService.getPendingRequests().subscribe(...)
-
-    // Mock data with different statuses
-    this.pendingRequests = [
-      {
-        id: '1',
-        niss: 'TL123456789',
-        fullName: 'Maria Fernanda dos Santos',
-        dateOfBirth: '15/08/1963',
-        schemeType: 'Contributory',
-        benefitType: 'Old Age Pension',
-        submittedDate: '2025-01-15',
-        status: 'submitted'
+    this.isProcessing = true;
+    this.benefitService.getPendingRequests().subscribe({
+      next: (requests) => {
+        this.pendingRequests = requests.map((req: any) => ({
+          id: req.id,
+          niss: req.niss,
+          fullName: req.fullName,
+          dateOfBirth: req.dateOfBirth,
+          schemeType: req.schemeType,
+          benefitType: req.benefitType,
+          submittedDate: req.submittedDate,
+          status: req.status,
+          comment: req.comment,
+          reviewedBy: req.reviewedBy,
+          reviewedDate: req.reviewedDate,
+        }));
+        this.applyStatusFilter();
+        this.isProcessing = false;
       },
-      {
-        id: '2',
-        niss: 'TL987654321',
-        fullName: 'João Carlos Silva',
-        dateOfBirth: '20/05/1960',
-        schemeType: 'Contributory',
-        benefitType: 'Disability Pension',
-        submittedDate: '2025-01-18',
-        status: 'pending_approval',
-        comment: 'Sent for approval by Level 2 Admin',
-        reviewedBy: 'Admin Level 2',
-        reviewedDate: '2025-01-19'
+      error: (error) => {
+        console.error('Error loading pending requests:', error);
+        this.isProcessing = false;
+        alert('Error loading pending requests. Please try again.');
       },
-      {
-        id: '3',
-        niss: 'TL555666777',
-        fullName: 'Ana Maria Costa',
-        dateOfBirth: '10/12/1958',
-        schemeType: 'Non-Contributory',
-        benefitType: 'Old Age Social Pension',
-        submittedDate: '2025-01-20',
-        status: 'approved',
-        comment: 'Approved - All documents verified',
-        reviewedBy: 'Admin Level 3',
-        reviewedDate: '2025-01-21'
-      },
-      {
-        id: '4',
-        niss: 'TL111222333',
-        fullName: 'Pedro Alves',
-        dateOfBirth: '25/03/1965',
-        schemeType: 'Contributory',
-        benefitType: 'Survivor Pension',
-        submittedDate: '2025-01-22',
-        status: 'rejected',
-        comment: 'Missing required documents',
-        reviewedBy: 'Admin Level 2',
-        reviewedDate: '2025-01-23'
-      },
-      {
-        id: '5',
-        niss: 'TL444555666',
-        fullName: 'Teresa Silva',
-        dateOfBirth: '12/04/1962',
-        schemeType: 'Contributory',
-        benefitType: 'Old Age Pension',
-        submittedDate: '2024-12-01',
-        status: 'expired',
-        comment: 'Request expired after 30 days',
-        reviewedDate: '2025-01-01'
-      }
-    ];
-    
-    this.applyStatusFilter();
+    });
   }
   
   applyStatusFilter(): void {

@@ -69,10 +69,7 @@ import {
   EmploymentSector,
   SAII_BASE_AMOUNT,
 } from '../constants/eligibility.constants';
-import {
-  getMockCitizenByNISS,
-  isNISSAlreadyAssigned,
-} from '../constants/mock-data.constants';
+// Removed direct mock data imports - now using HTTP requests
 import {
   DOCUMENT_TYPES,
   DocumentTypeOption,
@@ -234,6 +231,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
   totalContributionMonths: number = 0;
   currentAge: string = '';
   healthStatus: HealthStatus = { status: DEFAULT_HEALTH_STATUS };
+  cachedReferenceRemuneration: number | null = null; // Cache reference remuneration
 
   // Step 3: Contributory Scheme - Eligibility
   eligibilityResult: EligibilityResult | null = null;
@@ -367,6 +365,17 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     this.currentAge = data.currentAge;
     this.healthStatus = data.healthStatus;
 
+    // Cache reference remuneration from contribution history
+    if (this.citizenInfo?.niss) {
+      this.benefitService.getContributionHistoryByNiss(this.citizenInfo.niss).subscribe({
+        next: (historyData) => {
+          if (historyData?.referenceRemuneration) {
+            this.cachedReferenceRemuneration = historyData.referenceRemuneration;
+          }
+        }
+      });
+    }
+
     // Hide non-contributory options if citizen has contribution history
     // if (this.contributionMonths > 0) {
     //   this.showNonContributory = false;
@@ -449,17 +458,93 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     this.citizenInfo = null;
     this.citizenFound = false;
 
-    // Mock API call
-    setTimeout(() => {
-      this.handleMockCitizenSearch(niss);
-      this.isSearching = false;
+    const trimmedNiss = niss.trim();
 
-      // Only reset subsequent steps data after successful search
-      // Don't reset stepper position - stay on current step
-      if (this.citizenFound) {
-        this.resetSubsequentStepsData();
+    // First, check if NISS is already assigned to a beneficiary
+    this.benefitService.getBeneficiaries().subscribe({
+      next: (beneficiaries) => {
+        // Normalize NISS for comparison (trim and uppercase)
+        const normalizedNiss = trimmedNiss.toUpperCase().trim();
+        const isAssigned = beneficiaries.some((b: any) => {
+          const beneficiaryNiss = (b.niss || '').toUpperCase().trim();
+          return beneficiaryNiss === normalizedNiss;
+        });
+        
+        if (isAssigned) {
+          this.searchError = 'This citizen is already assigned to a beneficiary scheme.';
+          this.citizenInfo = null;
+          this.citizenFound = false;
+          this.isSearching = false;
+          console.log('NISS already in beneficiaries:', normalizedNiss);
+          return;
+        }
+        
+        console.log('NISS not in beneficiaries, proceeding to search:', normalizedNiss);
+
+        // If not assigned, proceed to search citizen
+        this.benefitService.searchCitizen(trimmedNiss).subscribe({
+          next: (citizen) => {
+            if (citizen && citizen.found) {
+              // Get contribution history to get employment sector
+              this.benefitService.getContributionHistoryByNiss(trimmedNiss).subscribe({
+                next: (history) => {
+                  this.citizenInfo = {
+                    niss: citizen.niss,
+                    name: citizen.name,
+                    dateOfBirth: citizen.dateOfBirth,
+                    employmentSector: history?.employmentSector || EmploymentSector.PRIVATE,
+                  };
+                  this.citizenFound = true;
+                  this.searchError = null;
+                  this.isSearching = false;
+
+                  // Only reset subsequent steps data after successful search
+                  if (this.citizenFound) {
+                    this.resetSubsequentStepsData();
+                  }
+                },
+                error: () => {
+                  // If contribution history not found, use default
+                  this.citizenInfo = {
+                    niss: citizen.niss,
+                    name: citizen.name,
+                    dateOfBirth: citizen.dateOfBirth,
+                    employmentSector: EmploymentSector.PRIVATE,
+                  };
+                  this.citizenFound = true;
+                  this.searchError = null;
+                  this.isSearching = false;
+
+                  if (this.citizenFound) {
+                    this.resetSubsequentStepsData();
+                  }
+                }
+              });
+            } else {
+              this.searchError = 'Citizen not found. Please verify the NISS number.';
+              this.citizenInfo = null;
+              this.citizenFound = false;
+              this.isSearching = false;
+            }
+          },
+          error: (error) => {
+            console.error('Error searching citizen:', error);
+            this.searchError = 'Citizen not found. Please verify the NISS number.';
+            this.citizenInfo = null;
+            this.citizenFound = false;
+            this.isSearching = false;
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error checking beneficiaries:', error);
+        // If check fails, show error and don't proceed
+        this.searchError = 'Error checking beneficiary status. Please try again.';
+        this.citizenInfo = null;
+        this.citizenFound = false;
+        this.isSearching = false;
       }
-    }, 1000);
+    });
   }
 
   /**
@@ -483,37 +568,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  /**
-   * Handle mock citizen search by NISS (remove when integrating with real API)
-   */
-  private handleMockCitizenSearch(niss: string): void {
-    if (isNISSAlreadyAssigned(niss)) {
-      this.searchError =
-        'This citizen is already assigned to a beneficiary scheme.';
-      this.citizenInfo = null;
-      this.citizenFound = false;
-      return;
-    }
-
-    const mockData = getMockCitizenByNISS(niss);
-    if (mockData) {
-      this.citizenInfo = {
-        niss: mockData.niss,
-        name: mockData.name,
-        dateOfBirth: mockData.dateOfBirth,
-        employmentSector: mockData.employmentSector || EmploymentSector.PRIVATE,
-      };
-      this.citizenFound = true;
-      this.searchError = null;
-
-      // Contribution history will be loaded by the contribution-history component
-      // when it renders (triggered by citizenInfo being set)
-    } else {
-      this.searchError = 'Citizen not found. Please verify the NISS number.';
-      this.citizenInfo = null;
-      this.citizenFound = false;
-    }
-  }
+  // Removed handleMockCitizenSearch - now using HTTP requests in searchCitizenByNISS
 
   /**
    * Handle mock citizen search by ID Number (for non-contributory benefits)
@@ -1031,13 +1086,13 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
    * defined in mock-data.constants.ts. Fallback to $115 only if mock data is missing.
    */
   getReferenceRemuneration(): number {
-    if (this.citizenInfo) {
-      const mockData = getMockCitizenByNISS(this.citizenInfo.niss);
-      if (mockData?.referenceRemuneration) {
-        return mockData.referenceRemuneration;
-      }
+    // Use cached value if available
+    if (this.cachedReferenceRemuneration !== null) {
+      return this.cachedReferenceRemuneration;
     }
 
+    // Fallback value if not cached yet
+    // Note: In production, this should be loaded before this method is called
     return 115.0;
   }
 
@@ -1926,6 +1981,7 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
     this.benefitService.submitBenefitRequest(request).subscribe({
       next: (response) => {
         this.isSubmitting = false;
+        
         // Check if this is a contributory request with contribution history
         const hasContributionHistory =
           this.selectedSchemeType === 'contributory' &&
@@ -1957,7 +2013,10 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.isSubmitting = false;
         console.error('Error submitting request:', error);
-        alert('Error submitting request. Please try again.');
+        
+        // Check if error is due to duplicate NISS (400 status)
+        const errorMessage = error?.error?.error || error?.message || 'Error submitting request. Please try again.';
+        alert(errorMessage);
       },
     });
   }

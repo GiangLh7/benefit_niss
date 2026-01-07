@@ -146,6 +146,7 @@ import { PopUpEditDespesaCabimentadaComponent } from './moduloGestao/preencher-t
 import { DatePickerFullComponent } from './componentes/date-picker-full/date-picker-full.component';
 import { PopUpHandleInvoiceComponent } from './moduloContribuicoes/pop-up-handle-invoice/pop-up-handle-invoice.component';
 import { PopUpAddUserComponent } from './moduloGestao/pop-up-add-user/pop-up-add-user.component';
+import { CustomInMemoryApiService } from './moduloBenefit/services/custom-in-memory-api.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -314,6 +315,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     { provide: LOCALE_ID, useValue: 'en-US'},
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true} },
     { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
+    // Custom In-Memory API Service for mock data (only in development)
+    // Remove this when connecting to real API
+    { provide: HTTP_INTERCEPTORS, useClass: CustomInMemoryApiService, multi: true },
     provideCharts(withDefaultRegisterables()),
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,

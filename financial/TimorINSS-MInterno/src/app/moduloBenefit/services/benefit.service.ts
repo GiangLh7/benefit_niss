@@ -144,34 +144,94 @@ export class BenefitService {
   submitBenefitRequest(
     request: CompleteBenefitRequest
   ): Observable<{ success: boolean; requestId: string }> {
-    // return this.http.post<{ success: boolean; requestId: string }>(
-    //   `${this.requestsUrl}/submit`,
-    //   request
-    // );
-    return of({
-      success: true,
-      requestId: `TEST_${Date.now()}`,
-    });
+    return this.http.post<{ success: boolean; requestId: string }>(
+      `api/benefitRequests`,
+      request
+    );
   }
 
   /**
    * Get all pending benefit requests
    */
-  getPendingRequests(): Observable<BenefitRequestDetails[]> {
-    return this.http.get<BenefitRequestDetails[]>(
-      `${this.requestsUrl}/pending`
-    );
+  getPendingRequests(): Observable<any[]> {
+    return this.http.get<any[]>(`api/benefitRequests`);
   }
 
   /**
    * Get benefit request details by ID
    */
   getRequestDetails(requestId: string): Observable<BenefitRequestDetails> {
-    // TODO: Replace with actual API call
-    // return this.http.get<BenefitRequestDetails>(`${this.requestsUrl}/${requestId}`);
+    return this.http.get<BenefitRequestDetails>(`api/benefitRequestDetails/${requestId}`);
+  }
 
-    // Mock data for demonstration
-    return of(this.getMockRequestDetails(requestId)).pipe(delay(800));
+  /**
+   * Get all beneficiaries (both contributory and non-contributory)
+   */
+  getBeneficiaries(): Observable<any[]> {
+    return this.http.get<any[]>(`api/beneficiaries`);
+  }
+
+  /**
+   * Get beneficiaries by scheme type
+   */
+  getBeneficiariesByScheme(schemeType: 'contributory' | 'non-contributory'): Observable<any[]> {
+    return this.http.get<any[]>(`api/beneficiaries?schemeType=${schemeType}`);
+  }
+
+  /**
+   * Get personal data by NISS
+   */
+  getPersonalDataByNiss(niss: string): Observable<any> {
+    return this.http.get<any>(`api/personalData?niss=${niss}`);
+  }
+
+  /**
+   * Get all personal data
+   */
+  getAllPersonalData(): Observable<any[]> {
+    return this.http.get<any[]>(`api/personalData`);
+  }
+
+  /**
+   * Get contribution history by NISS
+   */
+  getContributionHistoryByNiss(niss: string): Observable<any> {
+    return this.http.get<any>(`api/contributionHistory?niss=${niss}`);
+  }
+
+  /**
+   * Search citizen by NISS or name
+   */
+  searchCitizen(searchTerm: string): Observable<any> {
+    return this.http.get<any>(`api/citizens/search?q=${encodeURIComponent(searchTerm)}`);
+  }
+
+  /**
+   * Get professional situation by NISS
+   */
+  getProfessionalSituation(niss: string): Observable<any> {
+    return this.http.get<any>(`api/professionalSituation?niss=${encodeURIComponent(niss)}`);
+  }
+
+  /**
+   * Get contributory situation by NISS
+   */
+  getContributorySituation(niss: string): Observable<any> {
+    return this.http.get<any>(`api/contributorySituation?niss=${encodeURIComponent(niss)}`);
+  }
+
+  /**
+   * Get contributory career by NISS
+   */
+  getContributoryCareer(niss: string): Observable<any> {
+    return this.http.get<any>(`api/contributoryCareer?niss=${encodeURIComponent(niss)}`);
+  }
+
+  /**
+   * Get granted benefits by NISS
+   */
+  getGrantedBenefits(niss: string): Observable<any> {
+    return this.http.get<any>(`api/grantedBenefits?niss=${encodeURIComponent(niss)}`);
   }
 
   /**

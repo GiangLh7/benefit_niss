@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BenefitService } from '../services/benefit.service';
 
 interface BeneficiaryRow {
   position: number;
@@ -51,135 +52,73 @@ export class CurrentBeneficiariesComponent implements OnInit {
   nonContributoryBeneficiaries: BeneficiaryRow[] = [];
   contributoryBeneficiaries: BeneficiaryRow[] = [];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private benefitService: BenefitService
+  ) {}
 
   ngOnInit(): void {
-    // Mocked data for demonstration purposes. Replace with API data when available.
-    this.nonContributoryBeneficiaries = [
-      {
-        position: 1,
-        type: 'Old-Age (PV)',
-        niss: 'TL123456',
-        electoralId: 'EL987654',
-        noBi: 'BI5565',
-        fullName: 'Maria Santos',
-        municipality: 'Dili',
-        post: 'Vera',
-        suco: 'Bidau',
-        subVillage: 'Vera',
-        dob: '15/08/63',
-        age: 61,
-        sex: 'Female',
-        bankName: 'ANZ Bank',
-        bankAccount: '323-654321',
-        iban: 'TL3800...',
-        amount: 300,
-        phase: 'I',
-      },
-      {
-        position: 2,
-        type: 'Disability (PI)',
-        niss: 'TL789012',
-        electoralId: 'EL123456',
-        noBi: 'BI8565',
-        fullName: 'Joao Carlos',
-        municipality: 'Baucau',
-        post: 'Buco',
-        suco: 'Wataboo',
-        subVillage: 'Bucoli',
-        dob: '18/08/65',
-        age: 54,
-        sex: 'Male',
-        bankName: 'BNU Timor',
-        bankAccount: '865-654321',
-        iban: 'TL3800...',
-        amount: 200,
-        phase: 'II',
-      },
-      {
-        position: 3,
-        type: 'Social Old Age',
-        niss: 'TL545678',
-        electoralId: 'EL555555',
-        noBi: 'BI6465',
-        fullName: 'Ana da Silva',
-        municipality: 'Liquica',
-        post: 'Bucoli',
-        suco: 'Vatvou',
-        subVillage: 'Bucoli',
-        dob: '15/08/63',
-        age: 58,
-        sex: 'Female',
-        bankName: 'ANZ Bank',
-        bankAccount: '987-654321',
-        iban: 'TL3800...',
-        amount: 250,
-        phase: 'III',
-      },
-    ];
+    this.loadBeneficiaries();
+  }
 
-    this.contributoryBeneficiaries = [
-      {
-        position: 1,
-        type: 'Old-Age Pension',
-        niss: 'TL112233',
-        electoralId: 'EL223344',
-        noBi: 'BI1010',
-        fullName: 'Jose Manuel',
-        municipality: 'Dili',
-        post: 'Cristo Rei',
-        suco: 'Bairo Pite',
-        subVillage: 'Fatuhada',
-        dob: '01/01/60',
-        age: 64,
-        sex: 'Male',
-        bankName: 'BNCTL',
-        bankAccount: '201-554433',
-        iban: 'TL1100...',
-        amount: 450,
-        phase: 'Active',
+  loadBeneficiaries(): void {
+    // Load non-contributory beneficiaries
+    this.benefitService.getBeneficiariesByScheme('non-contributory').subscribe({
+      next: (beneficiaries) => {
+        this.nonContributoryBeneficiaries = beneficiaries.map((b: any, index: number) => ({
+          position: index + 1,
+          type: b.type,
+          niss: b.niss,
+          electoralId: b.electoralId,
+          noBi: b.noBi,
+          fullName: b.fullName,
+          municipality: b.municipality,
+          post: b.post,
+          suco: b.suco,
+          subVillage: b.subVillage,
+          dob: b.dob,
+          age: b.age,
+          sex: b.sex,
+          bankName: b.bankName,
+          bankAccount: b.bankAccount,
+          iban: b.iban,
+          amount: b.amount,
+          phase: b.phase,
+        }));
       },
-      {
-        position: 2,
-        type: 'Disability Pension',
-        niss: 'TL221144',
-        electoralId: 'EL334455',
-        noBi: 'BI2020',
-        fullName: 'Lucia Amaral',
-        municipality: 'Ermera',
-        post: 'Letefoho',
-        suco: 'Catrai Kraic',
-        subVillage: 'Hatugau',
-        dob: '12/04/1970',
-        age: 54,
-        sex: 'Female',
-        bankName: 'ANZ Bank',
-        bankAccount: '445-778899',
-        iban: 'TL2200...',
-        amount: 380,
-        phase: 'Active',
+      error: (error) => {
+        console.error('Error loading non-contributory beneficiaries:', error);
       },
-      {
-        position: 3,
-        type: 'Survivor Pension',
-        niss: 'TL889900',
-        electoralId: 'EL667788',
-        noBi: 'BI3030',
-        fullName: 'Pedro Gomes',
-        municipality: 'Manatuto',
-        post: 'Laclo',
-        suco: 'Uma Boco',
-        subVillage: 'Uma Boco',
-        dob: '25/09/1958',
-        age: 66,
-        sex: 'Male',
-        bankName: 'BNU Timor',
-        bankAccount: '112-233445',
-        iban: 'TL3300...',
-        amount: 420,
-        phase: 'Pending Review',
+    });
+
+    // Load contributory beneficiaries
+    this.benefitService.getBeneficiariesByScheme('contributory').subscribe({
+      next: (beneficiaries) => {
+        this.contributoryBeneficiaries = beneficiaries.map((b: any, index: number) => ({
+          position: index + 1,
+          type: b.type,
+          niss: b.niss,
+          electoralId: b.electoralId,
+          noBi: b.noBi,
+          fullName: b.fullName,
+          municipality: b.municipality,
+          post: b.post,
+          suco: b.suco,
+          subVillage: b.subVillage,
+          dob: b.dob,
+          age: b.age,
+          sex: b.sex,
+          bankName: b.bankName,
+          bankAccount: b.bankAccount,
+          iban: b.iban,
+          amount: b.amount,
+          phase: b.phase,
+        }));
       },
-    ];
+      error: (error) => {
+        console.error('Error loading contributory beneficiaries:', error);
+      },
+    });
   }
 
   goBack(): void {

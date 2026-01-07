@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, Input, SimpleChanges, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
+import { BenefitService } from '../services/benefit.service';
 
 export interface GrantedBenefit {
   id: number;
@@ -22,9 +23,11 @@ export interface GrantedBenefit {
   templateUrl: './benefit-granted.component.html',
   styleUrls: ['./benefit-granted.component.css']
 })
-export class BenefitGrantedComponent implements OnInit {
+export class BenefitGrantedComponent implements OnInit, OnChanges {
+  @Input() niss?: string;
+  
   displayedColumns: string[] = ['referenceNumber', 'benefitType', 'startDate', 'monthlyAmount', 'status', 'totalPaid', 'actions'];
-  dataSource: MatTableDataSource<GrantedBenefit>;
+  dataSource: MatTableDataSource<GrantedBenefit> = new MatTableDataSource<GrantedBenefit>([]);
   isLoading = false;
 
   activeBenefits = 0;
@@ -34,39 +37,19 @@ export class BenefitGrantedComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private router: Router) {
-    // Mock data - replace with service call
-    const mockData: GrantedBenefit[] = [
-      {
-        id: 1,
-        benefitType: 'Retirement Pension',
-        startDate: new Date('2023-01-01'),
-        endDate: undefined,
-        monthlyAmount: 450,
-        status: 'Active',
-        grantDate: new Date('2022-12-15'),
-        referenceNumber: 'BEN-2022-001',
-        totalPaid: 9900
-      },
-      {
-        id: 2,
-        benefitType: 'Survivor Benefit',
-        startDate: new Date('2022-06-01'),
-        endDate: new Date('2024-05-31'),
-        monthlyAmount: 250,
-        status: 'Completed',
-        grantDate: new Date('2022-05-20'),
-        referenceNumber: 'BEN-2022-045',
-        totalPaid: 5750
-      }
-    ];
-
-    this.dataSource = new MatTableDataSource(mockData);
-    this.calculateSummary(mockData);
-  }
+  constructor(
+    private router: Router,
+    private benefitService: BenefitService
+  ) {}
 
   ngOnInit(): void {
     this.loadGrantedBenefits();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['niss'] && !changes['niss'].firstChange) {
+      this.loadGrantedBenefits();
+    }
   }
 
   ngAfterViewInit() {
@@ -75,10 +58,35 @@ export class BenefitGrantedComponent implements OnInit {
   }
 
   loadGrantedBenefits(): void {
+    if (!this.niss) {
+      return;
+    }
+
     this.isLoading = true;
-    // TODO: Load from service
-    // this.benefitService.getGrantedBenefits().subscribe(...)
-    this.isLoading = false;
+    this.benefitService.getGrantedBenefits(this.niss).subscribe({
+      next: (data) => {
+        if (data && data.benefits) {
+          this.dataSource.data = data.benefits;
+          this.calculateSummary(data.benefits);
+          if (this.paginator) {
+            this.dataSource.paginator = this.paginator;
+          }
+          if (this.sort) {
+            this.dataSource.sort = this.sort;
+          }
+        } else {
+          this.dataSource.data = [];
+          this.calculateSummary([]);
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading granted benefits:', error);
+        this.dataSource.data = [];
+        this.calculateSummary([]);
+        this.isLoading = false;
+      }
+    });
   }
 
   calculateSummary(data: GrantedBenefit[]): void {

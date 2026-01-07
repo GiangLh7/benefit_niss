@@ -374,6 +374,14 @@ mat-chip.status-expired {
   font-weight: 600;
 }
 
+.mat-mdc-card-header {
+  justify-content: start !important;
+}
+
+.mat-mdc-card-header .mat-mdc-card-avatar {
+  margin: 0;
+}
+
 .info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
