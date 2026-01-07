@@ -230,13 +230,44 @@ export class CustomInMemoryApiService implements HttpInterceptor {
         return of(new HttpResponse({ status: 200, body: null }));
       }
 
-      // Search in personal data by NISS or name (case-insensitive)
       const normalizedQuery = searchQuery.toLowerCase().trim();
-      const foundCitizen = this.personalData.find((p) => {
+
+      // First, search in personalData
+      let foundCitizen = this.personalData.find((p) => {
         const nissMatch = p.niss.toLowerCase().includes(normalizedQuery);
         const nameMatch = p.name.toLowerCase().includes(normalizedQuery);
         return nissMatch || nameMatch;
       });
+
+      // If not found in personalData, search in MOCK_CITIZENS
+      if (!foundCitizen) {
+        const mockCitizen = Object.values(MOCK_CITIZENS).find((c) => {
+          const nissMatch = c.niss.toLowerCase().includes(normalizedQuery);
+          const nameMatch = c.name.toLowerCase().includes(normalizedQuery);
+          return nissMatch || nameMatch;
+        });
+
+        if (mockCitizen) {
+          // Convert dateOfBirth format
+          const dateParts = mockCitizen.dateOfBirth.split('-');
+          const formattedDateOfBirth = dateParts.length === 3 
+            ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`
+            : mockCitizen.dateOfBirth;
+
+          // Add to personalData for future searches
+          const newPersonalData = {
+            niss: mockCitizen.niss,
+            name: mockCitizen.name,
+            dateOfBirth: formattedDateOfBirth,
+            address: this.generateAddressFromNISS(mockCitizen.niss),
+            maritalStatus: this.getMaritalStatus(mockCitizen),
+            dependents: this.getDependents(mockCitizen),
+          };
+          this.personalData.push(newPersonalData);
+
+          foundCitizen = newPersonalData;
+        }
+      }
 
       if (foundCitizen) {
         // Return citizen data in the format expected by the component
@@ -327,6 +358,8 @@ export class CustomInMemoryApiService implements HttpInterceptor {
         // Check if NISS is already in beneficiaries list
         const niss = body.citizenNISS.trim();
         const normalizedNiss = niss.toUpperCase().trim();
+        
+        // Check in beneficiaries
         const isAlreadyBeneficiary = this.beneficiaries.some((b) => {
           const beneficiaryNiss = (b.niss || '').toUpperCase().trim();
           return beneficiaryNiss === normalizedNiss;
@@ -344,8 +377,27 @@ export class CustomInMemoryApiService implements HttpInterceptor {
             })
           );
         }
+
+        // Check in benefit requests (any status)
+        const isInRequests = this.benefitRequests.some((r) => {
+          const requestNiss = (r.niss || '').toUpperCase().trim();
+          return requestNiss === normalizedNiss;
+        });
+
+        if (isInRequests) {
+          console.log('Submit blocked: NISS already in benefit requests:', normalizedNiss);
+          return of(
+            new HttpResponse({
+              status: 400,
+              body: {
+                success: false,
+                error: 'This citizen already has a pending benefit request. Please check the pending requests list.',
+              },
+            })
+          );
+        }
         
-        console.log('Submit allowed: NISS not in beneficiaries:', normalizedNiss);
+        console.log('Submit allowed: NISS not in beneficiaries or requests:', normalizedNiss);
 
         // Create new benefit request from submitted data
         const newRequest: UnifiedBenefitRequest = {
@@ -822,8 +874,27 @@ export class CustomInMemoryApiService implements HttpInterceptor {
       },
     ];
 
-    // Initialize personal data
-    this.personalData = [
+    // Initialize personal data from MOCK_CITIZENS
+    // First, add all citizens from MOCK_CITIZENS
+    this.personalData = Object.values(MOCK_CITIZENS).map((citizen: MockCitizenData) => {
+      // Convert dateOfBirth from YYYY-MM-DD to DD/MM/YYYY format
+      const dateParts = citizen.dateOfBirth.split('-');
+      const formattedDateOfBirth = dateParts.length === 3 
+        ? `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`
+        : citizen.dateOfBirth;
+      
+      return {
+        niss: citizen.niss,
+        name: citizen.name,
+        dateOfBirth: formattedDateOfBirth,
+        address: this.generateAddressFromNISS(citizen.niss),
+        maritalStatus: this.getMaritalStatus(citizen),
+        dependents: this.getDependents(citizen),
+      };
+    });
+
+    // Add additional hardcoded personal data (for backward compatibility)
+    const additionalPersonalData = [
       {
         niss: 'TL123456789',
         name: 'Maria Fernanda dos Santos',
@@ -1264,5 +1335,39 @@ export class CustomInMemoryApiService implements HttpInterceptor {
         ],
       },
     ];
+  }
+
+  /**
+   * Generate address from NISS (helper method)
+   */
+  private generateAddressFromNISS(niss: string): string {
+    // Generate a default address based on NISS pattern
+    // In production, this would come from a database
+    const municipalities = ['Dili', 'Baucau', 'Ermera', 'Manatuto', 'Liquica'];
+    const randomMunicipality = municipalities[parseInt(niss.slice(-1)) % municipalities.length];
+    return `Rua Principal, ${randomMunicipality}, Timor-Leste`;
+  }
+
+  /**
+   * Get marital status from citizen data (helper method)
+   */
+  private getMaritalStatus(citizen: MockCitizenData): string {
+    // Default based on category or age
+    if (citizen.category === 'survivor') {
+      return 'Widowed';
+    }
+    // Age-based default
+    const age = new Date().getFullYear() - parseInt(citizen.dateOfBirth.split('-')[0]);
+    return age > 50 ? 'Married' : 'Single';
+  }
+
+  /**
+   * Get dependents from citizen data (helper method)
+   */
+  private getDependents(citizen: MockCitizenData): string {
+    if (citizen.category === 'survivor') {
+      return 'Children eligible for survivor pension';
+    }
+    return 'None';
   }
 }

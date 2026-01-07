@@ -460,17 +460,19 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
 
     const trimmedNiss = niss.trim();
 
-    // First, check if NISS is already assigned to a beneficiary
+    // First, check if NISS is already in beneficiaries or benefit requests
+    const normalizedNiss = trimmedNiss.toUpperCase().trim();
+    
+    // Check both beneficiaries and pending requests
     this.benefitService.getBeneficiaries().subscribe({
       next: (beneficiaries) => {
-        // Normalize NISS for comparison (trim and uppercase)
-        const normalizedNiss = trimmedNiss.toUpperCase().trim();
-        const isAssigned = beneficiaries.some((b: any) => {
+        // Check if NISS is already in beneficiaries
+        const isInBeneficiaries = beneficiaries.some((b: any) => {
           const beneficiaryNiss = (b.niss || '').toUpperCase().trim();
           return beneficiaryNiss === normalizedNiss;
         });
         
-        if (isAssigned) {
+        if (isInBeneficiaries) {
           this.searchError = 'This citizen is already assigned to a beneficiary scheme.';
           this.citizenInfo = null;
           this.citizenFound = false;
@@ -479,60 +481,31 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
           return;
         }
         
-        console.log('NISS not in beneficiaries, proceeding to search:', normalizedNiss);
-
-        // If not assigned, proceed to search citizen
-        this.benefitService.searchCitizen(trimmedNiss).subscribe({
-          next: (citizen) => {
-            if (citizen && citizen.found) {
-              // Get contribution history to get employment sector
-              this.benefitService.getContributionHistoryByNiss(trimmedNiss).subscribe({
-                next: (history) => {
-                  this.citizenInfo = {
-                    niss: citizen.niss,
-                    name: citizen.name,
-                    dateOfBirth: citizen.dateOfBirth,
-                    employmentSector: history?.employmentSector || EmploymentSector.PRIVATE,
-                  };
-                  this.citizenFound = true;
-                  this.searchError = null;
-                  this.isSearching = false;
-
-                  // Only reset subsequent steps data after successful search
-                  if (this.citizenFound) {
-                    this.resetSubsequentStepsData();
-                  }
-                },
-                error: () => {
-                  // If contribution history not found, use default
-                  this.citizenInfo = {
-                    niss: citizen.niss,
-                    name: citizen.name,
-                    dateOfBirth: citizen.dateOfBirth,
-                    employmentSector: EmploymentSector.PRIVATE,
-                  };
-                  this.citizenFound = true;
-                  this.searchError = null;
-                  this.isSearching = false;
-
-                  if (this.citizenFound) {
-                    this.resetSubsequentStepsData();
-                  }
-                }
-              });
-            } else {
-              this.searchError = 'Citizen not found. Please verify the NISS number.';
+        // Check if NISS is already in benefit requests (pending/submitted/pending_approval)
+        this.benefitService.getPendingRequests().subscribe({
+          next: (requests) => {
+            const isInRequests = requests.some((r: any) => {
+              const requestNiss = (r.niss || '').toUpperCase().trim();
+              return requestNiss === normalizedNiss;
+            });
+            
+            if (isInRequests) {
+              this.searchError = 'This citizen already has a pending benefit request. Please check the pending requests list.';
               this.citizenInfo = null;
               this.citizenFound = false;
               this.isSearching = false;
+              console.log('NISS already in benefit requests:', normalizedNiss);
+              return;
             }
+            
+            console.log('NISS not in beneficiaries or requests, proceeding to search:', normalizedNiss);
+            this.proceedWithSearch(trimmedNiss, normalizedNiss);
           },
           error: (error) => {
-            console.error('Error searching citizen:', error);
-            this.searchError = 'Citizen not found. Please verify the NISS number.';
-            this.citizenInfo = null;
-            this.citizenFound = false;
-            this.isSearching = false;
+            console.error('Error checking benefit requests:', error);
+            // If check fails, proceed anyway but log warning
+            console.warn('Could not verify benefit requests, proceeding with search');
+            this.proceedWithSearch(trimmedNiss, normalizedNiss);
           }
         });
       },
@@ -540,6 +513,66 @@ export class NewContributoryRequestComponent implements OnInit, OnDestroy {
         console.error('Error checking beneficiaries:', error);
         // If check fails, show error and don't proceed
         this.searchError = 'Error checking beneficiary status. Please try again.';
+        this.citizenInfo = null;
+        this.citizenFound = false;
+        this.isSearching = false;
+      }
+    });
+  }
+
+  /**
+   * Proceed with citizen search after validation
+   */
+  private proceedWithSearch(trimmedNiss: string, normalizedNiss: string): void {
+    // Use HTTP request to search citizen
+    this.benefitService.searchCitizen(trimmedNiss).subscribe({
+      next: (citizen) => {
+        if (citizen && citizen.found) {
+          // Get contribution history to get employment sector
+          this.benefitService.getContributionHistoryByNiss(trimmedNiss).subscribe({
+            next: (history) => {
+              this.citizenInfo = {
+                niss: citizen.niss,
+                name: citizen.name,
+                dateOfBirth: citizen.dateOfBirth,
+                employmentSector: history?.employmentSector || EmploymentSector.PRIVATE,
+              };
+              this.citizenFound = true;
+              this.searchError = null;
+              this.isSearching = false;
+
+              // Only reset subsequent steps data after successful search
+              if (this.citizenFound) {
+                this.resetSubsequentStepsData();
+              }
+            },
+            error: () => {
+              // If contribution history not found, use default
+              this.citizenInfo = {
+                niss: citizen.niss,
+                name: citizen.name,
+                dateOfBirth: citizen.dateOfBirth,
+                employmentSector: EmploymentSector.PRIVATE,
+              };
+              this.citizenFound = true;
+              this.searchError = null;
+              this.isSearching = false;
+
+              if (this.citizenFound) {
+                this.resetSubsequentStepsData();
+              }
+            }
+          });
+        } else {
+          this.searchError = 'Citizen not found. Please verify the NISS number.';
+          this.citizenInfo = null;
+          this.citizenFound = false;
+          this.isSearching = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error searching citizen:', error);
+        this.searchError = 'Citizen not found. Please verify the NISS number.';
         this.citizenInfo = null;
         this.citizenFound = false;
         this.isSearching = false;
