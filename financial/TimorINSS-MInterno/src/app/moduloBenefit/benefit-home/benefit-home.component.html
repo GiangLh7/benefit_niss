@@ -124,47 +124,57 @@
                 <mat-tab-group (selectedIndexChange)="onTabChange($event)">
                   <mat-tab label="Personal Data">
                     @if (loadedTabs[0]) {
-                    <app-personal-data [niss]="selectedCitizen?.niss" />
-                    } @else {
-                    <ng-template matTabContent>
                       <app-personal-data [niss]="selectedCitizen?.niss" />
-                    </ng-template>
+                    } @else {
+                      <ng-template matTabContent>
+                        <app-personal-data [niss]="selectedCitizen?.niss" />
+                      </ng-template>
                     }
                   </mat-tab>
                   <mat-tab label="Professional Situation">
                     @if (loadedTabs[1]) {
-                    <app-professional-situation [niss]="selectedCitizen?.niss" />
+                      <app-professional-situation
+                        [niss]="selectedCitizen?.niss"
+                      />
                     } @else {
-                    <ng-template matTabContent>
-                      <app-professional-situation [niss]="selectedCitizen?.niss" />
-                    </ng-template>
+                      <ng-template matTabContent>
+                        <app-professional-situation
+                          [niss]="selectedCitizen?.niss"
+                        />
+                      </ng-template>
                     }
                   </mat-tab>
                   <mat-tab label="Contributory Situation">
                     @if (loadedTabs[2]) {
-                    <app-contributory-situation [niss]="selectedCitizen?.niss" />
+                      <app-contributory-situation
+                        [niss]="selectedCitizen?.niss"
+                      />
                     } @else {
-                    <ng-template matTabContent>
-                      <app-contributory-situation [niss]="selectedCitizen?.niss" />
-                    </ng-template>
+                      <ng-template matTabContent>
+                        <app-contributory-situation
+                          [niss]="selectedCitizen?.niss"
+                        />
+                      </ng-template>
                     }
                   </mat-tab>
                   <mat-tab label="Contributory Career">
                     @if (loadedTabs[3]) {
-                    <app-contributory-career [niss]="selectedCitizen?.niss" />
-                    } @else {
-                    <ng-template matTabContent>
                       <app-contributory-career [niss]="selectedCitizen?.niss" />
-                    </ng-template>
+                    } @else {
+                      <ng-template matTabContent>
+                        <app-contributory-career
+                          [niss]="selectedCitizen?.niss"
+                        />
+                      </ng-template>
                     }
                   </mat-tab>
                   <mat-tab label="Benefit granted">
                     @if (loadedTabs[4]) {
-                    <app-benefit-granted [niss]="selectedCitizen?.niss" />
-                    } @else {
-                    <ng-template matTabContent>
                       <app-benefit-granted [niss]="selectedCitizen?.niss" />
-                    </ng-template>
+                    } @else {
+                      <ng-template matTabContent>
+                        <app-benefit-granted [niss]="selectedCitizen?.niss" />
+                      </ng-template>
                     }
                   </mat-tab>
                 </mat-tab-group>
@@ -194,6 +204,7 @@
                   <button
                     mat-raised-button
                     color="primary"
+                    style="margin-top: auto"
                     routerLink="/benefit/current-beneficiaries"
                   >
                     Proceed

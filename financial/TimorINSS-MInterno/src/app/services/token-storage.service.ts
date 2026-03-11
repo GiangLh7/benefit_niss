@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Utilizador } from '../response-models/utilizador-response';
+import { environment } from 'src/environments/environment';
 
 const TOKEN_KEY = 'auth-internal-token';
 const USER_KEY = 'auth-internal-user';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenStorageService {
-  constructor() { }
+  constructor() {}
 
   signOut(): void {
     window.localStorage.clear();
@@ -24,10 +25,13 @@ export class TokenStorageService {
   }
 
   public tokenExpired(): boolean {
+    if (environment.bypassTokenCheck) {
+      return false;
+    }
     let token = window.localStorage.getItem(TOKEN_KEY) ?? '';
-    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
-    return (Math.floor((new Date).getTime() / 1000)) >= expiry;
-  } 
+    const expiry = JSON.parse(atob(token.split('.')[1])).exp;
+    return Math.floor(new Date().getTime() / 1000) >= expiry;
+  }
 
   public saveUser(user: Utilizador): void {
     window.localStorage.removeItem(USER_KEY);
@@ -44,7 +48,7 @@ export class TokenStorageService {
   }
 
   public recoverTokenExpired(token: string): boolean {
-    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
-    return (Math.floor((new Date).getTime() / 1000)) >= expiry;
-  } 
+    const expiry = JSON.parse(atob(token.split('.')[1])).exp;
+    return Math.floor(new Date().getTime() / 1000) >= expiry;
+  }
 }

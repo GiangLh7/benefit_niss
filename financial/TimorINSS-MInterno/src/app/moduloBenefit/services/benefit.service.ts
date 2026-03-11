@@ -39,6 +39,9 @@ export class BenefitService {
    * Get all benefits
    */
   getAllBenefits(): Observable<Benefit[]> {
+    if (environment.useMockApi) {
+      return this.http.get<Benefit[]>('api/benefits');
+    }
     return this.http.get<Benefit[]>(this.apiUrl);
   }
 
@@ -46,6 +49,9 @@ export class BenefitService {
    * Get benefit by ID
    */
   getBenefitById(id: number): Observable<Benefit> {
+    if (environment.useMockApi) {
+      return this.http.get<Benefit>(`api/benefits/${id}`);
+    }
     return this.http.get<Benefit>(`${this.apiUrl}/${id}`);
   }
 
@@ -53,6 +59,14 @@ export class BenefitService {
    * Get benefits with filters
    */
   getBenefitsFiltered(filter: BenefitFilter): Observable<Benefit[]> {
+    if (environment.useMockApi) {
+      let params = new HttpParams();
+      if (filter.type) params = params.set('type', filter.type);
+      if (filter.status) params = params.set('status', filter.status);
+      if (filter.beneficiaryId) params = params.set('beneficiaryId', filter.beneficiaryId.toString());
+      return this.http.get<Benefit[]>('api/benefits', { params });
+    }
+
     let params = new HttpParams();
 
     if (filter.type) {
@@ -81,6 +95,9 @@ export class BenefitService {
    * Get benefits by beneficiary ID
    */
   getBenefitsByBeneficiaryId(beneficiaryId: number): Observable<Benefit[]> {
+    if (environment.useMockApi) {
+      return this.http.get<Benefit[]>(`api/benefits/beneficiary/${beneficiaryId}`);
+    }
     return this.http.get<Benefit[]>(
       `${this.apiUrl}/beneficiary/${beneficiaryId}`
     );
@@ -90,6 +107,9 @@ export class BenefitService {
    * Create new benefit
    */
   createBenefit(benefit: BenefitRequest): Observable<Benefit> {
+    if (environment.useMockApi) {
+      return this.http.post<Benefit>('api/benefits', benefit);
+    }
     return this.http.post<Benefit>(this.apiUrl, benefit);
   }
 
@@ -100,6 +120,9 @@ export class BenefitService {
     id: number,
     benefit: Partial<BenefitRequest>
   ): Observable<Benefit> {
+    if (environment.useMockApi) {
+      return this.http.put<Benefit>(`api/benefits/${id}`, benefit);
+    }
     return this.http.put<Benefit>(`${this.apiUrl}/${id}`, benefit);
   }
 
@@ -107,6 +130,9 @@ export class BenefitService {
    * Delete benefit
    */
   deleteBenefit(id: number): Observable<void> {
+    if (environment.useMockApi) {
+      return this.http.delete<void>(`api/benefits/${id}`);
+    }
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
@@ -114,6 +140,9 @@ export class BenefitService {
    * Approve benefit
    */
   approveBenefit(id: number): Observable<Benefit> {
+    if (environment.useMockApi) {
+      return this.http.patch<Benefit>(`api/benefits/${id}/approve`, {});
+    }
     return this.http.patch<Benefit>(`${this.apiUrl}/${id}/approve`, {});
   }
 
@@ -121,6 +150,9 @@ export class BenefitService {
    * Suspend benefit
    */
   suspendBenefit(id: number, reason?: string): Observable<Benefit> {
+    if (environment.useMockApi) {
+      return this.http.patch<Benefit>(`api/benefits/${id}/suspend`, { reason });
+    }
     return this.http.patch<Benefit>(`${this.apiUrl}/${id}/suspend`, { reason });
   }
 
@@ -128,6 +160,9 @@ export class BenefitService {
    * Cancel benefit
    */
   cancelBenefit(id: number, reason?: string): Observable<Benefit> {
+    if (environment.useMockApi) {
+      return this.http.patch<Benefit>(`api/benefits/${id}/cancel`, { reason });
+    }
     return this.http.patch<Benefit>(`${this.apiUrl}/${id}/cancel`, { reason });
   }
 
@@ -135,6 +170,9 @@ export class BenefitService {
    * Reactivate benefit
    */
   reactivateBenefit(id: number): Observable<Benefit> {
+    if (environment.useMockApi) {
+      return this.http.patch<Benefit>(`api/benefits/${id}/reactivate`, {});
+    }
     return this.http.patch<Benefit>(`${this.apiUrl}/${id}/reactivate`, {});
   }
 
@@ -374,8 +412,9 @@ export class BenefitService {
     requestId: string,
     comment?: string
   ): Observable<{ success: boolean }> {
+    const base = environment.useMockApi ? 'api/benefitRequests' : this.requestsUrl;
     return this.http.post<{ success: boolean }>(
-      `${this.requestsUrl}/${requestId}/send-for-approval`,
+      `${base}/${requestId}/send-for-approval`,
       { comment }
     );
   }
@@ -387,8 +426,9 @@ export class BenefitService {
     requestId: string,
     comment: string
   ): Observable<{ success: boolean }> {
+    const base = environment.useMockApi ? 'api/benefitRequests' : this.requestsUrl;
     return this.http.post<{ success: boolean }>(
-      `${this.requestsUrl}/${requestId}/approve`,
+      `${base}/${requestId}/approve`,
       { comment }
     );
   }
@@ -400,8 +440,9 @@ export class BenefitService {
     requestId: string,
     reason: string
   ): Observable<{ success: boolean }> {
+    const base = environment.useMockApi ? 'api/benefitRequests' : this.requestsUrl;
     return this.http.post<{ success: boolean }>(
-      `${this.requestsUrl}/${requestId}/reject`,
+      `${base}/${requestId}/reject`,
       { reason }
     );
   }
@@ -413,8 +454,9 @@ export class BenefitService {
     requestIds: string[],
     comment?: string
   ): Observable<{ success: boolean; count: number }> {
+    const base = environment.useMockApi ? 'api/benefitRequests' : this.requestsUrl;
     return this.http.post<{ success: boolean; count: number }>(
-      `${this.requestsUrl}/bulk/send-for-approval`,
+      `${base}/bulk/send-for-approval`,
       { requestIds, comment }
     );
   }
@@ -426,8 +468,9 @@ export class BenefitService {
     requestIds: string[],
     comment: string
   ): Observable<{ success: boolean; count: number }> {
+    const base = environment.useMockApi ? 'api/benefitRequests' : this.requestsUrl;
     return this.http.post<{ success: boolean; count: number }>(
-      `${this.requestsUrl}/bulk/approve`,
+      `${base}/bulk/approve`,
       { requestIds, comment }
     );
   }
@@ -439,8 +482,9 @@ export class BenefitService {
     requestIds: string[],
     reason: string
   ): Observable<{ success: boolean; count: number }> {
+    const base = environment.useMockApi ? 'api/benefitRequests' : this.requestsUrl;
     return this.http.post<{ success: boolean; count: number }>(
-      `${this.requestsUrl}/bulk/reject`,
+      `${base}/bulk/reject`,
       { requestIds, reason }
     );
   }

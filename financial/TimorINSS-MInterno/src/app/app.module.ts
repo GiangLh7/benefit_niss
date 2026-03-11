@@ -1,22 +1,34 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
-import {HttpClient, HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  LOCALE_ID,
+  NgModule,
+  NO_ERRORS_SCHEMA,
+} from '@angular/core';
+import {
+  HttpClient,
+  HttpClientModule,
+  HTTP_INTERCEPTORS,
+} from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { NgxSpinnerModule } from "ngx-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { GerirCamposEditaveisComponent } from './moduloGestao/gerir-campos-editaveis/gerir-campos-editaveis.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PopUpWarningComponent } from './componentes/pop-up-warning/pop-up-warning.component';
-import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common'
+import { CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { AppRoutingModule } from './app-routing.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PerfilComponent } from './moduloGestao/perfil/perfil.component';
 import { AdicionarPerfilComponent } from './moduloGestao/adicionar_perfil/adicionar_perfil.component';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule } from '@angular/material/form-field';
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldModule,
+} from '@angular/material/form-field';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -46,15 +58,18 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-import {MatSnackBarModule } from '@angular/material/snack-bar';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { PopUpGravarCampoComponent } from './moduloGestao/pop-up-gravar-campo/pop-up-gravar-campo.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { LoginComponent } from './login/login.component';
 import { PopUpGravarRegimeComponent } from './moduloGestao/pop-up-gravar-regime/pop-up-gravar-regime.component';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import { MatMomentDateModule, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatMomentDateModule,
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+} from '@angular/material-moment-adapter';
 import { NgxCurrencyDirective } from 'ngx-currency';
 import { UtilizadorComponent } from './moduloGestao/utilizador/utilizador.component';
 import { NovoUtilizadorComponent } from './moduloGestao/novo-utilizador/novo-utilizador.component';
@@ -94,7 +109,11 @@ import { DeclaracaoRemuneracaoComponent } from './moduloContribuicoes/declaracao
 import { PopUpInfoLegalRemuneracaoComponent } from './moduloContribuicoes/pop-up-info-legal-remuneracao/pop-up-info-legal-remuneracao.component';
 import { PopUpResumoDeclaracaoComponent } from './moduloContribuicoes/pop-up-resumo-declaracao/pop-up-resumo-declaracao.component';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { provideCharts, withDefaultRegisterables, BaseChartDirective } from 'ng2-charts';
+import {
+  provideCharts,
+  withDefaultRegisterables,
+  BaseChartDirective,
+} from 'ng2-charts';
 import { ContaCorrenteComponent } from './moduloContribuicoes/conta_corrente/conta_corrente.component';
 import { GuiaPagamentoComponent } from './moduloContribuicoes/guia-pagamento/guia-pagamento.component';
 import { PopUpComprovativoPagamentoComponent } from './moduloContribuicoes/pop-up-comprovativo-pagamento/pop-up-comprovativo-pagamento.component';
@@ -147,10 +166,11 @@ import { DatePickerFullComponent } from './componentes/date-picker-full/date-pic
 import { PopUpHandleInvoiceComponent } from './moduloContribuicoes/pop-up-handle-invoice/pop-up-handle-invoice.component';
 import { PopUpAddUserComponent } from './moduloGestao/pop-up-add-user/pop-up-add-user.component';
 import { CustomInMemoryApiService } from './moduloBenefit/services/custom-in-memory-api.service';
+import { environment } from '../environments/environment';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
-  }
+}
 
 @NgModule({
   declarations: [
@@ -302,29 +322,35 @@ export function HttpLoaderFactory(http: HttpClient) {
     PdfViewerModule,
     TranslateModule.forRoot({
       loader: {
-      provide: TranslateLoader,
-      useFactory: HttpLoaderFactory,
-      deps: [HttpClient]
-      }
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
     }),
   ],
   providers: [
     DatePipe,
     DecimalPipe,
     CurrencyPipe,
-    { provide: LOCALE_ID, useValue: 'en-US'},
-    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: {useUtc: true} },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
-    // Custom In-Memory API Service for mock data (only in development)
-    // Remove this when connecting to real API
-    { provide: HTTP_INTERCEPTORS, useClass: CustomInMemoryApiService, multi: true },
+    { provide: LOCALE_ID, useValue: 'en-US' },
+    { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+    // Custom In-Memory API interceptor for the Benefit module mock data
+    // Enabled when environment.useMockApi is true (see src/environments/environment.ts)
+    ...(environment.useMockApi
+      ? [{ provide: HTTP_INTERCEPTORS, useClass: CustomInMemoryApiService, multi: true }]
+      : []),
     provideCharts(withDefaultRegisterables()),
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-      useValue: { subscriptSizing: 'dynamic' }
-    }
+      useValue: { subscriptSizing: 'dynamic' },
+    },
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

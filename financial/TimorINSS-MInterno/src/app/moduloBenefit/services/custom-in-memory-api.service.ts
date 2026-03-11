@@ -1,6 +1,7 @@
 /**
  * Custom In-Memory API Service
  * Simple HTTP interceptor that provides mock data without external dependencies
+ * Activated via environment.useMockApi = true
  */
 
 import { Injectable } from '@angular/core';
@@ -17,6 +18,7 @@ import {
   MOCK_CITIZENS,
   MockCitizenData,
 } from '../constants/mock-data.constants';
+import { Benefit, BenefitStatus, BenefitType } from '../models/benefit.model';
 
 // Unified data structures
 export interface UnifiedBeneficiary {
@@ -72,6 +74,7 @@ export interface UnifiedPersonalData {
 
 @Injectable()
 export class CustomInMemoryApiService implements HttpInterceptor {
+  private benefits: Benefit[] = [];
   private beneficiaries: UnifiedBeneficiary[] = [];
   private benefitRequests: UnifiedBenefitRequest[] = [];
   private personalData: UnifiedPersonalData[] = [];
@@ -92,6 +95,7 @@ export class CustomInMemoryApiService implements HttpInterceptor {
 
     // List of benefit-related endpoint patterns to intercept
     const benefitEndpointPatterns = [
+      'api/benefits',
       'api/beneficiaries',
       'api/benefitRequests',
       'api/benefitRequestDetails',
@@ -111,6 +115,11 @@ export class CustomInMemoryApiService implements HttpInterceptor {
       urlToCheck.includes('api/benefitRequests') &&
       (method === 'POST' || method === 'PUT' || method === 'DELETE');
 
+    // Also intercept mutations on benefits endpoints
+    const isBenefitMutation =
+      urlToCheck.includes('api/benefits') &&
+      (method === 'POST' || method === 'PUT' || method === 'DELETE' || method === 'PATCH');
+
     // Check if this is a benefit-related request (including query params)
     // Match regardless of leading slash or protocol
     const isBenefitRequest = benefitEndpointPatterns.some((pattern) => {
@@ -122,7 +131,7 @@ export class CustomInMemoryApiService implements HttpInterceptor {
     });
 
     // If not a benefit request, pass through to real API
-    if (!isBenefitRequest && !isBenefitPostRequest) {
+    if (!isBenefitRequest && !isBenefitPostRequest && !isBenefitMutation) {
       return next.handle(req);
     }
 
@@ -152,6 +161,11 @@ export class CustomInMemoryApiService implements HttpInterceptor {
       return this.handleDelete(url, req).pipe(delay(300));
     }
 
+    // Handle PATCH requests (benefit actions: approve, suspend, cancel, reactivate)
+    if (method === 'PATCH') {
+      return this.handlePatch(url, req).pipe(delay(300));
+    }
+
     // Pass through other requests
     return next.handle(req);
   }
@@ -161,6 +175,38 @@ export class CustomInMemoryApiService implements HttpInterceptor {
     const urlParts = url.split('?');
     const path = urlParts[0];
     const queryParams = this.parseQueryParams(urlParts[1] || '');
+
+    // Benefits (generic CRUD)
+    if (path === 'benefits') {
+      let result = [...this.benefits];
+      if (queryParams['type']) {
+        result = result.filter((b) => b.type === queryParams['type']);
+      }
+      if (queryParams['status']) {
+        result = result.filter((b) => b.status === queryParams['status']);
+      }
+      if (queryParams['beneficiaryId']) {
+        result = result.filter(
+          (b) => b.beneficiaryId === Number(queryParams['beneficiaryId'])
+        );
+      }
+      return of(new HttpResponse({ status: 200, body: result }));
+    }
+
+    if (path.match(/^benefits\/\d+$/)) {
+      const id = Number(path.split('/')[1]);
+      const benefit = this.benefits.find((b) => b.id === id);
+      if (benefit) {
+        return of(new HttpResponse({ status: 200, body: benefit }));
+      }
+      return of(new HttpResponse({ status: 404, body: { error: 'Benefit not found' } }));
+    }
+
+    if (path.match(/^benefits\/beneficiary\/\d+$/)) {
+      const beneficiaryId = Number(path.split('/')[2]);
+      const result = this.benefits.filter((b) => b.beneficiaryId === beneficiaryId);
+      return of(new HttpResponse({ status: 200, body: result }));
+    }
 
     // Beneficiaries
     if (path === 'beneficiaries') {
@@ -351,6 +397,39 @@ export class CustomInMemoryApiService implements HttpInterceptor {
 
   private handlePost(url: string, req: HttpRequest<any>): Observable<any> {
     const body = req.body;
+
+    // Create benefit
+    if (url === 'benefits') {
+      const newBenefit: Benefit = {
+        ...body,
+        id: Date.now(),
+        status: BenefitStatus.PENDING,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      this.benefits.push(newBenefit);
+      return of(new HttpResponse({ status: 201, body: newBenefit }));
+    }
+
+    // Benefit actions: approve, suspend, cancel, reactivate
+    if (url.match(/^benefits\/\d+\/(approve|suspend|cancel|reactivate)$/)) {
+      const parts = url.split('/');
+      const id = Number(parts[1]);
+      const action = parts[2];
+      const benefit = this.benefits.find((b) => b.id === id);
+      if (benefit) {
+        const statusMap: Record<string, BenefitStatus> = {
+          approve: BenefitStatus.APPROVED,
+          suspend: BenefitStatus.SUSPENDED,
+          cancel: BenefitStatus.CANCELLED,
+          reactivate: BenefitStatus.ACTIVE,
+        };
+        benefit.status = statusMap[action];
+        benefit.updatedAt = new Date();
+        return of(new HttpResponse({ status: 200, body: { ...benefit } }));
+      }
+      return of(new HttpResponse({ status: 404, body: { error: 'Benefit not found' } }));
+    }
 
     // Submit benefit request - add to benefitRequests
     if (url === 'benefitRequests' || url.startsWith('benefitRequests/')) {
@@ -598,12 +677,59 @@ export class CustomInMemoryApiService implements HttpInterceptor {
   }
 
   private handlePut(url: string, req: HttpRequest<any>): Observable<any> {
-    // For now, just return success
+    const body = req.body;
+
+    // Update benefit
+    if (url.match(/^benefits\/\d+$/)) {
+      const id = Number(url.split('/')[1]);
+      const index = this.benefits.findIndex((b) => b.id === id);
+      if (index !== -1) {
+        this.benefits[index] = { ...this.benefits[index], ...body, id, updatedAt: new Date() };
+        return of(new HttpResponse({ status: 200, body: this.benefits[index] }));
+      }
+      return of(new HttpResponse({ status: 404, body: { error: 'Benefit not found' } }));
+    }
+
     return of(new HttpResponse({ status: 200, body: { success: true } }));
   }
 
   private handleDelete(url: string, req: HttpRequest<any>): Observable<any> {
-    // For now, just return success
+    // Delete benefit
+    if (url.match(/^benefits\/\d+$/)) {
+      const id = Number(url.split('/')[1]);
+      const index = this.benefits.findIndex((b) => b.id === id);
+      if (index !== -1) {
+        this.benefits.splice(index, 1);
+        return of(new HttpResponse({ status: 200, body: null }));
+      }
+      return of(new HttpResponse({ status: 404, body: { error: 'Benefit not found' } }));
+    }
+
+    return of(new HttpResponse({ status: 200, body: { success: true } }));
+  }
+
+  private handlePatch(url: string, req: HttpRequest<any>): Observable<any> {
+    const body = req.body;
+
+    if (url.match(/^benefits\/\d+\/(approve|suspend|cancel|reactivate)$/)) {
+      const parts = url.split('/');
+      const id = Number(parts[1]);
+      const action = parts[2];
+      const benefit = this.benefits.find((b) => b.id === id);
+      if (benefit) {
+        const statusMap: Record<string, BenefitStatus> = {
+          approve: BenefitStatus.APPROVED,
+          suspend: BenefitStatus.SUSPENDED,
+          cancel: BenefitStatus.CANCELLED,
+          reactivate: BenefitStatus.ACTIVE,
+        };
+        benefit.status = statusMap[action];
+        benefit.updatedAt = new Date();
+        return of(new HttpResponse({ status: 200, body: { ...benefit } }));
+      }
+      return of(new HttpResponse({ status: 404, body: { error: 'Benefit not found' } }));
+    }
+
     return of(new HttpResponse({ status: 200, body: { success: true } }));
   }
 
@@ -627,6 +753,59 @@ export class CustomInMemoryApiService implements HttpInterceptor {
   }
 
   private initializeData(): void {
+    // Initialize benefits (generic Benefit entities)
+    this.benefits = [
+      {
+        id: 1,
+        name: 'Old-Age Pension - Maria Fernanda dos Santos',
+        description: 'Monthly old-age pension payment',
+        type: BenefitType.RETIREMENT,
+        amount: 450,
+        status: BenefitStatus.ACTIVE,
+        startDate: new Date('2023-01-01'),
+        beneficiaryId: 1,
+        createdAt: new Date('2022-12-15'),
+        updatedAt: new Date('2023-01-01'),
+      },
+      {
+        id: 2,
+        name: 'Disability Pension - João Carlos Silva',
+        description: 'Monthly disability pension - absolute incapacity',
+        type: BenefitType.DISABILITY,
+        amount: 380,
+        status: BenefitStatus.APPROVED,
+        startDate: new Date('2025-02-01'),
+        beneficiaryId: 2,
+        createdAt: new Date('2025-01-18'),
+        updatedAt: new Date('2025-01-19'),
+      },
+      {
+        id: 3,
+        name: 'Survivor Pension - Pedro Gomes',
+        description: 'Monthly survivor pension for dependents',
+        type: BenefitType.SURVIVOR,
+        amount: 420,
+        status: BenefitStatus.PENDING,
+        startDate: new Date('2025-01-22'),
+        beneficiaryId: 3,
+        createdAt: new Date('2025-01-22'),
+        updatedAt: new Date('2025-01-22'),
+      },
+      {
+        id: 4,
+        name: 'Maternity Benefit - Lucia Amaral',
+        description: 'Parental benefit - maternity leave',
+        type: BenefitType.MATERNITY,
+        amount: 200,
+        status: BenefitStatus.ACTIVE,
+        startDate: new Date('2024-11-01'),
+        endDate: new Date('2025-01-29'),
+        beneficiaryId: 4,
+        createdAt: new Date('2024-10-20'),
+        updatedAt: new Date('2024-11-01'),
+      },
+    ];
+
     // Initialize beneficiaries
     this.beneficiaries = [
       // Non-Contributory Beneficiaries

@@ -10,7 +10,10 @@ export const environment = {
   ssIcon: 'assets/image/inss_logo.png',
   signatureIcon: 'assets/image/signature_icon.png',
   stampImage: 'assets/image/stamp_signature.png',
-  checkBoxIcon: 'assets/image/check_box.png'
+  checkBoxIcon: 'assets/image/check_box.png',
+  bypassTokenCheck: true,
+  // Set to true to use in-memory mock data for the Benefit module (no backend required)
+  useMockApi: true,
 };
 
 /*
