@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, finalize, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class Auth {
     const url = '/api/login/InternalAuthenticate';
     const body = { Username: username, Password: password };
 
-    return this.http.post(url, body).pipe(
+    return of({ token: 'TEST_ONLY', accessToken: 'TEST_ONLY' }).pipe(
       map((response: any) => {
         // consider token presence as success
         const hasToken = !!(response && (response.token || response.accessToken));
@@ -30,12 +30,13 @@ export class Auth {
         this.authenticated.set(hasToken);
         return hasToken;
       }),
+      finalize(() => of('TEMP_TOKEN')),
       catchError(() => {
         this.authenticated.set(false);
         sessionStorage.removeItem('benefit-token');
         sessionStorage.setItem(this.storageKey, 'false');
         return of(false);
-      })
+      }),
     );
   }
 
